@@ -6,6 +6,7 @@ use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KarmaController;
+use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostReputationController;
 use App\Http\Controllers\ProfileController;
@@ -104,6 +105,10 @@ Route::controller(GenreController::class)->group(function(){
 
 Route::controller(KarmaController::class)->group(function(){
     Route::get('forbidden/karma','forbidden')->name('karma.forbidden')->middleware('auth');
+});
+
+Route::controller(PersonalPageController::class)->group(function(){
+    Route::get('profile/{id}/{section?}/{page?}','index')->name('profile');
 });
 
 require __DIR__.'/auth.php';

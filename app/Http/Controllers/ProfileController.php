@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\CommentResource;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\ReplyResource;
+use App\Http\Resources\UserResource;
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Reply;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +21,7 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+    
     /**
      * Display the user's profile form.
      */
@@ -70,7 +78,7 @@ class ProfileController extends Controller
     }
     public function drafts()
     {
-        $drafts = Post::where('user_id',Auth::user()->id)->where('active',false)->get();
+        $drafts = Post::where('user_id',Auth::user()->id)->where('active',false)->orderBy('id','desc')->get();
         return inertia('Auth/Drafts',[
             'drafts' => $drafts->loadCount('films'),
         ]);

@@ -1,26 +1,31 @@
 <template>
     <Base :title="post.title">
-        <p>Завершить настройку подборки</p>
-        <div class="p-5 shadow rounded-xl my-5">
-            <PostAttachFilms :post="post"></PostAttachFilms>
-            <button
-                @click="goBack()"
-                class="mt-5 py-2 px-4 rounded-full border-0 text-sm font-semibold bg-neutral-50 text-neutral-700 hover:bg-neutral-100"
-            >
-                Назад
-            </button>
-            <button
-                @click="publish()"
-                class="mt-5 py-2 px-4 rounded-full border-0 text-sm font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-            >
-                Завершить
-            </button>
+        <div class="bg-white p-5 rounded-xl">
+            <p>Завершить настройку подборки</p>
+            <div class="px-5 my-5">
+                <PostAttachFilms :post="post"></PostAttachFilms>
+                <div class="mt-2">
+                    <button
+                        @click="goBack()"
+                        class="mt-5 py-2 px-4 rounded-full border-0 text-sm font-semibold bg-neutral-50 text-neutral-700 hover:bg-neutral-100"
+                    >
+                        Назад
+                    </button>
+                    <!-- <button
+                    @click="publish()"
+                    class="mt-5 ml-2 py-2 px-4 rounded-full border-0 text-sm font-semibold bg-orange-50 text-orange-700 hover:bg-orange-100"
+                >
+                    Завершить
+                </button> -->
+                    <PrimaryButton @click="publish"> Завершить </PrimaryButton>
+                </div>
+            </div>
         </div>
     </Base>
 </template>
 <script>
 import PostAttachFilms from "@/Components/PostAttachFilms.vue";
-
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 PostAttachFilms;
 export default {
     props: {
@@ -68,6 +73,6 @@ export default {
             );
         },
     },
-    components: { PostAttachFilms },
+    components: { PostAttachFilms, PrimaryButton },
 };
 </script>

@@ -1,75 +1,70 @@
 <template>
     <Csrf></Csrf>
     <Base title="Создать подборку">
-        <p>Создать подборку</p>
-        <div
-            v-if="Object.keys(errors).length"
-            class="bg-red-200 rounded px-2 py-3 my-2"
-        >
+        <div class="bg-white p-5 rounded-xl">
+            <p>Создать подборку</p>
             <div
-                v-for="error in Object.keys(errors)"
-                class="text-sm text-slate-900"
+                v-if="Object.keys(errors).length"
+                class="bg-red-200 rounded px-2 py-3 my-2"
             >
-                {{ errors[error][0].replace("films", "фильмы") }}
-            </div>
-        </div>
-        <form @submit.prevent="submit()" class="my-0 mx-0">
-            <div class="shadow rounded-xl p-5 mt-5">
-                <p class="text-sm">Название подборки</p>
-                <input
-                    v-model="title"
-                    type="text"
-                    class="w-full p-2 text-sm border-1 border border-slate-200 rounded-xl text-slate-800"
-                    placeholder="Название подборки"
-                    required
-                />
-                <p class="text-sm">Описание подборки</p>
-                <textarea
-                    @input="handleInputTextarea($event)"
-                    rows="1"
-                    v-model="description"
-                    type="text"
-                    class="w-full p-2 text-sm border-1 border border-slate-200 rounded-xl text-slate-800"
-                    placeholder="Описание подборки"
-                    :required="false"
-                />
-                <p class="text-sm">Выберите изображение подборки</p>
-                <div class="border-1 border border-slate-200 rounded-xl p-1">
-                    <input
-                        @change="handleFilepond($event)"
-                        ref="file"
-                        type="file"
-                        accept="image/png, image/jpeg"
-                        class="p-2 text-sm text-slate-800 file:mr-4 ring-0 focus:ring-0 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 file:cursor-pointer"
-                        placeholder="Описание подборки"
-                        :required="isCreated ? false : true"
-                    />
+                <div
+                    v-for="error in Object.keys(errors)"
+                    class="text-sm text-slate-900"
+                >
+                    {{ errors[error][0].replace("films", "фильмы") }}
                 </div>
-                <!-- <button
+            </div>
+            <form @submit.prevent="submit()" class="my-0 mx-0">
+                <div class="rounded-xl p-5 mt-5">
+                    <p class="text-sm">Название подборки</p>
+                    <input
+                        v-model="title"
+                        type="text"
+                        class="w-full p-2 text-sm border-1 border border-slate-200 rounded-xl text-slate-800"
+                        placeholder="Название подборки"
+                        required
+                    />
+                    <p class="text-sm">Описание подборки</p>
+                    <textarea
+                        @input="handleInputTextarea($event)"
+                        rows="1"
+                        v-model="description"
+                        type="text"
+                        class="w-full p-2 text-sm border-1 border border-slate-200 rounded-xl text-slate-800"
+                        placeholder="Описание подборки"
+                        :required="false"
+                    />
+                    <AttachImage @getImage="getImage"></AttachImage>
+                    <!-- <button
                     type="button"
                     class="mt-5 block py-2 px-4 rounded-full border-0 text-sm font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
                 >
                     Добавить фильм
                 </button> -->
-            </div>
-            <button
-                class="mt-5 block py-2 px-4 rounded-full border-0 text-sm font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                </div>
+                <!-- <button
+                class="mt-5 block py-2 px-4 rounded-full border-0 text-sm font-semibold bg-orange-50 text-orange-700 hover:bg-orange-100"
             >
                 Подтвердить
-            </button>
-        </form>
+            </button> -->
+                <PrimaryButton>Подтвердить</PrimaryButton>
+            </form>
+        </div>
     </Base>
 </template>
 <script>
 import axios from "axios";
 import PostAttachFilms from "@/Components/PostAttachFilms.vue";
 import Modal from "@/Components/Modal.vue";
+import AttachImage from "./AttachImage.vue";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 export default {
     props: {
         post: null,
     },
     data() {
         return {
+            showDropzone: 0,
             title: null,
             tag: null,
             tags: [],
@@ -82,12 +77,18 @@ export default {
             isCreated: this.post != null ? true : false,
         };
     },
+    emits: ["getImage"],
     methods: {
-        handleFilepond(e) {
+        // handleFilepond(e) {
+        //     let formData =
+        //         this.formData != null ? this.formData : new FormData();
+        //     const file = e.target.files[0];
+        //     formData.append("image", file);
+        // },
+        getImage(image) {
             let formData =
                 this.formData != null ? this.formData : new FormData();
-            const file = e.target.files[0];
-            formData.append("image", file);
+            formData.append("image", image);
         },
         handleErrors(res) {
             if (res.response.status == 422) {
@@ -154,6 +155,7 @@ export default {
             this.description = this.post.description.replace(/<br \/>/g, "");
         }
     },
-    components: { PostAttachFilms, Modal },
+
+    components: { PostAttachFilms, Modal, AttachImage, PrimaryButton },
 };
 </script>

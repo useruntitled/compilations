@@ -1,23 +1,36 @@
 <template>
     <form>
         <p class="text-sm">Поиск фильма с сайта</p>
-        <div class="border p-5">
-            <input
-                list="films"
-                @input="handleInputSite()"
-                v-model="input_site"
-                type="text"
-                class="w-full rounded-xl border-1 border-slate-200 text-sm text-slate-900"
-            />
-            <div class="my-2">
+        <div class="py-2">
+            <div class="flex items-center">
+                <span class="text-sm absolute pl-2"
+                    ><IconSearch class="w-5 h-5 text-slate-700"></IconSearch
+                ></span>
+                <input
+                    list="films"
+                    @input="handleInputSite()"
+                    v-model="input_site"
+                    type="text"
+                    placeholder="Поиск"
+                    class="w-full pl-12 rounded-xl border-1 border-slate-200 text-sm text-slate-900 bg-neutral-50 hover:bg-white hover:border-kp border-2 focus:bg-white focus:ring-kp focus:border-kp"
+                />
+            </div>
+            <div
+                v-if="films_for_chose.length || loading"
+                class="my-2 bg-neutral-50 p-2 px-1 rounded-lg shadow-lg"
+            >
                 <p
+                    v-if="!loading"
                     v-for="film in films_for_chose"
                     :key="film.id"
-                    class="text-sm text-slate-800 border rounded-xl p-2 cursor-pointer"
+                    class="text-sm rounded-xl p-2 cursor-pointer"
                     @click="attachFilm(film.id)"
                 >
                     {{ film.name_ru }} {{ film.name_en }}
                 </p>
+                <div v-else class="flex justify-center p-2">
+                    <AnimationLoader class="w-8 h-8"></AnimationLoader>
+                </div>
             </div>
         </div>
         <!-- <datalist id="films">
@@ -27,39 +40,39 @@
             </div>
         </datalist> -->
 
-        <p class="text-sm">Или вставить ссылку с кинопоиска</p>
+        <p class="text-sm pb-2">Или вставить ссылку с кинопоиска</p>
         <input
             v-model="input_kp"
             @input="handleInputKinopoisk()"
             type="text"
-            class="w-full rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+            class="w-full rounded-xl border-1 border-slate-200 text-sm text-slate-900 focus:border-kp focus:ring-kp"
         />
         <main>
             <div v-for="film in films_data" :key="film.id">
                 <Film :film="film" @removeFilm="removeFilm(film.id)"></Film>
             </div>
         </main>
-        <div class="shadow p-5 mt-5 rounded-xl">
+        <div class="mt-5">
             <div class="flex flex-wrap">
                 <p
                     v-for="tag in tags"
                     :key="tag.id"
-                    class="text-sm inline-block me-5 shadow p-2 rounded-lg my-2"
+                    class="text-sm inline-block me-5 rounded-full border-gray-500 border-2 border px-2 pl-3 py-1 my-2"
                 >
                     {{ tag.name }}
                     <span
                         @click="detachTag(tag.id)"
-                        class="cursor-pointer text-red-700"
-                        >✘</span
+                        class="cursor-pointer text-neutral-300 font-semibold text-sm px-1"
+                        >✕</span
                     >
                 </p>
             </div>
-            <p class="text-sm">Прикрепите теги, вводя через запятую</p>
+            <p class="text-sm pb-2">Прикрепите теги, вводя через запятую</p>
             <input
                 type="text"
                 @input="handleInputTags()"
                 v-model="input_tags"
-                class="w-full rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                class="w-full rounded-xl border-1 border-slate-200 text-sm text-slate-900 focus:ring-kp focus:border-kp"
             />
         </div>
     </form>
@@ -67,6 +80,8 @@
 <script>
 import axios from "axios";
 import Film from "./Film.vue";
+import IconSearch from "@/Components/Icons/IconSearch.vue";
+import AnimationLoader from "./Animations/AnimationLoader.vue";
 export default {
     props: {
         post: null,
@@ -120,6 +135,9 @@ export default {
             let query = this.input_site;
             if (this.input_site == null || this.input_site == "") {
                 this.films_for_chose = [];
+                this.loading = false;
+            } else {
+                this.loading = true;
             }
             // let catched = this.films_for_chose.find(
             //     (obj) => obj.name_ru == query
@@ -143,6 +161,7 @@ export default {
                     console.log(res);
                     if (res.status == 200) {
                         this.films_for_chose = res.data;
+                        this.loading = false;
                     }
                 });
         },
@@ -203,6 +222,6 @@ export default {
                 });
         },
     },
-    components: { Film },
+    components: { Film, IconSearch, AnimationLoader },
 };
 </script>

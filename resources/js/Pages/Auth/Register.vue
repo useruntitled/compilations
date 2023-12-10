@@ -2,9 +2,12 @@
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
+import IconUser from "@/Components/Icons/IconUser.vue";
+import IconMail from "@/Components/Icons/IconMail.vue";
+import IconShieldDanger from "@/Components/Icons/IconShieldDanger.vue";
 
 const form = useForm({
     name: "",
@@ -22,51 +25,66 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Зарегистрироваться" />
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Никнейм" />
 
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
+                <div class="flex items-center">
+                    <IconUser
+                        class="absolute pl-2 fill-slate-400 stroke-slate-400"
+                    ></IconUser>
+                    <TextInput
+                        id="name"
+                        type="text"
+                        class="mt-1 pl-10 block w-full"
+                        v-model="form.name"
+                        required
+                        autofocus
+                        autocomplete="name"
+                    />
+                </div>
 
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Эл. почта" />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
+                <div class="flex items-center">
+                    <IconMail
+                        class="absolute pl-2 fill-slate-400 stroke-white"
+                    ></IconMail>
+                    <TextInput
+                        id="email"
+                        type="email"
+                        class="mt-1 pl-10 block w-full"
+                        v-model="form.email"
+                        required
+                        autocomplete="username"
+                    />
+                </div>
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Пароль" />
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+                <div class="flex items-center">
+                    <IconShieldDanger
+                        class="absolute pl-2 fill-slate-400 stroke-white stroke-2"
+                    ></IconShieldDanger>
+                    <TextInput
+                        id="password"
+                        type="password"
+                        class="mt-1 pl-10 block w-full"
+                        v-model="form.password"
+                        required
+                        autocomplete="new-password"
+                    />
+                </div>
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
@@ -74,17 +92,22 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Подтвердить пароль"
                 />
 
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
+                <div class="flex items-center">
+                    <IconShieldDanger
+                        class="absolute pl-2 fill-slate-400 stroke-white stroke-2"
+                    ></IconShieldDanger>
+                    <TextInput
+                        id="password_confirmation"
+                        type="password"
+                        class="mt-1 pl-10 block w-full"
+                        v-model="form.password_confirmation"
+                        required
+                        autocomplete="new-password"
+                    />
+                </div>
 
                 <InputError
                     class="mt-2"
@@ -97,7 +120,7 @@ const submit = () => {
                     :href="route('login')"
                     class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Already registered?
+                    Уже зарегистрированы?
                 </Link>
 
                 <PrimaryButton
@@ -105,7 +128,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    Зарегистрироваться
                 </PrimaryButton>
             </div>
         </form>

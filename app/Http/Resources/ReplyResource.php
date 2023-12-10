@@ -23,6 +23,10 @@ class ReplyResource extends JsonResource
             'reply_to' => $this->replyTo,
             'reputation' => $this->rep,
             'comment_id' => $this->comment->id,
+            'comment' => $this->comment,
+            'post' => $this->comment->post,
+            'isReply' => True,
+            'created_at' => $this->created_at,
         ];
     }
 }

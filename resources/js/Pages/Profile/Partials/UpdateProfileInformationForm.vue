@@ -1,7 +1,7 @@
 <script>
+import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import axios from "axios";
@@ -51,7 +51,12 @@ export default {
 
         return { form, submit, user };
     },
-    components: { InputError, InputLabel, TextInput, PrimaryButton },
+    components: {
+        InputError,
+        InputLabel,
+        TextInput,
+        PrimaryButton,
+    },
 };
 </script>
 
@@ -99,33 +104,17 @@ export default {
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div>
-                <InputLabel for="avatar" value="Изображение профиля" />
-                <img
-                    v-lazy="route('image.crop', [user.avatar, '100x100'])"
-                    style="height: 100px; width: 100px"
-                    alt=""
-                />
-                <input
-                    @input="form.avatar = $event.target.files[0]"
-                    type="file"
-                    accept="image/png, image/jpeg"
-                    class="p-2 text-sm text-slate-800 w-full file:mr-4 ring-0 focus:ring-0 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indiigo-50 file:text-indiigo-700 hover:file:bg-indiigo-100 file:cursor-pointer"
-                    placeholder="Описание подборки"
-                    :required="false"
-                />
-            </div>
-
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800">
-                    Your email address is unverified.
+                    Ваша электронная почта не подтверждена.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                        Click here to re-send the verification email.
+                        Нажмите здесь, чтобы повторно отправить письмо для
+                        подтверждения.
                     </Link>
                 </p>
 
@@ -133,7 +122,7 @@ export default {
                     v-show="status === 'verification-link-sent'"
                     class="mt-2 font-medium text-sm text-green-600"
                 >
-                    A new verification link has been sent to your email address.
+                    Новая ссылка верификации была отправлена на вашу почту.
                 </div>
             </div>
 

@@ -20,6 +20,9 @@ class CommentResource extends JsonResource
             'text' => $this->text,
             'reputation' => $this->rep,
             'replies_count' => $this->replies->count(),
+            'post' => $this->post,
+            'isComment' => True,
+            'created_at' => $this->created_at,
         ];
     }
 }

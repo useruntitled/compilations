@@ -54,7 +54,7 @@ class ImageController extends Controller
         $content = $image->encode($encoding)->getEncoded();
 
         // Сохраните содержимое в кэше
-        Cache::put($cacheKey, $content, 60); // Здесь 60 - время жизни кэша в минутах
+        Cache::put($cacheKey, $content, now()->addMinutes(60)); // Здесь 60 - время жизни кэша в минутах
 
         // Отправьте обрезанное изображение в браузер
         return response($content)->header('Content-Type', 'image/' . $encoding);

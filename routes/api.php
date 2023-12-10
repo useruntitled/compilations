@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentReputationController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ReplyReputationController;
+use App\Http\Controllers\SidebarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -47,3 +48,8 @@ Route::controller(ReplyController::class)->group(function(){
 Route::controller(ReplyReputationController::class)->group(function(){
     Route::patch('reputation/reply','patch')->name('reply.reputation.post')->middleware('auth');
 });
+
+Route::controller(SidebarController::class)->group(function(){
+    Route::get('comments/last','getLastComments')->name('comments.get.last');
+});
+

@@ -25,9 +25,13 @@ class KarmaController extends Controller
     {
 
         $user_id = $user_id ?? Auth::user()->id;
-        $rep_comm = CommentReputation::all()->reject(fn($rep) => $rep->comment->user->id != $user_id);
-        $reputation = $rep_comm->sum(fn($rep) => $rep->action == 'up');
-        $reputation -= $rep_comm->sum(fn($rep) => $rep->action == 'down');
+        $rep_comm = CommentReputation::where('user_id','!=',$user_id)->get()->reject(fn($rep) => $rep->comment->user->id != $user_id);
+        $rep_reply = ReplyReputation::where('user_id','!=',$user_id)->get()->reject(fn($rep) => $rep->reply->user->id != $user_id);
+        $rep_post = PostReputation::where('user_id','!=',$user_id)->get()->reject(fn($rep) => $rep->post->user->id != $user_id);
+        $rep = $rep_comm->merge($rep_reply);
+        $rep = $rep->merge($rep_post);
+        $reputation = $rep->sum(fn($rep) => $rep->action == 'up');
+        $reputation -= $rep->sum(fn($rep) => $rep->action == 'down');
         return $reputation;
     }
     public static function canPost($user)

@@ -1,53 +1,39 @@
 <template>
-    <div class="text-sm">
+    <div class="text-sm flex">
         <Csrf></Csrf>
         <!-- <p>Up: {{ reputation["up"] }}</p> -->
         <!-- <p>Down: {{ reputation["down"] }}</p> -->
 
-        <span>{{ up }}</span>
         <!-- icon up -->
-        <button @click.prevent="setUp()">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 inline text-green-300 hover:text-green-500"
-                :class="current_action == 'up' ? 'stroke-green-500' : ''"
+        <div class="inline-block hover:text-green-700 flex items-center me-2">
+            <span class="me-1">{{ up }}</span>
+            <button
+                @click.prevent="setUp()"
+                class="p-1 rounded-full text-green-300 hover:text-green-500 hover:bg-green-100"
+                :class="current_action == 'up' ? 'text-green-500' : ''"
             >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M4.5 15.75l7.5-7.5 7.5 7.5"
-                />
-            </svg>
-        </button>
-        <span>{{ down }}</span>
-        <!-- icon down -->
-        <button @click.prevent="setDown()">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6 inline text-red-300 hover:text-red-500"
-                :class="current_action == 'down' ? 'stroke-red-500' : ''"
+                <IconUp></IconUp>
+            </button>
+        </div>
+        <div class="inline-block hover:text-red-700 flex items-center">
+            <span class="me-1">{{ down }}</span>
+            <!-- icon down -->
+            <button
+                @click.prevent="setDown()"
+                class="p-1 rounded-full hover:bg-red-100 text-red-300 hover:text-red-500"
+                :class="current_action == 'down' ? 'text-red-500' : ''"
             >
-                <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                />
-            </svg>
-        </button>
+                <IconDown></IconDown>
+            </button>
+        </div>
     </div>
     <AuthModal :show="showModal" @close="showModal = !showModal"></AuthModal>
 </template>
 <script>
 import axios from "axios";
 import AuthModal from "./AuthModal.vue";
+import IconUp from "./Icons/IconUp.vue";
+import IconDown from "./Icons/IconDown.vue";
 export default {
     props: {
         type: null,
@@ -150,6 +136,6 @@ export default {
             this.sendAction("up");
         },
     },
-    components: { AuthModal },
+    components: { AuthModal, IconUp, IconDown },
 };
 </script>

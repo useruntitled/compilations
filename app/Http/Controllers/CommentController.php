@@ -45,4 +45,5 @@ class CommentController extends Controller
         $comment->update();
         return Response::json($comment,200);
     }
+    
 }

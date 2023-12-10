@@ -40,13 +40,13 @@
                     ? '#reply' + reply.reply_to.reply_id
                     : '#comment-' + reply.reply_to.reply_id
             " -->
-        <a class="text-sm my-1 text-slate-600">
+        <a v-if="reply.reply_to" class="text-sm my-1 text-slate-600">
             Ответ {{ reply.reply_to.user.name }}
             <span class="text-slate-400">
                 {{
                     reply.isReplyToReply
                         ? "Ответ на ответ #" + reply.reply_to.reply_id
-                        : "Ответ на главную ветку"
+                        : "Ответ на комментарий"
                 }}
             </span>
         </a>

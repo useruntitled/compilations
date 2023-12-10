@@ -25,7 +25,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="name"
                     >
-                        Name
+                        Имя
                     </label>
                     <input
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -40,7 +40,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="username"
                     >
-                        Username
+                        Юзернейм
                     </label>
                     <input
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -57,7 +57,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="email"
                     >
-                        Email
+                        Эл. почта
                     </label>
                     <input
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -74,7 +74,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="password"
                     >
-                        Password
+                        Пароль
                     </label>
                     <input
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -91,7 +91,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="password_confirmation"
                     >
-                        Confirm Password
+                        Подтвердить пароль
                     </label>
 
                     <input
@@ -108,14 +108,14 @@
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:cursor-pointer"
                         @click="showLogin = !showLogin"
                     >
-                        Already registered?
+                        Уже зарегистрированы?
                     </a>
 
                     <button
-                        class="ml-4 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                        class="ml-4 inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-orange-700 focus:bg-orange-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                         type="submit"
                     >
-                        Register
+                        Зарегистрироваться
                     </button>
                 </div>
             </form>
@@ -130,7 +130,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="email"
                     >
-                        Email
+                        Эл. почта
                     </label>
                     <input
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -147,7 +147,7 @@
                         class="block font-medium text-sm text-gray-700"
                         for="password"
                     >
-                        Password
+                        Пароль
                     </label>
                     <input
                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
@@ -162,14 +162,14 @@
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:cursor-pointer"
                         @click="showLogin = !showLogin"
                     >
-                        Register
+                        Зарегистрироваться
                     </a>
 
                     <button
-                        class="ml-4 inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                        class="ml-4 inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-orange-700 focus:bg-orange-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
                         type="submit"
                     >
-                        Login
+                        Войти
                     </button>
                 </div>
             </form>
