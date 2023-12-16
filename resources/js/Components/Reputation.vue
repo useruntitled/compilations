@@ -27,7 +27,6 @@
             </button>
         </div>
     </div>
-    <AuthModal :show="showModal" @close="showModal = !showModal"></AuthModal>
 </template>
 <script>
 import axios from "axios";
@@ -60,7 +59,7 @@ export default {
                     .catch((res) => {
                         console.log(res);
                         if (res.response.status == 401) {
-                            this.showModal = true;
+                            this.callAuthModal();
                         }
                     })
                     .then((res) => {
@@ -85,7 +84,7 @@ export default {
                     .catch((res) => {
                         console.log(res);
                         if (res.response.status == 401) {
-                            this.showModal = true;
+                            this.callAuthModal();
                         }
                     })
                     .then((res) => {
@@ -110,7 +109,7 @@ export default {
                     .catch((res) => {
                         console.log(res);
                         if (res.response.status == 401) {
-                            this.showModal = true;
+                            this.callAuthModal();
                         }
                     })
                     .then((res) => {
@@ -125,6 +124,8 @@ export default {
                         }
                         console.log(res);
                     });
+            } else {
+                console.log("Reputation error: incorrect type", this.type);
             }
         },
         setDown() {

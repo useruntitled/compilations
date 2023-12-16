@@ -1,7 +1,12 @@
 <template>
     <div class="rounded-xl mb-5 px-3 block w-full bg-white">
         <header class="p-3 flex justify-between">
-            <UserTablet :user="post.user" class="font-medium"></UserTablet>
+            <!-- <UserTablet :user="post.user" class="font-medium"></UserTablet> -->
+            <UserTabletWithElementInside :user="post.user">
+                <p class="text-13px text-secondary">
+                    {{ post.timestamp }}
+                </p>
+            </UserTabletWithElementInside>
             <div>
                 <Dropdown>
                     <template #trigger>
@@ -67,12 +72,25 @@
                 />
             </div>
         </Link>
+        <div v-for="(film, index) in post.films">
+            <Film v-if="index < 3" :film="film" mode="read"></Film>
+        </div>
+        <Link :href="route('post', [post.id, post.slug])">
+            <p
+                v-if="post.films.length > 3"
+                class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
+            >
+                И еще {{ post.films.length - 3 }} фильмов в подборке
+            </p></Link
+        >
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
                 ><Reputation :reputation="post.reputation"></Reputation
             ></span>
             <span class="me-2 text-slate-700"
-                ><LinkIcon :text="post.comments_count"
+                ><LinkIcon
+                    :text="post.comments_count"
+                    :href="route('post', [post.id, post.slug]) + '#comments'"
                     ><IconComments class="w-5 h-5"></IconComments></LinkIcon
             ></span>
             <span class="me-2 text-slate-700">
@@ -102,6 +120,8 @@ import UserTablet from "./UserTablet.vue";
 import IconArrowForwardUp from "./Icons/IconArrowForwardUp.vue";
 import IconTrash from "./Icons/IconTrash.vue";
 import IconPencil from "./Icons/IconPencil.vue";
+import Film from "./Film.vue";
+import UserTabletWithElementInside from "./UserTabletWithElementInside.vue";
 
 export default {
     props: {
@@ -119,6 +139,8 @@ export default {
         IconTrash,
         IconPencil,
         IconArrowForwardUp,
+        Film,
+        UserTabletWithElementInside,
     },
 };
 </script>

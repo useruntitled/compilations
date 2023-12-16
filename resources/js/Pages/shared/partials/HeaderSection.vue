@@ -29,16 +29,7 @@
             <IconPanel class="me-2 inline-block"></IconPanel>
             Панель
         </DropdownLink>
-        <DropdownLink :href="route('post.create')" class="my-2">
-            <AnimationIconSquarePlusFilled
-                class="me-2 inline-block text-green-600"
-            ></AnimationIconSquarePlusFilled>
-            Создать подборку
-            <!-- <span
-                class="text-center mx-auto bg-green-700 font-semibold p-2 w-1/2 whitespace-no-wrap overflow-hidden text-white text-xs rounded"
-                >Создать подборку</span
-            > -->
-        </DropdownLink>
+
         <DropdownLink :href="route('drafts')">
             <IconPencil class="me-2 inline-block"></IconPencil>
             Черновики

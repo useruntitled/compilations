@@ -5,7 +5,7 @@
                 <div
                     class="inline-block hover:text-orange-700 hover:bg-orange-100 rounded-full p-1 duration-200"
                 >
-                    <Link :href="href">
+                    <Link :href="href ?? ''">
                         <slot></slot>
                     </Link>
                 </div>
@@ -20,8 +20,8 @@ import { Link } from "@inertiajs/vue3";
 export default {
     props: {
         href: {
-            type: String,
             required: false,
+            type: String,
         },
         text: null,
     },

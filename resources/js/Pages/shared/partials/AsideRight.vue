@@ -10,72 +10,115 @@
                 Сейчас обсуждают
             </p>
             <div class="overflow-y-auto overflow-x-hidden text-start">
-                <div v-for="comment in comments" class="mb-4">
+                <div v-for="comment in comments" :key="comment.id" class="mb-4">
                     <div
                         class="flex items-center overflow-hidden whitespace-no-wrap"
                     >
-                        <img
-                            :src="
-                                route('image.crop', [
-                                    comment.user.avatar,
-                                    ['50x50'],
-                                ])
-                            "
-                            class="rounded-full inline-block me-2"
-                            style="max-width: 36px; max-height: 36px"
-                            alt=""
-                        />
+                        <Link :href="route('profile', [comment.user.id])">
+                            <img
+                                :src="
+                                    route('image.crop', [
+                                        comment.user.avatar,
+                                        ['50x50'],
+                                    ])
+                                "
+                                class="rounded-full inline-block me-2"
+                                style="max-width: 36px; max-height: 36px"
+                                alt=""
+                        /></Link>
+
                         <div class="flex flex-col">
                             <div>
                                 <span class="text-xs font-medium me-2">
-                                    {{ comment.user.name }}
+                                    <Link
+                                        :href="
+                                            route('profile', [comment.user.id])
+                                        "
+                                        >{{ comment.user.name }}</Link
+                                    >
                                 </span>
                                 <span class="text-xs text-gray-600"
-                                    >в посте</span
+                                    >в подборке</span
                                 >
                             </div>
-                            <p
-                                class="text-sm font-semibold overflow-hidden text-ellipsis"
-                                style="max-height: 19px"
+                            <Link
+                                :href="
+                                    route('post', [
+                                        comment.post.id,
+                                        comment.post.slug,
+                                    ])
+                                "
                             >
-                                {{ comment.post.title }}
-                            </p>
+                                <p
+                                    class="text-sm font-semibold overflow-hidden text-ellipsis"
+                                    style="max-height: 19px"
+                                >
+                                    {{ comment.post.title }}
+                                </p></Link
+                            >
                         </div>
                     </div>
-                    <p
-                        class="text-base overflow-hidden text-ellipsis"
-                        style="max-height: 100px"
+                    <Link :href="prepareHref(comment)">
+                        <p
+                            class="text-base overflow-hidden text-ellipsis hover:opacity-70 cursor-pointer"
+                            style="max-height: 100px"
+                        >
+                            {{ comment.text }}
+                        </p></Link
                     >
-                        {{ comment.text }}
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import Comment from "@/Components/Comment.vue";
 import UserTablet from "@/Components/UserTablet.vue";
 import axios from "axios";
 
 export default {
     data() {
         return {
-            comments: null,
+            flag: false,
+            comments: [],
         };
     },
+
     methods: {
+        prepareHref(comment) {
+            if (comment.isReply)
+                return (
+                    route("post", [comment.post.id, comment.post.slug]) +
+                    `#reply-${comment.id}`
+                );
+            else
+                return (
+                    route("post", [comment.post.id, comment.post.slug]) +
+                    `#comment-${comment.id}`
+                );
+        },
         getLastComments() {
             axios
-                .get(route("comments.get.last"))
+                .get(route("comments.get.last"), {
+                    // transformResponse: [
+                    //     function (data) {
+                    //         // Возвращаем данные без изменений
+                    //         return data;
+                    //     },
+                    // ],
+                })
                 .catch((res) => {
-                    console.log(res);
+                    // console.log(res);
+                    this.getLastComments();
                 })
                 .then((res) => {
-                    console.log(res);
-                    if (res.status == 200) this.comments = res.data;
+                    // console.log(res);
+                    if (res.status == 200) {
+                        this.flag = true;
+                        this.comments = res.data;
+                    }
                 });
         },
+
         setIntervalGetComments() {
             setInterval(() => {
                 this.getLastComments();

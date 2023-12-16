@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 class ReplyResource extends JsonResource
 {
@@ -27,6 +28,7 @@ class ReplyResource extends JsonResource
             'post' => $this->comment->post,
             'isReply' => True,
             'created_at' => $this->created_at,
+            'timestamp' => (new Carbon($this->created_at))->diffForHumans(),
         ];
     }
 }

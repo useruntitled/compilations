@@ -4,7 +4,11 @@
     </Head>
     <div class="rounded-xl rounded-b-sm mb-0 px-3 block w-full bg-white">
         <header class="p-3 flex justify-between">
-            <UserTablet :user="post.user" class="font-medium"></UserTablet>
+            <UserTabletWithElementInside :user="post.user">
+                <p class="text-13px text-secondary">
+                    {{ post.timestamp }}
+                </p>
+            </UserTabletWithElementInside>
             <div>
                 <Dropdown>
                     <template #trigger>
@@ -70,6 +74,11 @@
                 />
             </div>
         </Link>
+    </div>
+    <div class="bg-white p-5 pt-4 rounded-b-xl pb-0">
+        <div v-for="film in post.films">
+            <Film :film="film" mode="read"></Film>
+        </div>
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
                 ><Reputation :reputation="post.reputation"></Reputation
@@ -92,11 +101,6 @@
             </span>
         </footer>
     </div>
-    <div class="bg-white p-5 pt-0 rounded-b-xl">
-        <div v-for="film in post.films">
-            <Film :film="film" mode="read"></Film>
-        </div>
-    </div>
     <Comments :post="post"></Comments>
 </template>
 <script>
@@ -104,7 +108,7 @@ import Film from "@/Components/Film.vue";
 import axios from "axios";
 import Reputation from "@/Components/Reputation.vue";
 import Csrf from "./shared/csrf.vue";
-import Comments from "@/Components/Comments.vue";
+import Comments from "@/Components/Comments/Comments.vue";
 import UserTablet from "@/Components/UserTablet.vue";
 import IconArrowForwardUp from "@/Components/Icons/IconArrowForwardUp.vue";
 import IconBookmark from "@/Components/Icons/IconBookmark.vue";
@@ -116,6 +120,7 @@ import IconPencil from "@/Components/Icons/IconPencil.vue";
 import LinkIcon from "@/Components/LinkIcon.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import Base from "./shared/base.vue";
+import UserTabletWithElementInside from "@/Components/UserTabletWithElementInside.vue";
 export default {
     layout: Base,
     props: {
@@ -139,6 +144,12 @@ export default {
                 });
         },
     },
+    mounted() {
+        if (window.location.hash.includes("#comment-")) {
+            const comment_id = window.location.hash.replace("#comment-", "");
+            console.log(comment_id);
+        }
+    },
     components: {
         Film,
         Csrf,
@@ -157,6 +168,7 @@ export default {
         Comments,
         IconDots,
         Dropdown,
+        UserTabletWithElementInside,
     },
 };
 </script>

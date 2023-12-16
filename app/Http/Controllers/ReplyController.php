@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Reply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class ReplyController extends Controller
 {

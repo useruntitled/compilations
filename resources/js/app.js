@@ -17,6 +17,19 @@ import NavLink from './Pages/shared/navLink.vue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+const authModalMixin = {
+    methods:{
+        callAuthModal(){
+        if(history.pushState) {
+    history.pushState(null, null, '#modal-auth');
+}
+else {
+    location.hash = '#modal-auth';
+}
+    }
+    }
+}
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
@@ -36,9 +49,11 @@ createInertiaApp({
                 // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
                 listenEvents: [ 'scroll' ]
             })
+            .mixin(authModalMixin)
             .mount(el);
     },
     progress: {
         color: '#d4620b',
     },
+    mixins: [authModalMixin],
 });

@@ -31,8 +31,12 @@
                 >
                     {{ film.name_ru }} {{ film.name_en }}
                 </a>
-                <div class="my-2">
-                    <span v-for="genre in film.genres" :key="genre.id">
+                <div class="my-2 flex-wrap flex">
+                    <span
+                        v-for="genre in film.genres"
+                        :key="genre.id"
+                        class="mb-2"
+                    >
                         <a
                             class="me-2 px-2 py-1 border-sky-700 border rounded-lg text-sm text-sky-600 hover:text-sky-700 hover:border-sky-800"
                             :href="genre.kp_wire"

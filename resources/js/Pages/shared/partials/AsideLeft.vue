@@ -7,40 +7,43 @@
             <div
                 class="w-full bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
             >
-                <button class="flex items-center">
+                <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block">
                         <IconFlame
-                            class="stroke-3/2 text-amber-500 stroke-4"
+                            class="stroke-3/2 w-[24px] text-amber-500 stroke-[2px]"
                         ></IconFlame>
                     </span>
-                    <span>Популярное</span>
+                    <span class="text-lgg">Популярное</span>
                 </button>
             </div>
             <div
                 class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
             >
-                <button class="flex items-center">
+                <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
-                        ><IconClock class="stroke-3/2"></IconClock
+                        ><IconClock
+                            class="stroke-[2px] w-[24px] text-gray-600"
+                        ></IconClock
                     ></span>
-                    <span>Свежее</span>
+                    <span class="text-lgg">Свежее</span>
                 </button>
             </div>
             <div
                 class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
             >
-                <button class="flex items-center">
+                <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconBookmark
-                            class="w-5 h-5 text-slate-700 stroke-2"
+                            class="w-[24px] text-gray-600 stroke-[2px]"
                         ></IconBookmark
                     ></span>
-                    <span>Закладки</span>
+                    <span class="text-lgg">Закладки</span>
                 </button>
             </div>
             <div class="w-full mt-10">
                 <PrimaryButton
-                    class="text-lg bg-orange-500 px-0 rounded-lg py-3 w-full font-semibold"
+                    @click="callAuthModal()"
+                    class="bg-orange-500 px-0 rounded-lg py-3 w-full font-semibold text-17px"
                     >Новая подборка</PrimaryButton
                 >
             </div>

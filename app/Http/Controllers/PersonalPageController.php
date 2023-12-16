@@ -15,42 +15,41 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonalPageController extends Controller
 {
-    public function index($id = null,$section = null,$page = null)
+    public function index($id = null,$section = null)
     {
-        $page == null || $page == 1 ? $page = 0 : "";
         $id = $id == null ? Auth::user()->id : $id;
         $section == null ? $section = 1 : $section;
         $user = User::query()->findOrFail($id);
-        if($user == null){
-            abort(404);
-        }
         $karma = KarmaController::getUserKarma($user->id);
         switch($section)
         {
             case 1:
-                $posts = Post::query()->where('user_id',$id)->where('active',true)->orderBy('id','desc')->skip($page)->paginate(10);
-                return inertia('Profile/index',[
+                $posts = Post::query()->where('user_id',$id)->get();
+                return inertia('Profile/Index',[
                     'section' => $section,
                     'user' => New UserResource($user),
                     'karma' => $karma,
                     'posts' => PostResource::collection($posts),
                 ]);
+                break;
             case 2:
-                $comments = CommentResource::collection(Comment::query()->where('user_id',$id)->skip($page)->paginate(10));
-                return inertia('Profile/index',[
+                $comments = CommentResource::collection(Comment::query()->where('user_id',$id)->get());
+                return inertia('Profile/Index',[
                     'section' => $section,
                     'user' => New UserResource($user),
                     'karma' => $karma,
                     'comments' => $comments,
                 ]);
+                break;
             case 3:
-                $replies = ReplyResource::collection(Reply::query()->where('user_id',$id)->skip($page)->paginate(10));
-                return inertia('Profile/index',[
+                $replies = ReplyResource::collection(Reply::query()->where('user_id',$id)->get());
+                return inertia('Profile/Index',[
                     'section' => $section,
                     'user' => New UserResource($user),
                     'karma' => $karma,
                     'replies' => $replies,
                 ]);
+                break;
             default: abort(404);
         }
         

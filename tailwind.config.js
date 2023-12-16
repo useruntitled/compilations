@@ -22,9 +22,17 @@ export default {
                 'bck': '#F2F2F2',
                 'dtfpr': '#0B5DD7',
                 'fox': '#d35400',
+                'secondary': '#595959',
+                'field': '#F5F5F5',
             },
             fontSize:{
-                'lgg': ['15px','20px'],
+                '13px': ['13px','18px'],
+                '15': ['15px','20px'],
+                '17px': ['17px','22px'],
+                'lgg': ['17px','20px'],
+            },
+            fontWeight:{
+                'w500': '500',
             },
             strokeWidth:{
                 '1/2': '0.5px',
@@ -35,7 +43,14 @@ export default {
                 10: '10px',
                 12: '12px',
                 16: '16px',
-            }
+            },
+            textDecorationThickness:{
+                3: '3px',
+                5: '5px',
+            },
+            fontFamily:{
+                'roboto': ['Roboto','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','sans-serif'] ,
+            },
         },
     },
 

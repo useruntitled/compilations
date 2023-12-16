@@ -1,5 +1,4 @@
 <template>
-    <p class="text-sm">#{{ reply.id }}</p>
     <header class="border-b flex items-center justify-between">
         <UserTablet :user="reply.user"></UserTablet>
         <Dropdown

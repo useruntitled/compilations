@@ -67,12 +67,9 @@ export default {
                     class="w-full ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
                 />
             </div>
-            <Dropdown class="text-sm">
+            <Dropdown class="text-sm" v-if="$page.props.auth.user">
                 <template #trigger>
                     <button>
-                        <PrimaryButtonWhite v-if="!$page.props.auth.user">
-                            Войти
-                        </PrimaryButtonWhite>
                         <UserTablet
                             v-if="$page.props.auth.user"
                             :mode="'no action'"
@@ -109,6 +106,9 @@ export default {
                     </div>
                 </template>
             </Dropdown>
+            <PrimaryButtonWhite v-else @click="callAuthModal()">
+                Войти
+            </PrimaryButtonWhite>
         </div>
     </div>
 </template>

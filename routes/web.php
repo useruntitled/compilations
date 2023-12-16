@@ -108,7 +108,7 @@ Route::controller(KarmaController::class)->group(function(){
 });
 
 Route::controller(PersonalPageController::class)->group(function(){
-    Route::get('profile/{id}/{section?}/{page?}','index')->name('profile');
+    Route::get('profile/{id}/{section?}','index')->name('profile');
 });
 
 require __DIR__.'/auth.php';
