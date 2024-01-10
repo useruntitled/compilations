@@ -3,9 +3,11 @@
         <header class="p-3 flex justify-between">
             <!-- <UserTablet :user="post.user" class="font-medium"></UserTablet> -->
             <UserTabletWithElementInside :user="post.user">
-                <p class="text-13px text-secondary">
-                    {{ post.timestamp }}
-                </p>
+                <template #content>
+                    <p class="text-13px text-secondary">
+                        {{ post.timestamp }}
+                    </p>
+                </template>
             </UserTabletWithElementInside>
             <div>
                 <Dropdown>
@@ -85,7 +87,10 @@
         >
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
-                ><Reputation :reputation="post.reputation"></Reputation
+                ><Reputation
+                    type="Post"
+                    :reputation="post.reputation"
+                ></Reputation
             ></span>
             <span class="me-2 text-slate-700"
                 ><LinkIcon

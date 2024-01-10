@@ -45,7 +45,7 @@ Route::controller(PostController::class)->group(function(){
     Route::get('post-edit/{id}/{slug}','edit')->name('post.edit')->middleware('auth');
     Route::post('post-film-attach','postAttachFilm')->name('post.attach.film')->middleware(['auth','creator']);
     Route::patch('post-film-dettach','postDettachFilm')->name('post.dettach.film')->middleware(['auth','creator']);
-    Route::get('post/{id}/{slug}','index')->name('post');
+    Route::get('post/{id}/{slug?}','index')->name('post');
     Route::delete('post','destroy')->name('post.delete')->middleware('auth');
 });
 

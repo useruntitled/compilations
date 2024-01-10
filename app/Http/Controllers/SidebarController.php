@@ -16,17 +16,17 @@ class SidebarController extends Controller
     {
         // $comments = CommentResource::collection(Comment::query()->orderBy('created_at','desc')->limit(10)->get());
         // $replies = ReplyResource::collection(Reply::query()->orderBy('created_at','desc')->limit(10)->get());
-        $comments = CommentResource::collection(Comment::query()->orderBy('created_at','desc')->limit(50)->get());
-        $replies = ReplyResource::collection(Reply::query()->orderBy('created_at','desc')->limit(50)->get());
-        $result = $comments->mergeRecursive($replies);
-        $result = $result->sortByDesc('created_at');
-        $result = $result->take(20);
-        $result = $result->mapWithKeys(function ($item, $key) {
-            return [chr($key + 65) => $item]; // блять иди нахуй
-        });
+        $comments = CommentResource::collection(Comment::query()->orderBy('created_at','desc')->limit(20)->get());
+        // $replies = ReplyResource::collection(Reply::query()->orderBy('created_at','desc')->limit(50)->get());
+        // $result = $comments->mergeRecursive($replies);
+        // $result = $result->sortByDesc('created_at');
+        // $result = $result->take(20);
+        // $result = $result->mapWithKeys(function ($item, $key) {
+            // return [chr($key + 65) => $item]; // блять иди нахуй
+        // });
         // dd($result);
 
 
-        return Response::json($result,200); 
+        return Response::json($comments,200); 
     }
 }

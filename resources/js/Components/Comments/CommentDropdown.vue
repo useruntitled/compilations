@@ -12,14 +12,14 @@
         >
             <div class="px-2">
                 <button
-                    @click.prevent="enableEditing = true"
+                    @click="this.$emit('enableEditing')"
                     class="block text-sm"
                     type="button"
                 >
                     Редактировать
                 </button>
                 <button
-                    @click.prevent="remove()"
+                    @click.prevent="this.$emit('remove')"
                     class="block text-sm"
                     type="button"
                 >

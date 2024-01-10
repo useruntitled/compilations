@@ -11,10 +11,6 @@ class HomeController extends Controller
     public function index()
     {
         $posts = Post::query()->latest('id')->limit(20)->where('active',true)->get();
-        $posts->each(function($post) {
-            $post->loadCount('films');
-            $post->load('tags');
-        });
         return inertia('home/index',[
             'posts' => PostResource::collection($posts),
         ]);

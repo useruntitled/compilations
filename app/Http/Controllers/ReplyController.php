@@ -50,4 +50,15 @@ class ReplyController extends Controller
         $reply->save();
         return new ReplyResource($reply);
     }
+    public function update(Request $request)
+    {
+        $validated = $request->validate([
+            'text' => 'required|min:1|max:2000',
+            'id' => 'required',
+        ]);
+        $comment = Reply::find($validated['id']);
+        $comment->text = nl2br($validated['text']);
+        $comment->update();
+        return $comment;
+    }
 }

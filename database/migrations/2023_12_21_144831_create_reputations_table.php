@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reply_reputations', function (Blueprint $table) {
+        Schema::create('reputations', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('reply_id')->constrained()->onDelete('cascade');
+            $table->set('action',['up','down']);
+            
+            $table->morphs('reputation_to');
+
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('action');
 
             $table->timestamps();
         });
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reply_reputations');
+        Schema::dropIfExists('reputations');
     }
 };

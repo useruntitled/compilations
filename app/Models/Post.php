@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\HasAuthor;
+use App\Traits\HasReputation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Auth;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, HasReputation, HasAuthor;
+
     protected $fillable = [
         'user_id','title',
         'description','active',
@@ -21,10 +25,6 @@ class Post extends Model
     {
         return $this->belongsToMany(Film::class);
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
@@ -33,28 +33,5 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
-    public function reputation()
-    {
-        return $this->hasMany(PostReputation::class);
-    }
-    public function getUserActionReputation()
-    {
-        $rep = $this->reputation->where('user_id',Auth::user()->id)->first();
-        if($rep != null) {
-            return $rep->action;
-        } 
-        return null;
-    }
-    public function getRepAttribute()
-    {
-        $pluses = $this->reputation->where('action','up')->count();
-        $minuses = $this->reputation->where('action','down')->count();
-        $user_action = Auth::user() ? $this->getUserActionReputation() : null;
-        return [
-            'up' => $pluses,
-            'down' => $minuses,
-            'action' => $user_action,
-            'post_id' => $this->id,
-        ];
-    }
+    
 }

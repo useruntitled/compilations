@@ -108,7 +108,9 @@ export default {
                 })
                 .catch((res) => {
                     // console.log(res);
-                    this.getLastComments();
+                    if (res.status != 429) {
+                        this.getLastComments();
+                    }
                 })
                 .then((res) => {
                     // console.log(res);

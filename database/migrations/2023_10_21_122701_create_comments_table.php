@@ -16,11 +16,14 @@ return new class extends Migration
 
             $table->foreignId('post_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('comment_id')->nullable()->constrained();
+
 
             $table->string('text');
 
 
             $table->timestamps();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
 

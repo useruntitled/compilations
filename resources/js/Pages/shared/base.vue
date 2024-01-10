@@ -21,13 +21,21 @@
         </div>
     </div>
 
-    <AuthModal :show="showModal" @close="closeModal()"></AuthModal>
+    <!-- <AuthModal :show="showModal" @close="closeModal()"></AuthModal> -->
+    <UrlModal
+        @closeModal="
+            calledModal = null;
+            modalIsClosed = false;
+        "
+        :modalIsClosed="modalIsClosed"
+        :callModal="calledModal"
+    ></UrlModal>
 </template>
 <script>
-import AuthModal from "@/Components/AuthModal.vue";
 import AsideLeft from "./partials/AsideLeft.vue";
 import AsideRight from "./partials/AsideRight.vue";
 import HeaderLayout from "./partials/HeaderLayout.vue";
+import UrlModal from "@/Components/Modals/UrlModal.vue";
 
 export default {
     props: {
@@ -35,27 +43,50 @@ export default {
     },
     data() {
         return {
-            showModal: false,
+            // showModal: false,
+            modalIsClosed: false,
+            calledModal: null,
+        };
+    },
+    provide() {
+        return {
+            closeModal: this.closeModal,
+            callModal: this.callModal,
         };
     },
     methods: {
         closeModal() {
-            this.showModal = false;
-            history.pushState(
-                "",
-                document.title,
-                window.location.pathname + window.location.search
-            );
+            this.modalIsClosed = true;
         },
+        callModal(name) {
+            this.calledModal = name;
+        },
+        // closeModal() {
+        //     this.showModal = false;
+        //     history.pushState(
+        //         "",
+        //         document.title,
+        //         window.location.pathname + window.location.search
+        //     );
+        // },
     },
-    mounted() {
-        setInterval(() => {
-            if (window.location.hash == "#modal-auth") {
-                this.showModal = true;
-            }
-        }, 100);
+    // mounted() {
+    //     setInterval(() => {
+    //         if (window.location.hash == "#modal-auth") {
+    //             this.showModal = true;
+    //         }
+    //     }, 100);
+    // },
+    destroyed() {
+        // window.Echo.init().leave(`App.Models.User.${$page.props.user.id}`);
     },
-    components: { HeaderLayout, AsideLeft, AsideRight, AuthModal },
+    components: {
+        HeaderLayout,
+        AsideLeft,
+        AsideRight,
+        UrlModal,
+        UrlModal,
+    },
 };
 </script>
 <style>

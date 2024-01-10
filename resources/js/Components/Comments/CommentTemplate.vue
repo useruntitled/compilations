@@ -3,7 +3,9 @@
         <header class="flex items-center justify-between">
             <!-- <UserTablet :user="comment.user"></UserTablet> -->
             <UserTabletWithElementInside :user="comment.user">
-                <p class="text-xs opacity-80">{{ comment.timestamp }}</p>
+                <template #content>
+                    <p class="text-xs opacity-80">{{ comment.timestamp }}</p>
+                </template>
             </UserTabletWithElementInside>
         </header>
         <main>
@@ -16,12 +18,23 @@
             ></Reputation>
             <button
                 class="ms-2 text-sm text-secondary"
-                @click="this.$emit('showReplyInterface')"
+                @click="
+                    this.changeShowReplyInterfaceValue(
+                        this.type,
+                        this.comment.id
+                    )
+                "
             >
                 Ответить
             </button>
             <span class="ms-5"
-                ><CommentDropdown :comment="this.comment"></CommentDropdown
+                ><CommentDropdown
+                    @remove="this.$emit('remove')"
+                    @enableEditing="
+                        changeShowEditingInterfaceValue(type, comment.id)
+                    "
+                    :comment="this.comment"
+                ></CommentDropdown
             ></span>
         </footer>
         <button
@@ -40,6 +53,11 @@ import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 
 export default {
+    inject: [
+        "showRepliesArray",
+        "changeShowReplyInterfaceValue",
+        "changeShowEditingInterfaceValue",
+    ],
     props: {
         comment: null,
         type: null,
@@ -54,10 +72,15 @@ export default {
     methods: {
         showRepliesFunction() {
             this.showReplies = true;
-            this.$emit("showReplies");
+            this.showRepliesArray.unshift(this.comment.id);
         },
     },
-    emits: ["showReplies", "showReplyInterface"],
+    emits: [
+        "showReplies",
+        "showReplyInterface",
+        "remove",
+        "showEditingInterface",
+    ],
     components: {
         UserTabletWithElementInside,
         Dropdown,

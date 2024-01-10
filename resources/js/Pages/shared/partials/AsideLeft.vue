@@ -42,7 +42,7 @@
             </div>
             <div class="w-full mt-10">
                 <PrimaryButton
-                    @click="callAuthModal()"
+                    @click="callModal('Editor')"
                     class="bg-orange-500 px-0 rounded-lg py-3 w-full font-semibold text-17px"
                     >Новая подборка</PrimaryButton
                 >
@@ -57,6 +57,7 @@ import IconClock from "@/Components/Icons/IconClock.vue";
 import IconFlame from "@/Components/Icons/IconFlame.vue";
 
 export default {
+    inject: ["callModal"],
     components: { PrimaryButton, IconBookmark, IconClock, IconFlame },
 };
 </script>

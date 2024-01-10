@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch, inject } from "vue";
 
 const props = defineProps({
     show: {
@@ -29,8 +29,11 @@ watch(
     }
 );
 
+const closeModal = inject("closeModal");
+
 const close = () => {
     if (props.closeable) {
+        closeModal();
         emit("close");
     }
 };

@@ -21,6 +21,7 @@ export default {
                 'kpnpale': '#f9b890',
                 'bck': '#F2F2F2',
                 'dtfpr': '#0B5DD7',
+                'primary': '#1793E6',
                 'fox': '#d35400',
                 'secondary': '#595959',
                 'field': '#F5F5F5',

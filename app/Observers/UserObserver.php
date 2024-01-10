@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Http\Controllers\KarmaController;
 use App\Http\Resources\UserResource;
+use App\Jobs\AddUserRoleToNewUserJob;
 use App\Models\Role;
 use App\Models\User;
 
@@ -14,8 +15,9 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        $user_role = Role::where('role','user')->first();
-        $user->roles()->attach($user_role->id);
+        // $user_role = Role::where('role','user')->first();
+        // $user->roles()->attach($user_role->id);
+        dispatch(new AddUserRoleToNewUserJob($user));
     }
 
     /**

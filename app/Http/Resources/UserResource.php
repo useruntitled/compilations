@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends JsonResource
 {
@@ -14,7 +15,7 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $prepare = [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
@@ -23,5 +24,9 @@ class UserResource extends JsonResource
             'roles' => $this->roles,
             'canCreatePosts' => $this->canCreatePosts,
         ];
+        if(Auth::check() && $this->id == Auth::user()->id){
+            $prepare['unreadNotifications_count'] = $this->unreadNotifications->count();
+        }
+        return $prepare;
     }
 }

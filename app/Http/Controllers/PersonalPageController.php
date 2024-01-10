@@ -19,6 +19,7 @@ class PersonalPageController extends Controller
     {
         $id = $id == null ? Auth::user()->id : $id;
         $section == null ? $section = 1 : $section;
+        $section = (int) $section;
         $user = User::query()->findOrFail($id);
         $karma = KarmaController::getUserKarma($user->id);
         switch($section)

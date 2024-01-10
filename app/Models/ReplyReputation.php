@@ -20,4 +20,8 @@ class ReplyReputation extends Model
     {
         return $this->belongsTo(Reply::class);
     }
+    public function getReplyToUserAttribute()
+    {
+        return $this->reply->user;
+    }
 }

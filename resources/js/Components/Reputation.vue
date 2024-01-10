@@ -30,12 +30,17 @@
 </template>
 <script>
 import axios from "axios";
-import AuthModal from "./AuthModal.vue";
+import AuthModal from "@/Components/Modals/Auth.vue";
 import IconUp from "./Icons/IconUp.vue";
 import IconDown from "./Icons/IconDown.vue";
+import Csrf from "@/Pages/shared/csrf.vue";
 export default {
+    inject: ["callModal"],
     props: {
-        type: null,
+        type: {
+            required: true,
+            default: null,
+        },
         reputation: null,
     },
     data() {
@@ -48,85 +53,28 @@ export default {
     },
     methods: {
         sendAction(action) {
-            // i can do that with formdata for chosing post_id or comment_id
-            if (this.type == "post" || this.type == null) {
-                axios
-                    .post(route("reputation.post"), {
-                        _method: "PATCH",
-                        post_id: this.reputation.post_id,
-                        action: action,
-                    })
-                    .catch((res) => {
-                        console.log(res);
-                        if (res.response.status == 401) {
-                            this.callAuthModal();
+            axios
+                .post(route("new.reputation"), {
+                    reputation_to_type: this.type,
+                    reputation_to_id: this.reputation.reputation_to_id,
+                    action: action,
+                })
+                .catch((res) => {
+                    console.log(res);
+                    if (res.response.status == 401) this.callModal("Auth");
+                })
+                .then((res) => {
+                    if (res.status == 200 || res.status == 201) {
+                        this.up = res.data.up;
+                        this.down = res.data.down;
+                        if (this.current_action == action) {
+                            this.current_action = null;
+                            return;
                         }
-                    })
-                    .then((res) => {
-                        if (res.status == 200 || res.status == 201) {
-                            this.up = res.data.up;
-                            this.down = res.data.down;
-                            if (this.current_action == action) {
-                                this.current_action = null;
-                                return;
-                            }
-                            this.current_action = action;
-                        }
-                        console.log(res);
-                    });
-            } else if (this.type == "comment") {
-                axios
-                    .post(route("comment.reputation.post"), {
-                        _method: "PATCH",
-                        comment_id: this.reputation.comment_id,
-                        action: action,
-                    })
-                    .catch((res) => {
-                        console.log(res);
-                        if (res.response.status == 401) {
-                            this.callAuthModal();
-                        }
-                    })
-                    .then((res) => {
-                        if (res.status == 200 || res.status == 201) {
-                            this.up = res.data.up;
-                            this.down = res.data.down;
-                            if (this.current_action == action) {
-                                this.current_action = null;
-                                return;
-                            }
-                            this.current_action = action;
-                        }
-                        console.log(res);
-                    });
-            } else if (this.type == "reply") {
-                axios
-                    .post(route("reply.reputation.post"), {
-                        _method: "PATCH",
-                        reply_id: this.reputation.reply_id,
-                        action: action,
-                    })
-                    .catch((res) => {
-                        console.log(res);
-                        if (res.response.status == 401) {
-                            this.callAuthModal();
-                        }
-                    })
-                    .then((res) => {
-                        if (res.status == 200 || res.status == 201) {
-                            this.up = res.data.up;
-                            this.down = res.data.down;
-                            if (this.current_action == action) {
-                                this.current_action = null;
-                                return;
-                            }
-                            this.current_action = action;
-                        }
-                        console.log(res);
-                    });
-            } else {
-                console.log("Reputation error: incorrect type", this.type);
-            }
+                        this.current_action = action;
+                    }
+                    console.log(res);
+                });
         },
         setDown() {
             // this.current_action = "down";
@@ -137,6 +85,6 @@ export default {
             this.sendAction("up");
         },
     },
-    components: { AuthModal, IconUp, IconDown },
+    components: { AuthModal, IconUp, IconDown, Csrf },
 };
 </script>

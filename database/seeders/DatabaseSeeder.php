@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $admin = User::create([
             'name' => fake()->name(),
+            'username' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => $password, // password

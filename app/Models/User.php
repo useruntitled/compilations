@@ -29,6 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username'
     ];
 
     /**
@@ -53,6 +54,10 @@ class User extends Authenticatable
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('role','admin')->exists();
+    }
+    public function getUnreadNotificationsAttribute()
+    {
+        return $this->unreadNotifications();
     }
     public function getAvatarAttribute()
     {
@@ -82,5 +87,10 @@ class User extends Authenticatable
     public function reply()
     {
         return $this->hasMany(Reply::class);
+    }
+    
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'users.'.$this->id;
     }
 }

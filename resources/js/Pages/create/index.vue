@@ -47,7 +47,8 @@
             >
                 Подтвердить
             </button> -->
-                <PrimaryButton>Подтвердить</PrimaryButton>
+                <!-- <PrimaryButton @click="submit()">Подтвердить</PrimaryButton> -->
+                <button @click="submit()">Подтвердить</button>
             </form>
         </div>
     </Base>
@@ -55,7 +56,7 @@
 <script>
 import axios from "axios";
 import PostAttachFilms from "@/Components/PostAttachFilms.vue";
-import Modal from "@/Components/Modal.vue";
+import Modal from "@/Components/Modals/Modal.vue";
 import AttachImage from "./AttachImage.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 export default {

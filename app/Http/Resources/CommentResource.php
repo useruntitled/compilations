@@ -20,11 +20,13 @@ class CommentResource extends JsonResource
             'user' => new UserResource($this->user),
             'text' => $this->text,
             'reputation' => $this->rep,
-            'replies' => ReplyResource::collection($this->replies),
+            'replies' => CommentResource::collection($this->replies),
             'replies_count' => $this->replies->count(),
+            'comment' => $this->comment ?? null,
+            'post_id' => $this->post_id,
             'post' => $this->post,
-            'isComment' => True,
             'created_at' => $this->created_at,
+            'deleted_at' => $this->deleted_at,
             'timestamp' => (new Carbon($this->created_at))->diffForHumans(),
         ];
     }

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="section == 1">
+    <div v-if="selectedSection == 1">
         <div v-for="post in posts" :key="post.id">
             <Post :post="post"></Post>
         </div>
@@ -30,7 +30,7 @@ export default {
     },
     data() {
         return {
-            selectedSection: this.section ?? 1,
+            selectedSection: parseInt(this.section) ?? 1,
         };
     },
     methods: {},

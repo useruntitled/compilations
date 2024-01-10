@@ -7,8 +7,10 @@ import HeaderSection from "./HeaderSection.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import PrimaryButtonWhite from "@/Components/Buttons/PrimaryButtonWhite.vue";
+import DropdownNotifications from "@/Components/Dropdowns/DropdownNotifications.vue";
 
 export default {
+    inject: ["callModal"],
     data() {
         return {
             showRegister: false,
@@ -25,6 +27,7 @@ export default {
         ApplicationLogo,
         PrimaryButton,
         PrimaryButtonWhite,
+        DropdownNotifications,
     },
 };
 </script>
@@ -67,48 +70,55 @@ export default {
                     class="w-full ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
                 />
             </div>
-            <Dropdown class="text-sm" v-if="$page.props.auth.user">
-                <template #trigger>
-                    <button>
-                        <UserTablet
-                            v-if="$page.props.auth.user"
-                            :mode="'no action'"
-                            :avatarOnly="true"
-                            :user="$page.props.auth.user"
-                            class="inline-block me-2"
-                        ></UserTablet>
-                        <svg
-                            v-if="$page.props.auth.user"
-                            class="ms-0 -mr-0.5 h-4 w-4 inline-block text-slate-500"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
+            <div class="flex items-center">
+                <div class="inline-block me-2">
+                    <DropdownNotifications></DropdownNotifications>
+                </div>
+                <Dropdown class="text-sm" v-if="$page.props.auth.user">
+                    <template #trigger>
+                        <button>
+                            <UserTablet
+                                v-if="$page.props.auth.user"
+                                :mode="'no action'"
+                                :avatarOnly="true"
+                                :user="$page.props.auth.user"
+                                class="inline-block me-2"
+                            ></UserTablet>
+                            <svg
+                                v-if="$page.props.auth.user"
+                                class="ms-0 -mr-0.5 h-4 w-4 inline-block text-slate-500"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg></button
+                    ></template>
+                    <template #content v-if="!$page.props.auth.user">
+                        <DropdownLink
+                            :href="route('register')"
+                            @click="showRegister = !showRegister"
                         >
-                            <path
-                                fill-rule="evenodd"
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg></button
-                ></template>
-                <template #content v-if="!$page.props.auth.user">
-                    <DropdownLink
-                        :href="route('register')"
-                        @click="showRegister = !showRegister"
-                    >
-                        Зарегистрироваться
-                    </DropdownLink>
-                    <DropdownLink :href="route('login')">Войти</DropdownLink>
-                </template>
-                <template v-if="$page.props.auth.user" #content>
-                    <div class="text-md">
-                        <HeaderSection></HeaderSection>
-                    </div>
-                </template>
-            </Dropdown>
-            <PrimaryButtonWhite v-else @click="callAuthModal()">
-                Войти
-            </PrimaryButtonWhite>
+                            Зарегистрироваться
+                        </DropdownLink>
+                        <DropdownLink :href="route('login')"
+                            >Войти</DropdownLink
+                        >
+                    </template>
+                    <template v-if="$page.props.auth.user" #content>
+                        <div class="text-md">
+                            <HeaderSection></HeaderSection>
+                        </div>
+                    </template>
+                </Dropdown>
+                <PrimaryButtonWhite v-else @click="callModal('Auth')">
+                    Войти
+                </PrimaryButtonWhite>
+            </div>
         </div>
     </div>
 </template>

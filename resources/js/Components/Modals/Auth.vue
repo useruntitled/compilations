@@ -1,6 +1,6 @@
 <template>
     <Csrf></Csrf>
-    <Modal :show="show" @close="$emit('close')">
+    <Modal :show="show" @close="showModal = false" v-if="showModal">
         <div class="p-5">
             <!-- errors -->
             <div
@@ -190,6 +190,14 @@ export default {
     data() {
         return {
             errors: {},
+            showModal: this.show,
+            name: null,
+            username: null,
+            email: null,
+            password: null,
+            password_confirmation: null,
+            login_password: null,
+            login_email: null,
         };
     },
     methods: {
@@ -203,7 +211,7 @@ export default {
                     password_confirmation: this.password_confirmation,
                 })
                 .catch((res) => {
-                    // console.log(res);
+                    console.log(res);
                     if (res.response.data.errors) {
                         this.errors = res.response.data.errors;
                     }
@@ -211,7 +219,18 @@ export default {
                 .then((res) => {
                     // console.log(res);
                     if (res.status == 200) {
-                        location.reload();
+                        let url = new URL(
+                            this.$page.props.app_url + this.$page.url
+                        );
+                        const interval = setInterval(() => {
+                            if (url.searchParams.has("modal") == false) {
+                                location.reload();
+                                clearInterval(interval);
+                            } else {
+                                url.searchParams.delete("modal");
+                                window.history.pushState(null, null, url);
+                            }
+                        }, 20);
                     }
                 });
         },
@@ -230,7 +249,18 @@ export default {
                 .then((res) => {
                     // console.log(res);
                     if (res.status == 200) {
-                        location.reload();
+                        let url = new URL(
+                            this.$page.props.app_url + this.$page.url
+                        );
+                        const interval = setInterval(() => {
+                            if (url.searchParams.has("modal") == false) {
+                                location.reload();
+                                clearInterval(interval);
+                            } else {
+                                url.searchParams.delete("modal");
+                                window.history.pushState(null, null, url);
+                            }
+                        }, 20);
                     }
                 });
         },

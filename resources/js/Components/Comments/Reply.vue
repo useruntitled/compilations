@@ -2,8 +2,9 @@
     <div ref="reply">
         <CommentTemplate
             :comment="reply"
-            type="'reply'"
+            type="Reply"
             @showReplyInterface="$emit('showReplyInterface')"
+            @showEditingInterface="$emit('showReplyEditingInterface')"
         >
         </CommentTemplate>
     </div>
@@ -23,7 +24,12 @@ export default {
             }, 200);
         }
     },
-    emits: ["showReplyInterface", "openReplies"],
+    emits: [
+        "showReplyInterface",
+        "openReplies",
+        "showEditingInterface",
+        "showReplyEditingInterface",
+    ],
     components: { CommentTemplate },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="text-md">
+    <div class="text-md text-15">
         <p class="px-4 text-md py-2 font-semibold">Мой профиль</p>
         <DropdownLink :href="route('profile', [$page.props.auth.user.id])">
             <div class="flex">

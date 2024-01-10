@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, provide } from "vue";
 
 const props = defineProps({
     align: {
@@ -27,7 +27,10 @@ onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
 
 const widthClass = computed(() => {
     return {
-        auto: "",
+        auto: `w-[${props.width}rem]`,
+        200: "w-[200px]",
+        300: "w-[300px]",
+        400: "w-[400px]",
         48: "w-48",
     }[props.width.toString()];
 });

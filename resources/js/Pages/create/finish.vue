@@ -17,7 +17,8 @@
                 >
                     Завершить
                 </button> -->
-                    <PrimaryButton @click="publish"> Завершить </PrimaryButton>
+                    <!-- <PrimaryButton @click="publish"> Завершить </PrimaryButton> -->
+                    <button @click="publish">Завершить</button>
                 </div>
             </div>
         </div>

@@ -6,13 +6,14 @@
         <div class="flex justify-between">
             <img
                 class="rounded-full"
-                :src="route('image.crop', [user.avatar, '1000x1000'])"
+                v-lazy="route('image.crop', [user.avatar, '1000x1000'])"
                 alt=""
-                style="max-width: 90px"
+                style="width: 90px"
             />
         </div>
         <p class="text-xl font-semibold">{{ user.name }}</p>
-        <p class="font-semibold">{{ karma }}</p>
+        <!-- <p class="font-semibold">{{ karma }}</p> -->
+        <KarmaCountWithEmoji :karma="karma"></KarmaCountWithEmoji>
         <div class="flex items-center mt-2">
             <Link
                 @click="selectedSection = 1"
@@ -32,11 +33,11 @@
             :style="
                 'width:' +
                 ' ' +
-                getLinkWidth(selectedSection) +
+                linkWidth +
                 'px;' +
                 'translate: ' +
                 ' ' +
-                setLinkPosition(selectedSection) +
+                linkPosition +
                 'px'
             "
         ></div>
@@ -46,6 +47,8 @@
     </div>
 </template>
 <script>
+import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
+
 export default {
     props: {
         user: null,
@@ -54,33 +57,51 @@ export default {
     },
     data() {
         return {
-            selectedSection: this.section,
+            selectedSection: parseInt(this.section),
             countOfLinks: 2,
+            linkWidth: null,
+            linkPosition: null,
         };
     },
     watch: {
         selectedSection(newValue, oldValue) {
             this.setLinkPosition(newValue);
+            this.setLinkWidth(newValue);
         },
     },
     methods: {
-        getLinkWidth(index) {
+        setLinkWidth(index) {
             if (this.$refs[`link-${index}`])
-                return this.$refs[`link-${index}`].clientWidth;
+                this.linkWidth = this.$refs[`link-${index}`].clientWidth;
         },
         setLinkPosition(index) {
+            // если реф существуют, то
             if (this.$refs[`link-${index}`]) {
-                if (index == 1) return 0;
+                if (index == 1) {
+                    this.linkPosition = 0;
+                    return;
+                }
                 let sum = 0;
                 for (let i = 0; i < this.countOfLinks - 1; i++) {
                     sum += this.$refs[`link-${index}`].clientWidth - 5;
                 }
-                return sum;
+                this.linkPosition = sum;
             }
         },
     },
     mounted() {
+        this.$watch(
+            () => this.$page.url,
+            (newUrl, oldUrl) => {
+                if (newUrl.slice(-1) > 2) {
+                    this.selectedSection = 1;
+                }
+            }
+        );
         this.setLinkPosition(this.selectedSection);
+        this.setLinkWidth(this.selectedSection);
+        // alert(this.setLinkPosition(this.selectedSection));
     },
+    components: { KarmaCountWithEmoji },
 };
 </script>

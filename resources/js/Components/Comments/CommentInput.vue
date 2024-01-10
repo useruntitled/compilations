@@ -19,6 +19,7 @@
                     : `before:content-['Комментарий...']`
             "
             @input="handleInput()"
+            v-html="text"
         ></div>
         <div class="flex justify-between mt-5 items-center">
             <div class="p-2 ps-0">
@@ -51,6 +52,10 @@ import IconPhoto from "../Icons/IconPhoto.vue";
 export default {
     props: {
         commentIsCreated: false,
+        text: {
+            required: false,
+            default: null,
+        },
     },
     data() {
         return {

@@ -22,7 +22,8 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'reputation' => $this->rep,
-            'comments' => CommentResource::collection($this->comments)->sortByDesc(fn($comment) => $comment->id)->all(),
+            'comments' => CommentResource::collection($this->comments->filter(fn($c) => !$c->isReply))
+            ->sortByDesc(fn($comment) => $comment->id)->all(),
             'comments_count' => $this->comments->count() + $this->comments->sum(fn($comm) => $comm->replies->count()),
             'tags' => $this->tags,
             'user' => new UserResource($this->user),
