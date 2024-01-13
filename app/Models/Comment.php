@@ -38,8 +38,43 @@ class Comment extends Model
         return $this->belongsTo(Comment::class,'comment_id');
     }
 
+    public function getIsDeletedAttribute()
+    {
+        return $this->deleted_at != null;
+    }
+
     public function getIsReplyAttribute()
     {
         return $this->comment != null;
+    }
+    
+    public function getNoRepliesAttribute()
+    {
+        return $this->replies->count() == 0;
+    }
+
+    public function getAuthorOfPostAttribute()
+    {
+        return $this->post->user->id == $this->user->id;
+    }
+
+    public function getHasParrentAttribute()
+    {
+        return isset($this->comment);
+    }
+
+    public function getParrentUserAttribute()
+    {
+        return $this->comment->user;
+    }
+
+    public function getPostUserAttribute()
+    {
+        return $this->post->user;
+    }
+
+    public function getAuthorOfParrentAttribute()
+    {
+        return $this->comment?->user->id == $this->user->id;
     }
 }

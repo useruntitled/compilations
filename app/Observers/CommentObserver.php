@@ -29,7 +29,7 @@ class CommentObserver
      */
     public function deleted(Comment $comment): void
     {
-        
+        event(new CommentDeletedEvent($comment));
     }
 
     /**
@@ -37,7 +37,7 @@ class CommentObserver
      */
     public function restored(Comment $comment): void
     {
-
+        //
     }
 
     /**
@@ -45,15 +45,10 @@ class CommentObserver
      */
     public function forceDeleted(Comment $comment): void
     {
-        event(new CommentDeletedEvent([
-            'id' => $comment->id,
-            'parrent_comment_id' => $comment->comment->id,
-            'author_of_commented_post' => $comment->post->user,
-            'author_of_comment' => $comment->user,
-        ]));
+        event(new CommentDeletedEvent($comment));
     }
     public function retrieved(Comment $comment)
     {
-        
+        //
     }
 }

@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Response;
 class NotificationController extends Controller
 {
 
+    public function index()
+    {
+        
+    }
+
     public function read()
     {
         $notifications = Auth::user()->unreadNotifications->get();
@@ -22,11 +27,21 @@ class NotificationController extends Controller
 
 
 
-    public static function deleteNotificationByParam($notifiable_id,$param_name,$param_content)
+    public static function deleteByParam($notifiable_id,$param_name,$param_content)
     {
         $user_id = $notifiable_id;
         $notifications = User::find($user_id)->notifications()
         ->whereJsonContains("data->$param_name",$param_content)->get();
+        foreach($notifications as $n){
+            $n->delete();
+        }
+    }
+
+    public static function deleteByObjectId($notifiable_id,$id): void
+    {
+        $user_id = $notifiable_id;
+        $notifications = User::find($user_id)->notifications()
+        ->whereJsonContains("data->id",$id)->get();
         foreach($notifications as $n){
             $n->delete();
         }

@@ -9,14 +9,14 @@ use Illuminate\Queue\SerializesModels;
 
 class ReputationDeletedEvent implements ShouldQueue
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
-    public $args;
+    public $reputation;
     /**
      * Create a new event instance.
      */
-    public function __construct($args)
+    public function __construct($reputation)
     {
-        $this->args = $args;
+        $this->reputation = $reputation;
     }
 }

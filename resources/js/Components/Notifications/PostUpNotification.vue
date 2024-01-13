@@ -2,27 +2,31 @@
     <div class="p-2 px-3">
         <main class="text-start">
             <div v-if="solo">
-                <NotificationTemplate :notification="notifications[0]">
+                <NotificationTemplate
+                    :notification="notifications[0]"
+                    iconFirstColor="red-500"
+                >
                     <template #content>
-                        Ответил на ваш комментарий
-                        {{ notifications[0].data.parrentComment.text }}
+                        Оценил вашу подборку
+                        {{ notifications[0].data.post.title }}
                     </template>
                     <template #icon>
-                        <IconComments></IconComments>
+                        <IconHeart></IconHeart>
                     </template>
                 </NotificationTemplate>
             </div>
             <div v-else>
-                <NotificationTemplate :notification="notifications[0]">
-                    <template #header>
-                        и ещё {{ countUniqueUsers }} чел.
-                    </template>
+                <NotificationTemplate
+                    :notification="notifications[0]"
+                    iconFirstColor="red-500"
+                >
+                    <template #header> И еще {{ count }} чел. </template>
                     <template #content>
-                        Ответили на ваш комментарий
-                        {{ notifications[0].data.parrentComment.text }}
+                        Оценили вашу подборку
+                        {{ notifications[0].data.post.title }}
                     </template>
                     <template #icon>
-                        <IconComments></IconComments>
+                        <IconHeart></IconHeart>
                     </template>
                 </NotificationTemplate>
             </div>
@@ -31,7 +35,7 @@
 </template>
 <script>
 import IconArrowForwardUp from "../Icons/IconArrowForwardUp.vue";
-import IconComments from "../Icons/IconComments.vue";
+import IconHeart from "../Icons/IconHeart.vue";
 import UserTablet from "../UserTablet.vue";
 import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
 import NotificationTemplate from "./NotificationTemplate.vue";
@@ -45,13 +49,7 @@ export default {
         solo() {
             return this.count == 1;
         },
-        countUniqueUsers() {
-            let array = [];
-            this.notifications.forEach((n) => {
-                array.unshift(n.data.byUser.id);
-            });
-            return new Set(array).size;
-        },
+        grouped() {},
     },
 
     components: {
@@ -59,7 +57,7 @@ export default {
         UserTabletWithElementInside,
         IconArrowForwardUp,
         NotificationTemplate,
-        IconComments,
+        IconHeart,
     },
 };
 </script>

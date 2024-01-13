@@ -20,10 +20,6 @@ class ReputationObserver
 
     public function deleted(Reputation $reputation): void
     {
-        event(new ReputationDeletedEvent([
-            'id' => $reputation->id,
-            'reputation_to' => $reputation->reputation_to,
-            'isUserOwnReputation' => $reputation->isUserOwnReputation,
-        ]));
+        event(new ReputationDeletedEvent($reputation));
     }
 }

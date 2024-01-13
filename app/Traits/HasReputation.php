@@ -18,15 +18,12 @@ trait HasReputation
     {
         return $this->morphMany(Reputation::class,'reputation_to');
     }
-    public function getUserActionReputation()
-    {
-        $rep = $this->reputation ? $this->reputation->where('user_id',Auth::user()->id)
-        ->where('reputation_to_type',$this->classname)->first() : null;
-        if($rep != null) {
-            return $rep->action;
-        } 
-        return null;
-    }
+
+    // public function getIsUserOwnReputationAttribute()
+    // {
+    //     return $this->reputation?->reputation_to_id == Auth::user()->id;
+    // }
+
     public function getRepAttribute()
     {   
         $pluses = $this->reputation ?
@@ -45,11 +42,18 @@ trait HasReputation
             'reputation_to_id' => $this->id,
         ];
     }
-    
-    public function getIsUserOwnReputationAttribute()
+
+    protected function getUserActionReputation()
     {
-        return $this->reputation->replyToUser->id == Auth::user()->id;
+        $rep = $this->reputation ? $this->reputation->where('user_id',Auth::user()->id)
+        ->where('reputation_to_type',$this->classname)->first() : null;
+        if($rep != null) {
+            return $rep->action;
+        } 
+        return null;
     }
+    
+    
 }
 
 

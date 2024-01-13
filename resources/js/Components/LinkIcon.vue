@@ -5,7 +5,10 @@
                 <div
                     class="inline-block hover:text-orange-700 hover:bg-orange-100 rounded-full p-1 duration-200"
                 >
-                    <Link :href="href ?? ''">
+                    <Link
+                        :href="href ?? ''"
+                        class="fill-none stroke-slate-700 hover:stroke-orange-700"
+                    >
                         <slot></slot>
                     </Link>
                 </div>

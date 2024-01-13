@@ -24,8 +24,18 @@ class Reputation extends Model
         return $this->reputation_to->user;
     }
 
-    public function getIsUserOwnReputationAttribute()
+    public function getRepToUserAttribute()
+    {
+        return $this->reputationToUser;
+    }
+
+    public function getRepToUserIsOwnerAttribute()
     {
         return $this->user_id == $this->reputation_to->user->id;
+    }
+
+    public function getIsUpAttribute()
+    {
+        return strtolower($this->action) == 'up';
     }
 }

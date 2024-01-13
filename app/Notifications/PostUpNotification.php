@@ -3,23 +3,23 @@
 namespace App\Notifications;
 
 use App\Http\Resources\UserResource;
-use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PostWasCommentedNotification extends Notification
+class PostUpNotification extends Notification
 {
     use Queueable;
 
-    public $comment;
+    protected $reputation;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct(Comment $comment)
+    public function __construct($reputation)
     {
-        $this->comment = $comment;
+        $this->reputation = $reputation;
     }
 
     /**
@@ -51,16 +51,12 @@ class PostWasCommentedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'notification_type' => 'post.was.commented',
-            'id' => $this->comment->id,
-            'post' => $this->comment->post,
-            'object_id' => $this->comment->post->id,
-            'link_post' => route('post',$this->comment->post->id),
-            'link_comment' => route('post',[
-                'id' => $this->comment->post->id,
-                'comment' => $this->comment->id,
-            ]),
-            'byUser' => new UserResource($this->comment->user),
+            'notification_type' => 'post.up.notification',
+            'post' => $this->reputation->reputation_to,
+            'object_id' => $this->reputation->reputation_to->id,
+            'id' => $this->reputation->id,
+            'link_post' => route('post',$this->reputation->reputation_to->id),
+            'byUser' => new UserResource($this->reputation->user),
         ];
     }
 }

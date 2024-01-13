@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Services\ParserService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller

@@ -6,6 +6,7 @@ use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KarmaController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostReputationController;
@@ -105,6 +106,10 @@ Route::controller(GenreController::class)->group(function(){
 
 Route::controller(KarmaController::class)->group(function(){
     Route::get('forbidden/karma','forbidden')->name('karma.forbidden')->middleware('auth');
+});
+
+Route::controller(NotificationController::class)->group(function(){
+    Route::get('notifications')->name('notifications')->middleware('auth');
 });
 
 Route::controller(PersonalPageController::class)->group(function(){

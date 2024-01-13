@@ -13,14 +13,14 @@ class ReplyNotification extends Notification
 {
     use Queueable;
 
-    public $reply;
+    public $comment;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Reply $reply)
+    public function __construct($comment)
     {
-        $this->reply = $reply;
+        $this->comment = $comment;
     }
 
     /**
@@ -53,8 +53,12 @@ class ReplyNotification extends Notification
     {
         return [
             'notification_type' => 'comment.was.replied',
-            'id' => $this->reply->id,
-            'byUser' => new UserResource($this->reply->user),
+            'object_id' => $this->comment->comment->id,
+            'parrentComment' => $this->comment->comment,
+            'id' => $this->comment->id,
+            'link_post' => route('post',$this->comment->post->id),
+            'link_comment' => route('post',['id' => $this->comment->post->id, 'comment' => $this->comment->id]),
+            'byUser' => new UserResource($this->comment->user),
         ];
     }
 }

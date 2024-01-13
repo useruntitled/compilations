@@ -62,10 +62,9 @@
                         <p
                             class="text-base overflow-hidden text-ellipsis hover:opacity-70 cursor-pointer"
                             style="max-height: 100px"
-                        >
-                            {{ comment.text }}
-                        </p></Link
-                    >
+                            v-html="comment.text"
+                        ></p
+                    ></Link>
                 </div>
             </div>
         </div>

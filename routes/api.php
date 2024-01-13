@@ -39,12 +39,7 @@ Route::controller(CommentController::class)->group(function(){
 //     Route::patch('reputation/comment','patch')->name('comment.reputation.post')->middleware('auth');
 // });
 
-Route::controller(ReplyController::class)->group(function(){
-    Route::put('reply','update')->name('reply.update')->middleware('auth');
-    Route::post('reply','create')->name('reply.create')->middleware('auth');
-    Route::delete('reply','delete')->name('reply.delete')->middleware('auth');
-    Route::get('reply/{comment_id}','get')->name('replies.get');
-});
+
 
 // Route::controller(ReplyReputationController::class)->group(function(){
 //     Route::patch('reputation/reply','patch')->name('reply.reputation.post')->middleware('auth');

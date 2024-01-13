@@ -4,18 +4,20 @@ namespace App\Listeners;
 
 use App\Events\NotificationModified;
 use App\Http\Controllers\NotificationController;
-use App\Models\Comment;
+use App\Jobs\DeleteNotificationAndCallEventJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class CommentDeletedListener implements ShouldQueue
 {
+
+
     /**
      * Create the event listener.
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -23,18 +25,39 @@ class CommentDeletedListener implements ShouldQueue
      */
     public function handle(object $event): void
     {
-        $args = $event->args;
+      
+      $comment = $event->comment;
 
-        $parrentComment = Comment::find($args['parrent_comment_id']);
+      
+      $this->deletePostWasCommentedNotification($comment);
+      $this->deleteReplyNotification($comment);
+      
 
-        if($parrentComment->deleted_at != null && $parrentComment->replies->count() == 0){
-          $parrentComment->forceDelete();
-        }
+      // Transaction or something needed here
+      $this->destroyDeletedParrent($comment);
+    }
 
-      if($args['author_of_commented_post']->id != $args['author_of_comment']->id){
-        NotificationController::deleteNotificationByParam($args['author_of_commented_post']->id,'id',
-        $args['id']);
-        event(new NotificationModified($args['author_of_commented_post']));
+    protected function deletePostWasCommentedNotification($comment)
+    {
+      dispatch(
+        new DeleteNotificationAndCallEventJob($comment->postUser, $comment)
+      );
+    }
+
+    protected function deleteReplyNotification($comment)
+    {
+      if($comment->hasParrent){
+        dispatch(
+          new DeleteNotificationAndCallEventJob($comment->parrentUser, $comment)
+        );
+      }
+    }
+
+    protected function destroyDeletedParrent($comment)
+    {
+      if($comment->comment?->isDeleted && $comment->comment?->noReplies)
+      {
+        $comment->comment->forceDelete();
       }
     }
 }

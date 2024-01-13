@@ -1,31 +1,37 @@
 <template>
     <div class="m-1 ms-0 text-start">
         <Link :href="route('profile', [user.id])">
-            <div class="flex items-start">
-                <div class="flex items-end justify-end">
-                    <img
-                        class="rounded-full inline-block"
-                        :src="route('image.crop', [user.avatar, '40x40'])"
-                        style="width: 40px; height: 40px"
-                        alt=""
-                    />
-                    <div
-                        class="absolute rounded-full duration-200 transition-all p-[1px] text-white stroke-2"
-                        :class="`bg-${iconColor}`"
-                        v-if="icon != null"
-                    >
-                        <component
-                            :is="icon"
-                            class="mx-auto duration-200 relative"
-                            :class="
-                                isDropdown
-                                    ? !isVisible
-                                        ? 'w-2 h-2'
-                                        : 'w-4 h-4'
-                                    : 'w-4 h-4'
-                            "
-                            :style="translateStyle"
-                        ></component>
+            <div
+                class="grid grid-rows-1 grid-flow-col items-start place-content-start"
+            >
+                <div class="flex items-end justify-start">
+                    <div class="flex items-end justify-end">
+                        <img
+                            class="rounded-full inline-block"
+                            :src="route('image.crop', [user.avatar, '100x100'])"
+                            style="width: 40px; height: 40px"
+                            alt=""
+                        />
+                        <div
+                            class="absolute rounded-full duration-200 transition-all text-white stroke-2"
+                            :class="'bg-' + iconColor"
+                            v-if="icon != null"
+                        >
+                            <div class="text-white">
+                                <component
+                                    :is="icon"
+                                    class="mx-auto duration-200 relative stroke-[2] fill-white p-1"
+                                    :class="
+                                        isDropdown
+                                            ? !isVisible
+                                                ? 'w-2 h-2'
+                                                : 'w-5 h-5'
+                                            : 'w-5 h-5'
+                                    "
+                                    :style="translateStyle"
+                                ></component>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-col align-center ms-2 text-15 font-500">
@@ -33,11 +39,13 @@
                     <p><slot name="content" /></p>
                 </div>
             </div>
+            <div class="d-none text-primary bg-primary bg-dtfpr"></div>
         </Link>
     </div>
 </template>
 <script>
 import IconArrowForwardUp from "./Icons/IconArrowForwardUp.vue";
+import IconComments from "./Icons/IconComments.vue";
 import IconHeart from "./Icons/IconHeart.vue";
 
 export default {
@@ -45,7 +53,7 @@ export default {
         user: null,
         icon: null,
         iconColor: {
-            default: "orange-500",
+            default: "primary",
         },
         isDropdown: {
             default: false,
@@ -63,6 +71,6 @@ export default {
             this.isVisible = true;
         }, 20);
     },
-    components: { IconArrowForwardUp, IconHeart },
+    components: { IconArrowForwardUp, IconHeart, IconComments },
 };
 </script>

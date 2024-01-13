@@ -25,7 +25,7 @@ class SidebarController extends Controller
             // return [chr($key + 65) => $item]; // блять иди нахуй
         // });
         // dd($result);
-
+        $comments = $comments->filter(fn($c) => !$c->trashed());
 
         return Response::json($comments,200); 
     }

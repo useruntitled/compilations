@@ -1,5 +1,5 @@
 <template>
-    <Dropdown width="300" v-if="$page.props.auth.user">
+    <Dropdown width="350" v-if="$page.props.auth.user">
         <template
             #trigger
             v-if="notifications_count <= 0 || notificationsHaveBeenRead"
@@ -28,29 +28,16 @@
         <template #content>
             <p class="text-start font-semibold p-5 py-2">Уведомления</p>
             <div v-if="notifications_count">
-                <div v-for="notification in notifications">
-                    <!-- <CommentReaction
-                        :notification="notification"
-                    ></CommentReaction> -->
-                    <!-- <NotificationBumpReaction
-                        :notification="notification"
-                    ></NotificationBumpReaction> -->
-                    <!-- <component
-                        :is="
-                            notification.type.replace(
-                                'App\\Notifications\\',
-                                ''
-                            )
-                        "
-                        :notification="notification"
-                    ></component> -->
-                </div>
                 <div v-for="(items, key) in notificationsGroup">
                     <component
                         :is="items[0].type.replace('App\\Notifications\\', '')"
                         :notifications="items"
                         :count="notificationsGroup[key].length"
                     ></component>
+                </div>
+                <div v-if="notifications_count >= 5">
+                    <hr />
+                    <button class="p-[5px] text-dtfpr">Все уведомления</button>
                 </div>
             </div>
             <div
@@ -77,9 +64,9 @@ import BtnIcon from "../BtnIcon.vue";
 import Dropdown from "../Dropdown.vue";
 import IconBell from "../Icons/IconBell.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
-import BumpReactionNotification from "../Notifications/BumpReactionNotification.vue";
 import PostWasCommentedNotification from "@/Components/Notifications/PostWasCommentedNotification.vue";
 import ReplyNotification from "../Notifications/ReplyNotification.vue";
+import PostUpNotification from "../Notifications/PostUpNotification.vue";
 
 export default {
     props: {},
@@ -92,26 +79,33 @@ export default {
             notificationsIsLoaded: false,
             notifications: null,
             isLoading: false,
+            notificationsGroup: this.notifications,
         };
     },
-    computed: {
-        notificationsGroup() {
-            const resultObject = {};
-            this.notifications.forEach((n) => {
-                const type = n.type;
-                const readed = n.read_at == null ? false : true;
-                const key = `${type}-${readed}`;
-                if (!resultObject[key]) resultObject[key] = [];
-                resultObject[key].push(n);
-            });
-            return resultObject;
-        },
-    },
+
     methods: {
         open() {
             if (!this.notificationsHaveBeenRead) {
                 this.LoadNotificationsAndRead();
             }
+        },
+        group() {
+            const resultObject = {};
+            let count;
+            if (this.notifications) {
+                this.notifications.forEach((n) => {
+                    const type = n.type;
+                    const readed = n.read_at == null ? false : true;
+                    const id = n.data.object_id;
+                    const key = `${type}-${readed}-${id}`;
+                    if (!resultObject[key]) resultObject[key] = [];
+                    resultObject[key].push(n);
+                    count++;
+                });
+            }
+            // return resultObject;
+            this.notifications_count = count;
+            this.notificationsGroup = resultObject;
         },
         LoadNotificationsAndRead() {
             this.isLoading = true;
@@ -126,6 +120,7 @@ export default {
                 .then((res) => {
                     console.log(res);
                     this.notifications = res.data;
+                    this.group();
                     this.notifications_count = res.data.length;
                     this.isLoading = false;
                     this.notificationsIsLoaded = true;
@@ -170,9 +165,9 @@ export default {
         IconBell,
         BtnIcon,
         AnimationLoader,
-        BumpReactionNotification,
         PostWasCommentedNotification,
         ReplyNotification,
+        PostUpNotification,
     },
 };
 </script>

@@ -8,11 +8,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BumpReactionNotification extends Notification
+class CommentUpNotification extends Notification
 {
     use Queueable;
 
-    public $reputation;
+    protected $reputation;
+
     /**
      * Create a new notification instance.
      */
@@ -34,6 +35,13 @@ class BumpReactionNotification extends Notification
     /**
      * Get the mail representation of the notification.
      */
+    // public function toMail(object $notifiable): MailMessage
+    // {
+    //     return (new MailMessage)
+    //                 ->line('The introduction to the notification.')
+    //                 ->action('Notification Action', url('/'))
+    //                 ->line('Thank you for using our application!');
+    // }
 
     /**
      * Get the array representation of the notification.
@@ -42,14 +50,17 @@ class BumpReactionNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $comment = $this->reputation->reputation_to;
+        $post = $comment->post;
+
         return [
-            'notification_type' => 'bump',
+            'notification_type' => 'comment.up.notification',
+            'comment' => $this->reputation->reputation_to,
+            'object_id' => $comment->id,
             'id' => $this->reputation->id,
-            'type' => str_replace('App\\Models\\','',$this->reputation->reputation_to_type),
-            'toUser' => new UserResource($this->reputation->reputationToUser),
-            'reactionTo' => $this->reputation->reputation_to,
+            'link_post' => route('post',$post->id),
+            'link_comment' => route('post',['id' => $post->id, 'comment' => $comment->id]),
             'byUser' => new UserResource($this->reputation->user),
-            'isDeleted' => false,
         ];
     }
 }

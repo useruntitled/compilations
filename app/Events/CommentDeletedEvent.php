@@ -14,15 +14,15 @@ use Illuminate\Queue\SerializesModels;
 
 class CommentDeletedEvent implements ShouldQueue
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
-    public $args;
+    public $comment;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($args)
+    public function __construct($comment)
     {
-        $this->args = $args;
+        $this->comment = $comment;
     }
 }

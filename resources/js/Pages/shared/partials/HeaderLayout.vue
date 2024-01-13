@@ -77,13 +77,29 @@ export default {
                 <Dropdown class="text-sm" v-if="$page.props.auth.user">
                     <template #trigger>
                         <button>
-                            <UserTablet
+                            <!-- <UserTablet
                                 v-if="$page.props.auth.user"
                                 :mode="'no action'"
                                 :avatarOnly="true"
                                 :user="$page.props.auth.user"
                                 class="inline-block me-2"
-                            ></UserTablet>
+                            ></UserTablet> -->
+                            <div
+                                v-if="$page.props.auth.user"
+                                class="inline-block me-1"
+                            >
+                                <img
+                                    class="rounded-full inline-block"
+                                    :src="
+                                        route('image.crop', [
+                                            $page.props.auth.user.avatar,
+                                            '100x100',
+                                        ])
+                                    "
+                                    style="width: 40px; height: 40px"
+                                    alt=""
+                                />
+                            </div>
                             <svg
                                 v-if="$page.props.auth.user"
                                 class="ms-0 -mr-0.5 h-4 w-4 inline-block text-slate-500"

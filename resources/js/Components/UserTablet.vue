@@ -1,35 +1,28 @@
 <template>
-    <div class="m-1 ms-0" v-if="!avatarOnly">
-        <Link v-if="mode != 'no action'" :href="route('profile', [user.id])">
-            <img
-                class="rounded-full inline-block"
-                v-lazy="route('image.crop', [user.avatar, '40x40'])"
-                style="width: 40px; height: 40px"
-                alt=""
-            />
-            <span class="text-sm text-slate-900 ms-2 hover:text-slate-600">{{
-                user.name
-            }}</span>
-        </Link>
-        <div v-else>
-            <img
-                class="rounded-full inline-block"
-                v-lazy="route('image.crop', [user.avatar, '40x40'])"
-                style="width: 40px; height: 40px"
-                alt=""
-            />
-            <span class="text-sm text-slate-900 ms-2 hover:text-slate-600">{{
-                user.name
-            }}</span>
-        </div>
-    </div>
-    <div v-else>
-        <img
-            class="rounded-full inline-block hover:opacity-80"
-            v-lazy="route('image.crop', [user.avatar, '40x40'])"
-            style="width: 40px; height: 40px"
-            alt=""
-        />
+    <div>
+        <header
+            class="grid grid-rows-1 grid-flow-col items-start place-content-start"
+        >
+            <div class="flex items-end justify-end">
+                <img
+                    class="rounded-full inline-block"
+                    :src="route('image.crop', [user.avatar, '100x100'])"
+                    style="width: 40px; height: 40px"
+                    alt=""
+                />
+                <div class="absolute">
+                    <slot name="icon"></slot>
+                </div>
+            </div>
+            <div class="flex flex-col ms-2">
+                <div>
+                    <slot name="header"></slot>
+                </div>
+                <main>
+                    <slot name="content"></slot>
+                </main>
+            </div>
+        </header>
     </div>
 </template>
 <script>
