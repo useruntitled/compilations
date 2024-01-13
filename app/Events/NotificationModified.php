@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Http\Controllers\NotificationController;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -40,7 +41,7 @@ class NotificationModified implements ShouldQueue, ShouldBroadcast
 
     public function broadcastWith(): Array
     {
-        $result = NotificationController::countUserUnreadNotifications($this->notifiable_id);
+        $result = User::find($this->notifiable_id)->countUnreadNotifications();
         return [
             'unreadNotifications_count' => $result,
         ];

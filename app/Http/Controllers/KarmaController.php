@@ -21,23 +21,18 @@ class KarmaController extends Controller
             'karma' => $karma,
         ]);
     }
+
     public static function getUserKarma($user_id = null)
     {
-
         $user_id = $user_id ?? Auth::user()->id;
         $reps = Reputation::where('user_id','!=',$user_id)->get()
-        ->reject(fn($rep) => $rep->reputation_to->user->id != $user_id);
-
-        // $rep_comm = CommentReputation::where('user_id','!=',$user_id)->get()->reject(fn($rep) => $rep->comment->user->id != $user_id);
-        // $rep_reply = ReplyReputation::where('user_id','!=',$user_id)->get()->reject(fn($rep) => $rep->reply->user->id != $user_id);
-        // $rep_post = PostReputation::where('user_id','!=',$user_id)->get()->reject(fn($rep) => $rep->post->user->id != $user_id);
-        // $rep = $rep_comm->merge($rep_reply);
-        // $rep = $rep->merge($rep_post);
+            ->reject(fn($rep) => $rep->reputation_to->user->id != $user_id);
 
         $reputation = $reps->sum(fn($rep) => $rep->action == 'up');
         $reputation -= $reps->sum(fn($rep) => $rep->action == 'down');
         return $reputation;
     }
+    
     public static function canPost(User $user)
     {
         $karma = static::getUserKarma($user->id);

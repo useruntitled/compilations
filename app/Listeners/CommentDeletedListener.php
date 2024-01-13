@@ -2,9 +2,11 @@
 
 namespace App\Listeners;
 
+use App\Actions\DeleteNotificationAndCallEvent;
 use App\Events\NotificationModified;
 use App\Http\Controllers\NotificationController;
 use App\Jobs\DeleteNotificationAndCallEventJob;
+use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -13,11 +15,14 @@ class CommentDeletedListener implements ShouldQueue
 {
 
 
+    protected $service;
+
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(NotificationService $service)
     {
+      $this->service = $service;
     }
 
     /**
@@ -39,17 +44,13 @@ class CommentDeletedListener implements ShouldQueue
 
     protected function deletePostWasCommentedNotification($comment)
     {
-      dispatch(
-        new DeleteNotificationAndCallEventJob($comment->postUser, $comment)
-      );
+      $this->service->deleteAndCallEvent($comment->postUser,$comment);
     }
 
     protected function deleteReplyNotification($comment)
     {
       if($comment->hasParrent){
-        dispatch(
-          new DeleteNotificationAndCallEventJob($comment->parrentUser, $comment)
-        );
+        $this->service->deleteAndCallEvent($comment->parrentUser,$comment);
       }
     }
 

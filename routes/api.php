@@ -2,11 +2,10 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ReputationController;
 use App\Http\Controllers\SidebarController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,7 +52,11 @@ Route::controller(ReputationController::class)->group(function(){
     Route::post('reputation','index')->name('new.reputation')->middleware('auth');
 });
 
-Route::controller(NotificationController::class)->group(function(){
-    Route::post('notifications/read','read')->name('notifications.read')->middleware('auth');
-    Route::get('notifications/get/{user_id}','getUserNotifications')->name('notifications.get')->middleware('auth');
-});
+
+Route::get('/notifications/get', function(){
+    return Auth::user()->notifications;
+})->name('notifications.get')->middleware('auth');
+
+Route::post('notifications/read', function(){
+    return Auth::user()->markAsReadNotifications();
+})->name('notifications.read')->middleware('auth');

@@ -90,14 +90,7 @@ Route::controller(TagController::class)->group(function(){
     Route::get('tag/{slug}','index')->name('tag');
 });
 
-Route::controller(UserController::class)->group(function() {
-    Route::get('user/{username}','index')->name('user');
-});
 
-
-Route::controller(PostReputationController::class)->group(function(){
-    Route::patch('reputation/post','patch')->name('reputation.post')->middleware('auth');
-});
 
 Route::controller(GenreController::class)->group(function(){
     Route::get('genre/{slug}','index')->name('genre')->middleware('admin');

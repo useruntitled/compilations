@@ -2,26 +2,26 @@
 
 namespace App\Listeners;
 
-use App\Events\NotificationModified;
 use App\Events\ReputationDeletedEvent;
 use App\Http\Controllers\KarmaController;
-use App\Http\Controllers\NotificationController;
-use App\Jobs\DeleteNotificationAndCallEventJob;
-use App\Notifications\CrutchNotification;
+use App\Services\KarmaService;
+use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class ReputationDeletedListener implements ShouldQueue
 {
+    protected $notifier;
+    protected $karmaService;
+
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(NotificationService $notifier, KarmaService $karmaService)
     {
-        
+        $this->notifier = $notifier;
+        $this->karmaService = $karmaService;
     }
 
     /**
@@ -32,19 +32,10 @@ class ReputationDeletedListener implements ShouldQueue
         $reputation = $event->reputation;
 
         if(!$reputation->RepToUserIsOwner){
-            dispatch(new DeleteNotificationAndCallEventJob($reputation->reputationToUser,$reputation));
+            $this->notifier->deleteAndCallEvent($reputation->reputationToUser,$reputation);
 
-            KarmaController::canPost($reputation->reputation_to->user);
+            $this->karmaService->handleCreatorRole($reputation->reputation_to->user);
         }
-
-        // $reputation = $event->args;
-        // if(!$reputation['isUserOwnReputation']){
-        //     KarmaController::canPost($reputation['reputation_to']->user);
-        //     NotificationController::deleteNotificationByParam($reputation['reputation_to']->user->id,'id',
-        //     $reputation['id']);
-        //     event(new NotificationModified($reputation['reputation_to']->user->id));
-        // }
-        
     }
 
 }

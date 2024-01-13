@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Http\Resources\NotificationResource;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,14 +52,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('role','admin')->exists();
     }
-    public function getUnreadNotificationsAttribute()
+
+    public function getIsCreatorAttribute()
     {
-        return $this->unreadNotifications();
+        return $this->roles()->where('role','creator')->exists();
     }
+
     public function getAvatarAttribute()
     {
         if($this->id != null){
@@ -73,6 +77,27 @@ class User extends Authenticatable
         
         return "avatars." . "Default";
     }
+
+    public function getNotificationsAttribute()
+    {
+        $notifications = $this->notifications()?->get();
+        return NotificationResource::collection($notifications);
+    }
+
+    public function markAsReadNotifications()
+    {
+        foreach($this->notifications as $n){
+            $n->markAsRead();
+        }
+        return true;
+    }
+
+
+    public function countUnreadNotifications()
+    {
+        return $this->unreadNotifications()->count();
+    }
+
     public function getCanCreatePostsAttribute()
     {
         if($this->roles()->where('role','creator')->exists()){
@@ -80,13 +105,10 @@ class User extends Authenticatable
         }
         return False;
     }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
-    }
-    public function reply()
-    {
-        return $this->hasMany(Reply::class);
     }
     
     public function receivesBroadcastNotificationsOn(): string

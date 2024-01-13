@@ -2,23 +2,34 @@
 
 namespace App\Listeners;
 
+use App\Actions\DeleteNotificationAndCallEvent;
+use App\Actions\SendCommentUpNotification;
+use App\Actions\SendPostUpNotification;
 use App\Events\ReputationPutEvent;
 use App\Http\Controllers\KarmaController;
 use App\Jobs\DeleteNotificationAndCallEventJob;
 use App\Jobs\SendCommentUpNotificationJob;
 use App\Jobs\SendPostUpNotificationJob;
+use App\Services\KarmaService;
+use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class ReputationPutListener implements ShouldQueue
 {
+
+    
+    protected $notifier;
+    protected $karmaService;
+
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(NotificationService $notifier, KarmaService $karmaService)
     {
-        //
+        $this->notifier = $notifier;
+        $this->karmaService = $karmaService;
     }
 
     /**
@@ -30,19 +41,20 @@ class ReputationPutListener implements ShouldQueue
 
 
         if(!$reputation->repToUserIsOwner){
-            KarmaController::canPost($reputation->reputation_to->user);
+            $this->karmaService->handleCreatorRole($reputation->reputation_to->user);
 
 
             if(strtolower($reputation->action) == 'down'){
-                dispatch(new DeleteNotificationAndCallEventJob($reputation->reputationToUser,$reputation));
+                $this->notifier->deleteAndCallEvent($reputation->reputationToUser,$reputation);
+
             }else{
                 switch($reputation->reputation_to_type)
                 {
                     case 'App\\Models\\Post':
-                        dispatch(new SendPostUpNotificationJob($reputation));
+                        $this->notifier->sendPostUpNotification($reputation);
                         break;
                     case 'App\\Models\\Comment':
-                        dispatch((new SendCommentUpNotificationJob($reputation)));
+                        $this->notifier->sendCommentUpNotification($reputation);
                         break;
                     default: break;
                 }

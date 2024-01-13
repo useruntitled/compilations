@@ -2,23 +2,23 @@
 
 namespace App\Listeners;
 
+use App\Actions\SendPostWasCommentedNotification;
 use App\Events\CommentCreatedEvent;
-use App\Jobs\SendNotificationAndCallEvent;
-use App\Jobs\SendPostWasCommentedNotificationJob;
-use App\Jobs\SendReplyNotificationJob;
-use App\Notifications\PostWasCommentedNotification;
-use App\Notifications\ReplyNotification;
+use App\Actions\SendReplyNotification;
+use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class CommentCreatedListener implements ShouldQueue
 {
+
+    protected $service;
+
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(NotificationService $service)
     {
-        //
+        $this->service = $service;
     }
 
     /**
@@ -28,7 +28,7 @@ class CommentCreatedListener implements ShouldQueue
     {
         $comment = $event->comment;
 
-        dispatch(new SendReplyNotificationJob($comment));
-        dispatch(new SendPostWasCommentedNotificationJob($comment));
+        $this->service->sendReplyNotification($comment);
+        $this->service->sendPostWasCommentedNotification($comment);
     }
 }
