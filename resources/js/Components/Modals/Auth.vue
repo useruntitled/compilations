@@ -1,6 +1,13 @@
 <template>
     <Csrf></Csrf>
-    <Modal :show="show" @close="showModal = false" v-if="showModal">
+    <Modal
+        :show="show"
+        @close="
+            showModal = false;
+            $emit('close');
+        "
+        v-if="showModal"
+    >
         <div class="p-5">
             <!-- errors -->
             <div
@@ -264,6 +271,9 @@ export default {
                     }
                 });
         },
+    },
+    mounted() {
+        console.log("Auth modal");
     },
     components: { Modal },
 };

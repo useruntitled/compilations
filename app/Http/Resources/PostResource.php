@@ -16,14 +16,15 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // $comments = $this->comments->filter(fn($c) => !$c->isReply)->sortByDesc('created_at');
+        $comments = $this->comments;
+
         return [
-            
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'reputation' => $this->rep,
-            'comments' => CommentResource::collection($this->comments->filter(fn($c) => !$c->isReply))
-            ->sortByDesc(fn($comment) => $comment->id)->all(),
+            'comments' => $comments,
             'comments_count' => $this->comments->count() + $this->comments->sum(fn($comm) => $comm->replies->count()),
             'tags' => $this->tags,
             'user' => new UserResource($this->user),

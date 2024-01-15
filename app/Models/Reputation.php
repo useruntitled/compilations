@@ -38,4 +38,5 @@ class Reputation extends Model
     {
         return strtolower($this->action) == 'up';
     }
+
 }

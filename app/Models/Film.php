@@ -11,6 +11,11 @@ class Film extends Model
     protected $guarded = [
 
     ];
+
+    // protected $with = [
+    //     'genres'
+    // ];
+
     public function genres()
     {
         return $this->belongsToMany(Genre::class);

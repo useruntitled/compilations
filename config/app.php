@@ -5,6 +5,10 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+
+    'storage_path' => public_path('storage\\'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -168,6 +172,7 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
     ])->toArray(),
 
     /*

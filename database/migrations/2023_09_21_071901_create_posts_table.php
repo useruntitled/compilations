@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
+            $table->string('slug')->nullable();
 
             $table->foreignId('user_id')->constrained();
 
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->longText('description')->nullable();
             
             $table->boolean('active')->nullable()->default(false);
 
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

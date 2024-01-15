@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => $password, // password
             'remember_token' => Str::random(10),
+            'avatar' => 'Default.jpg',
         ]);
         $this->command->info('Admin user is created:');
         $admin->roles()->attach([$role_admin->id,$role_creator->id]);

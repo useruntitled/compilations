@@ -83,10 +83,7 @@
         </div>
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
-                ><Reputation
-                    type="Post"
-                    :reputation="post.reputation"
-                ></Reputation
+                ><Reputation type="Post" :reputation="post.rep"></Reputation
             ></span>
             <span class="me-2 text-slate-700"
                 ><LinkIcon :text="post.comments_count"

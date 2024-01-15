@@ -6,7 +6,7 @@
         <div class="flex justify-between">
             <img
                 class="rounded-full"
-                v-lazy="route('image.crop', [user.avatar, '1000x1000'])"
+                v-lazy="route('im', [user.avatar, '1000x1000'])"
                 alt=""
                 style="width: 90px"
             />

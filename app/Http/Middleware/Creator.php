@@ -16,7 +16,7 @@ class Creator
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->canCreatePosts){
+        if(Auth::user()->isCreator){
             return $next($request);
         }
         return to_route("karma.forbidden");

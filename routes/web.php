@@ -13,6 +13,7 @@ use App\Http\Controllers\PostReputationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Models\Post;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,10 +39,10 @@ Route::get('/', function () {
 });
 
 Route::controller(PostController::class)->group(function(){
-    Route::get('create','create')->name('post.create')->middleware(['auth','creator']);
+    // Route::get('create','create')->name('post.create')->middleware(['auth','creator']);
     Route::get('post-finish/{id}','finish')->name('post.finish')->middleware(['auth','creator']);
-    Route::post('create','store')->name('post.create')->middleware(['auth','creator']);
-    Route::put('create','update')->name('post.update')->middleware('auth');
+    // Route::post('create','store')->name('post.create')->middleware(['auth','creator']);
+    // Route::put('create','update')->name('post.update')->middleware('auth');
     Route::put('publish','publish')->name('post.publish')->middleware(['auth','creator']);
     Route::get('post-edit/{id}/{slug}','edit')->name('post.edit')->middleware('auth');
     Route::post('post-film-attach','postAttachFilm')->name('post.attach.film')->middleware(['auth','creator']);
@@ -97,16 +98,21 @@ Route::controller(GenreController::class)->group(function(){
     Route::post('wire','wire')->name('genre.wire')->middleware('admin');
 });
 
-Route::controller(KarmaController::class)->group(function(){
-    Route::get('forbidden/karma','forbidden')->name('karma.forbidden')->middleware('auth');
-});
+// Route::controller(KarmaController::class)->group(function(){
+//     Route::get('forbidden/karma','forbidden')->name('karma.forbidden')->middleware('auth');
+// });
 
-Route::controller(NotificationController::class)->group(function(){
-    Route::get('notifications')->name('notifications')->middleware('auth');
-});
+// Route::controller(NotificationController::class)->group(function(){
+//     Route::get('notifications')->name('notifications')->middleware('auth');
+// });
 
 Route::controller(PersonalPageController::class)->group(function(){
     Route::get('profile/{id}/{section?}','index')->name('profile');
+});
+
+Route::get('test',function(){
+    // $post = Post::find(3);
+    // return ($post->toJson());
 });
 
 require __DIR__.'/auth.php';

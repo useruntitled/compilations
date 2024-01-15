@@ -2,11 +2,13 @@
     <div v-if="selectedSection == 1">
         <div v-for="post in posts" :key="post.id">
             <Post :post="post"></Post>
+            <!-- {{ post }} -->
         </div>
     </div>
     <div v-else>
         <div v-for="comment in comments" class="p-2 mx-auto">
-            <Comment :comment="comment"></Comment>
+            <!-- <Comment :comment="comment"></Comment> -->
+            {{ comment }}
         </div>
     </div>
 </template>

@@ -80,7 +80,7 @@
                 <footer class="flex items-center" v-if="!isDeleted">
                     <Reputation
                         type="Comment"
-                        :reputation="comment.reputation"
+                        :reputation="comment.rep"
                     ></Reputation>
                     <button
                         class="ms-2 text-sm text-secondary"

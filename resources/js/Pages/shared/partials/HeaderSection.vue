@@ -1,23 +1,26 @@
 <template>
     <div class="text-md text-15">
-        <p class="px-4 text-md py-2 font-semibold">Мой профиль</p>
-        <DropdownLink :href="route('profile', [$page.props.auth.user.id])">
-            <div class="flex">
+        <p class="px-4 text-md py-2 font-semibold text-start">Мой профиль</p>
+        <DropdownLink
+            :href="route('profile', [$page.props.auth.user.id])"
+            class="my-2"
+        >
+            <div class="flex items-center">
                 <img
                     :src="
-                        route('image.crop', [
-                            $page.props.auth.user.avatar,
-                            ['40x40'],
-                        ])
+                        route('im', [$page.props.auth.user.avatar, ['100x100']])
                     "
                     class="rounded-full inline-block"
                     alt=""
+                    style="width: 45px; height: 45px"
                 />
-                <span class="whitespace-no-wrap overflow-hidden">
-                    <p class="ms-2 whitespace-no-wrap overflow-hidden">
+                <span
+                    class="whitespace-no-wrap overflow-hidden flex flex-col ms-2"
+                >
+                    <p class="whitespace-no-wrap overflow-hidden font-semibold">
                         {{ $page.props.auth.user.name }}
                     </p>
-                    <!-- <p>Страница</p> -->
+                    <p class="opacity-80">Страница</p>
                 </span>
             </div>
         </DropdownLink>
@@ -25,21 +28,33 @@
         <DropdownLink
             v-if="$page.props.auth.user.isAdmin"
             :href="route('panel.index')"
+            class="my-4 font-semibold text-17px"
         >
-            <IconPanel class="me-2 inline-block"></IconPanel>
+            <IconPanel class="me-2 inline-block stroke-[2]"></IconPanel>
             Панель
         </DropdownLink>
 
-        <DropdownLink :href="route('drafts')">
-            <IconPencil class="me-2 inline-block"></IconPencil>
+        <DropdownLink
+            :href="route('drafts')"
+            class="my-4 font-semibold text-17px"
+        >
+            <IconPencil class="me-2 inline-block stroke-[2]"></IconPencil>
             Черновики
         </DropdownLink>
-        <DropdownLink :href="route('profile.edit')">
-            <IconTooth class="me-2 inline-block"></IconTooth>
+        <DropdownLink
+            :href="route('profile.edit')"
+            class="my-4 font-semibold text-17px"
+        >
+            <IconTooth class="me-2 inline-block stroke-[2]"></IconTooth>
             Настройки
         </DropdownLink>
-        <DropdownLink :href="route('logout')" method="post" as="button">
-            <IconExit class="me-2 inline-block"></IconExit>
+        <DropdownLink
+            :href="route('logout')"
+            method="post"
+            as="button"
+            class="my-4 font-semibold text-17px"
+        >
+            <IconExit class="me-2 inline-block stroke-[2]"></IconExit>
             Выйти
         </DropdownLink>
     </div>

@@ -12,6 +12,7 @@
         <main>
             <Comment
                 v-for="comment in comments"
+                v-show="!comment.is_reply"
                 :key="comment.id"
                 :comment="comment"
                 @sendReply="sendReply"

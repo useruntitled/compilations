@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Film;
 use App\Models\Post;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -16,17 +17,29 @@ class PostController extends Controller
 {
     public function index($id,$slug)
     {
-        $post = Post::find($id);
-        if($post == null){
-            abort(404);
-        }
-        foreach($post->films as $film){
-            $film->load('genres');
-        }
+        $post = Post::with([
+            'comments' => [
+                'replies' => ['reputation','user' => ['roles']],
+                'reputation',
+                'user' => ['roles'],
+            ],
+            'user' => ['roles'],
+            'films' => [
+                'genres'
+            ]
+        ])->withCount('comments')->findOrFail($id);
+
+        
+        
+        
+
+        // $post->films->load('genres');
+
         return inertia('post',[
-            'post' => new PostResource($post),
+            'post' => $post,
         ]);
     }
+    
     public function create()
     {
         return inertia('create/index');
@@ -48,34 +61,51 @@ class PostController extends Controller
         abort(404);
         
     }
-    public function store(StorePostRequest $request)
+
+    public function get(int $id)
+    {
+        $post = Post::with(['user' => ['roles']])->find($id);
+        return $post;
+    }
+
+    public function store(Request $request)
     {
         $post = Post::create([
             'user_id' => Auth::user()->id,
             'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'description' => nl2br($request->description),
+            'description' => $request->description,
         ]);
-        $path = $post->id . '.png';
-        $image = $request->file('image')->storeAs(null,$path,'public');
+        return Response::json($post->load('user'),200);
+
+
+
+
+        // $post = Post::create([
+        //     'user_id' => Auth::user()->id,
+        //     'title' => $request->title,
+        //     'slug' => Str::slug($request->title),
+        //     'description' => nl2br($request->description),
+        // ]);
+        // $path = $post->id . '.png';
+        // $image = $request->file('image')->storeAs(null,$path,'public');
         
-        if($post == null){
-            return Response::json('',500);
-        }
-        return Response::json($post,200);
+        // if($post == null){
+        //     return Response::json('',500);
+        // }
+        // return Response::json($post,200);
     }
-    public function update(UpdatePostRequest $request)
+    public function update(Request $request)
     {
-        $post = Post::find($request->post_id);
+        $post = Post::findOrFail($request->id);
         $post->update([
             'title' => $request->title,
             'description' => nl2br($request->description),
         ]);
         $post->save();
-        if($request->hasFile('image')){
-            $path = $post->id . '.png';
-            $image = $request->file('image')->storeAs(null,$path,'public');
-        }
+        // if($request->hasFile('image')){
+        //     $path = $post->id . '.png';
+        //     $image = $request->file('image')->storeAs(null,$path,'public');
+        // }
         return Response::json($post,200);
     }
     public function publish(Request $request)

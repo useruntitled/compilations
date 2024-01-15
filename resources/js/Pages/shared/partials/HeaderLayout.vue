@@ -43,7 +43,7 @@ export default {
             :class="$page.props.auth.user ? 'p-2' : 'p-5'"
         >
             <div>
-                <Link :href="route('home')">
+                <Link :href="route('home')" preserve-state preserve-scroll>
                     <!-- <img
                         class="inline-block rounded"
                         style="max-width: 50px"
@@ -74,7 +74,11 @@ export default {
                 <div class="inline-block me-2">
                     <DropdownNotifications></DropdownNotifications>
                 </div>
-                <Dropdown class="text-sm" v-if="$page.props.auth.user">
+                <Dropdown
+                    class="text-sm"
+                    v-if="$page.props.auth.user"
+                    width="300"
+                >
                     <template #trigger>
                         <button>
                             <!-- <UserTablet
@@ -91,7 +95,7 @@ export default {
                                 <img
                                     class="rounded-full inline-block"
                                     :src="
-                                        route('image.crop', [
+                                        route('im', [
                                             $page.props.auth.user.avatar,
                                             '100x100',
                                         ])

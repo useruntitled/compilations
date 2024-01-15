@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReputationController;
 use App\Http\Controllers\SidebarController;
 use Illuminate\Http\Request;
@@ -25,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::controller(ImageController::class)->group(function(){
     Route::get('image/{filename}/{dimensions}','crop')->name('image.crop');
+    Route::get('i/uhashed/{filename}/{dimensions}','unhashed')->name('iu');
+    Route::get('im/{filename}/{dimensions}','index')->name('im');
 });
 
 Route::controller(CommentController::class)->group(function(){
@@ -32,6 +35,12 @@ Route::controller(CommentController::class)->group(function(){
     Route::post('comment','create')->name('comment.create')->middleware('auth');
     Route::delete('comment','delete')->name('comment.delete')->middleware('auth');
     Route::put('comment','update')->name('comment.update')->middleware('auth');
+});
+
+Route::controller(PostController::class)->group(function() {
+    Route::post('post','store')->name('post.create')->middleware(['auth','creator']);
+    Route::put('post','update')->name('post.update')->middleware(['auth']);
+    Route::get('post/{id}','get')->name('post.get')->middleware(['auth']);
 });
 
 // Route::controller(CommentReputationController::class)->group(function(){
@@ -51,6 +60,8 @@ Route::controller(SidebarController::class)->group(function(){
 Route::controller(ReputationController::class)->group(function(){
     Route::post('reputation','index')->name('new.reputation')->middleware('auth');
 });
+
+
 
 
 Route::get('/notifications/get', function(){

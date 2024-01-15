@@ -67,11 +67,11 @@
                 <p v-html="post.description"></p>
             </section>
             <div class="p-2">
-                <img
+                <!-- <img
                     v-lazy="route('image.crop', [post.id, '800x600'])"
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
-                />
+                /> -->
             </div>
         </Link>
         <div v-for="(film, index) in post.films">
@@ -87,10 +87,7 @@
         >
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
-                ><Reputation
-                    type="Post"
-                    :reputation="post.reputation"
-                ></Reputation
+                ><Reputation type="Post" :reputation="post.rep"></Reputation
             ></span>
             <span class="me-2 text-slate-700"
                 ><LinkIcon

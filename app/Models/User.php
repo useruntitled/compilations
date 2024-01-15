@@ -5,9 +5,11 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Http\Resources\NotificationResource;
+use App\Services\KarmaService;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,12 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    // const DEFAULT = 1;
+
+    // const MODERATOR = 2;
+
+    // const ADMIN = 3;
+
 
     /**
      * The attributes that are mass assignable.
@@ -24,13 +32,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $appends = [
-        'isAdmin'
+        'is_creator','is_admin'
     ];
+
     protected $fillable = [
         'name',
         'email',
         'password',
-        'username'
+        'username',
+        'avatar'
     ];
 
     /**
@@ -52,37 +62,41 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    
-    public function getIsAdminAttribute()
+
+    protected function isAdmin(): Attribute
     {
-        return $this->roles()->where('role','admin')->exists();
+        $this->roles ?? $this->roles();
+        return Attribute::make(
+            get: fn() => $this->roles->contains(fn($r) => $r->role == 'admin')
+        );
     }
 
-    public function getIsCreatorAttribute()
+    protected function isCreator(): Attribute
     {
-        return $this->roles()->where('role','creator')->exists();
+        $this->roles ?? $this->roles();
+        return Attribute::make(
+            get: fn() =>  $this->roles->contains(fn($r) => $r->role == 'creator')
+        );
     }
 
-    public function getAvatarAttribute()
-    {
-        if($this->id != null){
-            $path = public_path("storage\\avatars\\" . $this->id);
-            $exts = ['.png','.jpeg','.jpg'];
-            foreach($exts as $ext){
-                if(file_exists($path . $ext)){
-                return "avatars." . $this->id;
-                }
-            }
-        }
-        
-        return "avatars." . "Default";
-    }
-
-    public function getNotificationsAttribute()
-    {
-        $notifications = $this->notifications()?->get();
-        return NotificationResource::collection($notifications);
-    }
+    // protected function avatar(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: function(){
+    //             if($this->id != null){
+    //                 $path = public_path("storage\\avatars\\" . $this->id);
+    //                 $exts = ['.png','.jpeg','.jpg'];
+    //                 foreach($exts as $ext){
+    //                     if(file_exists($path . $ext)){
+    //                     return "avatars." . $this->id;
+    //                     }
+    //                 }
+    //             }
+                
+    //             return "avatars." . "Default";
+    //             }
+    //     );
+    // }
 
     public function markAsReadNotifications()
     {
@@ -98,19 +112,39 @@ class User extends Authenticatable
         return $this->unreadNotifications()->count();
     }
 
-    public function getCanCreatePostsAttribute()
+    protected function canCreatePosts(): Attribute
     {
-        if($this->roles()->where('role','creator')->exists()){
+        return Attribute::make(
+            get: function(){
+                if($this->roles()->where('role','creator')->exists()){
             return True;
-        }
-        return False;
+            }
+            return False;
+            }
+        );
     }
+
+    public function karma(KarmaService $service)
+    {
+        return $service->calculateUserKarma($this);
+    }
+
 
     public function roles()
     {
         return $this->belongsToMany(Role::class);
     }
-    
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function receivesBroadcastNotificationsOn(): string
     {
         return 'users.'.$this->id;

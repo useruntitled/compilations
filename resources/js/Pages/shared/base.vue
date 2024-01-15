@@ -57,6 +57,9 @@ export default {
     methods: {
         closeModal() {
             this.modalIsClosed = true;
+            setTimeout(() => {
+                this.modalIsClosed = false;
+            }, 200);
         },
         callModal(name) {
             this.calledModal = name;

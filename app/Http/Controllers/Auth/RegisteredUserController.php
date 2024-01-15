@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\ImageService;
 use App\Services\NotificationService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -17,6 +18,7 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
+    const PATH_DEFAULT_AVATAR = 'avatar:default.jpg';
 
     protected $service;
 
@@ -38,7 +40,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, ImageService $service): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -52,6 +54,7 @@ class RegisteredUserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'avatar' => $service::DEFAULT_IMAGE_AVATAR_USER_VALUE,
         ]);
         // $user_role = Role::where('role','user')->firstOrFail();
         // $user->roles()->attach($user_role->id);
@@ -61,5 +64,10 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function updateAvatar(Request $request, ImageService $service)
+    {
+
     }
 }

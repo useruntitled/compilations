@@ -1,9 +1,104 @@
 <template>
     <div v-if="showModal == true">
-        <component :is="modalName" :show="showModal" />
+        <component
+            :is="modals[calledModal]"
+            :show="showModal"
+            @close="closeModal()"
+        />
     </div>
 </template>
-<script>
+<script setup>
+import { usePage } from "@inertiajs/vue3";
+import Auth from "./Auth.vue";
+import Editor from "./Editor.vue";
+import { ref, computed, watch, onMounted, inject, watchEffect } from "vue";
+const props = defineProps({
+    modalIsClosed: Boolean,
+    callModal: {
+        type: String,
+        default: null,
+    },
+});
+const emit = defineEmits(["closeModal"]);
+
+const modals = {
+    Auth: Auth,
+    Editor: Editor,
+};
+
+const injectedCallModal = inject("callModal");
+
+const page = usePage();
+
+onMounted(() => {
+    console.log(url.value);
+    if (calledModalByQuery.value != null) {
+        callModalFunc(calledModalByQuery.value);
+    }
+});
+
+watch(
+    () => props.callModal,
+    (newValue, oldValue) => {
+        if (newValue != null) callModalFunc(newValue);
+    }
+);
+watch(
+    () => props.modalIsClosed,
+    (newValue, oldValue) => {
+        if (newValue == true) {
+            emit("closeModal");
+        }
+    }
+);
+
+const calledModalByQuery = computed(() => {
+    if (url.value.searchParams.has("modal")) {
+        return url.value.searchParams.get("modal");
+    }
+    return null;
+});
+
+const url = computed(() => {
+    return new URL(window.location.href);
+});
+
+const showModal = ref(false);
+const calledModal = ref(null);
+
+const setQuery = () => {
+    url.value.searchParams.append("modal", calledModal.value);
+    window.history.pushState(null, null, url.value);
+};
+const unsetQuery = () => {
+    url.value.searchParams.delete("modal");
+    url.value.searchParams.delete("id");
+    window.history.pushState(null, null, url.value);
+};
+
+const showModalFunc = (modal) => {
+    showModal.value = true;
+    calledModal.value = modal;
+    setQuery();
+};
+
+const callModalFunc = (modal) => {
+    console.log("Call modal");
+    console.log(url.value);
+    if (!page.props.auth.check) {
+        showModalFunc("Auth");
+    } else {
+        showModalFunc(modal);
+        injectedCallModal(calledModalByQuery.value);
+    }
+};
+
+const closeModal = () => {
+    showModal.value = false;
+    unsetQuery();
+};
+</script>
+<!-- <script>
 import Auth from "./Auth.vue";
 import Editor from "./Editor.vue";
 export default {
@@ -98,39 +193,10 @@ export default {
             );
         }
     },
-    // mounted() {
-    //     setInterval(() => {
-    //         // if (window.location.hash == "#modal=auth") {
-    //         //     this.showModal = true;
-    //         // }
-    //         let url = new URL(this.$page.props.app_url + this.$page.url);
-
-    //         // Получаем параметры URL
-    //         let params = new URLSearchParams(url.search);
-    //         // Получаем значение параметра "modal"
-    //         let modalValue = params.get("modal");
-    //         if (params.has("modal")) {
-    //             this.showModal = true;
-    //             modalValue =
-    //                 modalValue.charAt(0).toUpperCase() + modalValue.slice(1);
-    //         }
-
-    //         if (this.modalIsClosed && this.isClosed == false) {
-    //         }
-
-    //         // if (this.callModal != null && this.modalIsCalled == false) {
-    //         //     this.modalIsCalled = true;
-    //         //     this.showModal = true;
-    //         //     url.searchParams.append("modal", this.callModal);
-    //         //     window.history.pushState(null, null, url);
-    //         // }
-    //         // console.log(modalValue);
-    //     }, 100);
-    // },
     components: {
         Auth,
         Editor,
     },
     emits: ["closeModal"],
 };
-</script>
+</script> -->

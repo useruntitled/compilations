@@ -4,25 +4,34 @@ namespace App\Models;
 
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class Comment extends Model
 {
     use HasFactory, HasReputation, HasAuthor, SoftDeletes;
+
     protected $fillable = [
         'text','user_id',
         'post_id','comment_id'
     ];
     protected $casts = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
+
     protected $appends = [
-        'isReply'
+        'rep', 'timestamp', 'is_reply'
     ];
+
+    protected $with = [
+        'user'
+    ];
+
     public function post()
     {
         return $this->belongsTo(Post::class);
@@ -30,51 +39,74 @@ class Comment extends Model
     
     public function replies()
     {
-        return $this->hasMany(Comment::class,'comment_id');
+        return $this->hasMany(Comment::class)->with('replies');
     }
 
     public function comment()
     {
-        return $this->belongsTo(Comment::class,'comment_id');
+        return $this->belongsTo(Comment::class);
     }
 
-    public function getIsDeletedAttribute()
+    protected function timestamp(): Attribute
     {
-        return $this->deleted_at != null;
+        return Attribute::make(
+            get: fn() => (new Carbon($this->created_at))->diffForHumans()
+        );
     }
 
-    public function getIsReplyAttribute()
+    protected function isDeleted(): Attribute
     {
-        return $this->comment != null;
+        return Attribute::make(
+            get: fn() => $this->deleted_at != null
+        );
+    }
+
+    protected function isReply(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => isset($this->comment)
+        );
     }
     
-    public function getNoRepliesAttribute()
+    protected function noReplies(): Attribute
     {
-        return $this->replies->count() == 0;
+        return Attribute::make(
+            get: fn() => $this->replies->count() == 0
+        );
     }
 
-    public function getAuthorOfPostAttribute()
+    protected function hasParrent(): Attribute
     {
-        return $this->post->user->id == $this->user->id;
+        return Attribute::make(
+            get: fn() => $this->isReply
+        );
     }
 
-    public function getHasParrentAttribute()
+    protected function parrentUser(): Attribute
     {
-        return isset($this->comment);
+        return Attribute::make(
+            get: fn() => $this->comment?->user
+        );
+    }
+    
+    protected function postUser(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->post->user
+        );
     }
 
-    public function getParrentUserAttribute()
+    protected function authorOfParrent(): Attribute
     {
-        return $this->comment->user;
+        return Attribute::make(
+            get: fn() => $this->comment?->user->id == $this->user->id
+        );
     }
 
-    public function getPostUserAttribute()
+    protected function authorOfPost(): Attribute
     {
-        return $this->post->user;
-    }
-
-    public function getAuthorOfParrentAttribute()
-    {
-        return $this->comment?->user->id == $this->user->id;
+        return Attribute::make(
+            get: fn() => $this->post->user->id == $this->user->id
+        );
     }
 }

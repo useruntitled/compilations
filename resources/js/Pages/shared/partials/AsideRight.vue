@@ -96,28 +96,29 @@ export default {
                 );
         },
         getLastComments() {
-            axios
-                .get(route("comments.get.last"), {
-                    // transformResponse: [
-                    //     function (data) {
-                    //         // Возвращаем данные без изменений
-                    //         return data;
-                    //     },
-                    // ],
-                })
-                .catch((res) => {
-                    // console.log(res);
-                    if (res.status != 429) {
-                        this.getLastComments();
-                    }
-                })
-                .then((res) => {
-                    // console.log(res);
-                    if (res.status == 200) {
-                        this.flag = true;
-                        this.comments = res.data;
-                    }
-                });
+            // axios
+            //     .get(route("comments.get.last"), {
+            //         // transformResponse: [
+            //         //     function (data) {
+            //         //         // Возвращаем данные без изменений
+            //         //         return data;
+            //         //     },
+            //         // ],
+            //     })
+            //     .catch((res) => {
+            //         // console.log(res);
+            //         if (res.status != 429) {
+            //             console.log(res);
+            //             this.getLastComments();
+            //         }
+            //     })
+            //     .then((res) => {
+            //         // console.log(res);
+            //         if (res.status == 200) {
+            //             this.flag = true;
+            //             this.comments = res.data;
+            //         }
+            //     });
         },
 
         setIntervalGetComments() {

@@ -2,8 +2,8 @@
     <Head>
         <title>Последние подборки</title>
     </Head>
-    <div v-if="posts.length == 0" class="shadow p-5 rounded-lg mt-5">
-        <p class="text-sm">Пока нет подборок..</p>
+    <div v-if="posts.length == 0" class="bg-white rounded-lg p-2 py-3">
+        <p>Пока нет подборок..</p>
     </div>
     <div v-for="post in posts">
         <!-- <Compilation :post="post"></Compilation> -->
