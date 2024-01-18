@@ -20,7 +20,7 @@
                     <p class="whitespace-no-wrap overflow-hidden font-semibold">
                         {{ $page.props.auth.user.name }}
                     </p>
-                    <p class="opacity-80">Страница</p>
+                    <p class="opacity-80">Профиль</p>
                 </span>
             </div>
         </DropdownLink>

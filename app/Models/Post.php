@@ -18,7 +18,7 @@ class Post extends Model
     protected $fillable = [
         'user_id','title',
         'description','active',
-        'slug'
+        'slug', 'image'
     ];
     protected $appends = [
         'rep','timestamp',

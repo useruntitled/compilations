@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReputationController;
@@ -26,9 +27,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::controller(ImageController::class)->group(function(){
     Route::get('image/{filename}/{dimensions}','crop')->name('image.crop');
-    Route::get('i/uhashed/{filename}/{dimensions}','unhashed')->name('iu');
     Route::get('im/{filename}/{dimensions}','index')->name('im');
 });
+
+Route::controller(FilmController::class)->group(function() {
+    Route::get('film-search/{query}','search')->name('film.search');
+});
+
 
 Route::controller(CommentController::class)->group(function(){
     Route::get('comment/{id}')->name('comment.get');
@@ -41,6 +46,7 @@ Route::controller(PostController::class)->group(function() {
     Route::post('post','store')->name('post.create')->middleware(['auth','creator']);
     Route::put('post','update')->name('post.update')->middleware(['auth']);
     Route::get('post/{id}','get')->name('post.get')->middleware(['auth']);
+    Route::post('post/image','uploadImage')->name('post.upload.image')->middleware(['auth']);
 });
 
 // Route::controller(CommentReputationController::class)->group(function(){

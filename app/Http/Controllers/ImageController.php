@@ -21,19 +21,12 @@ class ImageController extends Controller
      * Show image.
      * Global storage path.
      */
-    public function index($path,$dimensions)
+    public function index($filename,$dimensions)
     {
-        return $this->service->get($path, $dimensions);
+        return $this->service->get($filename, $dimensions);
     }
 
-    public function unhashed($filename, $dimensions)
-    {
-        $filename = str_replace('.','\\',$filename);
-        $path = public_path('storage\\' . $filename);
-        return $this->service->getUnhashed($path, $dimensions);
-    }
-
-    public function upload(Request $request)
+    public function upload($file)
     {
         
     }

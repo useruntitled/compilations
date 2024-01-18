@@ -22,11 +22,8 @@
     </div>
 
     <!-- <AuthModal :show="showModal" @close="closeModal()"></AuthModal> -->
+
     <UrlModal
-        @closeModal="
-            calledModal = null;
-            modalIsClosed = false;
-        "
         :modalIsClosed="modalIsClosed"
         :callModal="calledModal"
     ></UrlModal>
@@ -56,6 +53,8 @@ export default {
     },
     methods: {
         closeModal() {
+            console.log();
+            this.calledModal = null;
             this.modalIsClosed = true;
             setTimeout(() => {
                 this.modalIsClosed = false;
@@ -64,30 +63,12 @@ export default {
         callModal(name) {
             this.calledModal = name;
         },
-        // closeModal() {
-        //     this.showModal = false;
-        //     history.pushState(
-        //         "",
-        //         document.title,
-        //         window.location.pathname + window.location.search
-        //     );
-        // },
     },
-    // mounted() {
-    //     setInterval(() => {
-    //         if (window.location.hash == "#modal-auth") {
-    //             this.showModal = true;
-    //         }
-    //     }, 100);
-    // },
-    destroyed() {
-        // window.Echo.init().leave(`App.Models.User.${$page.props.user.id}`);
-    },
+
     components: {
         HeaderLayout,
         AsideLeft,
         AsideRight,
-        UrlModal,
         UrlModal,
     },
 };

@@ -21,19 +21,21 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 function customRule(choice, choicesLength, orgRule) {
   if (choice === 0) {
-    return 0
+    return 0;
   }
 
-  const teen = choice > 10 && choice < 20
-  const endsWithOne = choice % 10 === 1
-  if (!teen && endsWithOne) {
-    return 1
+  const teen = choice > 10 && choice < 20;
+  if (!teen) {
+    if (choice % 10 === 1) {
+      return 1;
+    } else if (choice % 10 >= 2 && choice % 10 <= 4) {
+      return 2;
+    }
   }
-  if (!teen && choice % 10 >= 2 && choice % 10 <= 4) {
-    return 2
+  if (choicesLength < 4) {
+    return 2;
   }
-
-  return choicesLength < 4 ? 2 : 3
+  return 3;
 }
 
 const i18n = createI18n({
@@ -49,6 +51,7 @@ const i18n = createI18n({
       answer: '0 ответов | {n} ответ | {n} ответа | {n} ответов',
       comment: '0 комментариев | {n} комментарий | {n} комментария | {n} комментариев',
       user: '0 пользователей | {n} пользователь | {n} пользователя | {n} пользователя',
+      film: '0 фильмов | {n} фильм | {n} фильма | {n} фильмов',
     }
   }
 })

@@ -40,7 +40,7 @@ class PersonalPageController extends Controller
                     'user' => ['roles'],
                     'films' => ['genres']
                 ])->where('user_id',$id)->limit(20)->get();
-                $posts->filter(fn($p) => $p->isActive);
+                $posts = $posts->filter(fn($p) => $p->isActive);
                 // $posts = $user->posts?->filter(fn($p) => $p->isActive);
                 $posts->loadCount('comments');
                 return inertia('Profile/Index',[

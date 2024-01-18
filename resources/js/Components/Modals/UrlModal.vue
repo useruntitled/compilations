@@ -8,10 +8,10 @@
     </div>
 </template>
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import Auth from "./Auth.vue";
 import Editor from "./Editor.vue";
-import { ref, computed, watch, onMounted, inject, watchEffect } from "vue";
+import { ref, computed, watch, onMounted, inject } from "vue";
 const props = defineProps({
     modalIsClosed: Boolean,
     callModal: {
@@ -19,7 +19,6 @@ const props = defineProps({
         default: null,
     },
 });
-const emit = defineEmits(["closeModal"]);
 
 const modals = {
     Auth: Auth,
@@ -27,6 +26,7 @@ const modals = {
 };
 
 const injectedCallModal = inject("callModal");
+const injectedCloseModal = inject("closeModal");
 
 const page = usePage();
 
@@ -47,14 +47,16 @@ watch(
     () => props.modalIsClosed,
     (newValue, oldValue) => {
         if (newValue == true) {
-            emit("closeModal");
+            console.log("Modal is closed");
+            injectedCloseModal();
         }
     }
 );
 
 const calledModalByQuery = computed(() => {
-    if (url.value.searchParams.has("modal")) {
-        return url.value.searchParams.get("modal");
+    const uri = new URL(window.location.href);
+    if (uri.searchParams.has("modal")) {
+        return uri.searchParams.get("modal");
     }
     return null;
 });
@@ -67,13 +69,21 @@ const showModal = ref(false);
 const calledModal = ref(null);
 
 const setQuery = () => {
-    url.value.searchParams.append("modal", calledModal.value);
-    window.history.pushState(null, null, url.value);
+    const uri = new URL(window.location.href);
+    if (!uri.searchParams.has("modal")) {
+        uri.searchParams.append("modal", calledModal.value);
+        console.log("Query set:", uri);
+        window.history.pushState(null, null, uri);
+        router.reload();
+    }
 };
 const unsetQuery = () => {
-    url.value.searchParams.delete("modal");
-    url.value.searchParams.delete("id");
-    window.history.pushState(null, null, url.value);
+    const uri = new URL(window.location.href);
+    uri.searchParams.delete("modal");
+    uri.searchParams.delete("id");
+    console.log("Unset query:", uri);
+    window.history.pushState(null, null, uri);
+    router.reload();
 };
 
 const showModalFunc = (modal) => {
@@ -94,109 +104,8 @@ const callModalFunc = (modal) => {
 };
 
 const closeModal = () => {
+    injectedCloseModal();
     showModal.value = false;
     unsetQuery();
 };
 </script>
-<!-- <script>
-import Auth from "./Auth.vue";
-import Editor from "./Editor.vue";
-export default {
-    props: {
-        modalIsClosed: null,
-        callModal: null,
-    },
-    data() {
-        return {
-            modalName: "Auth",
-            showModal: false,
-            isClosed: this.modalIsClosed,
-            modalIsCalled: false,
-            url: new URL(this.$page.props.app_url + this.$page.url),
-        };
-    },
-    watch: {
-        callModal: function (newValue, oldValue) {
-            if (newValue != null) {
-                this.callModalFunction();
-            }
-        },
-        modalIsClosed: function (newValue, oldValue) {
-            if (newValue == true) {
-                this.closeModal();
-            }
-        },
-        "this.$page.url": function (newValue, oldValue) {
-            console.log(newValue);
-        },
-    },
-    methods: {
-        callModalFunction(modalName = null) {
-            let url = new URL(this.$page.props.app_url + this.$page.url);
-
-            modalName = modalName ?? this.callModal;
-
-            // Если пользователь не авторизован, но пытается открыть не окно регистрации, то вызвать ему окно регистрации
-            if (modalName != "Auth" && !this.$page.props.auth.user) {
-                const interval = setInterval(() => {
-                    if (url.searchParams.get("modal") == "Auth") {
-                        clearInterval(interval);
-                    } else {
-                        url.searchParams.delete("modal");
-                        window.history.pushState(null, null, url);
-                        url.searchParams.append("modal", "Auth");
-                        window.history.pushState(null, null, url);
-                    }
-                }, 20);
-
-                this.callModalFunction("Auth");
-            } else {
-                if (
-                    (modalName == "Auth" && !this.$page.props.auth.user) ||
-                    (modalName != "Auth" && this.$page.props.auth.user)
-                ) {
-                    url.searchParams.append("modal", this.callModal);
-                    window.history.pushState(null, null, url);
-                    this.modalName = modalName;
-                    this.showModal = true;
-                } else {
-                    const interval = setInterval(() => {
-                        if (url.searchParams.has("modal") == false) {
-                            clearInterval(interval);
-                        } else {
-                            url.searchParams.delete("modal");
-                            window.history.pushState(null, null, url);
-                        }
-                    }, 20);
-                }
-            }
-        },
-        closeModal() {
-            let url = new URL(this.$page.props.app_url + this.$page.url);
-            let params = new URLSearchParams(url.search);
-            this.showModal = false;
-            params.delete("modal");
-            url.searchParams.delete("modal");
-            window.history.pushState(null, null, url);
-            this.isClosed = true;
-            this.$emit("closeModal");
-        },
-        normalizeParamName(name) {
-            name = name.charAt(0).toUpperCase() + name.slice(1);
-            return name;
-        },
-    },
-    mounted() {
-        if (this.url.searchParams.has("modal")) {
-            this.callModalFunction(
-                this.normalizeParamName(this.url.searchParams.get("modal"))
-            );
-        }
-    },
-    components: {
-        Auth,
-        Editor,
-    },
-    emits: ["closeModal"],
-};
-</script> -->

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Film;
 use App\Models\Post;
+use App\Services\ImageService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -160,5 +161,26 @@ class PostController extends Controller
             return Response::json('',202);
         }
         return Response::json('',403);
+    }
+
+    public function uploadImage(Request $request, ImageService $service)
+    {
+        $request->validate([
+            'id' => 'required',
+            'image' => 'required'
+        ]);
+        
+        if(!$request->hasFile('image')) {
+            abort(422);
+        }
+
+        $post = Post::findOrFail($request->id);
+
+        $file = $request->file('image');
+        $filename = $service->uploadAndDelete($file,$post->image);
+
+        $post->image = $filename;
+        $post->update();
+        return Response::json($filename,200);
     }
 }

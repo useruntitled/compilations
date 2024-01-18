@@ -54,7 +54,7 @@ Route::controller(PostController::class)->group(function(){
 Route::controller(FilmController::class)->group(function(){
     Route::post('film','add')->name('film.store')->middleware('auth');
     Route::patch('film','patch')->name('film.patch')->middleware('admin');
-    Route::get('film-search/{query}','search')->name('film.search');
+    
     Route::get('film-edit/{id}','edit')->name('film.edit')->middleware(['auth','admin']);
 
     Route::patch('film-refresh','refresh')->name('film.refresh')->middleware('admin');

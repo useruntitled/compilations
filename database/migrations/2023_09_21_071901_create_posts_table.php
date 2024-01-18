@@ -22,6 +22,8 @@ return new class extends Migration
             
             $table->boolean('active')->nullable()->default(false);
 
+            $table->string('image')->nullable();
+
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });

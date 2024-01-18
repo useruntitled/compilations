@@ -102,6 +102,13 @@ class FilmController extends Controller
     }
     public function search($query)
     {
+        if(ctype_digit($query)) {
+            return $this->searchById($query);
+        }
+        return $this->searchByName($query);
+    }
+
+    protected function searchByName($query) {
         $films = Film::where('name_ru','LIKE',"%$query%")->limit(5)->get();
         $films_en = Film::where('name_en','LIKE',"%$query%")->limit(5)->get();
         foreach($films_en as $film){
@@ -109,6 +116,16 @@ class FilmController extends Controller
         }
         return Response::json($films,200);
     }
+
+    protected function searchById($id) {
+        $films = Film::where('id','LIKE',"$id%")->limit(5)->get();
+        if($films->count() == 0) {
+            return Response::json([$this->create($id)],200);
+        }
+
+        return Response::json($films,200);
+    }
+
     public function edit($id)
     {
         $film = Film::find($id);

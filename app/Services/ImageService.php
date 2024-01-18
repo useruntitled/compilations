@@ -3,8 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class ImageService
@@ -16,10 +15,13 @@ class ImageService
 
 
     protected $uploads_path;
+    protected $filename;
+    protected $path;
+    protected $key;
 
     public function __construct()
     {
-        $this->uploads_path = config('storage_path');
+        $this->uploads_path = public_path('storage\\');
     }
 
     protected function getSize($dimensions)
@@ -28,107 +30,71 @@ class ImageService
         return array($width, $height);
     }
 
-    public function upload()
+    public function uploadAndDelete($file, $old)
     {
-
+        if($old != null) Storage::disk('public')->delete($old);
+        $name = $file->hashName();
+        $path = $file->storePubliclyAs('public',$name);
+        return $name;
     }
 
-    protected function response($image, $encoding)
+    protected function response($image)
     {
-        $content = $image->encode($encoding)->getEncoded();
-        return response($content)->header('Content-Type', 'image/' . $encoding);
+        $content = $image->getEncoded();
+        return response($content)->header('Content-Type', 'image/jpg' );
     }
 
-    protected function getAndResponse($key)
+    protected function getAndResponse()
     {
-        return response(Cache::get($key))->header('Content-Type', 'image/jpg');
-    }
-
-    public function getUnhashed($path, $dimensions)
-    {
-        // list($w,$h) = $this->getSize($dimensions);
-        list($ext,$encoding) = $this->findExtensionAndEncoding($path);
-
-        if($ext == null) return false;
-        
-        $path .= $ext;
-
-        $key = $this->generateKey($path,$dimensions);
-
-        if($this->isCached($key)){
-            return $this->getAndResponse($key);
-        }
-
-
-        return $this->cropAndCache($path, $encoding, $dimensions);
+        return response(Cache::get($this->key))->header('Content-Type', 'image/jpg');
     }
 
     /**
-     * Поступает путь изображения (Да, хеш. Но просто отвечает за имя файла)
+     * Filename like P5WuyYVLVUcmcffkGwQJb8mxqVKdVPAkvTPOqEbc.jpg or 'Default.jpg'
+     * Path like C:\OSPanel\domains\compilations\public\storage\P5WuyYVLVUcmcffkGwQJb8mxqVKdVPAkvTPOqEbc.jpg
      */
-    public function get($path, $dimensions)
+    public function get($filename, $dimensions)
     {
-        if($path == self::DEFAULT_IMAGE_AVATAR_USER_VALUE) return $this->getAvatarByDefault($dimensions);
+        $this->filename = $filename;
+        $this->path = $this->uploads_path . $filename;
+        $this->key = $this->generateKey($filename,$dimensions);
 
-        list($ext, $encoding) = $this->findExtensionAndEncoding($path);
-        if($ext == null) abort(404);
+        if($filename == self::DEFAULT_IMAGE_AVATAR_USER_VALUE) return $this->getAvatarByDefault($dimensions);
 
-        if($this->isCached("image:$path:$dimensions")){
-            return $this->getAndResponse("image:$path:$dimensions");
+        if($this->isCached()){
+            return $this->getAndResponse();
         }
 
-        return $this->cropAndCache($path, $encoding, $dimensions);
+        return $this->cropAndCache($dimensions);
     }
 
     protected function getAvatarByDefault($dimensions)
     {
-        $path = public_path('storage\\' .  self::DEFAULT_IMAGE_AVATAR_USER_VALUE);
-
-        if($this->isCached("image:$path:$dimensions")){
-            return $this->getAndResponse("image:$path:$dimensions");
+        if($this->isCached()){
+            return $this->getAndResponse();
         }
 
-        return $this->cropAndCache($path, SELF::DEFAULT_IMAGE_AVATAR_USER_ENCODING, $dimensions);
+        return $this->cropAndCache($dimensions);
     }
 
-    protected function findExtensionAndEncoding($path)
-    {
-        foreach(SELF::EXTS as $ext){
-            if(file_exists($path . '.' . $ext)){
-                $encoding = pathinfo($path . '.' . $ext,PATHINFO_EXTENSION);
-                $extension = '.' . $encoding;
-                // $i = file_get_contents($path . $extension);
-                // return response($i)->header('Content-Type','image/' . $encoding);
-                return array($extension,$encoding);
-            }
-        }
-        return array(null, null);
-    }
-
-    protected function cropAndCache($path, $encoding, $dimensions)
+    protected function cropAndCache($dimensions)
     {
         list($w,$h) = $this->getSize($dimensions);
-        $image = Image::make($path)->fit($w,$h);
-        // $content = $image->encode($encoding)->getEncoded();
-        // return response($content)->header('Content-Type', 'image/' . $encoding);
+        $image = Image::make($this->path)->fit($w,$h);
 
-        $content = $image->encode($encoding)->getEncoded();
-        Cache::put($this->generateKey($path,$dimensions), $content, now()->addMinutes(self::CACHE_MINUTES));
-        return $this->response($image, $encoding);
+        $content = $image->encode()->getEncoded();
+        Cache::put($this->key, $content, now()->addMinutes(self::CACHE_MINUTES));
+        return $this->response($image);
     }
 
-    protected function generateKey($path,$dimensions)
+    protected function generateKey($filename,$dimensions)
     {
-        return "image:$path:$dimensions";
+        return "image:$filename:$dimensions";
     }
 
-    protected function generateAvatarKey()
-    {
 
-    }
-
-    protected function isCached($key)
+    protected function isCached()
     {
-        return Cache::has($key) == 1;
+        return Cache::has($this->key) == 1;
     }
 }

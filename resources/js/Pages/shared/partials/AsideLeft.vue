@@ -10,10 +10,10 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block">
                         <IconFlame
-                            class="stroke-3/2 w-[24px] text-amber-500 stroke-[2px]"
+                            class="stroke-3/2 w-[24px] text-amber-500 stroke-[2.2px]"
                         ></IconFlame>
                     </span>
-                    <span class="text-lgg">Популярное</span>
+                    <span class="text-lgg font-semibold">Популярное</span>
                 </button>
             </div>
             <div
@@ -22,10 +22,10 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconClock
-                            class="stroke-[2px] w-[24px] text-gray-600"
+                            class="stroke-[2.2px] w-[24px] text-gray-600"
                         ></IconClock
                     ></span>
-                    <span class="text-lgg">Свежее</span>
+                    <span class="text-lgg font-semibold">Свежее</span>
                 </button>
             </div>
             <div
@@ -34,10 +34,10 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconBookmark
-                            class="w-[24px] text-gray-600 stroke-[2px]"
+                            class="w-[24px] text-gray-600 stroke-[2.2px]"
                         ></IconBookmark
                     ></span>
-                    <span class="text-lgg">Закладки</span>
+                    <span class="text-lgg font-semibold">Закладки</span>
                 </button>
             </div>
             <div class="w-full mt-10">

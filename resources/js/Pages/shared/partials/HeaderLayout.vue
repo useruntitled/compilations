@@ -59,7 +59,7 @@ export default {
             <div class="flex items-center w-1/2 mx-auto">
                 <span class="text-sm absolute pl-2"
                     ><IconSearch
-                        class="text-slate-600 stroke-3 w-5 h-5"
+                        class="text-slate-600 stroke-[2px] w-5 h-5"
                     ></IconSearch
                 ></span>
                 <input
@@ -67,7 +67,7 @@ export default {
                     v-model="input_site"
                     type="text"
                     placeholder="Поиск"
-                    class="w-full ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
+                    class="w-full font-semibold ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
                 />
             </div>
             <div class="flex items-center">
