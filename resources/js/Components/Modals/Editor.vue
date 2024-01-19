@@ -211,7 +211,7 @@ const emit = defineEmits(["close"]);
 const close = () => {
     emit("close");
     showModal.value = false;
-    if (POSTWASLOADED.value) {
+    if (POSTWASLOADED.value && !postIsPublished.value) {
         injectedCallMessage("success", "Подборка сохранена в черновиках.");
     }
 };
@@ -517,6 +517,7 @@ const publish = () => {
         })
         .then((res) => {
             if (res.status == 200) {
+                post.value.is_active = true;
                 close();
                 router.visit(res.data);
             }

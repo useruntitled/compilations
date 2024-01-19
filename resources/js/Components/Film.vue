@@ -15,16 +15,16 @@
                 <img
                     v-else
                     v-lazy="film.poster_url"
-                    class="rounded-lg h-full"
+                    class="rounded-lg h-full w-full object-cover"
                     alt=""
-                    style="max-width: 200px"
+                    style="min-width: 200px"
                 />
                 <img
                     v-if="!film.cover_url && !film.poster_url"
-                    class="rounded-lg h-full"
+                    class="rounded-lg h-full w-full object-cover"
                     src="https://dummyimage.com/400x400/000/fff&text=No+image"
                     alt=""
-                    style="max-width: 200px"
+                    style="min-width: 200px"
                 />
             </a>
             <div class="ms-5 inline-block">

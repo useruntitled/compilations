@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('text');
 
 
+            $table->boolean('active')->nullable()->default(false);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
