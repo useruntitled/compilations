@@ -10,53 +10,10 @@
                 </template>
             </UserTabletWithElementInside>
             <div>
-                <Dropdown>
-                    <template #trigger>
-                        <button
-                            class="p-1 hover:bg-gray-100 text-gray-600 rounded-full"
-                        >
-                            <IconDots></IconDots>
-                        </button>
-                    </template>
-                    <template
-                        #content
-                        v-if="
-                            $page.props.auth.user == null ||
-                            $page.props.auth.user.id != post.user.id
-                        "
-                    >
-                        <div class="py-1">
-                            <button
-                                class="text-base text-black hover:bg-neutral-100 rounded-lg px-5"
-                            >
-                                <IconFlag
-                                    class="stroke-2 inline-block me-2 w-5 h-5"
-                                ></IconFlag>
-                                <span>Пожаловаться</span>
-                            </button>
-                        </div>
-                    </template>
-                    <template #content v-else>
-                        <div class="py-1 text-start">
-                            <button
-                                class="text-base text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
-                            >
-                                <IconPencil
-                                    class="stroke-2 inline-block me-2 w-5 h-5"
-                                ></IconPencil>
-                                <span>Редактировать</span>
-                            </button>
-                            <button
-                                class="text-base text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
-                            >
-                                <IconTrash
-                                    class="stroke-2 inline-block me-2 w-5 h-5"
-                                ></IconTrash>
-                                <span>Удалить</span>
-                            </button>
-                        </div>
-                    </template>
-                </Dropdown>
+                <DropdownReportOrManage
+                    :user="$page.props.auth.user"
+                    :post="post"
+                ></DropdownReportOrManage>
             </div>
         </header>
         <Link :href="route('post', [post.id, post.slug])">
@@ -67,22 +24,22 @@
                 <p v-html="post.description"></p>
             </section>
             <div class="p-2">
-                <!-- <img
-                    v-lazy="route('image.crop', [post.id, '800x600'])"
+                <img
+                    v-lazy="route('im', [post.image, '800x600'])"
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
-                /> -->
+                />
             </div>
         </Link>
-        <div v-for="(film, index) in post.films">
-            <Film v-if="index < 3" :film="film" mode="read"></Film>
+        <div v-for="(film, index) in post.films" class="px-2">
+            <Film v-if="index < 3" :film="film"></Film>
         </div>
         <Link :href="route('post', [post.id, post.slug])">
             <p
                 v-if="post.films.length > 3"
                 class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
             >
-                И еще {{ post.films.length - 3 }} фильмов в подборке
+                И еще {{ $tc("film", post.films.length - 3) }} в подборке
             </p></Link
         >
         <footer class="m-0 px-5 py-2 flex items-center">
@@ -124,6 +81,7 @@ import IconTrash from "./Icons/IconTrash.vue";
 import IconPencil from "./Icons/IconPencil.vue";
 import Film from "./Film.vue";
 import UserTabletWithElementInside from "./UserTabletWithElementInside.vue";
+import DropdownReportOrManage from "./Dropdowns/DropdownReportOrManage.vue";
 
 export default {
     props: {
@@ -143,6 +101,7 @@ export default {
         IconArrowForwardUp,
         Film,
         UserTabletWithElementInside,
+        DropdownReportOrManage,
     },
 };
 </script>

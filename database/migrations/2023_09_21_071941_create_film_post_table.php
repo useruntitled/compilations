@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('film_id')->constrained()->onDelete('cascade');
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
 
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 

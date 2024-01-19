@@ -19,7 +19,7 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'user' => new UserResource($this->user),
             'text' => $this->text,
-            'reputation' => $this->rep,
+            'rep' => $this->rep,
             'replies' => CommentResource::collection($this->replies),
             'replies_count' => $this->replies->count(),
             'comment' => $this->comment ?? null,

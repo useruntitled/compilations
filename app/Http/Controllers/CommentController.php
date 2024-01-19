@@ -34,6 +34,7 @@ class CommentController extends Controller
             'user_id' => Auth::user()->id,
         ]);
         if($comment != null){
+            $comment->load('reputation');
             return new CommentResource($comment);
         }
         return 'Error in store method';

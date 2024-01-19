@@ -31,7 +31,7 @@ class Post extends Model
 
     public function films()
     {
-        return $this->belongsToMany(Film::class);
+        return $this->belongsToMany(Film::class)->orderByPivot('id', 'asc');
     }
     public function tags()
     {
@@ -45,7 +45,7 @@ class Post extends Model
     public function timestamp(): Attribute
     {
         return Attribute::make(
-            get: fn() => (new Carbon($this->created_at))->diffForHumans()
+            get: fn() => (new Carbon($this->published_at))->diffForHumans()
         );
     }
 

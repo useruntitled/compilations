@@ -65,7 +65,7 @@ class PostController extends Controller
 
     public function get(int $id)
     {
-        $post = Post::with(['user' => ['roles']])->find($id);
+        $post = Post::with(['user' => ['roles'], 'films'])->find($id);
         return $post;
     }
 
@@ -97,24 +97,46 @@ class PostController extends Controller
     }
     public function update(Request $request)
     {
-        $post = Post::findOrFail($request->id);
+
+        $post = Post::with('films')->findOrFail($request->id);
+
+        $films = $request->films;
+
+
+        if($films != null && count($films) > 0) {
+            if(count($post->films) > 0) $post->films()->detach();
+
+            $array_of_ids = [];
+            foreach($films as $film) { 
+                $array_of_ids[] = $film['id'];
+            }
+
+            $post->films()->attach(array_unique($array_of_ids),['created_at' => now()]);
+        } else if (count($films) == 0 && count($post->films) > 0) {
+            $post->films()->detach();
+        }
+
+
         $post->update([
             'title' => $request->title,
             'description' => nl2br($request->description),
+            'slug' => Str::slug($request->title),
         ]);
         $post->save();
-        // if($request->hasFile('image')){
-        //     $path = $post->id . '.png';
-        //     $image = $request->file('image')->storeAs(null,$path,'public');
-        // }
         return Response::json($post,200);
     }
     public function publish(Request $request)
     {
         $post = Post::find($request->id);
-        $post->active = true;
-        $post->save();
-        return Response::json('',200);
+        
+        if(!$post->active) {
+            $post->active = true;
+            $post->published_at = now();
+            $post->save();
+        }
+
+        
+        return route('post',[$post->id,$post->slug]);
     }
     public function postAttachFilm(Request $request)
     {

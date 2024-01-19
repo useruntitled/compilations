@@ -40,10 +40,10 @@ Route::get('/', function () {
 
 Route::controller(PostController::class)->group(function(){
     // Route::get('create','create')->name('post.create')->middleware(['auth','creator']);
-    Route::get('post-finish/{id}','finish')->name('post.finish')->middleware(['auth','creator']);
+    // Route::get('post-finish/{id}','finish')->name('post.finish')->middleware(['auth','creator']);
     // Route::post('create','store')->name('post.create')->middleware(['auth','creator']);
     // Route::put('create','update')->name('post.update')->middleware('auth');
-    Route::put('publish','publish')->name('post.publish')->middleware(['auth','creator']);
+    // Route::put('publish','publish')->name('post.publish')->middleware(['auth','creator']);
     Route::get('post-edit/{id}/{slug}','edit')->name('post.edit')->middleware('auth');
     Route::post('post-film-attach','postAttachFilm')->name('post.attach.film')->middleware(['auth','creator']);
     Route::patch('post-film-dettach','postDettachFilm')->name('post.dettach.film')->middleware(['auth','creator']);

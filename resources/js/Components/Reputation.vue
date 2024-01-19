@@ -12,7 +12,7 @@
                 class="p-1 rounded-full text-green-300 hover:text-green-500 hover:bg-green-100"
                 :class="current_action == 'up' ? 'text-green-500' : ''"
             >
-                <IconUp></IconUp>
+                <IconUp class="w-6 h-6"></IconUp>
             </button>
         </div>
         <div class="inline-block hover:text-red-700 flex items-center">
@@ -23,7 +23,7 @@
                 class="p-1 rounded-full hover:bg-red-100 text-red-300 hover:text-red-500"
                 :class="current_action == 'down' ? 'text-red-500' : ''"
             >
-                <IconDown></IconDown>
+                <IconDown class="w-6 h-6"></IconDown>
             </button>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
-    <Modal :show="show" @close="showModal = false" v-if="showModal">
-        <div class="p-5 px-20">
+    <Modal :show="show" @close="close()" v-if="showModal">
+        <div class="p-5 px-20 pb-0">
             <div v-if="postIsLoading" class="flex justify-center my-10">
                 <AnimationLoader></AnimationLoader>
             </div>
@@ -9,7 +9,10 @@
                 v-if="access && !postIsLoading"
                 style="height: calc(100vh - 100px)"
             >
-                <div class="overflow-auto h-full noscrollbar pb-10">
+                <p v-if="postIsPublished" class="font-semibold">
+                    Будьте осторожны. Пост уже опубликован.
+                </p>
+                <div class="overflow-auto h-full noscrollbar pb-20">
                     <main class="overflow-y-auto px-1">
                         <div class="my-5 flex relative">
                             <div
@@ -78,14 +81,12 @@
                                 v-focus
                                 v-model="form.title"
                                 placeholder="Название подборки"
-                                @input="savePost()"
                             ></SecondaryInput>
                         </div>
                         <div>
                             <SecondaryContent
                                 v-model="form.description"
                                 placeholder="Описание подборки"
-                                @input="savePost()"
                             ></SecondaryContent>
                         </div>
 
@@ -116,12 +117,12 @@
                             </section>
                         </div>
 
-                        <div class="my-5" v-show="pinnedFilms.length > 0">
-                            <p>{{ $tc("film", pinnedFilms.length) }}</p>
+                        <div class="my-5" v-show="form.films.length > 0">
+                            <p>{{ $tc("film", form.films.length) }}</p>
                             <div
                                 @mouseenter="hoverButtons = film.id"
                                 @mouseleave="hoverButtons = null"
-                                v-for="(film, index) in pinnedFilms"
+                                v-for="(film, index) in form.films"
                                 class="flex justify-between items-center my-2"
                             >
                                 <button
@@ -160,24 +161,41 @@
                 </div>
                 <footer class="bg-white absolute bottom-0 w-full">
                     <div class="flex justify-between items-center bg-white">
-                        <PrimaryButton class="px-4" :class="canPublishClass"
+                        <PrimaryButton
+                            class="px-4 ms-1 mb-4"
+                            :class="canPublishClass"
+                            @click="publish()"
                             >Опубликовать</PrimaryButton
                         >
                         <p v-show="isUpdating" class="font-semibold">
                             Сохранение...
                         </p>
+                        <div
+                            v-show="isUpdated && !isUpdating"
+                            class="font-semibold flex items-center"
+                        >
+                            <span> Сохранено </span>
+                            <span>
+                                <IconCheck
+                                    class="w-5 h-5 inline-block"
+                                ></IconCheck>
+                            </span>
+                        </div>
                     </div>
                 </footer>
             </div>
-            <div v-if="!access">Недостаточно кармы</div>
+            <div v-if="!access">
+                Вы не можете публиковать подборки, так как не являетесь частью
+                сообщества.
+            </div>
         </div>
     </Modal>
 </template>
 <script setup>
 import SecondaryInput from "@/Components/Forms/SecondaryInput.vue";
-import { ref, reactive, computed, watch, onMounted } from "vue";
+import { ref, reactive, computed, watch, onMounted, inject } from "vue";
 import Modal from "./Modal.vue";
-import { usePage } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import axios from "axios";
 import PrimaryButton from "../Buttons/PrimaryButton.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
@@ -186,6 +204,17 @@ import SearchInput from "../Forms/SearchInput.vue";
 import IconUp from "../Icons/IconUp.vue";
 import IconDown from "../Icons/IconDown.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
+import IconCheck from "../Icons/IconCheck.vue";
+
+const emit = defineEmits(["close"]);
+
+const close = () => {
+    emit("close");
+    showModal.value = false;
+    if (POSTWASLOADED.value) {
+        injectedCallMessage("success", "Подборка сохранена в черновиках.");
+    }
+};
 
 const vFocus = {
     mounted: (el) => el.focus(),
@@ -196,6 +225,8 @@ const page = usePage();
 const props = defineProps({
     show: Boolean,
 });
+
+const injectedCallMessage = inject("callMessage");
 
 onMounted(() => {
     if (!access.value)
@@ -209,6 +240,9 @@ onMounted(() => {
 const searchInputFocused = ref(false);
 const showModal = ref(props.show);
 const post = ref(null);
+const postIsPublished = computed(() => {
+    return post.value && post.value.is_active;
+});
 const postIsLoading = ref(false);
 const postIsCreated = computed({
     get() {
@@ -228,7 +262,13 @@ watch(post, () => {
     pushState();
     form.title = post.value.title;
     form.description = post.value.description;
-    form.films = post.value.films;
+
+    if (post.value.films != undefined) {
+        pinnedFilms.value = [...post.value.films];
+        form.films = post.value.films;
+    } else {
+        form.films = [];
+    }
 });
 
 const searchInput = ref(null);
@@ -237,6 +277,7 @@ const pinnedFilms = ref([]);
 const hoverButtons = ref(null);
 const filepond = ref(null);
 const imageIsLoading = ref(false);
+const isUpdated = ref(false);
 
 const clickFilePond = () => {
     filepond.value.click();
@@ -252,13 +293,19 @@ const handleFile = (e) => {
     reader.readAsDataURL(file);
 };
 
-const uploadImage = (image, base64) => {
+const uploadImage = async (image, base64) => {
     form.image = base64;
     isUpdating.value = true;
+
     imageIsLoading.value = true;
+
+    if (!post.value) {
+        await createPost();
+    }
     const formData = new FormData();
     formData.append("id", post.value.id);
     formData.append("image", image);
+
     axios
         .post(route("post.upload.image"), formData)
         .catch((res) => {
@@ -275,7 +322,7 @@ const uploadImage = (image, base64) => {
 };
 
 const canPublishClass = computed(() => {
-    if (pinnedFilms.value.length > 0 && form.title.length > 0) {
+    if (form.films.length > 0 && form.title) {
         return "bg-orange-500";
     }
     return "bg-orange-200";
@@ -329,6 +376,9 @@ watch(
     }
 );
 
+watch(form, () => {
+    savePost();
+});
 const access = computed({
     get() {
         return page.props.auth.can.create_posts;
@@ -347,10 +397,13 @@ const pushState = () => {
     append("id", post.value.id);
 
     window.history.pushState(null, null, url);
+    router.reload();
 };
 
-const createPost = () => {
-    axios
+const createPost = async () => {
+    console.log("creating post");
+    isUpdating.value = true;
+    await axios
         .post(route("post.create"), {
             title: form.title,
             description: form.description,
@@ -360,27 +413,39 @@ const createPost = () => {
         })
         .then((res) => {
             POSTWASLOADED.value = true;
-            if (res.status == 200) post.value = res.data;
+            if (res.status == 200) {
+                post.value = res.data;
+                isUpdating.value = false;
+            }
             console.log(res);
         });
 };
 
-const savePost = () => {
-    if (!postIsCreated.value && !POSTWASLOADED.value) createPost();
+const savePost = async () => {
+    if (!postIsCreated.value && !POSTWASLOADED.value && !isUpdating.value) {
+        await createPost();
+    }
     isUpdating.value = true;
-    setTimeout(() => {
-        axios
+    setTimeout(async () => {
+        await axios
             .post(route("post.update"), {
                 _method: "PUT",
                 title: form.title,
                 description: form.description,
                 id: post.value.id,
+                films: form.films,
             })
             .catch((res) => {
                 console.log(res);
             })
             .then((res) => {
-                if (res.status == 200) isUpdating.value = false;
+                if (res.status == 200) {
+                    isUpdating.value = false;
+                    isUpdated.value = true;
+                    setTimeout(() => {
+                        isUpdated.value = false;
+                    }, 1000);
+                }
             });
     }, 1000);
 };
@@ -406,34 +471,56 @@ const searchFilm = () => {
     }, 200);
 };
 
-const addFilm = (film) => {
-    if (!pinnedFilms.value.find((obj) => obj.id == film.id))
-        pinnedFilms.value.push(film);
+const addFilm = async (film) => {
+    if (!post.value && !isUpdating.value) {
+        await createPost();
+    }
+
+    if (!form.films.find((obj) => obj.id == film.id)) form.films.push(film);
 };
 
 const removeFilm = (film_id) => {
-    const index = pinnedFilms.value.findIndex((obj) => obj.id == film_id);
-    pinnedFilms.value.splice(index, 1);
+    const index = form.films.findIndex((obj) => obj.id == film_id);
+    form.films.splice(index, 1);
+    savePost();
 };
 
 const changeFilmIndex = (film_id, action) => {
-    const index = pinnedFilms.value.findIndex((obj) => obj.id == film_id);
-    const film = pinnedFilms.value[index];
-    const filmAbove = pinnedFilms.value[index - 1];
-    const filmBelow = pinnedFilms.value[index + 1];
+    const index = form.films.findIndex((obj) => obj.id == film_id);
+    const film = form.films[index];
+    const filmAbove = form.films[index - 1];
+    const filmBelow = form.films[index + 1];
     if (
         (index == 0 && action == 0) ||
-        (index == pinnedFilms.value.length - 1 && action == 1)
+        (index == form.films.length - 1 && action == 1)
     )
         return false;
 
     if (action == 0) {
-        pinnedFilms.value[index - 1] = film;
-        pinnedFilms.value[index] = filmAbove;
+        form.films[index - 1] = film;
+        form.films[index] = filmAbove;
     } else {
-        pinnedFilms.value[index + 1] = film;
-        pinnedFilms.value[index] = filmBelow;
+        form.films[index + 1] = film;
+        form.films[index] = filmBelow;
     }
+
+    savePost();
+};
+
+const publish = () => {
+    axios
+        .post(route("post.publish"), {
+            id: post.value.id,
+        })
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            if (res.status == 200) {
+                close();
+                router.visit(res.data);
+            }
+        });
 };
 </script>
 <style>

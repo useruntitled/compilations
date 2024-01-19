@@ -31,7 +31,7 @@
             class="my-4 font-semibold text-17px"
         >
             <IconPanel class="me-2 inline-block stroke-[2]"></IconPanel>
-            Панель
+            Администрировать
         </DropdownLink>
 
         <DropdownLink

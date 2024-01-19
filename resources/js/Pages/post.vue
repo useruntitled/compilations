@@ -12,53 +12,10 @@
                 </template>
             </UserTabletWithElementInside>
             <div>
-                <Dropdown>
-                    <template #trigger>
-                        <button
-                            class="p-1 hover:bg-gray-100 text-gray-600 rounded-full"
-                        >
-                            <IconDots></IconDots>
-                        </button>
-                    </template>
-                    <template
-                        #content
-                        v-if="
-                            $page.props.auth.user == null ||
-                            $page.props.auth.user.id != post.user.id
-                        "
-                    >
-                        <div class="py-1">
-                            <button
-                                class="text-base text-black hover:bg-neutral-100 rounded-lg px-5"
-                            >
-                                <IconFlag
-                                    class="stroke-2 inline-block me-2 w-5 h-5"
-                                ></IconFlag>
-                                <span>Пожаловаться</span>
-                            </button>
-                        </div>
-                    </template>
-                    <template #content v-else>
-                        <div class="py-1 text-start">
-                            <button
-                                class="text-base text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
-                            >
-                                <IconPencil
-                                    class="stroke-2 inline-block me-2 w-5 h-5"
-                                ></IconPencil>
-                                <span>Редактировать</span>
-                            </button>
-                            <button
-                                class="text-base text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
-                            >
-                                <IconTrash
-                                    class="stroke-2 inline-block me-2 w-5 h-5"
-                                ></IconTrash>
-                                <span>Удалить</span>
-                            </button>
-                        </div>
-                    </template>
-                </Dropdown>
+                <DropdownReportOrManage
+                    :user="$page.props.auth.user"
+                    :post="post"
+                ></DropdownReportOrManage>
             </div>
         </header>
         <Link :href="route('post', [post.id, post.slug])">
@@ -70,7 +27,7 @@
             </section>
             <div class="p-2">
                 <img
-                    v-lazy="route('image.crop', [post.id, '800x600'])"
+                    v-lazy="route('im', [post.image, '800x600'])"
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
                 />
@@ -79,7 +36,7 @@
     </div>
     <div class="bg-white p-5 pt-4 rounded-b-xl pb-0">
         <div v-for="film in post.films">
-            <Film :film="film" mode="read"></Film>
+            <Film :film="film"></Film>
         </div>
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
@@ -123,6 +80,7 @@ import LinkIcon from "@/Components/LinkIcon.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import Base from "./shared/base.vue";
 import UserTabletWithElementInside from "@/Components/UserTabletWithElementInside.vue";
+import DropdownReportOrManage from "@/Components/Dropdowns/DropdownReportOrManage.vue";
 export default {
     layout: Base,
     props: {
@@ -171,6 +129,7 @@ export default {
         IconDots,
         Dropdown,
         UserTabletWithElementInside,
+        DropdownReportOrManage,
     },
 };
 </script>

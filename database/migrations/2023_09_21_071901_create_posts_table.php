@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('image')->nullable();
 
             $table->timestamps();
+            $table->timestamp('published_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
         });
     }

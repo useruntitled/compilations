@@ -6,6 +6,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReputationController;
 use App\Http\Controllers\SidebarController;
+use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::controller(PostController::class)->group(function() {
     Route::put('post','update')->name('post.update')->middleware(['auth']);
     Route::get('post/{id}','get')->name('post.get')->middleware(['auth']);
     Route::post('post/image','uploadImage')->name('post.upload.image')->middleware(['auth']);
+    Route::post('post/publish','publish')->name('post.publish')->middleware(['auth','creator']);
 });
 
 // Route::controller(CommentReputationController::class)->group(function(){
@@ -71,7 +73,7 @@ Route::controller(ReputationController::class)->group(function(){
 
 
 Route::get('/notifications/get', function(){
-    return Auth::user()->notifications;
+    return NotificationResource::collection(Auth::user()->notifications);
 })->name('notifications.get')->middleware('auth');
 
 Route::post('notifications/read', function(){

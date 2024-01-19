@@ -43,7 +43,7 @@ export default {
             :class="$page.props.auth.user ? 'p-2' : 'p-5'"
         >
             <div>
-                <Link :href="route('home')" preserve-state preserve-scroll>
+                <Link :href="route('home')" preserve-state>
                     <!-- <img
                         class="inline-block rounded"
                         style="max-width: 50px"
@@ -93,7 +93,7 @@ export default {
                                 class="inline-block me-1"
                             >
                                 <img
-                                    class="rounded-full inline-block"
+                                    class="rounded-full inline-block hover:opacity-70"
                                     :src="
                                         route('im', [
                                             $page.props.auth.user.avatar,

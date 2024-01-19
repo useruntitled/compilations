@@ -38,7 +38,7 @@ trait HasReputation
         return [
             'up' => $pluses,
             'down' => $minuses,
-            'action' => $user_action,
+            'action' => $user_action ?? null,
             'reputation_to_id' => $this->id,
         ];
     }

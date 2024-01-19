@@ -73,7 +73,7 @@
                 <main>
                     <p
                         v-html="comment.text"
-                        class="text-base"
+                        class="text-lgg"
                         v-if="!isDeleted"
                     ></p>
                 </main>
