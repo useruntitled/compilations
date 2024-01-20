@@ -19,6 +19,8 @@
                     : `before:content-['Комментарий...']`
             "
             @input="handleInput()"
+            @paste.prevent="handlePaste($event)"
+            @drop.prevent="handlePaste($event)"
             v-html="text"
         ></div>
         <div class="flex justify-between mt-5 items-center">
@@ -82,6 +84,10 @@ export default {
             this.textarea = this.$refs["textarea"];
             this.textareaValue = this.textarea.innerHTML;
             this.textareaValueLength = this.considerTextareaLength();
+        },
+        handlePaste(e) {
+            const text = e.clipboardData.getData("text/plain");
+            document.execCommand("insertText", false, text);
         },
     },
     updated() {

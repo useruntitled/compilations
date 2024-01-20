@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\ImageService;
@@ -64,6 +65,13 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function notifications()
+    {
+        return inertia('Auth/Notifications', [
+            'notifications' => NotificationResource::collection(Auth::user()->notifications),
+        ]);
     }
 
     public function updateAvatar(Request $request, ImageService $service)

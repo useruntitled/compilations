@@ -37,7 +37,11 @@
                 </div>
                 <div v-if="notifications_count >= 5">
                     <hr />
-                    <button class="p-[5px] text-dtfpr">Все уведомления</button>
+                    <Link :href="route('notifications')">
+                        <button class="p-[5px] text-dtfpr">
+                            Все уведомления
+                        </button></Link
+                    >
                 </div>
             </div>
             <div

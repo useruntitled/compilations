@@ -17,7 +17,7 @@
                         <Link :href="route('profile', [comment.user.id])">
                             <img
                                 :src="
-                                    route('image.crop', [
+                                    route('im', [
                                         comment.user.avatar,
                                         ['50x50'],
                                     ])
@@ -70,9 +70,59 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { ref, onMounted, watch } from "vue";
 import UserTablet from "@/Components/UserTablet.vue";
 import axios from "axios";
+
+const comments = ref([]);
+
+const prepareHref = (comment) => {
+    if (comment.isReply)
+        return (
+            route("post", [comment.post.id, comment.post.slug]) +
+            `#reply-${comment.id}`
+        );
+    else
+        return (
+            route("post", [comment.post.id, comment.post.slug]) +
+            `#comment-${comment.id}`
+        );
+};
+
+const getLastComments = () => {
+    axios
+        .get(route("comments.get.last"))
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            // console.log(res);
+            if (res.status == 200) {
+                comments.value = res.data;
+            }
+        });
+};
+
+onMounted(() => {
+    getLastComments();
+
+    console.log("AsideRight: Connecting");
+
+    const channel = Echo.private(`users`);
+    channel.listen(".comments.feed", (data) => {
+        comments.value.unshift(data[0]);
+    });
+});
+
+watch(comments, () => {
+    if (comments.length == 20) {
+        comments.value.splice(-20);
+    }
+});
+</script>
+<!-- <script>
+
 
 export default {
     data() {
@@ -96,44 +146,38 @@ export default {
                 );
         },
         getLastComments() {
-            // axios
-            //     .get(route("comments.get.last"), {
-            //         // transformResponse: [
-            //         //     function (data) {
-            //         //         // Возвращаем данные без изменений
-            //         //         return data;
-            //         //     },
-            //         // ],
-            //     })
-            //     .catch((res) => {
-            //         // console.log(res);
-            //         if (res.status != 429) {
-            //             console.log(res);
-            //             this.getLastComments();
-            //         }
-            //     })
-            //     .then((res) => {
-            //         // console.log(res);
-            //         if (res.status == 200) {
-            //             this.flag = true;
-            //             this.comments = res.data;
-            //         }
-            //     });
-        },
-
-        setIntervalGetComments() {
-            setInterval(() => {
-                this.getLastComments();
-            }, 30000);
+            axios
+                .get(route("comments.get.last"), {
+                    // transformResponse: [
+                    //     function (data) {
+                    //         // Возвращаем данные без изменений
+                    //         return data;
+                    //     },
+                    // ],
+                })
+                .catch((res) => {
+                    console.log(res);
+                })
+                .then((res) => {
+                    // console.log(res);
+                    if (res.status == 200) {
+                        this.comments = res.data;
+                    }
+                });
         },
     },
     mounted() {
         this.getLastComments();
-        this.setIntervalGetComments();
+        console.log("Connecting");
+
+        const channel = Echo.private(`users`);
+        channel.listen(".comments.feed", (data) => {
+            this.comments.unshift(data[0]);
+        });
     },
     components: { Comment, UserTablet },
 };
-</script>
+</script> -->
 <style>
 /* хром, сафари */
 .noscrollbar::-webkit-scrollbar {

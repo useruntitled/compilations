@@ -3,7 +3,7 @@
         <div class="mt-5 text-start flex items-center w-full rounded-lg">
             <a
                 :href="'https://kinopoisk.ru/film/' + film.id"
-                class="object-cover h-full w-full"
+                class="object-cover h-full"
             >
                 <img
                     v-if="film.poster_url_preview"

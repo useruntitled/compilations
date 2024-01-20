@@ -20,6 +20,7 @@ class PostController extends Controller
     {
         $post = Post::with([
             'comments' => [
+                'post' => ['user'],
                 'replies' => ['reputation','user' => ['roles']],
                 'reputation',
                 'user' => ['roles'],

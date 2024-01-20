@@ -16,11 +16,13 @@
         <KarmaCountWithEmoji :karma="karma"></KarmaCountWithEmoji>
         <div class="flex items-center mt-2">
             <Link
+                preserve-scroll
                 @click="selectedSection = 1"
                 :href="route('profile', [user.id, 1])"
                 ><button ref="link-1">Подборки</button></Link
             >
             <Link
+                preserve-scroll
                 @click="selectedSection = 2"
                 :href="route('profile', [user.id, 2])"
                 ><button ref="link-2" class="ms-5">Комментарии</button></Link

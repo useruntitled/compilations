@@ -5,16 +5,20 @@
     >
         <div class="px-2.5 mt-2 py-5 text-start">
             <div
-                class="w-full bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
+                class="w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white"
+                :class="{ 'bg-white': isPopular }"
             >
-                <button class="flex items-center py-[5px]">
+                <Link :href="route('home')" class="flex items-center py-[5px]">
                     <span class="me-2 inline-block">
                         <IconFlame
-                            class="stroke-3/2 w-[24px] text-amber-500 stroke-[2.2px]"
+                            class="stroke-3/2 w-[24px] text-gray-500 stroke-[2.2px]"
+                            :class="{ 'stroke-amber-500': isPopular }"
                         ></IconFlame>
                     </span>
-                    <span class="text-lgg font-semibold">Популярное</span>
-                </button>
+                    <span class="text-lgg font-semibold opacity-80"
+                        >Популярное</span
+                    >
+                </Link>
             </div>
             <div
                 class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
@@ -22,10 +26,12 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconClock
-                            class="stroke-[2.2px] w-[24px] text-gray-600"
+                            class="stroke-[2.2px] w-[24px] text-gray-500"
                         ></IconClock
                     ></span>
-                    <span class="text-lgg font-semibold">Свежее</span>
+                    <span class="text-lgg font-semibold opacity-80"
+                        >Свежее</span
+                    >
                 </button>
             </div>
             <div
@@ -34,10 +40,12 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconBookmark
-                            class="w-[24px] text-gray-600 stroke-[2.2px]"
+                            class="w-[24px] text-gray-500 stroke-[2.2px]"
                         ></IconBookmark
                     ></span>
-                    <span class="text-lgg font-semibold">Закладки</span>
+                    <span class="text-lgg font-semibold opacity-80"
+                        >Закладки</span
+                    >
                 </button>
             </div>
             <div class="w-full mt-10">
@@ -50,14 +58,28 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { inject, computed } from "vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import IconBookmark from "@/Components/Icons/IconBookmark.vue";
 import IconClock from "@/Components/Icons/IconClock.vue";
 import IconFlame from "@/Components/Icons/IconFlame.vue";
+import { usePage } from "@inertiajs/vue3";
+
+const callModal = inject("callModal");
+
+const page = usePage();
+
+const isPopular = computed(() => {
+    return page.component == "home/index";
+});
+</script>
+
+<!-- <script>
+
 
 export default {
     inject: ["callModal"],
     components: { PrimaryButton, IconBookmark, IconClock, IconFlame },
 };
-</script>
+</script> -->

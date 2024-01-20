@@ -42,7 +42,7 @@
             Черновики
         </DropdownLink>
         <DropdownLink
-            :href="route('profile.edit')"
+            :href="route('settings')"
             class="my-4 font-semibold text-17px"
         >
             <IconTooth class="me-2 inline-block stroke-[2]"></IconTooth>

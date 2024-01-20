@@ -7,7 +7,7 @@
                 <div class="flex items-end justify-start">
                     <div class="flex items-end justify-end">
                         <img
-                            class="rounded-full inline-block"
+                            class="rounded-full inline-block hover:brightness-110"
                             :src="route('im', [user.avatar, '100x100'])"
                             style="width: 40px; height: 40px"
                             alt=""

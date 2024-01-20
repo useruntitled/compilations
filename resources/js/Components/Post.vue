@@ -32,14 +32,14 @@
             </div>
         </Link>
         <div v-for="(film, index) in post.films" class="px-2">
-            <Film v-if="index < 3" :film="film"></Film>
+            <Film v-if="index < 2" :film="film"></Film>
         </div>
         <Link :href="route('post', [post.id, post.slug])">
             <p
                 v-if="post.films.length > 3"
                 class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
             >
-                И еще {{ $tc("film", post.films.length - 3) }} в подборке
+                И еще {{ $tc("film", post.films.length - 2) }} в подборке
             </p></Link
         >
         <footer class="m-0 px-5 py-2 flex items-center">

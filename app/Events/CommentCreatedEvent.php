@@ -13,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CommentCreatedEvent implements ShouldQueue
+class CommentCreatedEvent implements ShouldQueue, ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -27,4 +27,20 @@ class CommentCreatedEvent implements ShouldQueue
         $this->comment = $comment;
     }
 
+    public function broadcastOn(): Array
+    {
+        return [
+            new PrivateChannel('users'),
+        ];  
+    }
+    
+    public function broadcastAs(): string
+    {
+        return 'comments.feed';
+    }
+
+    public function broadcastWith(): Array
+    {
+        return [$this->comment->load(['post' => ['user'],'user' => ['roles']])];
+    }
 }

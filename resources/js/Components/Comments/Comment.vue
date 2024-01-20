@@ -32,7 +32,7 @@
             <section
                 ref="comment"
                 class="duration-500"
-                :class="colorizeComment ? 'bg-orange-50' : ''"
+                :class="colorizeComment ? 'opacity-50' : ''"
                 @mouseenter="this.showLinkToParent = true"
                 @mouseleave="this.showLinkToParent = false"
             >
@@ -45,6 +45,14 @@
                         <template #content>
                             <p class="text-xs opacity-80">
                                 {{ comment.timestamp }}
+                                <!-- <span
+                                    class="text-orange-500 opacity-100 ms-1"
+                                    v-if="
+                                        comment.user.id == comment.post.user.id
+                                    "
+                                >
+                                    Автор
+                                </span> -->
                             </p>
                         </template>
                     </UserTabletWithElementInside>

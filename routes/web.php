@@ -11,6 +11,7 @@ use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostReputationController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Models\Post;
@@ -109,6 +110,8 @@ Route::controller(GenreController::class)->group(function(){
 Route::controller(PersonalPageController::class)->group(function(){
     Route::get('profile/{id}/{section?}','index')->name('profile');
 });
+
+
 
 Route::get('test',function(){
     // $post = Post::find(3);

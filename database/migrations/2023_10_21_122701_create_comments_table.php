@@ -19,8 +19,7 @@ return new class extends Migration
             $table->foreignId('comment_id')->nullable()->constrained();
 
 
-            $table->string('text');
-
+            $table->longText('text');
 
             $table->boolean('active')->nullable()->default(false);
             $table->string('image')->nullable();

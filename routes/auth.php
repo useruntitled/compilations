@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -56,4 +57,10 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+});
+
+Route::middleware('auth')->group(function() {
+    Route::get('settings',[SettingsController::class, 'index'])->name('settings');
+    Route::get('settings/blog', [SettingsController::class, 'blog'])->name('settings.blog');
+    Route::get('notifications',[RegisteredUserController::class, 'notifications'])->name('notifications');
 });

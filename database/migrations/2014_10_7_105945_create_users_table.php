@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('avatar');
+            $table->string('background_image');
+            $table->text('description');
 
             $table->timestamps();
         });
