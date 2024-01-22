@@ -19,8 +19,6 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    const PATH_DEFAULT_AVATAR = 'avatar:default.jpg';
-
     protected $service;
 
     public function __construct(NotificationService $service)
@@ -74,8 +72,47 @@ class RegisteredUserController extends Controller
         ]);
     }
 
-    public function updateAvatar(Request $request, ImageService $service)
+    public function updateProfileInfo(Request $request)
     {
+       $request->validate([
+        'name' => 'required',
+        'description' => 'required',
+       ]);
 
+       $user = Auth::user();
+
+       $user->name = $request->name;
+       $user->description = $request->description;
+       $user->update();
+       
+       return $user;
+    }
+
+    public function uploadAvatar(Request $request, ImageService $service)
+    {
+        $user = Auth::user();
+
+        if($request->hasFile('image')) {
+            $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
+            $user->avatar = $filename;
+            $user->update();
+
+            return $filename;
+        }
+        abort(422);
+    }
+
+    public function uploadBackgroundImage(Request $request, ImageService $service)
+    {
+        $user = Auth::user();
+
+        if($request->hasFile('image')) {
+            $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
+            $user->background_image = $filename;
+            $user->update();
+
+            return $filename;
+        }
+        abort(422);
     }
 }

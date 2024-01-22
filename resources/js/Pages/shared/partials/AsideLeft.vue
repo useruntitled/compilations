@@ -11,8 +11,11 @@
                 <Link :href="route('home')" class="flex items-center py-[5px]">
                     <span class="me-2 inline-block">
                         <IconFlame
-                            class="stroke-3/2 w-[24px] text-gray-500 stroke-[2.2px]"
-                            :class="{ 'stroke-amber-500': isPopular }"
+                            class="w-[24px] stroke-[0.3px] text-secondary"
+                            :class="{
+                                'stroke-amber-500 fill-amber-500 stroke-[0.5px]':
+                                    isPopular,
+                            }"
                         ></IconFlame>
                     </span>
                     <span class="text-lgg font-semibold opacity-80"
@@ -26,7 +29,7 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconClock
-                            class="stroke-[2.2px] w-[24px] text-gray-500"
+                            class="stroke-[2.2px] w-[24px] text-secondary"
                         ></IconClock
                     ></span>
                     <span class="text-lgg font-semibold opacity-80"
@@ -40,7 +43,7 @@
                 <button class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconBookmark
-                            class="w-[24px] text-gray-500 stroke-[2.2px]"
+                            class="w-[24px] text-secondary stroke-[2.2px]"
                         ></IconBookmark
                     ></span>
                     <span class="text-lgg font-semibold opacity-80"

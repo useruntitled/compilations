@@ -5,7 +5,7 @@
         </header>
         <hr />
         <main class="px-5 py-5">
-            Здесь тоже динамически компонент подгружаться должен.
+            Здесь тоже динамически компонент уведомлений подгружаться должен.
             <div v-for="n in notifications" class="mb-5">
                 <NotificationTemplate :notification="n"> </NotificationTemplate>
             </div>
@@ -15,7 +15,6 @@
 <script setup>
 import NotificationTemplate from "@/Components/Notifications/NotificationTemplate.vue";
 import Base from "../shared/base.vue";
-import IconComments from "@/Components/Icons/IconComments.vue";
 
 const props = defineProps({
     notifications: [],

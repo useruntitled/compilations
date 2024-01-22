@@ -6,6 +6,7 @@
         <div class="pt-2 mt-0 ms-10">
             <p
                 class="font-semibold py-5 text-lg text-start flex sticky top-0 bg-bck"
+                v-show="comments && comments.length > 0"
             >
                 Сейчас обсуждают
             </p>

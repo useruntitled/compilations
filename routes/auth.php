@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function() {
     Route::get('settings',[SettingsController::class, 'index'])->name('settings');
-    Route::get('settings/blog', [SettingsController::class, 'blog'])->name('settings.blog');
+    Route::get('settings/profile', [SettingsController::class, 'profile'])->name('settings.profile');
+    Route::put('me/profile', [RegisteredUserController::class, 'updateProfileInfo'])->name('settings.profile.update');
     Route::get('notifications',[RegisteredUserController::class, 'notifications'])->name('notifications');
 });

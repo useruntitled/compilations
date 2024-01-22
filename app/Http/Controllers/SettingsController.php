@@ -11,8 +11,8 @@ class SettingsController extends Controller
         return inertia('Auth/Settings/Index');
     }
 
-    public function blog()
+    public function profile()
     {
-        return inertia('Auth/Settings/Blog');
+        return inertia('Auth/Settings/Profile');
     }
 }

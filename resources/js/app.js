@@ -67,11 +67,14 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(VueLazyLoad, {
-                preLoad: 1.3,
-                attempt: 1,
+                adapter: {
+                  loading (listener, Init) {
+                    
+                  }
+                },
+                attempt: 3,
                 loading: '/preloader.png',
                 // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
-                listenEvents: [ 'scroll' ]
             })
             .use(i18n)
             .component('Head',Head)

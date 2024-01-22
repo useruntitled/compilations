@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ImageController;
@@ -79,3 +80,9 @@ Route::get('/notifications/get', function(){
 Route::post('notifications/read', function(){
     return Auth::user()->markAsReadNotifications();
 })->name('notifications.read')->middleware('auth');
+
+
+Route::middleware('auth')->group(function() {
+    Route::post('user/avatar',[RegisteredUserController::class,'uploadAvatar'])->name('user.upload.avatar');
+    Route::post('user/background-image',[RegisteredUserController::class, 'uploadBackgroundImage'])->name('user.upload.background.image');
+});

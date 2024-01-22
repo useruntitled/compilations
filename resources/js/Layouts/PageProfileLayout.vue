@@ -2,108 +2,279 @@
     <Head>
         <title>Страница {{ user.name }}</title>
     </Head>
-    <div class="bg-white p-5 pb-2 rounded-xl">
-        <div class="flex justify-between">
+    <div class="bg-white rounded-xl">
+        <div class="flex">
+            <input
+                type="file"
+                class="hidden"
+                ref="filepond_background"
+                accept="image/*"
+                @input="handleFile('background_image', $event)"
+            />
+            <div
+                @click="filepond_background.click()"
+                v-if="showUploadBackground"
+                @mouseleave="backgroundImageIsHovered = false"
+                class="absolute bg-black bg-opacity-20 rounded-t-xl flex items-center cursor-pointer aspect-[640/200] w-[640px]"
+            >
+                <IconPhoto
+                    class="w-10 h-10 mx-auto stroke-4 border-white"
+                ></IconPhoto>
+            </div>
             <img
-                class="rounded-full"
-                v-lazy="route('im', [user.avatar, '1000x1000'])"
-                alt=""
-                style="width: 90px"
+                class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
+                v-lazy="
+                    !backgroundImageIsUploading
+                        ? route('im', [
+                              user.background_image ?? '',
+                              '1000x1000',
+                          ])
+                        : user.background_image
+                "
+                @mouseover="backgroundImageIsHovered = true"
             />
         </div>
-        <p class="text-xl font-semibold">{{ user.name }}</p>
-        <!-- <p class="font-semibold">{{ karma }}</p> -->
-        <KarmaCountWithEmoji :karma="karma"></KarmaCountWithEmoji>
-        <div class="flex items-center mt-2">
-            <Link
-                preserve-scroll
-                @click="selectedSection = 1"
-                :href="route('profile', [user.id, 1])"
-                ><button ref="link-1">Подборки</button></Link
-            >
-            <Link
-                preserve-scroll
-                @click="selectedSection = 2"
-                :href="route('profile', [user.id, 2])"
-                ><button ref="link-2" class="ms-5">Комментарии</button></Link
-            >
+        <div class="px-5 pb-2">
+            <div class="flex justify-between items-center">
+                <div class="mt-[-32px]">
+                    <div
+                        v-if="
+                            page.props.auth.check &&
+                            page.props.auth.user.id != user.id
+                        "
+                    >
+                        <img
+                            class="rounded-full border-[3px]"
+                            v-lazy="route('im', [user.avatar, '1000x1000'])"
+                            style="width: 90px; height: 90px"
+                            alt=""
+                        />
+                    </div>
+                    <div v-else class="flex items-center justify-between">
+                        <input
+                            type="file"
+                            class="hidden"
+                            ref="filepond_avatar"
+                            accept="image/*"
+                            @input="handleFile('avatar', $event)"
+                        />
+                        <div
+                            @click="filepond_avatar.click()"
+                            v-if="showUploadAvatar"
+                            @mouseleave="avatarIsHovered = false"
+                            class="absolute bg-black bg-opacity-20 rounded-full flex items-center cursor-pointer z-30"
+                            style="width: 90px; height: 90px"
+                        >
+                            <IconPhoto
+                                class="w-10 h-10 mx-auto stroke-4 border-white"
+                            ></IconPhoto>
+                        </div>
+                        <img
+                            @mouseover="avatarIsHovered = true"
+                            class="rounded-full border-gray-100 border-[3.5px] z-20"
+                            v-lazy="
+                                !avatarIsUploading
+                                    ? route('im', [user.avatar, '1000x1000'])
+                                    : user.avatar
+                            "
+                            style="width: 90px; height: 90px"
+                            alt=""
+                        />
+                    </div>
+                </div>
+                <Link
+                    v-if="page.props.auth.check"
+                    class="bg-gray-100 p-2 rounded-xl hover:opacity-70"
+                    :href="route('settings')"
+                >
+                    <IconTooth class="w-[20px] h-[20px] stroke-2"></IconTooth>
+                </Link>
+            </div>
+            <p class="text-xl font-semibold">{{ user.name }}</p>
+            <p
+                class="opacity-80 font-semibold text-sm px-2"
+                v-html="user.description"
+            ></p>
+            <KarmaCountWithEmoji :karma="karma"></KarmaCountWithEmoji>
+
+            <div class="flex items-center mt-4">
+                <Link
+                    preserve-scroll
+                    @click="selectedSection = 1"
+                    :href="route('profile', [user.id, 1])"
+                    ><button ref="linkFirst">Подборки</button></Link
+                >
+                <Link
+                    preserve-scroll
+                    @click="selectedSection = 2"
+                    :href="route('profile', [user.id, 2])"
+                    ><button ref="linkSecond" class="ms-5">
+                        Комментарии
+                    </button></Link
+                >
+            </div>
+            <!-- movable underline  -->
+            <div
+                ref="underline"
+                class="bg-orange-500 w-20 h-1 absolute duration-200 mt-1 rounded"
+                :style="
+                    'width:' +
+                    ' ' +
+                    linkWidth +
+                    'px;' +
+                    'translate: ' +
+                    ' ' +
+                    linkPosition +
+                    'px'
+                "
+            ></div>
         </div>
-        <!-- movable underline  -->
-        <div
-            ref="underline"
-            class="bg-orange-500 w-20 h-1 absolute duration-200 mt-1 rounded"
-            :style="
-                'width:' +
-                ' ' +
-                linkWidth +
-                'px;' +
-                'translate: ' +
-                ' ' +
-                linkPosition +
-                'px'
-            "
-        ></div>
     </div>
-    <div class="mt-5 bg-white rounded-xl">
+    <div class="mt-5">
         <slot></slot>
     </div>
 </template>
-<script>
+<script setup>
+import { ref, watch, computed } from "vue";
+import IconPhoto from "@/Components/Icons/IconPhoto.vue";
 import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
+import { usePage } from "@inertiajs/vue3";
+import axios from "axios";
+import IconTooth from "@/Components/Icons/IconTooth.vue";
 
-export default {
-    props: {
-        user: null,
-        karma: null,
-        section: null,
-    },
-    data() {
-        return {
-            selectedSection: parseInt(this.section),
-            countOfLinks: 2,
-            linkWidth: null,
-            linkPosition: null,
-        };
-    },
-    watch: {
-        selectedSection(newValue, oldValue) {
-            this.setLinkPosition(newValue);
-            this.setLinkWidth(newValue);
-        },
-    },
-    methods: {
-        setLinkWidth(index) {
-            if (this.$refs[`link-${index}`])
-                this.linkWidth = this.$refs[`link-${index}`].clientWidth;
-        },
-        setLinkPosition(index) {
-            // если реф существуют, то
-            if (this.$refs[`link-${index}`]) {
-                if (index == 1) {
-                    this.linkPosition = 0;
-                    return;
-                }
-                let sum = 0;
-                for (let i = 0; i < this.countOfLinks - 1; i++) {
-                    sum += this.$refs[`link-${index}`].clientWidth - 5;
-                }
-                this.linkPosition = sum;
-            }
-        },
-    },
-    mounted() {
-        this.$watch(
-            () => this.$page.url,
-            (newUrl, oldUrl) => {
-                if (newUrl.slice(-1) > 2) {
-                    this.selectedSection = 1;
-                }
-            }
-        );
-        this.setLinkPosition(this.selectedSection);
-        this.setLinkWidth(this.selectedSection);
-        // alert(this.setLinkPosition(this.selectedSection));
-    },
-    components: { KarmaCountWithEmoji },
+const props = defineProps({
+    user: null,
+    karma: null,
+    section: null,
+});
+
+const page = usePage();
+
+const selectedSection = ref(parseInt(props.section.value));
+const linkWidth = ref(null);
+const linkPosition = ref(null);
+
+const linkFirst = ref(null);
+const linkSecond = ref(null);
+
+const setLinkWidth = (index) => {
+    if (index == 1) {
+        linkWidth.value = linkFirst.value.clientWidth;
+    } else {
+        linkWidth.value = linkSecond.value.clientWidth;
+    }
 };
+
+const setLinkPosition = (index) => {
+    if (index == 1) linkPosition.value = 0;
+    else linkPosition.value = linkSecond.value.clientWidth - 5;
+};
+
+watch(props, (newValue, oldValue) => {
+    if (newValue.section != oldValue.section) {
+        setLinkWidth(selectedSection.value);
+        setLinkPosition(selectedSection.value);
+    }
+});
+
+watch(selectedSection, () => {
+    setLinkWidth(selectedSection.value);
+    setLinkPosition(selectedSection.value);
+});
+
+const avatarIsHovered = ref(false);
+const backgroundImageIsHovered = ref(false);
+
+const filepond_avatar = ref(null);
+const filepond_background = ref(null);
+const showUploadAvatar = computed(() => {
+    if (page.props.auth.check && page.props.auth.user.id == props.user.id) {
+        return avatarIsHovered.value;
+    }
+    return false;
+});
+const showUploadBackground = computed(() => {
+    if (page.props.auth.check && page.props.auth.user.id == props.user.id) {
+        return backgroundImageIsHovered.value;
+    }
+    return false;
+});
+const avatarIsUploading = ref(false);
+const backgroundImageIsUploading = ref(false);
+
+const uploadAvatar = (file, base64) => {
+    avatarIsUploading.value = true;
+    props.user.avatar = base64;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    axios
+        .post(route("user.upload.avatar"), formData)
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                avatarIsUploading.value = false;
+                props.user.avatar = res.data;
+            }
+        });
+};
+
+const uploadBackgroundImage = (file, base64) => {
+    backgroundImageIsUploading.value = true;
+    props.user.background_image = base64;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    axios
+        .post(route("user.upload.background.image"), formData)
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                backgroundImageIsUploading.value = false;
+                props.user.background_image = res.data;
+            }
+        });
+};
+
+const handleFile = (type, e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (type == "avatar") {
+            uploadAvatar(file, e.target.result);
+        } else {
+            uploadBackgroundImage(file, e.target.result);
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
+// const handleAvatarFile = (e) => {
+//     const file = e.target.files[0];
+
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//         uploadAvatar(file, e.target.result);
+//     };
+//     reader.readAsDataURL(file);
+// };
+
+// const handleBackgroundImage = (e) => {
+//     const file = e.target.files[0];
+
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//         uploadBackgroundImage(file, e.target.result);
+//     };
+//     reader.readAsDataURL(file);
+// };
 </script>

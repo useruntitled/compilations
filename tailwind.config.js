@@ -25,6 +25,7 @@ export default {
                 'fox': '#d35400',
                 'secondary': '#595959',
                 'field': '#F5F5F5',
+                'shit': '#4f3d36',  
             },
             fontSize:{
                 '13px': ['13px','18px'],

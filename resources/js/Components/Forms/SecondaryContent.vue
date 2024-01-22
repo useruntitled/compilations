@@ -1,5 +1,6 @@
 <template>
     <!-- <div class="hidden before:content-['Описание_подборки']"></div> -->
+    <!-- <div class="hidden before:content-['Пара_слов_о_себе']"></div> -->
     <div
         contenteditable="true"
         ref="content"

@@ -2,8 +2,8 @@
     <Head>
         <title>Последние подборки</title>
     </Head>
-    <div v-if="posts.length == 0" class="bg-white rounded-lg p-2 py-3">
-        <p>Пока нет подборок..</p>
+    <div v-if="posts.length == 0" class="mt-20">
+        <EmptyFeed></EmptyFeed>
     </div>
     <div v-for="post in posts">
         <!-- <Compilation :post="post"></Compilation> -->
@@ -19,11 +19,12 @@
 import Compilation from "@/Components/Compilation.vue";
 import Post from "@/Components/Post.vue";
 import Base from "../shared/base.vue";
+import EmptyFeed from "@/Components/EmptyFeed.vue";
 export default {
     layout: Base,
     props: {
         posts: null,
     },
-    components: { Compilation, Post },
+    components: { Compilation, Post, EmptyFeed },
 };
 </script>

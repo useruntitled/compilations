@@ -2,13 +2,13 @@
     <div class="text-md text-15">
         <p class="px-4 text-md py-2 font-semibold text-start">Мой профиль</p>
         <DropdownLink
-            :href="route('profile', [$page.props.auth.user.id])"
+            :href="route('profile', [page.props.auth.user.id])"
             class="my-2"
         >
             <div class="flex items-center">
                 <img
                     :src="
-                        route('im', [$page.props.auth.user.avatar, ['100x100']])
+                        route('im', [page.props.auth.user.avatar, ['100x100']])
                     "
                     class="rounded-full inline-block"
                     alt=""
@@ -18,7 +18,7 @@
                     class="whitespace-no-wrap overflow-hidden flex flex-col ms-2"
                 >
                     <p class="whitespace-no-wrap overflow-hidden font-semibold">
-                        {{ $page.props.auth.user.name }}
+                        {{ page.props.auth.user.name }}
                     </p>
                     <p class="opacity-80">Профиль</p>
                 </span>
@@ -26,7 +26,7 @@
         </DropdownLink>
 
         <DropdownLink
-            v-if="$page.props.auth.user.isAdmin"
+            v-if="page.props.auth.user.isAdmin"
             :href="route('panel.index')"
             class="my-4 font-semibold text-17px"
         >
@@ -38,7 +38,7 @@
             :href="route('drafts')"
             class="my-4 font-semibold text-17px"
         >
-            <IconPencil class="me-2 inline-block stroke-[2]"></IconPencil>
+            <IconPencil class="me-2 inline-block w-5 h-5"></IconPencil>
             Черновики
         </DropdownLink>
         <DropdownLink
@@ -59,7 +59,7 @@
         </DropdownLink>
     </div>
 </template>
-<script>
+<script setup>
 import DropdownLink from "@/Components/DropdownLink.vue";
 import IconCirclePlus from "@/Components/Icons/IconCirclePlus.vue";
 import IconExit from "@/Components/Icons/IconExit.vue";
@@ -71,20 +71,7 @@ import IconSquarePlus from "@/Components/Icons/IconSquarePlus.vue";
 import IconSquarePlusFilled from "@/Components/Icons/IconSquarePlusFilled.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import AnimationIconSquarePlusFilled from "@/Components/Animations/AnimationIconSquarePlusFilled.vue";
+import { usePage } from "@inertiajs/vue3";
 
-export default {
-    components: {
-        DropdownLink,
-        IconPanel,
-        IconPencil,
-        IconTooth,
-        IconExit,
-        IconCirclePlus,
-        IconPlus,
-        IconGlobe,
-        IconSquarePlus,
-        IconSquarePlusFilled,
-        AnimationIconSquarePlusFilled,
-    },
-};
+const page = usePage();
 </script>

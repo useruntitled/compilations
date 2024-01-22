@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'avatar' => $this->avatar,
             'roles' => $this->roles,
             'canCreatePosts' => $this->canCreatePosts,
+            'description' => $this->description,
         ];
         if(Auth::check() && $this->id == Auth::user()->id){
             $prepare['unreadNotifications_count'] = $this->unreadNotifications->count();
