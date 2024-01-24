@@ -37,18 +37,15 @@
         <div class="px-5 pb-2">
             <div class="flex justify-between items-center">
                 <div class="mt-[-32px]">
-                    <div
-                        v-if="
-                            page.props.auth.check &&
-                            page.props.auth.user.id != user.id
-                        "
-                    >
-                        <img
+                    <div v-if="page.props.auth.user?.id != user.id">
+                        <ZoomableImage
+                            :filename="user.avatar"
                             class="rounded-full border-[3px]"
-                            v-lazy="route('im', [user.avatar, '1000x1000'])"
-                            style="width: 90px; height: 90px"
-                            alt=""
-                        />
+                            size="1000x1000"
+                            w="90px"
+                            h="90px"
+                        >
+                        </ZoomableImage>
                     </div>
                     <div v-else class="flex items-center justify-between">
                         <input
@@ -90,11 +87,8 @@
                     <IconTooth class="w-[20px] h-[20px] stroke-2"></IconTooth>
                 </Link>
             </div>
-            <p class="text-xl font-semibold">{{ user.name }}</p>
-            <p
-                class="opacity-80 font-semibold text-sm px-2"
-                v-html="user.description"
-            ></p>
+            <p class="text-xl font-medium">{{ user.name }}</p>
+            <p class="text-sm px-2" v-html="user.description"></p>
             <KarmaCountWithEmoji :karma="karma"></KarmaCountWithEmoji>
 
             <div class="flex items-center mt-4">
@@ -102,12 +96,14 @@
                     preserve-scroll
                     @click="selectedSection = 1"
                     :href="route('profile', [user.id, 1])"
+                    :only="['posts', 'section']"
                     ><button ref="linkFirst">Подборки</button></Link
                 >
                 <Link
                     preserve-scroll
                     @click="selectedSection = 2"
                     :href="route('profile', [user.id, 2])"
+                    :only="['comments', 'section']"
                     ><button ref="linkSecond" class="ms-5">
                         Комментарии
                     </button></Link
@@ -135,8 +131,9 @@
     </div>
 </template>
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import IconPhoto from "@/Components/Icons/IconPhoto.vue";
+import ZoomableImage from "@/Components/ZoomableImage.vue";
 import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
 import axios from "axios";
@@ -170,16 +167,13 @@ const setLinkPosition = (index) => {
     else linkPosition.value = linkSecond.value.clientWidth - 5;
 };
 
-watch(props, (newValue, oldValue) => {
-    if (newValue.section != oldValue.section) {
-        setLinkWidth(selectedSection.value);
-        setLinkPosition(selectedSection.value);
-    }
-});
-
 watch(selectedSection, () => {
     setLinkWidth(selectedSection.value);
     setLinkPosition(selectedSection.value);
+});
+
+onMounted(() => {
+    selectedSection.value = props.section;
 });
 
 const avatarIsHovered = ref(false);
@@ -257,24 +251,4 @@ const handleFile = (type, e) => {
     };
     reader.readAsDataURL(file);
 };
-
-// const handleAvatarFile = (e) => {
-//     const file = e.target.files[0];
-
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//         uploadAvatar(file, e.target.result);
-//     };
-//     reader.readAsDataURL(file);
-// };
-
-// const handleBackgroundImage = (e) => {
-//     const file = e.target.files[0];
-
-//     const reader = new FileReader();
-//     reader.onload = (e) => {
-//         uploadBackgroundImage(file, e.target.result);
-//     };
-//     reader.readAsDataURL(file);
-// };
 </script>

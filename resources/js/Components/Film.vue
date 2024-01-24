@@ -30,7 +30,7 @@
             <div class="ms-5 inline-block">
                 <a
                     :href="'https://kinopoisk.ru/film/' + film.id"
-                    class="text-sky-600 font-bold"
+                    class="text-sky-600 font-semibold"
                 >
                     {{ film.name_ru }} {{ film.name_en }}
                 </a>
@@ -41,7 +41,7 @@
                         class="mb-1"
                     >
                         <a
-                            class="me-2 pe-2 py-1 text-dtfpr opacity-70 font-semibold"
+                            class="me-2 pe-2 py-1 text-dtfpr opacity-70 font-medium"
                             :href="genre.kp_wire"
                         >
                             #{{ genre.name }}
@@ -52,7 +52,7 @@
                     {{ film.description }}
                 </p>
                 <p
-                    class="px-2 py-1 my-2 bg-orange-50 text-sm rounded-lg text-orange-700 inline-block font-semibold"
+                    class="px-2 py-1 my-2 bg-orange-50 text-sm rounded-lg text-orange-700 inline-block font-medium"
                 >
                     {{ film.type == "movie" ? "Фильм" : "Сериал" }}
                 </p>

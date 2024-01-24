@@ -132,4 +132,8 @@ provide("callMessage", callMessage);
 .grid-template {
     grid-template-columns: 220px auto 320px;
 }
+
+* {
+    font-family: Roboto;
+}
 </style>

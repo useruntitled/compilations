@@ -1,6 +1,6 @@
 <template>
-    <div class="text-md text-15">
-        <p class="px-4 text-md py-2 font-semibold text-start">Мой профиль</p>
+    <div class="text-15">
+        <p class="px-4 font-medium py-2 text-start">Мой профиль</p>
         <DropdownLink
             :href="route('profile', [page.props.auth.user.id])"
             class="my-2"
@@ -17,7 +17,7 @@
                 <span
                     class="whitespace-no-wrap overflow-hidden flex flex-col ms-2"
                 >
-                    <p class="whitespace-no-wrap overflow-hidden font-semibold">
+                    <p class="whitespace-no-wrap overflow-hidden">
                         {{ page.props.auth.user.name }}
                     </p>
                     <p class="opacity-80">Профиль</p>
@@ -28,23 +28,17 @@
         <DropdownLink
             v-if="page.props.auth.user.isAdmin"
             :href="route('panel.index')"
-            class="my-4 font-semibold text-17px"
+            class="my-4 text-17px"
         >
             <IconPanel class="me-2 inline-block stroke-[2]"></IconPanel>
             Администрировать
         </DropdownLink>
 
-        <DropdownLink
-            :href="route('drafts')"
-            class="my-4 font-semibold text-17px"
-        >
+        <DropdownLink :href="route('drafts')" class="my-4 text-17px">
             <IconPencil class="me-2 inline-block w-5 h-5"></IconPencil>
             Черновики
         </DropdownLink>
-        <DropdownLink
-            :href="route('settings')"
-            class="my-4 font-semibold text-17px"
-        >
+        <DropdownLink :href="route('settings')" class="my-4 text-17px">
             <IconTooth class="me-2 inline-block stroke-[2]"></IconTooth>
             Настройки
         </DropdownLink>
@@ -52,7 +46,7 @@
             :href="route('logout')"
             method="post"
             as="button"
-            class="my-4 font-semibold text-17px"
+            class="my-4 text-17px"
         >
             <IconExit class="me-2 inline-block stroke-[2]"></IconExit>
             Выйти

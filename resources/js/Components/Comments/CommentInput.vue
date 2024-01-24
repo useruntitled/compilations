@@ -1,4 +1,5 @@
 <template>
+    <!-- <div class="before:content-['Комментарий...']"></div> -->
     <div
         class="bg-field px-3 py-4 pb-0 rounded-xl border hover:bg-white hover:ring-orange-200 hover:ring-2 hover:border-orange-300 duration-200"
         :class="
@@ -11,14 +12,9 @@
     >
         <div
             contenteditable=""
-            ref="textarea"
+            ref="content"
             class="focus:outline-none text-17px hover:cursor-text"
-            :class="
-                textareaValueLength > 0
-                    ? ''
-                    : `before:content-['Комментарий...']`
-            "
-            @input="handleInput()"
+            :class="placeholderClass"
             @paste.prevent="handlePaste($event)"
             @drop.prevent="handlePaste($event)"
             v-html="text"
@@ -45,11 +41,38 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { ref, computed, onMounted } from "vue";
 import BtnIcon from "../BtnIcon.vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
-import PrimaryButton from "../Buttons/PrimaryButton.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
+
+const props = defineProps({
+    commentIsCreated: false,
+    text: {
+        required: false,
+        default: "",
+    },
+});
+
+const content = ref(null);
+
+const textareaValueLength = ref(null);
+const isFocused = ref(false);
+
+const placeholderClass = computed(() => {
+    if (
+        props.text == "" &&
+        (content.value == null || content.value.innerHTML.length == 0)
+    ) {
+        return "before:content-['Комментарий...']";
+    }
+    return "";
+});
+</script>
+
+<!-- <script>
+
 
 export default {
     props: {
@@ -101,5 +124,4 @@ export default {
     emits: ["sendComment"],
     components: { IconPhoto, PrimaryButton, BtnIcon, FlatPrimaryButton },
 };
-</script>
-<style></style>
+</script> -->

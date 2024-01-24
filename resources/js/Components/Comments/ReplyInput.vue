@@ -9,7 +9,7 @@
                 <FlatPrimaryButton
                     primaryColor="neutral-200"
                     textColor="black"
-                    class="font-semibold"
+                    class="font-medium"
                     @click="changeShowReplyInterfaceValue(null)"
                     >Отмена</FlatPrimaryButton
                 >

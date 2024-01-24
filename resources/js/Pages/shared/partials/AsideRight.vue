@@ -5,7 +5,7 @@
     >
         <div class="pt-2 mt-0 ms-10">
             <p
-                class="font-semibold py-5 text-lg text-start flex sticky top-0 bg-bck"
+                class="font-medium py-5 text-lg text-start flex sticky top-0 bg-bck"
                 v-show="comments && comments.length > 0"
             >
                 Сейчас обсуждают
@@ -51,7 +51,7 @@
                                 "
                             >
                                 <p
-                                    class="text-sm font-semibold overflow-hidden text-ellipsis"
+                                    class="text-sm font-medium overflow-hidden text-ellipsis"
                                     style="max-height: 19px"
                                 >
                                     {{ comment.post.title }}

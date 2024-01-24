@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Resources\PusherCommentResource;
 use App\Models\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -41,6 +42,7 @@ class CommentCreatedEvent implements ShouldQueue, ShouldBroadcast
 
     public function broadcastWith(): Array
     {
-        return [$this->comment->load(['post' => ['user'],'user' => ['roles']])];
+        // $this->comment->load(['post', 'user']);
+        return [new PusherCommentResource($this->comment)];
     }
 }

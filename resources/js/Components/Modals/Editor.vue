@@ -9,7 +9,7 @@
                 v-if="access && !postIsLoading"
                 style="height: calc(100vh - 100px)"
             >
-                <p v-if="postIsPublished" class="font-semibold">
+                <p v-if="postIsPublished" class="font-medium">
                     Будьте осторожны. Пост уже опубликован.
                 </p>
                 <div class="overflow-auto h-full noscrollbar pb-20">
@@ -109,7 +109,7 @@
                             >
                                 <button
                                     v-for="film in searchResult"
-                                    class="font-semibold block my-2"
+                                    class="font-medium block my-2"
                                     @click="addFilm(film)"
                                 >
                                     {{ film.name_ru ?? film.name_en }}
@@ -126,7 +126,7 @@
                                 class="flex justify-between items-center my-2"
                             >
                                 <button
-                                    class="font-semibold"
+                                    class="font-medium"
                                     @click="removeFilm(film.id)"
                                 >
                                     {{ film.name_ru ?? film.name_en }}
@@ -167,12 +167,12 @@
                             @click="publish()"
                             >Опубликовать</PrimaryButton
                         >
-                        <p v-show="isUpdating" class="font-semibold">
+                        <p v-show="isUpdating" class="font-medium">
                             Сохранение...
                         </p>
                         <div
                             v-show="isUpdated && !isUpdating"
-                            class="font-semibold flex items-center"
+                            class="font-medium flex items-center"
                         >
                             <span> Сохранено </span>
                             <span>

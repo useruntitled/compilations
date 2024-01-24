@@ -3,7 +3,7 @@
         <title>Настройки</title>
     </Head>
     <div class="bg-white rounded-xl">
-        <header class="font-semibold text-lgg px-5 py-4 flex items-center">
+        <header class="font-medium text-lgg px-5 py-4 flex items-center">
             <Link
                 preserve-state
                 preserve-scroll

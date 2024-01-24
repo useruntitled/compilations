@@ -18,9 +18,7 @@
                             }"
                         ></IconFlame>
                     </span>
-                    <span class="text-lgg font-semibold opacity-80"
-                        >Популярное</span
-                    >
+                    <span class="text-lgg font-regular">Популярное</span>
                 </Link>
             </div>
             <div
@@ -32,9 +30,7 @@
                             class="stroke-[2.2px] w-[24px] text-secondary"
                         ></IconClock
                     ></span>
-                    <span class="text-lgg font-semibold opacity-80"
-                        >Свежее</span
-                    >
+                    <span class="text-lgg font-regular">Свежее</span>
                 </button>
             </div>
             <div
@@ -46,15 +42,13 @@
                             class="w-[24px] text-secondary stroke-[2.2px]"
                         ></IconBookmark
                     ></span>
-                    <span class="text-lgg font-semibold opacity-80"
-                        >Закладки</span
-                    >
+                    <span class="text-lgg font-regular">Закладки</span>
                 </button>
             </div>
             <div class="w-full mt-10">
                 <PrimaryButton
                     @click="callModal('Editor')"
-                    class="bg-orange-500 px-0 rounded-lg py-3 w-full font-semibold text-17px"
+                    class="bg-orange-500 px-0 rounded-lg py-3 w-full font-regular text-17px"
                     >Новая подборка</PrimaryButton
                 >
             </div>

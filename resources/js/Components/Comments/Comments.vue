@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white p-5 rounded-xl mt-5" ref="comments">
-        <p class="text-xl mb-8 font-semibold">Комментарии</p>
+        <p class="text-xl mb-8 font-medium">Комментарии</p>
         <div class="px-2 mb-5">
             <div v-if="!showReplyInterface && !showEditingInterface">
                 <CommentInput

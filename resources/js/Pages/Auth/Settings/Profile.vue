@@ -1,11 +1,11 @@
 <template>
     <div class="mx-8">
         <div>
-            <p class="font-semibold pb-4 ms-1">Имя</p>
+            <p class="font-medium pb-4 ms-1">Имя</p>
             <SecondaryInput v-model="form.username"></SecondaryInput>
         </div>
         <div class="mt-4">
-            <p class="font-semibold pb-4 ms-1">Описание</p>
+            <p class="font-medium pb-4 ms-1">Описание</p>
             <SecondaryContent
                 v-model="form.description"
                 placeholder="Пара_слов_о_себе"
@@ -14,7 +14,7 @@
         <div class="ms-1 flex justify-between items-center mt-5">
             <button
                 @click="send()"
-                class="font-semibold text-orange-500 hover:opacity-70"
+                class="font-medium text-orange-500 hover:opacity-70"
             >
                 Сохранить
             </button>

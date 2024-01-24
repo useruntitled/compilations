@@ -19,7 +19,7 @@
             </div>
         </header>
         <Link :href="route('post', [post.id, post.slug])">
-            <section class="px-3 text-xl font-semibold">
+            <section class="px-3 text-xl font-medium">
                 <p>{{ post.title }}</p>
             </section>
             <section class="px-3 mt-2 text-base mb-2">

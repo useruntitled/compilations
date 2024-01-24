@@ -67,7 +67,7 @@ export default {
                     v-model="input_site"
                     type="text"
                     placeholder="Поиск"
-                    class="w-full font-semibold ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
+                    class="w-full font-regular ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
                 />
             </div>
             <div class="flex items-center">
@@ -130,7 +130,7 @@ export default {
                         >
                     </template>
                     <template v-if="$page.props.auth.user" #content>
-                        <div class="text-md">
+                        <div class="">
                             <HeaderSection></HeaderSection>
                         </div>
                     </template>

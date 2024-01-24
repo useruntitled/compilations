@@ -81,7 +81,7 @@
                 <main>
                     <p
                         v-html="comment.text"
-                        class="text-lgg"
+                        class="text-17"
                         v-if="!isDeleted"
                     ></p>
                 </main>
@@ -91,7 +91,7 @@
                         :reputation="comment.rep"
                     ></Reputation>
                     <button
-                        class="ms-2 text-sm text-secondary"
+                        class="ms-2 text-secondary text-sm"
                         @click="
                             this.changeShowReplyInterfaceValue(this.comment.id)
                         "

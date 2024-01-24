@@ -11,7 +11,7 @@
                     <IconLogin class="w-6 h-6 stroke-[0.1]"></IconLogin>
                 </div>
                 <div class="flex flex-col">
-                    <p class="font-semibold">Профиль</p>
+                    <p class="font-medium">Профиль</p>
                     <p class="text-15 opacity-80">Название, Описание</p>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                     <IconTooth class="stroke-2"></IconTooth>
                 </div>
                 <div class="flex flex-col">
-                    <p class="font-semibold">Основные</p>
+                    <p class="font-medium">Основные</p>
                     <p class="text-15 opacity-80">
                         Способ входа, Удаление аккаунта
                     </p>
@@ -35,7 +35,7 @@
                     <IconBell class="stroke-2"></IconBell>
                 </div>
                 <div class="flex flex-col">
-                    <p class="font-semibold">Уведомления</p>
+                    <p class="font-medium">Уведомления</p>
                     <p class="text-15 opacity-80">Уведомления, Письма</p>
                 </div>
             </div>

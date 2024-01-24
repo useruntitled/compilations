@@ -2,15 +2,15 @@
     <div>
         <UserTablet :user="notification.data.byUser">
             <template #header>
-                <span class="font-semibold">
+                <span class="font-medium">
                     {{ notification.data.byUser.name }}
                 </span>
-                <span class="text-black font-semibold text-sm">
+                <span class="text-black font-medium text-sm">
                     <slot name="header"></slot>
                 </span>
             </template>
             <template #content>
-                <p class="text-sm font-semibold">
+                <p class="text-sm font-regular">
                     <slot name="content"></slot>
                 </p>
                 <p class="text-xs opacity-80">

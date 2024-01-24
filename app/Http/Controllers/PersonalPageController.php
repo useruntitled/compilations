@@ -2,16 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CommentResource;
-use App\Http\Resources\PostResource;
-use App\Http\Resources\ReplyResource;
-use App\Http\Resources\UserResource;
-use App\Models\Comment;
 use App\Models\Post;
-use App\Models\Reply;
 use App\Models\User;
 use App\Services\KarmaService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PersonalPageController extends Controller
@@ -47,7 +40,7 @@ class PersonalPageController extends Controller
                     'section' => $section,
                     'user' => $user,
                     'karma' => $karma,
-                    'posts' => $posts,
+                    'posts' => fn() => $posts,
                 ]);
                 break;
             case 2:
@@ -57,7 +50,7 @@ class PersonalPageController extends Controller
                     'section' => $section,
                     'user' => $user,
                     'karma' => $karma,
-                    'comments' => $comments,
+                    'comments' => fn() => $comments,
                 ]);
                 break;
             default: abort(404);

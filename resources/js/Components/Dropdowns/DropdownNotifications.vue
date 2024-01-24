@@ -26,7 +26,7 @@
             </div>
         </template>
         <template #content>
-            <p class="text-start font-semibold p-5 py-2">Уведомления</p>
+            <p class="text-start font-medium p-5 py-2">Уведомления</p>
             <div v-if="notifications_count">
                 <div v-for="(items, key) in notificationsGroup">
                     <component
@@ -48,7 +48,7 @@
                 v-if="notifications_count == 0 && notificationsIsLoaded"
                 class="p-5"
             >
-                <p class="text-xl font-semibold">Уведомлений пока нет</p>
+                <p class="text-xl font-medium">Уведомлений пока нет</p>
                 <p class="text-secondary mt-5">
                     Делайте хорошие подборки и пишите комментарии, и здесь
                     станет не так пусто!
