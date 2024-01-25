@@ -21,18 +21,30 @@
                     class="w-10 h-10 mx-auto stroke-4 border-white"
                 ></IconPhoto>
             </div>
-            <img
+            <!-- <img
                 class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
                 v-lazy="
                     !backgroundImageIsUploading
-                        ? route('im', [
-                              user.background_image ?? '',
-                              '1000x1000',
-                          ])
+                        ? route('im', [user.background_image ?? '', '1000'])
                         : user.background_image
                 "
                 @mouseover="backgroundImageIsHovered = true"
-            />
+            /> -->
+            <div class="overflow-hidden" v-if="user.background_image">
+                <LazyImage
+                    @mouseover="backgroundImageIsHovered = true"
+                    :preview="`/media/${user.background_image_preview}`"
+                    :than="route('im', [user.background_image, 1000])"
+                    class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
+                    style="min-width: 640px"
+                >
+                </LazyImage>
+            </div>
+            <div
+                v-else
+                @mouseover="backgroundImageIsHovered = true"
+                class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
+            ></div>
         </div>
         <div class="px-5 pb-2">
             <div class="flex justify-between items-center">
@@ -41,7 +53,7 @@
                         <ZoomableImage
                             :filename="user.avatar"
                             class="rounded-full border-[3px]"
-                            size="1000x1000"
+                            size="100"
                             w="90px"
                             h="90px"
                         >
@@ -66,17 +78,24 @@
                                 class="w-10 h-10 mx-auto stroke-4 border-white"
                             ></IconPhoto>
                         </div>
-                        <img
+                        <!-- <img
                             @mouseover="avatarIsHovered = true"
                             class="rounded-full border-gray-100 border-[3.5px] z-20"
-                            v-lazy="
+                            :src="
                                 !avatarIsUploading
-                                    ? route('im', [user.avatar, '1000x1000'])
+                                    ? `/media/${user.avatar_preview}`
                                     : user.avatar
                             "
                             style="width: 90px; height: 90px"
                             alt=""
-                        />
+                        /> -->
+                        <LazyImage
+                            @mouseover="avatarIsHovered = true"
+                            class="rounded-full border-gray-100 border-[3.5px] z-20"
+                            style="width: 90px; height: 90px"
+                            :preview="`/media/${user.avatar_preview}`"
+                            :than="route('im', [user.avatar, 1000])"
+                        ></LazyImage>
                     </div>
                 </div>
                 <Link
@@ -138,6 +157,7 @@ import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
 import axios from "axios";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
+import LazyImage from "@/Components/LazyImage.vue";
 
 const props = defineProps({
     user: null,

@@ -66,7 +66,7 @@
                                             !imageIsLoading
                                                 ? route('im', [
                                                       post.image,
-                                                      '200x200',
+                                                      '200',
                                                   ])
                                                 : form.image
                                         "

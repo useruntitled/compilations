@@ -18,10 +18,7 @@
                         <Link :href="route('profile', [comment.user.id])">
                             <img
                                 :src="
-                                    route('im', [
-                                        comment.user.avatar,
-                                        ['50x50'],
-                                    ])
+                                    route('im', [comment.user.avatar, ['50']])
                                 "
                                 class="rounded-full inline-block me-2"
                                 style="max-width: 36px; max-height: 36px"

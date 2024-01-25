@@ -26,11 +26,16 @@
                 <p v-html="post.description"></p>
             </section>
             <div class="p-2">
-                <img
-                    v-lazy="route('im', [post.image, '800x600'])"
+                <!-- <img
+                    v-lazy="route('im', [post.image, '800'])"
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
-                />
+                /> -->
+                <LazyImage
+                    :preview="`/media/${post.image_preview}`"
+                    :than="route('im', [post.image, 800])"
+                    class="rounded-lg mx-auto w-full object-cover"
+                ></LazyImage>
             </div>
         </Link>
     </div>
@@ -81,6 +86,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import Base from "./shared/base.vue";
 import UserTabletWithElementInside from "@/Components/UserTabletWithElementInside.vue";
 import DropdownReportOrManage from "@/Components/Dropdowns/DropdownReportOrManage.vue";
+import LazyImage from "@/Components/LazyImage.vue";
 export default {
     layout: Base,
     props: {
@@ -130,6 +136,7 @@ export default {
         Dropdown,
         UserTabletWithElementInside,
         DropdownReportOrManage,
+        LazyImage,
     },
 };
 </script>

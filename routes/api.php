@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::controller(ImageController::class)->group(function(){
     Route::get('image/{filename}/{dimensions}','crop')->name('image.crop');
-    Route::get('im/{filename}/{dimensions}','index')->name('im');
+    Route::get('im/{filename}/x/{scale}','index')->name('im');
 });
 
 Route::controller(FilmController::class)->group(function() {

@@ -8,13 +8,13 @@
                 <img
                     v-if="film.poster_url_preview"
                     class="rounded-lg h-full w-full object-cover"
-                    v-lazy="film.poster_url_preview"
+                    :src="film.poster_url_preview"
                     alt=""
                     style="min-width: 200px"
                 />
                 <img
                     v-else
-                    v-lazy="film.poster_url"
+                    :src="film.poster_url"
                     class="rounded-lg h-full w-full object-cover"
                     alt=""
                     style="min-width: 200px"

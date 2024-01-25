@@ -22,12 +22,23 @@ class Post extends Model
     ];
     protected $appends = [
         'rep','timestamp',
-        'is_active'
+        'is_active', 'image_preview',
     ];
 
     protected $with = [
         'user'
     ];
+
+    protected function imagePreview(): Attribute
+    {
+        if ($this->image == null) {
+            return Attribute::make(get: fn() => null);
+        }
+        list($name, $ext) = explode('.', $this->image);
+        return Attribute::make(
+            get: fn() => $name . '__preview' . ".$ext"
+        );
+    }
 
     public function films()
     {

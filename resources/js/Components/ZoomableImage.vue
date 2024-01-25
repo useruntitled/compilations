@@ -15,8 +15,8 @@
     >
         <img
             loading="eager"
-            class="h-1/2 aspect-square mx-auto hover:scale-150 duration-200 transform ease-in hover:scale-150 select-none"
-            v-lazy="route('im', [filename, ['1000x1000']])"
+            class="h-1/2 mx-auto hover:scale-150 duration-200 transform ease-in hover:scale-150 select-none"
+            v-lazy="route('im', [filename, ['1000']])"
             alt=""
         />
     </section>

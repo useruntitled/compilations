@@ -93,6 +93,7 @@ class RegisteredUserController extends Controller
         $user = Auth::user();
 
         if($request->hasFile('image')) {
+            
             $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
             $user->avatar = $filename;
             $user->update();
@@ -106,6 +107,7 @@ class RegisteredUserController extends Controller
     {
         $user = Auth::user();
 
+        
         if($request->hasFile('image')) {
             $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
             $user->background_image = $filename;

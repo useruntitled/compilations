@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\GenreController;
@@ -113,9 +114,6 @@ Route::controller(PersonalPageController::class)->group(function(){
 
 
 
-Route::get('test',function(){
-    // $post = Post::find(3);
-    // return ($post->toJson());
-});
+// Route::get('test',[RegisteredUserController::class,'uploadAvatar']);
 
 require __DIR__.'/auth.php';

@@ -24,11 +24,17 @@
                 <p v-html="post.description"></p>
             </section>
             <div class="p-2">
-                <img
-                    v-lazy="route('im', [post.image, '800x600'])"
+                <!-- <img
+                    v-lazy="route('im', [post.image, '800'])"
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
-                />
+                /> -->
+                <LazyImage
+                    :preview="`/media/${post.image_preview}`"
+                    :than="route('im', [post.image, 800])"
+                    class="rounded-lg mx-auto w-full object-cover"
+                    style="min-width: 600px"
+                ></LazyImage>
             </div>
         </Link>
         <div v-for="(film, index) in post.films" class="px-2">
@@ -82,6 +88,7 @@ import IconPencil from "./Icons/IconPencil.vue";
 import Film from "./Film.vue";
 import UserTabletWithElementInside from "./UserTabletWithElementInside.vue";
 import DropdownReportOrManage from "./Dropdowns/DropdownReportOrManage.vue";
+import LazyImage from "./LazyImage.vue";
 
 export default {
     props: {
@@ -102,6 +109,7 @@ export default {
         Film,
         UserTabletWithElementInside,
         DropdownReportOrManage,
+        LazyImage,
     },
 };
 </script>

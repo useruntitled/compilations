@@ -6,12 +6,19 @@
             >
                 <div class="flex items-end justify-start">
                     <div class="flex items-end justify-end">
-                        <img
+                        <!-- <img
                             class="rounded-full inline-block hover:brightness-110"
-                            :src="route('im', [user.avatar, '100x100'])"
+                            :src="route('im', [user.avatar, '100'])"
                             style="width: 40px; height: 40px"
                             alt=""
-                        />
+                        /> -->
+                        <LazyImage
+                            :preview="`/media/${user.avatar_preview}`"
+                            :than="route('im', [user.avatar, 100])"
+                            class="rounded-full inline-block hover:brightness-110"
+                            style="width: 40px; height: 40px"
+                        >
+                        </LazyImage>
                         <div
                             class="absolute rounded-full duration-200 transition-all text-white stroke-2"
                             :class="'bg-' + iconColor"
@@ -47,6 +54,7 @@
 import IconArrowForwardUp from "./Icons/IconArrowForwardUp.vue";
 import IconComments from "./Icons/IconComments.vue";
 import IconHeart from "./Icons/IconHeart.vue";
+import LazyImage from "./LazyImage.vue";
 
 export default {
     props: {
@@ -71,6 +79,6 @@ export default {
             this.isVisible = true;
         }, 20);
     },
-    components: { IconArrowForwardUp, IconHeart, IconComments },
+    components: { IconArrowForwardUp, IconHeart, IconComments, LazyImage },
 };
 </script>

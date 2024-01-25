@@ -11,10 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable 
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     // const DEFAULT = 1;
 
@@ -29,7 +33,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $appends = [
-        'is_creator','is_admin'
+        'is_creator','is_admin',
+        'avatar_preview', 'background_image_preview'
     ];
 
     protected $fillable = [
@@ -62,6 +67,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
     protected function isAdmin(): Attribute
     {
         $this->roles ?? $this->roles();
@@ -75,6 +81,27 @@ class User extends Authenticatable
         $this->roles ?? $this->roles();
         return Attribute::make(
             get: fn() =>  $this->roles->contains(fn($r) => $r->role == 'creator')
+        );
+    }
+
+    protected function avatarPreview(): Attribute
+    {
+        list($name, $ext) = explode('.', $this->avatar);
+        return Attribute::make(
+            get: fn() => $name . '__preview' . ".$ext"
+        );
+    }
+
+    protected function backgroundImagePreview(): Attribute
+    {
+        if ($this->background_image == null) {
+            return Attribute::make(
+                get: fn() => null
+            );
+        }
+        list($name, $ext) = explode('.', $this->background_image);
+        return Attribute::make(
+            get: fn() => $name . '__preview' . ".$ext"
         );
     }
 

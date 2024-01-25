@@ -1,3 +1,9 @@
+<style>
+.grid-template {
+    grid-template-columns: 220px auto 320px;
+}
+</style>
+
 <script>
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
@@ -8,6 +14,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import PrimaryButtonWhite from "@/Components/Buttons/PrimaryButtonWhite.vue";
 import DropdownNotifications from "@/Components/Dropdowns/DropdownNotifications.vue";
+import LazyImage from "@/Components/LazyImage.vue";
 
 export default {
     inject: ["callModal"],
@@ -28,6 +35,7 @@ export default {
         PrimaryButton,
         PrimaryButtonWhite,
         DropdownNotifications,
+        LazyImage,
     },
 };
 </script>
@@ -92,17 +100,32 @@ export default {
                                 v-if="$page.props.auth.user"
                                 class="inline-block me-1"
                             >
-                                <img
+                                <!-- <img
                                     class="rounded-full inline-block hover:opacity-70"
                                     :src="
                                         route('im', [
                                             $page.props.auth.user.avatar,
-                                            '100x100',
+                                            '100',
                                         ])
                                     "
                                     style="width: 40px; height: 40px"
                                     alt=""
-                                />
+                                /> -->
+                                <LazyImage
+                                    :preview="
+                                        '/media/' +
+                                        $page.props.auth.user.avatar_preview
+                                    "
+                                    :than="
+                                        route('im', [
+                                            $page.props.auth.user.avatar,
+                                            '100',
+                                        ])
+                                    "
+                                    style="width: 40px; height: 40px"
+                                    class="rounded-full inline-block hover:opacity-70"
+                                >
+                                </LazyImage>
                             </div>
                             <svg
                                 v-if="$page.props.auth.user"

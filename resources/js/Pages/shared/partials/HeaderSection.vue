@@ -6,14 +6,22 @@
             class="my-2"
         >
             <div class="flex items-center">
-                <img
+                <!-- <img
                     :src="
                         route('im', [page.props.auth.user.avatar, ['100x100']])
                     "
                     class="rounded-full inline-block"
                     alt=""
                     style="width: 45px; height: 45px"
-                />
+                /> -->
+                <LazyImage
+                    :preview="`/media/${page.props.auth.user.avatar_preview}`"
+                    :than="route('im', [page.props.auth.user.avatar, [100]])"
+                    class="rounded-full inline-block"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                >
+                </LazyImage>
                 <span
                     class="whitespace-no-wrap overflow-hidden flex flex-col ms-2"
                 >
@@ -66,6 +74,7 @@ import IconSquarePlusFilled from "@/Components/Icons/IconSquarePlusFilled.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import AnimationIconSquarePlusFilled from "@/Components/Animations/AnimationIconSquarePlusFilled.vue";
 import { usePage } from "@inertiajs/vue3";
+import LazyImage from "@/Components/LazyImage.vue";
 
 const page = usePage();
 </script>

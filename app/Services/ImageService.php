@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
 
 class ImageService
 {
@@ -21,25 +22,25 @@ class ImageService
 
     public function __construct()
     {
-        $this->uploads_path = public_path('storage\\');
+        $this->uploads_path = public_path('media\\');
     }
 
     /**
      * Filename like P5WuyYVLVUcmcffkGwQJb8mxqVKdVPAkvTPOqEbc.jpg or 'Default.jpg'
      * Path like C:\OSPanel\domains\compilations\public\storage\P5WuyYVLVUcmcffkGwQJb8mxqVKdVPAkvTPOqEbc.jpg
     */
-    public function get($filename, $dimensions)
+    public function get($filename, $scale)
     {
         $this->filename = $filename;
         $this->path = $this->uploads_path . $filename;
-        $this->key = $this->generateKey($filename,$dimensions);
+        $this->key = $this->generateKey($filename,$scale);
 
 
         if($this->isCached()){
             return $this->getAndResponse();
         }
 
-        return $this->cropAndCache($dimensions);
+        return $this->scaleAndCache($scale);
     }
 
     protected function isCached()
@@ -47,25 +48,19 @@ class ImageService
         return Cache::has($this->key) == 1;
     }
 
-    protected function cropAndCache($dimensions)
+    protected function scaleAndCache($scale)
     {
-        list($w,$h) = $this->getSize($dimensions);
-        $image = Image::make($this->path)->fit($w,$h);
+        $image = ImageManager::imagick()->read($this->uploads_path . $this->filename)->scale(width: $scale)->encodeByPath();
 
-        $content = $image->encode()->getEncoded();
+        $content = $image;
         Cache::put($this->key, $content, now()->addMinutes(self::CACHE_MINUTES));
         return $this->response($image);
     }
 
-    protected function getSize($dimensions)
-    {
-        list($width, $height) = explode('x', $dimensions);
-        return array($width, $height);
-    }
 
     protected function response($image)
     {
-        $content = $image->getEncoded();
+        $content = $image;
         return response($content)->header('Content-Type', 'image/jpg' );
     }
 
@@ -75,16 +70,28 @@ class ImageService
     }
 
 
-    protected function generateKey($filename,$dimensions)
+    protected function generateKey($filename,$scale)
     {
-        return "image:$filename:$dimensions";
+        return "image:$filename:$scale";
     }
+
+
 
     public function uploadAndDelete($file, $old)
     {
-        if($old != null) Storage::disk('public')->delete($old);
+        if($old != null) {
+            list($filename, $ext) = explode('.', $old);
+            Storage::disk('media')->delete($old);
+            Storage::disk('media')->delete($filename . '__preview' . ".$ext");
+        }
         $name = $file->hashName();
-        $path = $file->storePubliclyAs('public',$name);
-        return $name;
+
+        // $path = $file->storePubliclyAs('media', $name, 'media');
+        $path = Storage::disk('media')->put(null, $file);
+        list($new_file_name, $new_file_ext) = explode('.', $path);
+        // $file_preview = Image::make(public_path("media\\$path"))->resize(width: 30);
+        $file_preview = ImageManager::imagick()->read(public_path("media\\$path"))->scaleDown(width: 30)->encodeByPath();
+        Storage::disk('media')->put($new_file_name . '__preview' . ".$new_file_ext", $file_preview);
+        return $path;
     }
 }
