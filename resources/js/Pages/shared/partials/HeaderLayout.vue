@@ -1,10 +1,117 @@
-<style>
-.grid-template {
-    grid-template-columns: 220px auto 320px;
-}
-</style>
+<template>
+    <div v-for="i in 2">
+        <div class="bg-kppale" :class="i == 1 ? 'fixed w-full z-50' : 'block'">
+            <div class="max-w-7xl mx-auto px-5 py-1">
+                <div class="grid grid-template">
+                    <section>
+                        <div>
+                            <Link :href="route('home')" preserve-state>
+                                <ApplicationLogo
+                                    class="inline-block rounded hover:opacity-80"
+                                    :size="'200x200'"
+                                    style="max-width: 50px"
+                                ></ApplicationLogo>
+                            </Link>
+                        </div>
+                    </section>
+                    <section class="flex items-center">
+                        <div class="flex items-center w-11/12 mx-auto">
+                            <span class="text-sm absolute pl-2"
+                                ><IconSearch
+                                    class="text-slate-600 stroke-[2px] w-5 h-5"
+                                ></IconSearch
+                            ></span>
+                            <input
+                                list="films"
+                                type="text"
+                                placeholder="Поиск"
+                                class="w-full font-regular ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
+                            />
+                        </div>
+                    </section>
+                    <section class="flex items-center">
+                        <div
+                            class="w-full flex justify-end"
+                            v-if="!page.props.auth.check"
+                        >
+                            <PrimaryButtonWhite @click="callModal('Auth')">
+                                Войти
+                            </PrimaryButtonWhite>
+                        </div>
+                        <div
+                            v-else
+                            class="w-full flex justify-end items-center"
+                        >
+                            <div class="inline-block me-2">
+                                <DropdownNotifications></DropdownNotifications>
+                            </div>
+                            <Dropdown width="300">
+                                <template #trigger>
+                                    <div
+                                        class="flex items-center cursor-pointer"
+                                    >
+                                        <LazyImage
+                                            :preview="
+                                                '/media/' +
+                                                page.props.auth.user
+                                                    .avatar_preview
+                                            "
+                                            :than="
+                                                route('im', [
+                                                    page.props.auth.user.avatar,
+                                                    40,
+                                                ])
+                                            "
+                                            class="w-[40px] h-[40px] rounded-full hover:brightness-[1.2]"
+                                        ></LazyImage>
+                                        <div class="ms-2">
+                                            <svg
+                                                v-if="$page.props.auth.user"
+                                                class="ms-0 -mr-0.5 h-4 w-4 inline-block text-slate-500"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template #content>
+                                    <HeaderSection></HeaderSection>
+                                </template>
+                            </Dropdown>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
 
-<script>
+<script setup>
+import { inject, ref } from "vue";
+import Dropdown from "@/Components/Dropdown.vue";
+import IconSearch from "@/Components/Icons/IconSearch.vue";
+import HeaderSection from "./HeaderSection.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import PrimaryButtonWhite from "@/Components/Buttons/PrimaryButtonWhite.vue";
+import DropdownNotifications from "@/Components/Dropdowns/DropdownNotifications.vue";
+import LazyImage from "@/Components/LazyImage.vue";
+import { usePage } from "@inertiajs/vue3";
+
+const callModal = inject("callModal");
+
+const showRegister = ref(false);
+
+const page = usePage();
+</script>
+
+<!-- <script>
 import DropdownLink from "@/Components/DropdownLink.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import UserTablet from "@/Components/UserTablet.vue";
@@ -38,130 +145,9 @@ export default {
         LazyImage,
     },
 };
-</script>
-<template>
-    <!-- fixed -->
-    <div
-        class="bg-kppale w-full top-0 z-50"
-        v-for="i in [0, 1]"
-        :class="i == 0 ? 'block' : 'fixed'"
-    >
-        <div
-            class="bg-kppale max-w-7xl px-4 mx-auto flex items-center justify-between space-x-20 py-2"
-            :class="$page.props.auth.user ? 'p-2' : 'p-5'"
-        >
-            <div>
-                <Link :href="route('home')" preserve-state>
-                    <!-- <img
-                        class="inline-block rounded"
-                        style="max-width: 50px"
-                        :src="route('image.crop', ['logo', '200x200'])"
-                /> -->
-                    <ApplicationLogo
-                        class="inline-block rounded hover:opacity-80"
-                        :size="'200x200'"
-                        style="max-width: 50px"
-                    ></ApplicationLogo>
-                </Link>
-            </div>
-            <div class="flex items-center w-1/2 mx-auto">
-                <span class="text-sm absolute pl-2"
-                    ><IconSearch
-                        class="text-slate-600 stroke-[2px] w-5 h-5"
-                    ></IconSearch
-                ></span>
-                <input
-                    list="films"
-                    v-model="input_site"
-                    type="text"
-                    placeholder="Поиск"
-                    class="w-full font-regular ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
-                />
-            </div>
-            <div class="flex items-center">
-                <div class="inline-block me-2">
-                    <DropdownNotifications></DropdownNotifications>
-                </div>
-                <Dropdown
-                    class="text-sm"
-                    v-if="$page.props.auth.user"
-                    width="300"
-                >
-                    <template #trigger>
-                        <button>
-                            <!-- <UserTablet
-                                v-if="$page.props.auth.user"
-                                :mode="'no action'"
-                                :avatarOnly="true"
-                                :user="$page.props.auth.user"
-                                class="inline-block me-2"
-                            ></UserTablet> -->
-                            <div
-                                v-if="$page.props.auth.user"
-                                class="inline-block me-1"
-                            >
-                                <!-- <img
-                                    class="rounded-full inline-block hover:opacity-70"
-                                    :src="
-                                        route('im', [
-                                            $page.props.auth.user.avatar,
-                                            '100',
-                                        ])
-                                    "
-                                    style="width: 40px; height: 40px"
-                                    alt=""
-                                /> -->
-                                <LazyImage
-                                    :preview="
-                                        '/media/' +
-                                        $page.props.auth.user.avatar_preview
-                                    "
-                                    :than="
-                                        route('im', [
-                                            $page.props.auth.user.avatar,
-                                            '100',
-                                        ])
-                                    "
-                                    style="width: 40px; height: 40px"
-                                    class="rounded-full inline-block hover:opacity-70"
-                                >
-                                </LazyImage>
-                            </div>
-                            <svg
-                                v-if="$page.props.auth.user"
-                                class="ms-0 -mr-0.5 h-4 w-4 inline-block text-slate-500"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"
-                                />
-                            </svg></button
-                    ></template>
-                    <template #content v-if="!$page.props.auth.user">
-                        <DropdownLink
-                            :href="route('register')"
-                            @click="showRegister = !showRegister"
-                        >
-                            Зарегистрироваться
-                        </DropdownLink>
-                        <DropdownLink :href="route('login')"
-                            >Войти</DropdownLink
-                        >
-                    </template>
-                    <template v-if="$page.props.auth.user" #content>
-                        <div class="">
-                            <HeaderSection></HeaderSection>
-                        </div>
-                    </template>
-                </Dropdown>
-                <PrimaryButtonWhite v-else @click="callModal('Auth')">
-                    Войти
-                </PrimaryButtonWhite>
-            </div>
-        </div>
-    </div>
-</template>
+</script> -->
+<style>
+.grid-template {
+    grid-template-columns: 220px 640px 320px;
+}
+</style>

@@ -90,7 +90,7 @@ class ImageService
         $path = Storage::disk('media')->put(null, $file);
         list($new_file_name, $new_file_ext) = explode('.', $path);
         // $file_preview = Image::make(public_path("media\\$path"))->resize(width: 30);
-        $file_preview = ImageManager::imagick()->read(public_path("media\\$path"))->scaleDown(width: 30)->encodeByPath();
+        $file_preview = ImageManager::imagick()->read(public_path("media\\$path"))->scaleDown(width: 30)->blur(3)->encodeByPath();
         Storage::disk('media')->put($new_file_name . '__preview' . ".$new_file_ext", $file_preview);
         return $path;
     }

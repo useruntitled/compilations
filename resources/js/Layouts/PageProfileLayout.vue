@@ -51,11 +51,10 @@
                 <div class="mt-[-32px]">
                     <div v-if="page.props.auth.user?.id != user.id">
                         <ZoomableImage
-                            :filename="user.avatar"
-                            class="rounded-full border-[3px]"
+                            :preview="'/media/' + user.avatar_preview"
+                            :than="route('im', [user.avatar, '1000'])"
+                            class="rounded-full border-[3px] w-[90px] h-[90px]"
                             size="100"
-                            w="90px"
-                            h="90px"
                         >
                         </ZoomableImage>
                     </div>

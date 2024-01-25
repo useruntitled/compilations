@@ -109,7 +109,7 @@ class RegisteredUserController extends Controller
 
         
         if($request->hasFile('image')) {
-            $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
+            $filename = $service->uploadAndDelete($request->file('image'), $user->background_image);
             $user->background_image = $filename;
             $user->update();
 

@@ -5,7 +5,7 @@
         @load="isLoaded = true"
         :class="classes"
         :style="style"
-        class="transition duration-[300ms]"
+        class="duration-[200ms] ease-out"
     />
 </template>
 <script setup>
@@ -20,7 +20,7 @@ const props = defineProps({
 
 const classes = computed(() => {
     if (isLoaded.value == false) {
-        return props.class + " " + "blur-sm brightness-[.8]";
+        return props.class + " " + "brightness-[.5]";
     }
     return props.class;
 });
