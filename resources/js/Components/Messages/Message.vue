@@ -17,7 +17,7 @@
                                         class="w-5 h-5 stroke-2"
                                     ></IconCheck>
                                 </div>
-                                <p class="text-center font-semibold">
+                                <p class="text-center font-medium">
                                     {{ msg.message }}
                                 </p>
                             </div>

@@ -5,7 +5,11 @@
                 <div class="grid grid-template">
                     <section>
                         <div>
-                            <Link :href="route('home')" preserve-state>
+                            <Link
+                                :href="route('home')"
+                                preserve-state
+                                :only="[]"
+                            >
                                 <ApplicationLogo
                                     class="inline-block rounded hover:opacity-80"
                                     :size="'200x200'"

@@ -3,7 +3,7 @@
         class="h-full mx-auto w-full text-center sticky"
         style="height: 100vh; top: 65.6px"
     >
-        <div class="px-2.5 mt-2 py-5 text-start">
+        <div class="px-2.5 mt-0 py-5 text-start">
             <div
                 class="w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white"
                 :class="{ 'bg-white': isPopular }"

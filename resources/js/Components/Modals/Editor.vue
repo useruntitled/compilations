@@ -257,7 +257,7 @@ const isUpdating = ref(false);
 watch(post, () => {
     console.log(url.value);
     postIsCreated.value = true;
-    postIsLoading.value = false;
+    // postIsLoading.value = false;
     if (page.props.auth.user.id != post.value.user.id) access.value = false;
     pushState();
     form.title = post.value.title;
@@ -377,7 +377,10 @@ watch(
 );
 
 watch(form, () => {
-    savePost();
+    if (!postIsLoading.value) {
+        savePost();
+    }
+    postIsLoading.value = false;
 });
 const access = computed({
     get() {
