@@ -26,6 +26,8 @@ class PusherCommentResource extends JsonResource
                 'title' => $this->post->title,
             ],
             'text' => $this->text,
+            'image' => $this->image,
+            'image_preview' => $this->image_preview,
         ];
     }
 }

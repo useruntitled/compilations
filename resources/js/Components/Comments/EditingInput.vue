@@ -4,6 +4,7 @@
             @sendComment="saveComment"
             :commentIsCreated="commentIsUpdated"
             :text="text"
+            :image="image"
         >
             <template #button>
                 <FlatPrimaryButton
@@ -30,6 +31,7 @@ export default {
         type: null,
         id: null,
         text: null,
+        image: null,
     },
     data() {
         return {
@@ -37,13 +39,14 @@ export default {
         };
     },
     methods: {
-        saveComment(v) {
+        saveComment(form) {
+            const formData = new FormData();
+            formData.append("_method", "PUT");
+            formData.append("id", this.id);
+            formData.append("text", form.content);
+            formData.append("image", form.image?.image);
             axios
-                .post(route("comment.update"), {
-                    _method: "PUT",
-                    id: this.id,
-                    text: v,
-                })
+                .post(route("comment.update"), formData)
                 .catch((res) => {
                     console.log(res);
                 })

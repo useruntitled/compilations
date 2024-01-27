@@ -95,12 +95,14 @@ export default {
             );
             this.showRepliesArray.unshift(this.comments[index].id);
         },
-        sendComment(comment_value) {
+        sendComment(form) {
+            const formData = new FormData();
+            formData.append("_method", "POST");
+            formData.append("post_id", this.post.id);
+            formData.append("text", form.content);
+            formData.append("image", form.image?.image);
             axios
-                .post(route("comment.create"), {
-                    post_id: this.post.id,
-                    text: comment_value,
-                })
+                .post(route("comment.create"), formData)
                 .catch((res) => {
                     if (res.response.status == 401) this.callModal("Auth");
                     console.log(res);
@@ -116,13 +118,16 @@ export default {
                     }
                 });
         },
-        sendReply(reply_value) {
+        sendReply(form) {
+            console.log("FORM", form);
+            const formData = new FormData();
+            formData.append("_method", "POST");
+            formData.append("comment_id", this.showReplyInterface);
+            formData.append("post_id", this.post.id);
+            formData.append("text", form.content);
+            formData.append("image", form.image?.image);
             axios
-                .post(route("comment.create"), {
-                    comment_id: this.showReplyInterface,
-                    post_id: this.post.id,
-                    text: reply_value,
-                })
+                .post(route("comment.create"), formData)
                 .catch((res) => {
                     if (res.response.status == 401) this.callModal("Auth");
                     console.log(res);

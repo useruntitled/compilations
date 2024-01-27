@@ -84,6 +84,19 @@
                         class="text-17"
                         v-if="!isDeleted"
                     ></p>
+                    <div v-if="comment.image">
+                        <ZoomableImage
+                            :preview="'/media/' + comment.image_preview"
+                            :than="route('im', [comment.image, 1000])"
+                            class="rounded-xl w-[300px]"
+                        ></ZoomableImage>
+                        <!-- <img
+                            :src="route('im', [comment.image, 1000])"
+                            alt=""
+                            class="rounded-xl"
+                            style="max-width: 300px"
+                        /> -->
+                    </div>
                 </main>
                 <footer class="flex items-center" v-if="!isDeleted">
                     <Reputation
@@ -119,6 +132,7 @@
             <div v-if="showEditingInterface == comment.id" class="px-2">
                 <EditingInput
                     :text="comment.text"
+                    :image="comment.image"
                     :id="comment.id"
                     @closeEditingInterface="
                         changeShowEditingInterfaceValue(null)
@@ -166,8 +180,10 @@
 import Dropdown from "../Dropdown.vue";
 import IconArrowUp from "../Icons/IconArrowUp.vue";
 import IconTrash from "../Icons/IconTrash.vue";
+import LazyImage from "../LazyImage.vue";
 import Reputation from "../Reputation.vue";
 import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
+import ZoomableImage from "../ZoomableImage.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";
@@ -264,13 +280,15 @@ export default {
             this.showReplies = true;
             this.showRepliesArray.unshift(this.comment.id);
         },
-        sendReply(reply_value) {
+        sendReply(form) {
+            const formData = new FormData();
+            formData.append("_method", "POST");
+            formData.append("comment_id", this.showReplyInterface);
+            formData.append("post_id", this.comment.post_id);
+            formData.append("text", form.content);
+            formData.append("image", form.image?.image);
             axios
-                .post(route("comment.create"), {
-                    comment_id: this.showReplyInterface,
-                    post_id: this.comment.post_id,
-                    text: reply_value,
-                })
+                .post(route("comment.create"), formData)
                 .catch((res) => {
                     if (res.response.status == 401) this.callModal("Auth");
                     console.log(res);
@@ -313,6 +331,8 @@ export default {
         IconArrowUp,
         EditingInput,
         IconTrash,
+        LazyImage,
+        ZoomableImage,
     },
 };
 </script>

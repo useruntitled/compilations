@@ -61,8 +61,15 @@
                             class="text-base overflow-hidden text-ellipsis hover:opacity-70 cursor-pointer"
                             style="max-height: 100px"
                             v-html="comment.text"
-                        ></p
-                    ></Link>
+                        ></p>
+                        <div v-if="comment.image" class="text-center">
+                            <LazyImage
+                                :preview="'/media/' + comment.image_preview"
+                                :than="route('im', [comment.image, 200])"
+                                class="rounded-xl w-[200px] hover:brightness-[1.2]"
+                            ></LazyImage>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -72,6 +79,7 @@
 import { ref, onMounted, watch } from "vue";
 import UserTablet from "@/Components/UserTablet.vue";
 import axios from "axios";
+import LazyImage from "@/Components/LazyImage.vue";
 
 const comments = ref([]);
 

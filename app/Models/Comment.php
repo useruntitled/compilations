@@ -17,15 +17,18 @@ class Comment extends Model
 
     protected $fillable = [
         'text','user_id',
-        'post_id','comment_id'
+        'post_id','comment_id',
+        'image',
     ];
     protected $casts = [
         'created_at',
         'updated_at',
+        
     ];
 
     protected $appends = [
-        'rep', 'timestamp', 'is_reply'
+        'rep', 'timestamp', 'is_reply',
+        'image_preview',
     ];
 
     protected $with = [
@@ -107,6 +110,17 @@ class Comment extends Model
     {
         return Attribute::make(
             get: fn() => $this->post->user->id == $this->user->id
+        );
+    }
+
+    protected function imagePreview(): Attribute
+    {
+        if ($this->image == null) {
+            return Attribute::make(get: fn() => null);
+        }
+        list($name, $ext) = explode('.', $this->image);
+        return Attribute::make(
+            get: fn() => $name . '__preview' . ".$ext"
         );
     }
 }

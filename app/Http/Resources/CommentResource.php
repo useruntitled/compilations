@@ -19,6 +19,8 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'user' => $this->user,
             'text' => $this->text,
+            'image' => $this->image,
+            'image_preview' => $this->image_preview,
             'rep' => $this->rep,
             'replies' => CommentResource::collection($this->replies),
             'replies_count' => $this->replies->count(),
@@ -31,6 +33,7 @@ class CommentResource extends JsonResource
             'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,
             'timestamp' => (new Carbon($this->created_at))->diffForHumans(),
+            'post_id' => $this->post_id,
         ];
     }
 }
