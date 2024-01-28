@@ -53,8 +53,8 @@
                         <ZoomableImage
                             :preview="'/media/' + user.avatar_preview"
                             :than="route('im', [user.avatar, '1000'])"
-                            class="rounded-full border-[3px] w-[90px] h-[90px]"
-                            size="100"
+                            class="border-gray-100 border-[3.5px] rounded-full w-[90px] h-[90px] object-cover"
+                            style="width: 90px; height: 90px"
                         >
                         </ZoomableImage>
                     </div>
@@ -98,7 +98,10 @@
                     </div>
                 </div>
                 <Link
-                    v-if="page.props.auth.check"
+                    v-if="
+                        page.props.auth.check &&
+                        page.props.auth.user.id == user.id
+                    "
                     class="bg-gray-100 p-2 rounded-xl hover:opacity-70"
                     :href="route('settings')"
                 >

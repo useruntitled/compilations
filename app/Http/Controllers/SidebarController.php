@@ -13,14 +13,13 @@ class SidebarController extends Controller
     public function getLastComments()
     {
 
-        $comments = Comment::query()->with(['user' => ['roles'],'post','reputation'])->latest()->limit(20)->get();
+        $comments = Comment::with(['user' => ['roles'],'post','reputation'])->latest()->limit(20)->get();
         
         // $comments = CommentResource::collection(Comment::query()->orderBy('created_at','desc')->limit(20)->get());
 
         $comments = $comments->filter(fn($c) => !$c->trashed());
 
-        return $comments;
-        // return true;
+      
         return Response::json($comments,200); 
     }
 }

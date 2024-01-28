@@ -1,6 +1,12 @@
 <template>
-    <main @click="showZoomedImage = true" class="cursor-zoom-in" :class="class">
-        <LazyImage :preview="preview" :than="than" :class="class"> </LazyImage>
+    <main @click="showZoomedImage = true" class="cursor-zoom-in inline-block">
+        <LazyImage
+            :preview="preview"
+            :than="than"
+            :class="class"
+            :style="style"
+        >
+        </LazyImage>
     </main>
     <section
         v-show="showZoomedImage"
@@ -24,6 +30,7 @@ const props = defineProps({
     class: null,
     preview: null,
     than: null,
+    style: null,
 });
 
 const showZoomedImage = ref(false);

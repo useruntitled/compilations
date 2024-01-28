@@ -5,7 +5,7 @@
     >
         <div class="pt-2 mt-0 ms-10">
             <p
-                class="font-medium py-5 text-lg text-start flex sticky top-0 bg-bck"
+                class="font-medium py-5 text-lg text-start flex sticky top-0 bg-bck z-50"
                 v-show="comments && comments.length > 0"
             >
                 Сейчас обсуждают
@@ -20,7 +20,7 @@
                                 :src="
                                     route('im', [comment.user.avatar, ['50']])
                                 "
-                                class="rounded-full inline-block me-2"
+                                class="rounded-full inline-block me-2 w-[36px] h-[36px] object-cover"
                                 style="max-width: 36px; max-height: 36px"
                                 alt=""
                         /></Link>
@@ -105,6 +105,7 @@ const getLastComments = () => {
         .then((res) => {
             // console.log(res);
             if (res.status == 200) {
+                console.log(res);
                 comments.value = res.data;
             }
         });

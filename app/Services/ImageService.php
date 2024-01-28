@@ -79,11 +79,8 @@ class ImageService
 
     public function uploadAndDelete($file, $old)
     {
-        if($old != null) {
-            list($filename, $ext) = explode('.', $old);
-            Storage::disk('media')->delete($old);
-            Storage::disk('media')->delete($filename . '__preview' . ".$ext");
-        }
+        $this->delete($old);
+        
         $name = $file->hashName();
 
         // $path = $file->storePubliclyAs('media', $name, 'media');
@@ -93,5 +90,17 @@ class ImageService
         $file_preview = ImageManager::imagick()->read(public_path("media\\$path"))->scaleDown(width: 30)->blur(3)->encodeByPath();
         Storage::disk('media')->put($new_file_name . '__preview' . ".$new_file_ext", $file_preview);
         return $path;
+    }
+
+    public function delete($filename): void
+    {
+        if($filename == null || $filename == 'Default.jpg') {
+            return;
+        }
+
+        list($name, $ext) = explode('.', $filename);
+
+        Storage::disk('media')->delete($filename);
+        Storage::disk('media')->delete($name . '__preview' . ".$ext");
     }
 }

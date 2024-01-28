@@ -20,7 +20,7 @@
             @input="handleInput()"
             v-html="text"
         ></div>
-        <div class="flex justify-between mt-5 items-center">
+        <div class="flex justify-between mt-5 items-end">
             <div class="p-2 ps-0">
                 <div v-if="!fileWasInserted">
                     <BtnIcon
@@ -43,16 +43,17 @@
                         @click="
                             fileWasInserted = false;
                             insertedImage.image = null;
+                            insertedImage.hasImage = false;
                         "
                         :src="
                             insertedImage.base64 ??
                             route('im', [insertedImage.image, 200])
                         "
-                        class="rounded-lg w-[200px] object-cover cursor-pointer"
+                        class="rounded-lg w-20 h-20 object-cover cursor-pointer"
                     />
                 </div>
             </div>
-            <div class="flex">
+            <div class="flex mb-2">
                 <slot name="button"></slot>
                 <FlatPrimaryButton
                     v-if="content?.innerHTML.length > 0 || fileWasInserted"
@@ -92,6 +93,7 @@ const fileWasInserted = ref(false);
 const insertedImage = reactive({
     base64: null,
     image: null,
+    hasImage: false,
 });
 
 const filepond = ref(null);
@@ -152,15 +154,22 @@ const handleFile = (file) => {
         fileWasInserted.value = true;
         insertedImage.base64 = reader.result;
         insertedImage.image = file;
+        insertedImage.hasImage = true;
         form.image = insertedImage;
     };
 };
 
+watch(insertedImage, () => {
+    form.image = insertedImage;
+});
+
 onMounted(() => {
     content.value.innerHTML = props.text;
+    form.content = content.value.innerHTML;
     if (props.image != null) {
         fileWasInserted.value = true;
         insertedImage.image = props.image;
+        insertedImage.hasImage = true;
     }
     if (props.text != "") {
         placeholder.value = "";

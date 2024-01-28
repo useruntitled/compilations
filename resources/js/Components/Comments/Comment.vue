@@ -1,12 +1,12 @@
 <template>
     <div class="flex w-full" v-if="!completelyDeleted">
         <div
-            style="width: 20px; height: 20px"
+            style="width: 20px; height: 30px"
             class="border-2 border-t-0 border-e-0 border-bl-1 border-bl-gray-200 border-bl-1 rounded-bl-lg hover:cursor-pointer"
             :class="hoverAllValue ? 'border-sky-600' : ''"
             @mouseenter="this.$emit('enableHoverBranches')"
             @mouseleave="this.$emit('disableHoverBranches')"
-            @click="this.$emit('closeReplies')"
+            @click="closeReplies(comment.comment.id)"
             v-if="isReply && countOfNeighbours == 0 && nestingLevel < 5"
         ></div>
 
@@ -17,10 +17,10 @@
             style="height: auto"
             @mouseenter="this.$emit('enableHoverBranches')"
             @mouseleave="this.$emit('disableHoverBranches')"
-            @click="this.$emit('closeReplies')"
+            @click="closeReplies(comment.comment.id)"
         >
             <div
-                style="width: 20px; height: 20px"
+                style="width: 20px; height: 30px"
                 class="ms-[-1.5px] border-2 border-t-0 border-e-0 border-bl-1 border-bl-gray-200 border-bl-1 rounded-bl-lg"
                 :class="hoverAllValue ? 'border-sky-600' : ''"
             ></div>
@@ -141,9 +141,13 @@
                 ></EditingInput>
             </div>
 
-            <div v-if="isReply && replies.length > 0 && !openReplies">
+            <div
+                v-if="
+                    replies.length > 0 && !showRepliesArray.includes(comment.id)
+                "
+            >
                 <button
-                    @click="openReplies = true"
+                    @click="showRepliesArray.push(comment.id)"
                     class="text-dtfpr hover:opacity-80"
                 >
                     {{ $tc("answer", replies.length) }}
@@ -151,18 +155,16 @@
             </div>
 
             <div v-if="replies.length > 0">
-                <div v-if="isReply && !openReplies"></div>
-                <div v-else>
+                <!-- <div
+                    v-if="isReply && !showRepliesArray.includes(comment.id)"
+                ></div> -->
+                <div v-if="showRepliesArray.includes(comment.id)">
                     <comment
                         @enableHoverBranches="this.hoverBranches = true"
                         @disableHoverBranches="this.hoverBranches = false"
                         @focusEmit="focusFunction()"
                         @enableColorize="this.colorizeComment = true"
                         @disableColorize="this.colorizeComment = false"
-                        @closeReplies="
-                            this.openReplies = false;
-                            this.hoverBranches = false;
-                        "
                         v-for="(reply, index) in replies"
                         :isReply="true"
                         :key="reply.id"
@@ -271,7 +273,9 @@ export default {
                 });
         },
         updateComment(value) {
-            this.comment.text = value;
+            this.comment.text = value.text;
+            this.comment.image = value.image;
+            this.comment.image_preview = value.image_preview;
         },
         hoverBranchesFunction() {
             this.hoverBranches = !this.hoverBranches;
@@ -280,12 +284,20 @@ export default {
             this.showReplies = true;
             this.showRepliesArray.unshift(this.comment.id);
         },
+        closeReplies(id) {
+            const index = this.showRepliesArray.findIndex((i) => i == id);
+            this.showRepliesArray.splice(index, 1);
+            this.openReplies = false;
+            this.hoverBranches = false;
+            this.$emit("disableHoverBranches");
+        },
         sendReply(form) {
             const formData = new FormData();
             formData.append("_method", "POST");
             formData.append("comment_id", this.showReplyInterface);
             formData.append("post_id", this.comment.post_id);
             formData.append("text", form.content);
+            formData.append("hasImage", form.image?.hasImage);
             formData.append("image", form.image?.image);
             axios
                 .post(route("comment.create"), formData)
@@ -296,6 +308,7 @@ export default {
                 .then((res) => {
                     console.log(res);
                     this.commentIsCreated = true;
+                    this.showRepliesArray.unshift(this.comment.id);
                     setInterval(() => {
                         this.commentIsCreated = false;
                     }, 20);

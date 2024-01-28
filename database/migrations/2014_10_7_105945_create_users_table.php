@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+use App\Services\ImageService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -33,6 +35,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        $service = new ImageService;
+        $users = User::all();
+        foreach($users as $u) {
+            $service->delete($u->image);
+            $service->delete($u->background_image);
+        }
         Schema::dropIfExists('users');
     }
 };

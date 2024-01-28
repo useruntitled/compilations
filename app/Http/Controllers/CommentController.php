@@ -82,15 +82,29 @@ class CommentController extends Controller
             'id' => 'required',
         ]);
 
-        if($request->hasFile('image')) {
+        $comment = Comment::find($validated['id']);
+
+
+        if($request->hasFile('image') && $request->hasImage == 'true') {
             $filename = $this->service->uploadAndDelete($request->file('image'), null);
+            $comment->image = $filename;
+        }
+        
+        if($request->hasImage == 'false') {
+            $comment->image = null;
+            $this->service->delete($comment->image);
         }
 
-        $comment = Comment::find($validated['id']);
+        
         $comment->text = nl2br($validated['text']);
-        $comment->image = $filename ?? null;
         $comment->update();
         return $comment;
     }
     
+    public function getByPostId($post_id)
+    {
+        $comments = Comment::where('post_id', $post_id)->with(['replies', 'user' => ['roles']])->latest()->get();
+        return CommentResource::collection($comments);
+    }
+
 }

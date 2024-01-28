@@ -34,6 +34,7 @@ class CommentResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'timestamp' => (new Carbon($this->created_at))->diffForHumans(),
             'post_id' => $this->post_id,
+            'is_reply' => $this->is_reply,
         ];
     }
 }

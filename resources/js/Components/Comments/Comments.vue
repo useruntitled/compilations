@@ -1,37 +1,130 @@
 <template>
-    <div class="bg-white p-5 rounded-xl mt-5" ref="comments">
+    <div class="bg-white p-5 rounded-xl mt-5" ref="comments_block">
         <p class="text-xl mb-8 font-medium">Комментарии</p>
         <div class="px-2 mb-5">
             <div v-if="!showReplyInterface && !showEditingInterface">
                 <CommentInput
-                    @sendComment="sendComment"
+                    @sendComment="createComment"
                     :commentIsCreated="commentIsCreated"
                 ></CommentInput>
             </div>
         </div>
         <main>
+            <AnimationLoader
+                v-if="!isLoaded"
+                class="mx-auto stroke-gray-500"
+            ></AnimationLoader>
             <Comment
                 v-for="comment in comments"
                 v-show="!comment.is_reply"
                 :key="comment.id"
                 :comment="comment"
-                @sendReply="sendReply"
                 @remove="remove(comment.id)"
             ></Comment>
         </main>
     </div>
 </template>
 
-<script>
-import Csrf from "@/Pages/shared/csrf.vue";
+<script setup>
+import { inject, ref, provide, onMounted } from "vue";
 import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
-import Reply from "./Reply.vue";
-import ReplyInput from "@/Components/Comments/ReplyInput.vue";
 import axios from "axios";
-import EditingInput from "./EditingInput.vue";
-import { computed } from "vue";
-import ZoomableImage from "../ZoomableImage.vue";
+import AnimationLoader from "../Animations/AnimationLoader.vue";
+
+const isLoaded = ref(false);
+
+const loadComments = async () => {
+    await axios
+        .get(route("comments.get", [props.post.id]))
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            isLoaded.value = true;
+            comments.value = res.data;
+        });
+};
+
+onMounted(async () => {
+    if (window.location.hash == "#comments")
+        setTimeout(() => {
+            comments_block.value.scrollIntoView();
+        }, 200);
+    await loadComments();
+    if (window.location.hash == "#comments")
+        comments_block.value.scrollIntoView();
+    comments.value.forEach((comment) => {
+        if (!comment.is_reply) showRepliesArray.value.unshift(comment.id);
+    });
+});
+
+const callModal = inject("callModal");
+
+const props = defineProps({
+    post: null,
+});
+
+const showRepliesArray = ref([]);
+const showReplyInterface = ref(null);
+const showReplyEditingInterface = ref(null);
+const showEditingInterface = ref(null);
+const comments = ref(null);
+const comments_block = ref(null);
+const commentIsCreated = ref(false);
+
+const createComment = (form) => {
+    const formData = new FormData();
+    formData.append("_method", "POST");
+    formData.append("post_id", props.post.id);
+    formData.append("text", form.content);
+    formData.append("hasImage", form.image?.hasImage);
+    formData.append("image", form.image?.image);
+    axios
+        .post(route("comment.create"), formData)
+        .catch((res) => {
+            if (res.response.status == 401) callModal("Auth");
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.status == 200 || res.status == 201) {
+                comments.value.unshift(res.data);
+                commentIsCreated.value = true;
+
+                setTimeout(() => {
+                    commentIsCreated.value = false;
+                }, 20);
+            }
+        });
+};
+
+const setInputValuesToNull = () => {
+    showReplyInterface.value = null;
+    showEditingInterface.value = null;
+};
+
+const changeShowReplyInterfaceValue = (value) => {
+    setInputValuesToNull();
+    showReplyInterface.value = value;
+};
+
+const changeShowEditingInterfaceValue = (value) => {
+    setInputValuesToNull();
+    showEditingInterface.value = value;
+};
+
+provide("changeShowReplyInterfaceValue", changeShowReplyInterfaceValue);
+provide("setInputValuesToNull", setInputValuesToNull);
+provide("showReplyInterface", showReplyInterface);
+provide("changeShowEditingInterfaceValue", changeShowEditingInterfaceValue);
+provide("showEditingInterface", showEditingInterface);
+provide("showRepliesArray", showRepliesArray);
+</script>
+
+<!-- <script>
+
 
 export default {
     inject: ["callModal"],
@@ -187,4 +280,4 @@ export default {
         ZoomableImage,
     },
 };
-</script>
+</script> -->

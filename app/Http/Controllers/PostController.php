@@ -16,13 +16,6 @@ class PostController extends Controller
 public function index($id, $slug)
 {
     $post = Post::with([
-        'comments' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        },
-        'comments.post' => ['user' => ['roles']],
-        'comments.replies' => ['post', 'reputation', 'user' => ['roles']],
-        'comments.reputation',
-        'comments.user' => ['roles'],
         'user' => ['roles'],
         'films' => ['genres']
     ])->withCount('comments')->findOrFail($id);

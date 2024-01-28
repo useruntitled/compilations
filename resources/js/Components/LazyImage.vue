@@ -5,7 +5,7 @@
         @load="isLoaded = true"
         :class="classes"
         :style="style"
-        class="duration-[200ms] ease-out"
+        class="duration-[200ms] ease-out object-cover"
     />
 </template>
 <script setup>

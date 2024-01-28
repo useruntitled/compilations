@@ -39,6 +39,7 @@ Route::controller(FilmController::class)->group(function() {
 
 Route::controller(CommentController::class)->group(function(){
     Route::get('comment/{id}')->name('comment.get');
+    Route::get('comments/{post_id}', 'getByPostId')->name('comments.get');
     Route::post('comment','create')->name('comment.create')->middleware('auth');
     Route::delete('comment','delete')->name('comment.delete')->middleware('auth');
     Route::put('comment','update')->name('comment.update')->middleware('auth');
@@ -63,7 +64,7 @@ Route::controller(PostController::class)->group(function() {
 // });
 
 Route::controller(SidebarController::class)->group(function(){
-    Route::get('comments/last','getLastComments')->name('comments.get.last');
+    Route::get('sidebar/comments/last','getLastComments')->name('comments.get.last');
 });
 
 Route::controller(ReputationController::class)->group(function(){
