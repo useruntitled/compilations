@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { inject, ref, provide, onMounted, watch } from "vue";
+import { inject, ref, provide, onMounted, watch, nextTick } from "vue";
 import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
 import axios from "axios";
@@ -91,9 +91,8 @@ const openRepliesForComment = (comment) => {
     go(comment, comment.id);
 };
 
-const prepareToFocusComment = () => {
+const prepareToFocusComment = async () => {
     if (window.location.hash.includes("#comment-")) {
-        comments_block.value.scrollIntoView();
         const comment = findComment(window.location.hash.split("#comment-")[1]);
         openRepliesForComment(comment);
         console.log("array", showRepliesArray.value);
@@ -102,10 +101,16 @@ const prepareToFocusComment = () => {
 };
 
 onMounted(async () => {
+    if (window.location.hash.includes("#comment-")) {
+        nextTick(() => {
+            comments_block.value?.scrollIntoView();
+        });
+    }
+
     if (window.location.hash == "#comments")
-        setTimeout(() => {
-            comments_block.value.scrollIntoView();
-        }, 200);
+        nextTick(() => {
+            comments_block.value?.scrollIntoView();
+        });
     await loadComments();
     prepareToFocusComment();
     if (window.location.hash == "#comments")

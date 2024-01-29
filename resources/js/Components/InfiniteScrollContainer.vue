@@ -12,7 +12,7 @@ const layout = ref(null);
 const handleScroll = () => {
     if (
         document.documentElement.scrollTop >=
-        container.value.scrollHeight - 1500
+        container.value?.scrollHeight - 1500
     ) {
         console.log("load");
         emit("load");

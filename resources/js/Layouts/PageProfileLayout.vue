@@ -186,7 +186,7 @@ const setLinkWidth = (index) => {
 
 const setLinkPosition = (index) => {
     if (index == 1) linkPosition.value = 0;
-    else linkPosition.value = linkSecond.value.clientWidth - 5;
+    else linkPosition.value = linkSecond.value.clientWidth - 10;
 };
 
 watch(selectedSection, () => {
