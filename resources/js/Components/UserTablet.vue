@@ -6,7 +6,7 @@
             <div class="flex items-end justify-end">
                 <img
                     class="rounded-full inline-block"
-                    :src="route('im', [user.avatar, '100x100'])"
+                    :src="route('im', [user.avatar, '100'])"
                     style="width: 40px; height: 40px"
                     alt=""
                 />

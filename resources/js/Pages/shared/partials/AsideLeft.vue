@@ -23,15 +23,20 @@
             </div>
             <div
                 class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
+                :class="{ 'bg-white': isNew }"
             >
-                <button class="flex items-center py-[5px]">
+                <Link :href="route('new')" class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconClock
                             class="stroke-[2.2px] w-[24px] text-secondary"
+                            :class="{
+                                'stroke-dtfpr opacity-80  stroke-[0.5px]':
+                                    isNew,
+                            }"
                         ></IconClock
                     ></span>
                     <span class="text-lgg font-regular">Свежее</span>
-                </button>
+                </Link>
             </div>
             <div
                 class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
@@ -69,6 +74,10 @@ const page = usePage();
 
 const isPopular = computed(() => {
     return page.component == "home/index";
+});
+
+const isNew = computed(() => {
+    return page.component == "home/New";
 });
 </script>
 

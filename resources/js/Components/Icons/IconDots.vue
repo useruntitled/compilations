@@ -7,7 +7,7 @@
         viewBox="0 0 24 24"
         stroke-width="2"
         stroke="currentColor"
-        fill="none"
+        fill="currentColor"
         stroke-linecap="round"
         stroke-linejoin="round"
     >

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Film;
 use App\Models\Post;
 use App\Services\ImageService;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -25,14 +26,32 @@ class PostController extends Controller
         ]);
     }
 
-    public function popular($page)
+    public function new()
+    {
+        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        ->withCount('comments')
+        ->latest()
+        ->take(5)
+        ->get();
+        
+       
+
+        // $posts->loadCount('comments','films');
+        return inertia('home/New',[
+            'posts' => $posts,
+        ]);
+    }
+
+    public function getNew($page)
     {
         $per_page = 5;
-        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'], 'reputation'])
-        ->withCount(['reputation', 'comments'])
-        ->orderByDesc('reputation_count')
-        ->orderByDesc('comments_count')
-        ->get(); 
+        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        ->withCount('comments')
+        ->latest()
+        ->skip(($page - 1) * $per_page)
+        ->take($per_page)
+        ->get();
+
 
         $result = [];
 
@@ -40,9 +59,46 @@ class PostController extends Controller
             $result[chr(97 + $i)] = $posts[$i];
         }
 
-        return $result;
+        return $posts;
     }
 
+    public function getRandom($page)
+    {
+        $per_page = 5;
+        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        ->withCount('comments')
+        ->inRandomOrder()
+        ->skip(($page - 1) * $per_page)
+        ->take($per_page)
+        ->get();
+
+        return $posts;
+    }
+
+    public function popular($page)
+    {
+        $per_page = 5;
+        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'], 
+            'reputation' => function(Builder $query) {
+                $query->where('action', 'up');
+            }
+        ])
+            ->withCount(['comments'])
+            ->withCount('reputation')
+            ->orderByDesc('reputation_count')
+            ->orderByDesc('comments_count')
+            ->skip(($page - 1) * $per_page)
+            ->take($per_page)
+            ->get(); 
+
+        $result = [];
+
+        for($i = 0; $i < $posts->count(); $i++) {
+            $result[chr(97 + $i)] = $posts[$i];
+        }
+
+        return $posts;
+    }
     public function create()
     {
         return inertia('create/index');

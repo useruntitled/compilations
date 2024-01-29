@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-
+use Illuminate\Contracts\Database\Eloquent\Builder;
 class HomeController extends Controller
 {
     public function index()
@@ -14,13 +14,17 @@ class HomeController extends Controller
         // ]);
 
 
-        $posts = Post::query()
-            ->with(['user' => ['roles'], 'films' => ['genres']])
-            ->withCount(['comments', 'reputation'])
-            ->where('active', true)
-            ->latest()
-            ->limit(5)
-            ->get();
+        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'], 
+            'reputation' => function(Builder $query) {
+                $query->where('action', 'up');
+            }
+        ])
+            ->withCount(['comments'])
+            ->withCount('reputation')
+            ->orderByDesc('reputation_count')
+            ->orderByDesc('comments_count')
+            ->take(5)
+            ->get(); 
         
        
 

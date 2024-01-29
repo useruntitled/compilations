@@ -26,13 +26,19 @@
 </template>
 
 <script setup>
-import { inject, ref, provide, onMounted } from "vue";
+import { inject, ref, provide, onMounted, watch } from "vue";
 import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
 import axios from "axios";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 
 const isLoaded = ref(false);
+
+const emit = defineEmits(["load"]);
+
+watch(isLoaded, (newValue, oldValue) => {
+    if (newValue == true) emit("load");
+});
 
 const loadComments = async () => {
     await axios

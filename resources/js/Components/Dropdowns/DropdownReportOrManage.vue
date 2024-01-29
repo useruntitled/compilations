@@ -1,7 +1,7 @@
 <template>
     <Dropdown>
         <template #trigger>
-            <button class="p-1 hover:bg-gray-100 text-gray-600 rounded-full">
+            <button class="p-1 hover:bg-gray-100 text-secondary rounded-full">
                 <IconDots></IconDots>
             </button>
         </template>

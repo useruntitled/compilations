@@ -46,7 +46,7 @@ const handleLoadEvent = async () => {
 
 const loadPosts = async () => {
     await axios
-        .get(route("posts.popular", [current_page.value]))
+        .get(route("posts.new", [current_page.value]))
         .catch((res) => {
             console.log(res);
         })

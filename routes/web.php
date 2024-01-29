@@ -51,6 +51,8 @@ Route::controller(PostController::class)->group(function(){
     Route::patch('post-film-dettach','postDettachFilm')->name('post.dettach.film')->middleware(['auth','creator']);
     Route::get('post/{id}/{slug?}','index')->name('post');
     Route::delete('post','destroy')->name('post.delete')->middleware('auth');
+
+    Route::get('new', 'new')->name('new');
 });
 
 Route::controller(FilmController::class)->group(function(){
