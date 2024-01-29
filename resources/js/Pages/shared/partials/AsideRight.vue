@@ -62,11 +62,11 @@
                             style="max-height: 100px"
                             v-html="comment.text"
                         ></p>
-                        <div v-if="comment.image" class="text-center">
+                        <div v-if="comment.image" class="text-center mt-2">
                             <LazyImage
                                 :preview="'/media/' + comment.image_preview"
                                 :than="route('im', [comment.image, 200])"
-                                class="rounded-xl w-[200px] hover:brightness-[1.2]"
+                                class="rounded-xl w-2/3 hover:brightness-[1.2]"
                             ></LazyImage>
                         </div>
                     </Link>
@@ -116,7 +116,7 @@ onMounted(() => {
 
     console.log("AsideRight: Connecting");
 
-    const channel = Echo.private(`users`);
+    const channel = Echo.channel(`all`);
     channel.listen(".comments.feed", (data) => {
         comments.value.unshift(data[0]);
     });

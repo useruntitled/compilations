@@ -35,6 +35,8 @@ import SecondaryContent from "@/Components/Forms/SecondaryContent.vue";
 import axios from "axios";
 import IconCheck from "@/Components/Icons/IconCheck.vue";
 
+defineOptions({ layout: [Base, SettingsLayout] });
+
 const page = usePage();
 
 const form = reactive({
@@ -61,10 +63,5 @@ const send = () => {
                 isUpdated.value = false;
             }, 1000);
         });
-};
-</script>
-<script>
-export default {
-    layout: [Base, SettingsLayout],
 };
 </script>

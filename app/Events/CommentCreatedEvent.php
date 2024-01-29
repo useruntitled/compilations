@@ -31,7 +31,7 @@ class CommentCreatedEvent implements ShouldQueue, ShouldBroadcast
     public function broadcastOn(): Array
     {
         return [
-            new PrivateChannel('users'),
+            new Channel('all'),
         ];  
     }
     

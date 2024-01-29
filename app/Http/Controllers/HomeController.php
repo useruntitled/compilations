@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PostResource;
 use App\Models\Post;
-use App\Services\ParserService;
-use Illuminate\Contracts\Database\Query\Builder;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -19,13 +15,11 @@ class HomeController extends Controller
 
 
         $posts = Post::query()
-            ->with(['user' => ['roles'], 'films' => function (Builder $query) {
-                $query->orderBy('id');
-            }])
-            ->withCount(['comments'])
+            ->with(['user' => ['roles'], 'films' => ['genres']])
+            ->withCount(['comments', 'reputation'])
             ->where('active', true)
             ->latest()
-            ->limit(20)
+            ->limit(5)
             ->get();
         
        

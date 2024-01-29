@@ -49,6 +49,7 @@ Route::controller(PostController::class)->group(function() {
     Route::post('post','store')->name('post.create')->middleware(['auth','creator']);
     Route::put('post','update')->name('post.update')->middleware(['auth']);
     Route::get('post/{id}','get')->name('post.get')->middleware(['auth']);
+    Route::get('posts/popular/page/{page?}','popular')->name('posts.popular');
     Route::post('post/image','uploadImage')->name('post.upload.image')->middleware(['auth']);
     Route::post('post/publish','publish')->name('post.publish')->middleware(['auth','creator']);
 });

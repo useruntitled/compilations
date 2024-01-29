@@ -84,7 +84,7 @@
                         class="text-17"
                         v-if="!isDeleted"
                     ></p>
-                    <div v-if="comment.image">
+                    <div v-if="comment.image && !isDeleted">
                         <ZoomableImage
                             :preview="'/media/' + comment.image_preview"
                             :than="route('im', [comment.image, 1000])"
@@ -198,6 +198,7 @@ export default {
         "showReplyInterface",
         "showEditingInterface",
         "callModal",
+        "scrollIntoComment",
     ],
     props: {
         isReply: false,
@@ -226,6 +227,13 @@ export default {
             isDeleted: this.comment.deleted_at != null,
             completelyDeleted: false,
         };
+    },
+    watch: {
+        scrollIntoComment() {
+            if (this.comment.id == this.scrollIntoComment) {
+                this.focusFunction();
+            }
+        },
     },
     computed: {
         nestingLevel() {
@@ -309,6 +317,7 @@ export default {
                     console.log(res);
                     this.commentIsCreated = true;
                     this.showRepliesArray.unshift(this.comment.id);
+                    this.scrollIntoComment = res.data.id;
                     setInterval(() => {
                         this.commentIsCreated = false;
                     }, 20);
@@ -320,6 +329,12 @@ export default {
     },
     mounted() {
         console.log(this.nestingLevel);
+        if (this.comment.id == this.scrollIntoComment) {
+            this.focusFunction();
+            setTimeout(() => {
+                this.focusFunction();
+            }, 50);
+        }
     },
     emits: [
         "showReplies",

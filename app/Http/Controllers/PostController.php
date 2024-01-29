@@ -13,17 +13,36 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-public function index($id, $slug)
-{
-    $post = Post::with([
-        'user' => ['roles'],
-        'films' => ['genres']
-    ])->withCount('comments')->findOrFail($id);
+    public function index($id, $slug)
+    {
+        $post = Post::with([
+            'user' => ['roles'],
+            'films' => ['genres']
+        ])->withCount('comments')->findOrFail($id);
 
-    return inertia('post', [
-        'post' => $post,
-    ]);
-}
+        return inertia('post', [
+            'post' => $post,
+        ]);
+    }
+
+    public function popular($page)
+    {
+        $per_page = 5;
+        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'], 'reputation'])
+        ->withCount(['reputation', 'comments'])
+        ->orderByDesc('reputation_count')
+        ->orderByDesc('comments_count')
+        ->get(); 
+
+        $result = [];
+
+        for($i = 0; $i < $posts->count(); $i++) {
+            $result[chr(97 + $i)] = $posts[$i];
+        }
+
+        return $result;
+    }
+
     public function create()
     {
         return inertia('create/index');

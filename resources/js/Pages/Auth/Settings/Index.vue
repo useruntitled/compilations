@@ -48,9 +48,6 @@ import SettingsLayout from "./SettingsLayout.vue";
 import IconLogin from "@/Components/Icons/IconLogin.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import IconBell from "@/Components/Icons/IconBell.vue";
-</script>
-<script>
-export default {
-    layout: [Base, SettingsLayout],
-};
+
+defineOptions({ layout: [Base, SettingsLayout] });
 </script>

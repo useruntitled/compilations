@@ -40,7 +40,7 @@
         <div v-for="(film, index) in post.films" class="px-2">
             <Film v-if="index < 2" :film="film"></Film>
         </div>
-        <Link :href="route('post', [post.id, post.slug])">
+        <Link :href="route('post', [post.id, post.slug]) + '#films'">
             <p
                 v-if="post.films.length > 3"
                 class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"

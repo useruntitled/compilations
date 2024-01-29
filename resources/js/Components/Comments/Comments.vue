@@ -47,12 +47,61 @@ const loadComments = async () => {
         });
 };
 
+const findComment = (id) => {
+    console.log("Trying to find this comment:", id);
+    function find(comment) {
+        if (comment.id == id) {
+            return comment;
+        }
+        if (comment.replies) {
+            comment.replies.forEach((reply) => {
+                return find(reply);
+            });
+        }
+        return null;
+    }
+
+    let found_comment = null;
+
+    comments.value.forEach((comment) => {
+        console.log("found", find(comment));
+        if (find(comment) != null) {
+            found_comment = find(comment);
+            return;
+        }
+    });
+
+    return found_comment;
+};
+
+const openRepliesForComment = (comment) => {
+    function go(comment, id) {
+        if (comment.comment) {
+            showRepliesArray.value.push(comment.comment.id);
+            return go(comment.comment, id);
+        }
+        return true;
+    }
+    go(comment, comment.id);
+};
+
+const prepareToFocusComment = () => {
+    if (window.location.hash.includes("#comment-")) {
+        comments_block.value.scrollIntoView();
+        const comment = findComment(window.location.hash.split("#comment-")[1]);
+        openRepliesForComment(comment);
+        console.log("array", showRepliesArray.value);
+        scrollIntoComment.value = comment.id;
+    }
+};
+
 onMounted(async () => {
     if (window.location.hash == "#comments")
         setTimeout(() => {
             comments_block.value.scrollIntoView();
         }, 200);
     await loadComments();
+    prepareToFocusComment();
     if (window.location.hash == "#comments")
         comments_block.value.scrollIntoView();
     comments.value.forEach((comment) => {
@@ -73,6 +122,7 @@ const showEditingInterface = ref(null);
 const comments = ref(null);
 const comments_block = ref(null);
 const commentIsCreated = ref(false);
+const scrollIntoComment = ref(null);
 
 const createComment = (form) => {
     const formData = new FormData();
@@ -92,6 +142,7 @@ const createComment = (form) => {
             if (res.status == 200 || res.status == 201) {
                 comments.value.unshift(res.data);
                 commentIsCreated.value = true;
+                scrollIntoComment.value = res.data.id;
 
                 setTimeout(() => {
                     commentIsCreated.value = false;
@@ -121,6 +172,7 @@ provide("showReplyInterface", showReplyInterface);
 provide("changeShowEditingInterfaceValue", changeShowEditingInterfaceValue);
 provide("showEditingInterface", showEditingInterface);
 provide("showRepliesArray", showRepliesArray);
+provide("scrollIntoComment", scrollIntoComment);
 </script>
 
 <!-- <script>

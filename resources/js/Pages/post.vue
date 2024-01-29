@@ -40,8 +40,10 @@
         </Link>
     </div>
     <div class="bg-white p-5 pt-4 rounded-b-xl pb-0">
-        <div v-for="film in post.films">
-            <Film :film="film"></Film>
+        <div ref="films_block">
+            <div v-for="film in post.films">
+                <Film :film="film"></Film>
+            </div>
         </div>
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
@@ -67,76 +69,33 @@
     </div>
     <Comments :post="post"></Comments>
 </template>
-<script>
+<script setup>
+import { onMounted, ref } from "vue";
 import Film from "@/Components/Film.vue";
-import axios from "axios";
 import Reputation from "@/Components/Reputation.vue";
-import Csrf from "./shared/csrf.vue";
 import Comments from "@/Components/Comments/Comments.vue";
-import UserTablet from "@/Components/UserTablet.vue";
 import IconArrowForwardUp from "@/Components/Icons/IconArrowForwardUp.vue";
 import IconBookmark from "@/Components/Icons/IconBookmark.vue";
 import IconComments from "@/Components/Icons/IconComments.vue";
-import IconFlag from "@/Components/Icons/IconFlag.vue";
-import IconDots from "@/Components/Icons/IconDots.vue";
-import IconTrash from "@/Components/Icons/IconTrash.vue";
-import IconPencil from "@/Components/Icons/IconPencil.vue";
 import LinkIcon from "@/Components/LinkIcon.vue";
-import Dropdown from "@/Components/Dropdown.vue";
 import Base from "./shared/base.vue";
 import UserTabletWithElementInside from "@/Components/UserTabletWithElementInside.vue";
 import DropdownReportOrManage from "@/Components/Dropdowns/DropdownReportOrManage.vue";
 import LazyImage from "@/Components/LazyImage.vue";
-export default {
-    layout: Base,
-    props: {
-        post: null,
-    },
-    methods: {
-        destroy() {
-            axios
-                .post(route("post.delete"), {
-                    _method: "DELETE",
-                    id: this.post.id,
-                })
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    if (res.status == 202) {
-                        window.location = route("home");
-                    }
-                });
-        },
-    },
-    mounted() {
-        if (window.location.hash.includes("#comment-")) {
-            const comment_id = window.location.hash.replace("#comment-", "");
-            console.log(comment_id);
-        }
-    },
-    components: {
-        Film,
-        Csrf,
-        Reputation,
-        Comments,
-        UserTablet,
-        IconArrowForwardUp,
-        IconBookmark,
-        IconComments,
-        IconFlag,
-        IconDots,
-        UserTablet,
-        IconTrash,
-        IconPencil,
-        LinkIcon,
-        Comments,
-        IconDots,
-        Dropdown,
-        UserTabletWithElementInside,
-        DropdownReportOrManage,
-        LazyImage,
-    },
-};
+
+defineOptions({ layout: Base });
+
+const films_block = ref(null);
+
+const props = defineProps({
+    post: null,
+});
+
+onMounted(() => {
+    if (window.location.hash == "#films") {
+        setTimeout(() => {
+            films_block.value.scrollIntoView();
+        }, 200);
+    }
+});
 </script>

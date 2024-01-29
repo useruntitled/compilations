@@ -2,29 +2,49 @@
     <Head>
         <title>Последние подборки</title>
     </Head>
-    <div v-if="posts.length == 0" class="mt-20">
+    <div v-if="posts.length == 0 && !isLoading" class="mt-20">
         <EmptyFeed></EmptyFeed>
     </div>
+
     <div v-for="post in posts">
-        <!-- <Compilation :post="post"></Compilation> -->
         <Post :post="post"></Post>
     </div>
-    <!-- <div class="mx-auto flex justify-center gap-5 flex-wrap">
-            <div v-for="post in posts" :key="post.id" class="inline-block">
-                <Compilation :post="post"></Compilation>
-            </div>
-        </div> -->
 </template>
-<script>
-import Compilation from "@/Components/Compilation.vue";
+<script setup>
+import axios from "axios";
+import { onMounted, ref } from "vue";
 import Post from "@/Components/Post.vue";
 import Base from "../shared/base.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
-export default {
-    layout: Base,
-    props: {
-        posts: null,
-    },
-    components: { Compilation, Post, EmptyFeed },
+
+defineOptions({ layout: Base });
+
+const props = defineProps({
+    posts: null,
+});
+
+const posts = ref(props.posts);
+
+const current_page = ref(2);
+
+const isLoading = ref(true);
+
+const loadPosts = async () => {
+    await axios
+        .get(route("posts.popular", [current_page.value]))
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                posts.value = res.data;
+                isLoading.value = false;
+            }
+        });
 };
+
+onMounted(async () => {
+    await loadPosts();
+});
 </script>
