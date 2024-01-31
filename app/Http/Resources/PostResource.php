@@ -24,7 +24,6 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'reputation' => $this->rep,
-            'comments' => $comments,
             'comments_count' => $this->comments->count() + $this->comments->sum(fn($comm) => $comm->replies->count()),
             'tags' => $this->tags,
             'user' => new UserResource($this->user),
@@ -32,6 +31,9 @@ class PostResource extends JsonResource
             'films_count' => $this->films->count(),
             'slug' => $this->slug,
             'timestamp' => (new Carbon($this->created_at))->diffForHumans(),
+            'image' => $this->image,
+            'image_preview' => $this->image_preview,
+            'rep' => $this->rep,
         ];
     }
 }

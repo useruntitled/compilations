@@ -1,27 +1,68 @@
 <template>
-    <div class="bg-white rounded-xl">
-        <div v-if="selectedSection == 1">
-            <div v-for="post in posts" :key="post.id">
-                <Post :post="post"></Post>
-                <!-- {{ post }} -->
+    <InfiniteScrollContainer @load="handleLoadEvent()">
+        <div class="rounded-xl">
+            <div>
+                <div v-for="post in posts" :key="post.id">
+                    <Post :post="post"></Post>
+                    <!-- {{ post }} -->
+                </div>
             </div>
         </div>
-        <div v-else>
-            <div v-for="comment in comments" class="p-2 mx-auto">
-                <!-- <Comment :comment="comment"></Comment> -->
-                {{ comment }}
-            </div>
-        </div>
-    </div>
+    </InfiniteScrollContainer>
 
-    <div
-        class="mt-20"
-        v-if="(!comments || !comments.length) && (!posts || !posts.length)"
-    >
+    <div class="mt-20" v-if="!posts.length || isEnd">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>
-<script>
+<script setup>
+import { ref } from "vue";
+import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
+import Base from "../shared/base.vue";
+import EmptyFeed from "@/Components/EmptyFeed.vue";
+import Post from "@/Components/Post.vue";
+import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import axios from "axios";
+
+defineOptions({ layout: [Base, PageProfileLayout] });
+
+const props = defineProps({
+    user: null,
+    posts: null,
+});
+
+const isLoading = ref(false);
+
+const currentPage = ref(2);
+
+const isEnd = ref(false);
+
+const loadPosts = async () => {
+    await axios
+        .get(route("profile.posts.get", [props.user.id, currentPage.value]))
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                if (res.data.length == 0) isEnd.value = true;
+                res.data.forEach((post) => {
+                    props.posts.push(post);
+                });
+            }
+        });
+};
+
+const handleLoadEvent = async () => {
+    if (!isLoading.value && !isEnd.value) {
+        isLoading.value = true;
+        await loadPosts();
+        currentPage.value += 1;
+        isLoading.value = false;
+    }
+};
+</script>
+<!-- <script>
 import Pagination from "@/Components/Pagination.vue";
 import { Link } from "@inertiajs/vue3";
 import Post from "@/Components/Post.vue";
@@ -55,4 +96,4 @@ export default {
         EmptyFeed,
     },
 };
-</script>
+</script> -->

@@ -96,6 +96,10 @@ Route::controller(TagController::class)->group(function(){
 });
 
 
+Route::controller(CommentController::class)->group(function() {
+    Route::get('comment/{id}', 'index')->name('comment.redirect');
+});
+
 
 Route::controller(GenreController::class)->group(function(){
     Route::get('genre/{slug}','index')->name('genre')->middleware('admin');
@@ -111,7 +115,11 @@ Route::controller(GenreController::class)->group(function(){
 // });
 
 Route::controller(PersonalPageController::class)->group(function(){
-    Route::get('profile/{id}/{section?}','index')->name('profile');
+    Route::get('profile/{id}/','index')->name('profile');
+});
+
+Route::controller(PersonalPageController::class)->group(function() {
+    Route::get('profile/{id}/comments', 'comments')->name('profile.comments');
 });
 
 

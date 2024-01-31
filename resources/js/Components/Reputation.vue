@@ -53,6 +53,7 @@ export default {
     },
     methods: {
         sendAction(action) {
+            this.current_action = action;
             axios
                 .post(route("new.reputation"), {
                     reputation_to_type: this.type,
@@ -67,21 +68,19 @@ export default {
                     if (res.status == 200 || res.status == 201) {
                         this.up = res.data.up;
                         this.down = res.data.down;
-                        if (this.current_action == action) {
-                            this.current_action = null;
-                            return;
-                        }
-                        this.current_action = action;
+                        this.current_action = res.data.action;
                     }
                     console.log(res);
                 });
         },
         setDown() {
             // this.current_action = "down";
+            if (!this.reputation.action == "down") this.down++;
             this.sendAction("down");
         },
         setUp() {
             // this.current_action = "up";
+            if (!this.reputation.action == "up") this.up++;
             this.sendAction("up");
         },
     },

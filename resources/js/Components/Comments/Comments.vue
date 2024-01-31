@@ -59,10 +59,15 @@ const findComment = (id) => {
         if (comment.id == id) {
             return comment;
         }
-        if (comment.replies) {
+        if (comment.replies?.length) {
+            let result;
             comment.replies.forEach((reply) => {
-                return find(reply);
+                if (find(reply) != null) {
+                    result = find(reply);
+                    return;
+                }
             });
+            return result;
         }
         return null;
     }
@@ -70,10 +75,9 @@ const findComment = (id) => {
     let found_comment = null;
 
     comments.value.forEach((comment) => {
-        console.log("found", find(comment));
         if (find(comment) != null) {
+            console.log("found", find(comment));
             found_comment = find(comment);
-            return;
         }
     });
 
@@ -92,29 +96,38 @@ const openRepliesForComment = (comment) => {
 };
 
 const prepareToFocusComment = async () => {
-    if (window.location.hash.includes("#comment-")) {
-        const comment = findComment(window.location.hash.split("#comment-")[1]);
+    if (hasParam("comment")) {
+        const comment = findComment(getParam("comment"));
         openRepliesForComment(comment);
         console.log("array", showRepliesArray.value);
         scrollIntoComment.value = comment.id;
     }
 };
 
+const hasParam = (param) => {
+    const url = new URL(window.location.href);
+    return url.searchParams.has(param);
+};
+
+const getParam = (param) => {
+    const url = new URL(window.location.href);
+    return url.searchParams.get(param);
+};
+
 onMounted(async () => {
-    if (window.location.hash.includes("#comment-")) {
+    if (hasParam("comment")) {
         nextTick(() => {
             comments_block.value?.scrollIntoView();
         });
     }
 
-    if (window.location.hash == "#comments")
+    if (hasParam("comments"))
         nextTick(() => {
             comments_block.value?.scrollIntoView();
         });
     await loadComments();
     prepareToFocusComment();
-    if (window.location.hash == "#comments")
-        comments_block.value.scrollIntoView();
+    if (hasParam("comments")) comments_block.value.scrollIntoView();
     comments.value.forEach((comment) => {
         if (!comment.is_reply) showRepliesArray.value.unshift(comment.id);
     });

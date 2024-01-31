@@ -16,7 +16,7 @@
                 /> -->
                 <LazyImage
                     :preview="`/media/${page.props.auth.user.avatar_preview}`"
-                    :than="route('im', [page.props.auth.user.avatar, [100]])"
+                    :then="route('im', [page.props.auth.user.avatar, [100]])"
                     class="rounded-full inline-block"
                     alt=""
                     style="width: 45px; height: 45px"
@@ -63,16 +63,10 @@
 </template>
 <script setup>
 import DropdownLink from "@/Components/DropdownLink.vue";
-import IconCirclePlus from "@/Components/Icons/IconCirclePlus.vue";
 import IconExit from "@/Components/Icons/IconExit.vue";
-import IconGlobe from "@/Components/Icons/IconGlobe.vue";
 import IconPanel from "@/Components/Icons/IconPanel.vue";
 import IconPencil from "@/Components/Icons/IconPencil.vue";
-import IconPlus from "@/Components/Icons/IconPlus.vue";
-import IconSquarePlus from "@/Components/Icons/IconSquarePlus.vue";
-import IconSquarePlusFilled from "@/Components/Icons/IconSquarePlusFilled.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
-import AnimationIconSquarePlusFilled from "@/Components/Animations/AnimationIconSquarePlusFilled.vue";
 import { usePage } from "@inertiajs/vue3";
 import LazyImage from "@/Components/LazyImage.vue";
 

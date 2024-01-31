@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReputationController;
 use App\Http\Controllers\SidebarController;
@@ -54,6 +55,11 @@ Route::controller(PostController::class)->group(function() {
     Route::get('posts/random/page/{page?}', 'getRandom')->name('posts.random');
     Route::post('post/image','uploadImage')->name('post.upload.image')->middleware(['auth']);
     Route::post('post/publish','publish')->name('post.publish')->middleware(['auth','creator']);
+});
+
+Route::controller(PersonalPageController::class)->group(function() {
+    Route::get('profile/{id}/comments/page/{page}', 'getComments')->name('profile.comments.get');
+    Route::get('profile/{id}/posts/page/{page}', 'getPosts')->name('profile.posts.get');
 });
 
 // Route::controller(CommentReputationController::class)->group(function(){

@@ -33,7 +33,7 @@
                 /> -->
                 <LazyImage
                     :preview="`/media/${post.image_preview}`"
-                    :than="route('im', [post.image, 800])"
+                    :then="route('im', [post.image, 800])"
                     class="rounded-lg mx-auto w-full object-cover"
                 ></LazyImage>
             </div>
@@ -89,7 +89,7 @@
     </section>
 </template>
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, nextTick } from "vue";
 import Film from "@/Components/Film.vue";
 import Reputation from "@/Components/Reputation.vue";
 import Comments from "@/Components/Comments/Comments.vue";
@@ -128,6 +128,7 @@ const handleLoadFooterEvent = async () => {
     if (!footerFeedIsLoading.value && !footerFeedIsEnd.value) {
         footerFeedIsLoading.value = true;
         await loadFooterFeed();
+        footerFeedIsLoading.value = false;
     }
 };
 
@@ -156,10 +157,10 @@ const props = defineProps({
 });
 
 onMounted(() => {
-    if (window.location.hash == "#films") {
-        setTimeout(() => {
+    if (new URL(window.location.href).searchParams.has("films")) {
+        nextTick(() => {
             films_block.value.scrollIntoView();
-        }, 200);
+        });
     }
 });
 </script>

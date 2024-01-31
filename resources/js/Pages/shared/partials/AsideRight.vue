@@ -65,7 +65,7 @@
                         <div v-if="comment.image" class="text-center mt-2">
                             <LazyImage
                                 :preview="'/media/' + comment.image_preview"
-                                :than="route('im', [comment.image, 200])"
+                                :then="route('im', [comment.image, 200])"
                                 class="rounded-xl w-2/3 hover:brightness-[1.2]"
                             ></LazyImage>
                         </div>
@@ -77,23 +77,17 @@
 </template>
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import UserTablet from "@/Components/UserTablet.vue";
 import axios from "axios";
 import LazyImage from "@/Components/LazyImage.vue";
 
 const comments = ref([]);
 
 const prepareHref = (comment) => {
-    if (comment.isReply)
-        return (
-            route("post", [comment.post.id, comment.post.slug]) +
-            `#reply-${comment.id}`
-        );
-    else
-        return (
-            route("post", [comment.post.id, comment.post.slug]) +
-            `#comment-${comment.id}`
-        );
+    return route("post", [
+        comment.post.id,
+        comment.post.slug,
+        { comment: comment.id },
+    ]);
 };
 
 const getLastComments = () => {

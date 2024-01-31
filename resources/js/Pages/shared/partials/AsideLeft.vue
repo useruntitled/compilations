@@ -30,7 +30,7 @@
                         ><IconClock
                             class="stroke-[2.2px] w-[24px] text-secondary"
                             :class="{
-                                'stroke-dtfpr opacity-80  stroke-[0.5px]':
+                                'stroke-amber-500 opacity-80  stroke-[0.5px]':
                                     isNew,
                             }"
                         ></IconClock

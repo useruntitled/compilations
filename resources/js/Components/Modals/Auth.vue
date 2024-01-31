@@ -16,7 +16,7 @@
                         currentForm = 'LoginForm';
                         errors = {};
                     "
-                    class="mx-2 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
+                    class="mx-2 px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
                 >
                     Вход
                 </button>
@@ -26,7 +26,7 @@
                         currentForm = 'RegisterForm';
                         errors = {};
                     "
-                    class="mx-2 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
+                    class="mx-2 px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
                 >
                     Регистрация
                 </button>

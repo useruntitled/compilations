@@ -13,7 +13,7 @@ import { ref, computed } from "vue";
 
 const props = defineProps({
     preview: null,
-    than: null,
+    then: null,
     class: null,
     style: null,
 });
@@ -31,6 +31,6 @@ const src = computed(() => {
     if (!isLoaded.value) {
         return props.preview;
     }
-    return props.than;
+    return props.then;
 });
 </script>

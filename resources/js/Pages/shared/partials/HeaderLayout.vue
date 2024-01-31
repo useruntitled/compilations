@@ -60,7 +60,7 @@
                                                 page.props.auth.user
                                                     .avatar_preview
                                             "
-                                            :than="
+                                            :then="
                                                 route('im', [
                                                     page.props.auth.user.avatar,
                                                     40,

@@ -7,11 +7,11 @@
             @mouseenter="this.$emit('enableHoverBranches')"
             @mouseleave="this.$emit('disableHoverBranches')"
             @click="closeReplies(comment.comment.id)"
-            v-if="isReply && countOfNeighbours == 0 && nestingLevel < 5"
+            v-if="isReply && countOfNeighbours == 0 && nestingLevel < 7"
         ></div>
 
         <div
-            v-if="isReply && countOfNeighbours > 0 && nestingLevel < 5"
+            v-if="isReply && countOfNeighbours > 0 && nestingLevel < 7"
             class="h-full border-s-2 hover:cursor-pointer"
             :class="hoverAllValue ? 'border-sky-600' : ''"
             style="height: auto"
@@ -27,7 +27,7 @@
         </div>
         <div
             class="my-2 px-0 bg-white rounded-xl p-2 pb-0 w-full"
-            :class="nestingLevel < 5 && isReply ? 'ms-4' : ''"
+            :class="nestingLevel < 7 && isReply ? 'ms-2' : ''"
         >
             <section
                 ref="comment"
@@ -87,7 +87,7 @@
                     <div v-if="comment.image && !isDeleted">
                         <ZoomableImage
                             :preview="'/media/' + comment.image_preview"
-                            :than="route('im', [comment.image, 1000])"
+                            :then="route('im', [comment.image, 1000])"
                             class="rounded-xl w-[300px]"
                         ></ZoomableImage>
                         <!-- <img
@@ -158,7 +158,7 @@
                 <!-- <div
                     v-if="isReply && !showRepliesArray.includes(comment.id)"
                 ></div> -->
-                <div v-if="showRepliesArray.includes(comment.id)">
+                <div v-show="showRepliesArray.includes(comment.id)">
                     <comment
                         @enableHoverBranches="this.hoverBranches = true"
                         @disableHoverBranches="this.hoverBranches = false"
@@ -169,7 +169,7 @@
                         :isReply="true"
                         :key="reply.id"
                         :hoverAllValue="hoverBranches"
-                        :showRepliesByDefault="nestingLevel < 5"
+                        :showRepliesByDefault="nestingLevel < 7"
                         :comment="reply"
                         :countOfNeighbours="replies.length - (index + 1)"
                     />

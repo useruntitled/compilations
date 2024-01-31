@@ -31,7 +31,7 @@
                 /> -->
                 <LazyImage
                     :preview="`/media/${post.image_preview}`"
-                    :than="route('im', [post.image, 800])"
+                    :then="route('im', [post.image, 800])"
                     class="rounded-lg mx-auto w-full object-cover"
                     style="min-width: 600px"
                 ></LazyImage>
@@ -40,7 +40,7 @@
         <div v-for="(film, index) in post.films" class="px-2">
             <Film v-if="index < 2" :film="film"></Film>
         </div>
-        <Link :href="route('post', [post.id, post.slug]) + '#films'">
+        <Link :href="route('post', [post.id, post.slug, 'films'])">
             <p
                 v-if="post.films.length > 3"
                 class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
@@ -55,7 +55,7 @@
             <span class="me-2 text-slate-700"
                 ><LinkIcon
                     :text="post.comments_count"
-                    :href="route('post', [post.id, post.slug]) + '#comments'"
+                    :href="route('post', [post.id, post.slug, 'comments'])"
                     ><IconComments class="w-5 h-5"></IconComments></LinkIcon
             ></span>
             <span class="me-2 text-slate-700">

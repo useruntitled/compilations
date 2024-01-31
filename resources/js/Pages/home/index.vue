@@ -38,9 +38,11 @@ const isEndOfFeed = ref(false);
 const isLoading = ref(false);
 
 const handleLoadEvent = async () => {
-    if (isLoading.value == false) {
+    if (!isLoading.value && !isEndOfFeed.value) {
         isLoading.value = true;
         await loadPosts();
+        isLoading.value = false;
+        current_page.value++;
     }
 };
 
@@ -55,15 +57,12 @@ const loadPosts = async () => {
             if (res.status == 200) {
                 if (res.data.length == 0) {
                     isEndOfFeed.value = true;
-                } else {
-                    current_page.value++;
                 }
 
                 res.data.forEach((post) => {
                     posts.value.push(post);
                 });
                 console.log(posts.value);
-                isLoading.value = false;
             }
         });
 };

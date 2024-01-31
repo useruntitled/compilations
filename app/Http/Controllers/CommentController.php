@@ -20,8 +20,13 @@ class CommentController extends Controller
 
     public function index($id)
     {
-        $comment = Comment::find($id);
-        
+        $comment = Comment::with('post')->findOrFail($id);
+        return redirect()
+        ->route('post', [
+            'id' => $comment->post->id,
+            'slug' => $comment->post->slug,
+            'comment' => $comment->id
+        ]);
     }
 
     public function create(Request $request)
@@ -103,7 +108,9 @@ class CommentController extends Controller
     
     public function getByPostId($post_id)
     {
-        $comments = Comment::where('post_id', $post_id)->with(['replies', 'user' => ['roles']])->latest()->get();
+        $comments = Comment::where('post_id', $post_id)
+        ->where('comment_id', null)
+        ->with(['replies', 'user' => ['roles'], 'reputation'])->latest()->get();
         return CommentResource::collection($comments);
     }
 

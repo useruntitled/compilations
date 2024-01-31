@@ -28,7 +28,7 @@ class PostController extends Controller
 
     public function new()
     {
-        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        $posts = Post::where('active', true)->with(['user' => ['roles'], 'films', 'reputation'])
         ->withCount('comments')
         ->latest()
         ->take(5)
@@ -45,7 +45,7 @@ class PostController extends Controller
     public function getNew($page)
     {
         $per_page = 5;
-        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        $posts = Post::where('active', true)->with(['user' => ['roles'], 'films', 'reputation'])
         ->withCount('comments')
         ->latest()
         ->skip(($page - 1) * $per_page)
@@ -66,6 +66,7 @@ class PostController extends Controller
     {
         $per_page = 5;
         $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        ->where('active', 1)
         ->withCount('comments')
         ->inRandomOrder()
         ->skip(($page - 1) * $per_page)
@@ -83,6 +84,7 @@ class PostController extends Controller
                 $query->where('action', 'up');
             }
         ])
+            ->where('active', true)
             ->withCount(['comments'])
             ->withCount('reputation')
             ->orderByDesc('reputation_count')

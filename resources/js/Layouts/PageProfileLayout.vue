@@ -2,7 +2,10 @@
     <Head>
         <title>Страница {{ user.name }}</title>
     </Head>
-    <div class="bg-white rounded-xl">
+    <div
+        class="bg-white rounded-xl"
+        @mouseleave="backgroundImageIsHovered = false"
+    >
         <div class="flex">
             <input
                 type="file"
@@ -28,13 +31,13 @@
                         ? route('im', [user.background_image ?? '', '1000'])
                         : user.background_image
                 "
-                @mouseover="backgroundImageIsHovered = true"
+                @mouseenter="backgroundImageIsHovered = true"
             /> -->
             <div class="overflow-hidden" v-if="user.background_image">
                 <LazyImage
-                    @mouseover="backgroundImageIsHovered = true"
+                    @mouseenter="backgroundImageIsHovered = true"
                     :preview="`/media/${user.background_image_preview}`"
-                    :than="route('im', [user.background_image, 1000])"
+                    :then="route('im', [user.background_image, 1000])"
                     class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
                     style="min-width: 640px"
                 >
@@ -42,7 +45,7 @@
             </div>
             <div
                 v-else
-                @mouseover="backgroundImageIsHovered = true"
+                @mouseenter="backgroundImageIsHovered = true"
                 class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
             ></div>
         </div>
@@ -52,13 +55,17 @@
                     <div v-if="page.props.auth.user?.id != user.id">
                         <ZoomableImage
                             :preview="'/media/' + user.avatar_preview"
-                            :than="route('im', [user.avatar, '1000'])"
+                            :then="route('im', [user.avatar, '1000'])"
                             class="border-gray-100 border-[3.5px] rounded-full w-[90px] h-[90px] object-cover"
                             style="width: 90px; height: 90px"
                         >
                         </ZoomableImage>
                     </div>
-                    <div v-else class="flex items-center justify-between">
+                    <div
+                        v-else
+                        class="flex items-center justify-between"
+                        @mouseleave="avatarIsHovered = false"
+                    >
                         <input
                             type="file"
                             class="hidden"
@@ -78,7 +85,7 @@
                             ></IconPhoto>
                         </div>
                         <!-- <img
-                            @mouseover="avatarIsHovered = true"
+                            @mouseenter="avatarIsHovered = true"
                             class="rounded-full border-gray-100 border-[3.5px] z-20"
                             :src="
                                 !avatarIsUploading
@@ -89,11 +96,11 @@
                             alt=""
                         /> -->
                         <LazyImage
-                            @mouseover="avatarIsHovered = true"
+                            @mouseenter="avatarIsHovered = true"
                             class="rounded-full border-gray-100 border-[3.5px] z-20"
                             style="width: 90px; height: 90px"
                             :preview="`/media/${user.avatar_preview}`"
-                            :than="route('im', [user.avatar, 1000])"
+                            :then="route('im', [user.avatar, 1000])"
                         ></LazyImage>
                     </div>
                 </div>
@@ -116,14 +123,14 @@
                 <Link
                     preserve-scroll
                     @click="selectedSection = 1"
-                    :href="route('profile', [user.id, 1])"
+                    :href="route('profile', [user.id])"
                     :only="['posts', 'section']"
                     ><button ref="linkFirst">Подборки</button></Link
                 >
                 <Link
                     preserve-scroll
                     @click="selectedSection = 2"
-                    :href="route('profile', [user.id, 2])"
+                    :href="route('profile.comments', [user.id])"
                     :only="['comments', 'section']"
                     ><button ref="linkSecond" class="ms-5">
                         Комментарии
@@ -175,6 +182,13 @@ const linkPosition = ref(null);
 
 const linkFirst = ref(null);
 const linkSecond = ref(null);
+
+watch(
+    () => props.section,
+    () => {
+        selectedSection.value = props.section;
+    }
+);
 
 const setLinkWidth = (index) => {
     if (index == 1) {

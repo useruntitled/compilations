@@ -2,7 +2,7 @@
     <main @click="showZoomedImage = true" class="cursor-zoom-in inline-block">
         <LazyImage
             :preview="preview"
-            :than="than"
+            :then="then"
             :class="class"
             :style="style"
         >
@@ -17,7 +17,7 @@
             <LazyImage
                 class="mx-auto w-1/2 hover:w-full"
                 :preview="preview"
-                :than="than"
+                :then="then"
             >
             </LazyImage>
         </div>
@@ -29,7 +29,7 @@ import LazyImage from "./LazyImage.vue";
 const props = defineProps({
     class: null,
     preview: null,
-    than: null,
+    then: null,
     style: null,
 });
 
