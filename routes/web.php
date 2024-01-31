@@ -116,6 +116,9 @@ Route::controller(PersonalPageController::class)->group(function(){
 
 
 
+
+
 // Route::get('test',[RegisteredUserController::class,'uploadAvatar']);
 
 require __DIR__.'/auth.php';
+require __DIR__.'/404.php';
