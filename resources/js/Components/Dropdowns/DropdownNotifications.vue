@@ -5,7 +5,7 @@
             v-if="notifications_count <= 0 || notificationsHaveBeenRead"
         >
             <div class="px-3" @click="open()">
-                <BtnIcon class="flex items-center"
+                <BtnIcon class="flex items-center text-black"
                     ><IconBell class="w-[28px] h-[28px] stroke-[2px]"></IconBell
                 ></BtnIcon>
             </div>
@@ -13,7 +13,7 @@
         <template #trigger v-else>
             <div @click="open()" class="px-3">
                 <BtnIcon>
-                    <div class="flex items-center">
+                    <div class="flex items-center text-black">
                         <IconBell
                             class="w-[28px] h-[28px] stroke-[2px]"
                         ></IconBell>
@@ -71,6 +71,7 @@ import AnimationLoader from "../Animations/AnimationLoader.vue";
 import PostWasCommentedNotification from "@/Components/Notifications/PostWasCommentedNotification.vue";
 import ReplyNotification from "../Notifications/ReplyNotification.vue";
 import PostUpNotification from "../Notifications/PostUpNotification.vue";
+import CommentUpNotification from "../Notifications/CommentUpNotification.vue";
 
 export default {
     props: {},
@@ -172,6 +173,7 @@ export default {
         PostWasCommentedNotification,
         ReplyNotification,
         PostUpNotification,
+        CommentUpNotification,
     },
 };
 </script>

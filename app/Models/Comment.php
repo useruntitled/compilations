@@ -18,7 +18,7 @@ class Comment extends Model
     protected $fillable = [
         'text','user_id',
         'post_id','comment_id',
-        'image',
+        'image', 'level'
     ];
     protected $casts = [
         'created_at',
@@ -27,8 +27,8 @@ class Comment extends Model
     ];
 
     protected $appends = [
-        'rep', 'timestamp', 'is_reply',
-        'image_preview',
+        'rep', 'timestamp', 
+        'image_preview', 
     ];
 
     protected $with = [

@@ -26,7 +26,7 @@
             </Link>
         </div>
     </InfiniteScrollContainer>
-    <div class="mt-20" v-if="!comments.length || isEnd">
+    <div class="mt-20" v-if="!comments.length">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>

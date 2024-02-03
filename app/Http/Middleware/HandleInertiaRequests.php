@@ -37,7 +37,7 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $user ? new UserResource($user) : $user,
-                'check' => Auth::check(),
+                'check' => $user ? true : false,
                 'can' => [
                     'create_posts' => $user ? $user->isCreator : false,
                 ],

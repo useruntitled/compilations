@@ -44,8 +44,8 @@ export default {
             formData.append("_method", "PUT");
             formData.append("id", this.id);
             formData.append("text", form.content);
-            formData.append("hasImage", form.image.hasImage);
-            formData.append("image", form.image.image);
+            formData.append("hasImage", form.image?.hasImage);
+            formData.append("image", form.image?.image);
             axios
                 .post(route("comment.update"), formData)
                 .catch((res) => {

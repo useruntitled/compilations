@@ -17,8 +17,8 @@ export default {
             },
             colors: {
                 'kp': '#d4620b',
-                'kppale': '#fac29f',
-                'kpnpale': '#f9b890',
+                'kppale': '#fcc7a2',
+                'kpnpale': '#fcc198',
                 'bck': '#F2F2F2',
                 'dtfpr': '#0B5DD7',
                 'primary': '#1793E6',

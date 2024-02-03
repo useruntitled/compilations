@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReputationController;
@@ -62,6 +64,11 @@ Route::controller(PersonalPageController::class)->group(function() {
     Route::get('profile/{id}/posts/page/{page}', 'getPosts')->name('profile.posts.get');
 });
 
+Route::controller(BookmarkController::class)->group(function(){
+    Route::post('bookmark','toggle')->name('bookmark.toggle')->middleware('auth');
+    Route::get('me/bookmarks/page/{page}','getMyBookmarkedPosts')->name('me.bookmarks.get')->middleware('auth');
+});
+
 // Route::controller(CommentReputationController::class)->group(function(){
 //     Route::patch('reputation/comment','patch')->name('comment.reputation.post')->middleware('auth');
 // });
@@ -86,6 +93,11 @@ Route::controller(ReputationController::class)->group(function(){
 Route::get('/notifications/get', function(){
     return NotificationResource::collection(Auth::user()->notifications);
 })->name('notifications.get')->middleware('auth');
+
+Route::controller(NotificationController::class)->group(function() {
+    Route::get('me/notifications/page/{page}', 'getMyNotifications')->name('me.notifications.get')->middleware('auth');
+});
+
 
 Route::post('notifications/read', function(){
     return Auth::user()->markAsReadNotifications();

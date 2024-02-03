@@ -14,12 +14,14 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
+    const PER_PAGE =5;
+
     public function index($id, $slug)
     {
         $post = Post::with([
             'user' => ['roles'],
             'films' => ['genres']
-        ])->withCount('comments')->findOrFail($id);
+        ])->withCount(['comments', 'bookmarks'])->findOrFail($id);
 
         return inertia('post', [
             'post' => $post,
@@ -28,15 +30,8 @@ class PostController extends Controller
 
     public function new()
     {
-        $posts = Post::where('active', true)->with(['user' => ['roles'], 'films', 'reputation'])
-        ->withCount('comments')
-        ->latest()
-        ->take(5)
-        ->get();
-        
-       
+        $posts = $this->getNew(1);
 
-        // $posts->loadCount('comments','films');
         return inertia('home/New',[
             'posts' => $posts,
         ]);
@@ -44,12 +39,11 @@ class PostController extends Controller
 
     public function getNew($page)
     {
-        $per_page = 5;
-        $posts = Post::where('active', true)->with(['user' => ['roles'], 'films', 'reputation'])
-        ->withCount('comments')
+        $posts = Post::with(['user' => ['roles'], 'reputation', 'films'])->published()
+        ->withCount(['comments', 'bookmarks', 'films'])
         ->latest()
-        ->skip(($page - 1) * $per_page)
-        ->take($per_page)
+        ->skip(($page - 1) * SELF::PER_PAGE)
+        ->take(SELF::PER_PAGE)
         ->get();
 
 
@@ -64,13 +58,12 @@ class PostController extends Controller
 
     public function getRandom($page)
     {
-        $per_page = 5;
         $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
         ->where('active', 1)
-        ->withCount('comments')
+        ->withCount(['comments', 'bookmarks'])
         ->inRandomOrder()
-        ->skip(($page - 1) * $per_page)
-        ->take($per_page)
+        ->skip(($page - 1) * SELF::PER_PAGE)
+        ->take(SELF::PER_PAGE)
         ->get();
 
         return $posts;
@@ -78,19 +71,20 @@ class PostController extends Controller
 
     public function popular($page)
     {
-        $per_page = 5;
-        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'], 
+        $posts = Post::with(['user' => ['roles'],
+         'films' => function ($query) {
+            $query->take(3);
+         }, 
             'reputation' => function(Builder $query) {
                 $query->where('action', 'up');
             }
         ])
-            ->where('active', true)
-            ->withCount(['comments'])
-            ->withCount('reputation')
+            ->withCount(['comments', 'bookmarks', 'reputation'])
             ->orderByDesc('reputation_count')
             ->orderByDesc('comments_count')
-            ->skip(($page - 1) * $per_page)
-            ->take($per_page)
+            ->orderByDesc('bookmarks_count')
+            ->skip(($page - 1) * SELF::PER_PAGE)
+            ->take(SELF::PER_PAGE)
             ->get(); 
 
         $result = [];

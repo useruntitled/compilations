@@ -1,23 +1,26 @@
 <template>
     <div class="flex w-full" v-if="!completelyDeleted">
+        <!-- branches -->
+        <!-- solo branch -->
         <div
             style="width: 20px; height: 30px"
             class="border-2 border-t-0 border-e-0 border-bl-1 border-bl-gray-200 border-bl-1 rounded-bl-lg hover:cursor-pointer"
             :class="hoverAllValue ? 'border-sky-600' : ''"
             @mouseenter="this.$emit('enableHoverBranches')"
             @mouseleave="this.$emit('disableHoverBranches')"
-            @click="closeReplies(comment.comment.id)"
-            v-if="isReply && countOfNeighbours == 0 && nestingLevel < 7"
+            @click="this.$emit('closeReplies')"
+            v-if="isReply && countOfNeighbours == 0 && comment.level < 7"
         ></div>
 
+        <!-- multi-branch (with stick) -->
         <div
-            v-if="isReply && countOfNeighbours > 0 && nestingLevel < 7"
+            v-if="isReply && countOfNeighbours > 0 && comment.level < 7"
             class="h-full border-s-2 hover:cursor-pointer"
             :class="hoverAllValue ? 'border-sky-600' : ''"
             style="height: auto"
             @mouseenter="this.$emit('enableHoverBranches')"
             @mouseleave="this.$emit('disableHoverBranches')"
-            @click="closeReplies(comment.comment.id)"
+            @click="this.$emit('closeReplies')"
         >
             <div
                 style="width: 20px; height: 30px"
@@ -25,9 +28,10 @@
                 :class="hoverAllValue ? 'border-sky-600' : ''"
             ></div>
         </div>
+        <!-- branches end -->
         <div
-            class="my-2 px-0 bg-white rounded-xl p-2 pb-0 w-full"
-            :class="nestingLevel < 7 && isReply ? 'ms-2' : ''"
+            class="px-0 bg-white rounded-xl p-2 pb-0 w-full"
+            :class="comment.level < 7 && isReply ? 'ms-2' : ''"
         >
             <section
                 ref="comment"
@@ -38,10 +42,7 @@
             >
                 <header class="flex items-start p-0 m-0">
                     <!-- <UserTablet :user="comment.user"></UserTablet> -->
-                    <UserTabletWithElementInside
-                        :user="comment.user"
-                        v-if="!isDeleted"
-                    >
+                    <UserTabletWithElementInside :user="comment.user">
                         <template #content>
                             <p class="text-xs opacity-80">
                                 {{ comment.timestamp }}
@@ -56,16 +57,7 @@
                             </p>
                         </template>
                     </UserTabletWithElementInside>
-                    <div v-else>
-                        <div class="flex items-center">
-                            <div class="p-2 bg-gray-200 rounded-full">
-                                <IconTrash class="w-6 h-6"></IconTrash>
-                            </div>
-                            <span class="ms-2 font-semibold"
-                                >Удалённый комментарий</span
-                            >
-                        </div>
-                    </div>
+
                     <button
                         @click="this.$emit('focusEmit')"
                         @mouseenter="this.$emit('enableColorize')"
@@ -123,13 +115,13 @@
                 </footer>
             </section>
 
-            <div v-if="showReplyInterface == comment.id" class="px-2">
+            <div v-if="showReplyInterface == comment.id" class="px-2 my-2">
                 <ReplyInput
                     @sendReply="sendReply"
                     :commentIsCreated="this.commentIsCreated"
                 ></ReplyInput>
             </div>
-            <div v-if="showEditingInterface == comment.id" class="px-2">
+            <div v-if="showEditingInterface == comment.id" class="px-2 my-2">
                 <EditingInput
                     :text="comment.text"
                     :image="comment.image"
@@ -143,35 +135,49 @@
 
             <div
                 v-if="
-                    replies.length > 0 && !showRepliesArray.includes(comment.id)
+                    replies?.length > 0 &&
+                    !showRepliesArray.includes(comment.id)
                 "
             >
                 <button
-                    @click="showRepliesArray.push(comment.id)"
+                    @click="
+                        showRepliesArray.push(comment.id);
+                        closeRepliesValues = false;
+                    "
                     class="text-dtfpr hover:opacity-80"
                 >
-                    {{ $tc("answer", replies.length) }}
+                    {{ $tc("answer", replies?.length) }}
                 </button>
             </div>
 
-            <div v-if="replies.length > 0">
+            <div v-if="replies?.length > 0">
                 <!-- <div
                     v-if="isReply && !showRepliesArray.includes(comment.id)"
                 ></div> -->
-                <div v-show="showRepliesArray.includes(comment.id)">
+                <div
+                    v-if="
+                        showRepliesArray.includes(comment.id) &&
+                        !closeRepliesValues
+                    "
+                >
                     <comment
                         @enableHoverBranches="this.hoverBranches = true"
                         @disableHoverBranches="this.hoverBranches = false"
                         @focusEmit="focusFunction()"
+                        @closeReplies="this.closeReplies()"
+                        @closeRepliesAndParrentReplies="
+                            this.closeRepliesAndParrentReplies()
+                        "
                         @enableColorize="this.colorizeComment = true"
                         @disableColorize="this.colorizeComment = false"
                         v-for="(reply, index) in replies"
                         :isReply="true"
                         :key="reply.id"
                         :hoverAllValue="hoverBranches"
-                        :showRepliesByDefault="nestingLevel < 7"
+                        :showRepliesByDefault="comment.level < 7"
                         :comment="reply"
                         :countOfNeighbours="replies.length - (index + 1)"
+                        :closeAllReplies="closeRepliesValues"
                     />
                 </div>
             </div>
@@ -199,6 +205,7 @@ export default {
         "showEditingInterface",
         "callModal",
         "scrollIntoComment",
+        "post",
     ],
     props: {
         isReply: false,
@@ -212,15 +219,17 @@ export default {
         hoverAllValue: {
             default: false,
         },
+        closeAllReplies: false,
     },
     data() {
         return {
             isEdited: false,
             enableEditing: false,
+            replies: this.comment.replies ?? [],
             showReplies: this.showRepliesByDefault,
-            replies: this.comment.replies,
             commentIsCreated: false,
             openReplies: !this.showRepliesByDefault,
+            closeRepliesValues: this.closeAllReplies,
             hoverBranches: this.hoverAllValue,
             colorizeComment: false,
             showLinkToParent: false,
@@ -235,18 +244,7 @@ export default {
             }
         },
     },
-    computed: {
-        nestingLevel() {
-            function process(comment, count) {
-                if (comment.comment != null) {
-                    return process(comment.comment, count + 1);
-                } else {
-                    return count;
-                }
-            }
-            return process(this.comment, 0);
-        },
-    },
+
     methods: {
         focusFunction() {
             this.$refs["comment"].scrollIntoView({
@@ -292,13 +290,29 @@ export default {
             this.showReplies = true;
             this.showRepliesArray.unshift(this.comment.id);
         },
-        closeReplies(id) {
-            const index = this.showRepliesArray.findIndex((i) => i == id);
-            this.showRepliesArray.splice(index, 1);
-            this.openReplies = false;
-            this.hoverBranches = false;
-            this.$emit("disableHoverBranches");
+        closeReplies() {
+            this.showRepliesArray.splice(
+                this.showRepliesArray.findIndex((i) => i == this.comment.id),
+                1
+            );
+            this.closeRepliesValues = true;
+            this.$refs["comment"].scrollIntoViewIfNeeded();
+            // const index = this.showRepliesArray.findIndex((i) => i == id);
+            // this.showRepliesArray.splice(index);
+
+            // this.comment?.replies.forEach((reply) => {
+            //     const index = this.showRepliesArray.findIndex(
+            //         (i) => i == reply.id
+            //     );
+            //     this.showRepliesArray.splice(index, 1);
+            // });
+
+            // this.showRepliesArray.splice(index, 1);
+            // this.openReplies = false;
+            // this.hoverBranches = false;
+            // this.$emit("disableHoverBranches");
         },
+
         sendReply(form) {
             const formData = new FormData();
             formData.append("_method", "POST");
@@ -328,13 +342,26 @@ export default {
         },
     },
     mounted() {
-        console.log(this.nestingLevel);
+        if (this.closeRepliesValues) {
+            const index = this.showRepliesArray.findIndex(
+                (i) => i == this.comment.comment_id
+            );
+
+            this.showRepliesArray.splice(index, 1);
+        }
+
+        if (this.comment.replies?.length == 1 && this.comment.level > 1) {
+            this.showRepliesArray.unshift(this.comment.id);
+        }
         if (this.comment.id == this.scrollIntoComment) {
             this.focusFunction();
             setTimeout(() => {
                 this.focusFunction();
             }, 50);
         }
+    },
+    unmounted() {
+        this.$emit("disableHoverBranches");
     },
     emits: [
         "showReplies",

@@ -1,18 +1,12 @@
 <template>
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        class=""
-    >
+    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
         <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+            stroke-width="0"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M4 7C4 4.79086 5.79086 3 8 3H16C18.2091 3 20 4.79086 20 7V19.0454C20 20.6726 18.1247 21.584 16.8452 20.5787L12.5251 17.1844C12.2169 16.9422 11.7831 16.9422 11.4749 17.1844L7.15475 20.5787C5.8753 21.584 4 20.6725 4 19.0454V7ZM8 5C6.89543 5 6 5.89543 6 7V18.9425L10.2392 15.6117C11.2727 14.7997 12.7273 14.7997 13.7608 15.6117L18 18.9425V7C18 5.89543 17.1046 5 16 5H8Z"
+            fill="currentColor"
         />
     </svg>
 </template>
-<script>
-export default {};
-</script>
+<script setup></script>

@@ -50,13 +50,17 @@
                 ><Reputation type="Post" :reputation="post.rep"></Reputation
             ></span>
             <span class="me-2 text-slate-700"
-                ><LinkIcon :text="post.comments_count"
+                ><LinkIcon
+                    :text="post.comments_count"
+                    :href="route('post', [post.id, post.slug, 'comments'])"
                     ><IconComments class="w-5 h-5"></IconComments></LinkIcon
             ></span>
             <span class="me-2 text-slate-700">
-                <LinkIcon :text="0">
-                    <IconBookmark class="w-5 h-5 stroke-3/2"></IconBookmark>
-                </LinkIcon>
+                <Bookmark
+                    :has="post.has_bookmark"
+                    :count="post.bookmarks_count"
+                    :post_id="post.id"
+                ></Bookmark>
             </span>
             <span class="me-2 text-slate-700">
                 <LinkIcon>
@@ -104,6 +108,7 @@ import LazyImage from "@/Components/LazyImage.vue";
 import axios from "axios";
 import Post from "@/Components/Post.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import Bookmark from "@/Components/Bookmark.vue";
 
 defineOptions({ layout: Base });
 
@@ -113,7 +118,7 @@ const footerFeedIsLoaded = ref(false);
 
 watch(footerFeedIsLoaded, (newValue) => {
     if (newValue == true) {
-        loadFooterFeed();
+        handleLoadFooterEvent();
     }
 });
 
@@ -129,6 +134,7 @@ const handleLoadFooterEvent = async () => {
         footerFeedIsLoading.value = true;
         await loadFooterFeed();
         footerFeedIsLoading.value = false;
+        footerFeedPage.value++;
     }
 };
 
@@ -146,7 +152,6 @@ const loadFooterFeed = async () => {
                 }
                 res.data.forEach((post) => {
                     footerFeedPosts.value.push(post);
-                    footerFeedPage.value++;
                 });
             }
         });

@@ -14,12 +14,13 @@ class HomeController extends Controller
         // ]);
 
 
-        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'], 
+        $posts = Post::with(['user' => ['roles'],
             'reputation' => function(Builder $query) {
                 $query->where('action', 'up');
-            }
+            },
+            'films'
         ])
-            ->withCount(['comments'])
+            ->withCount(['comments', 'bookmarks', 'films'])
             ->withCount('reputation')
             ->orderByDesc('reputation_count')
             ->orderByDesc('comments_count')

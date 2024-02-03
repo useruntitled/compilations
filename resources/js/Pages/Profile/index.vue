@@ -10,7 +10,7 @@
         </div>
     </InfiniteScrollContainer>
 
-    <div class="mt-20" v-if="!posts.length || isEnd">
+    <div class="mt-20" v-if="!posts.length">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>

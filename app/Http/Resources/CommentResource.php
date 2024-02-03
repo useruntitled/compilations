@@ -17,19 +17,22 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->user,
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+                'avatar' => $this->user->avatar,
+                'avatar_preview' => $this->user->avatar_preview,
+            ],
+            'level' => $this->level,
             'text' => $this->text,
             'image' => $this->image,
             'image_preview' => $this->image_preview,
             'rep' => $this->rep,
-            'replies' => CommentResource::collection($this->replies),
+
             'replies_count' => $this->replies->count(),
-            'comment' => $this->comment ?? null,
-            'post' => [
-                'id' => $this->post->id,
-                'slug' => $this->post->slug,
-                'title' => $this->post->title,
-            ],
+
+            'comment_id' => $this->comment->id ?? null,
+
             'created_at' => $this->created_at,
             'deleted_at' => $this->deleted_at,
             'timestamp' => (new Carbon($this->created_at))->diffForHumans(),

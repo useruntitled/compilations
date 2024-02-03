@@ -13,7 +13,9 @@
                     <IconFlag
                         class="stroke-2 inline-block me-2 w-5 h-5"
                     ></IconFlag>
-                    <span>Пожаловаться</span>
+                    <button @click="showReportModal = true">
+                        Пожаловаться
+                    </button>
                 </button>
             </div>
         </template>
@@ -39,20 +41,27 @@
             </div>
         </template>
     </Dropdown>
+    <Report
+        :show="showReportModal"
+        @close="showReportModal = !showReportModal"
+    ></Report>
 </template>
 <script setup>
 import { router } from "@inertiajs/vue3";
-import { inject } from "vue";
+import { inject, ref } from "vue";
 import Dropdown from "../Dropdown.vue";
 import IconDots from "../Icons/IconDots.vue";
 import IconFlag from "../Icons/IconFlag.vue";
 import IconPencil from "../Icons/IconPencil.vue";
 import IconTrash from "../Icons/IconTrash.vue";
+import Report from "../Modals/Report.vue";
 
 const props = defineProps({
     user: null,
     post: null,
 });
+
+const showReportModal = ref(false);
 
 const injectedCallModal = inject("callModal");
 

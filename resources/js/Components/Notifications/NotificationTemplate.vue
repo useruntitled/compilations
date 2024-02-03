@@ -17,7 +17,7 @@
                     {{ notification.created_at }}
                 </p>
             </template>
-            <template #icon>
+            <template #icon v-if="hasIcon">
                 <CircledIcon
                     :firstColor="iconFirstColor"
                     :secondColor="iconSecondColor"
@@ -38,6 +38,10 @@ export default {
         notification: null,
         iconFirstColor: null,
         iconSecondColor: null,
+        hasIcon: {
+            required: false,
+            default: true,
+        },
     },
     components: { UserTablet, CircledIcon },
 };

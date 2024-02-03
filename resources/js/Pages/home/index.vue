@@ -8,10 +8,7 @@
             <Post :post="post"></Post>
         </div>
     </InfiniteScrollContainer>
-    <div
-        v-if="(posts.length == 0 && !isLoading) || isEndOfFeed"
-        class="mt-20 mb-20"
-    >
+    <div v-if="posts.length == 0 && !isLoading" class="mt-20 mb-20">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>

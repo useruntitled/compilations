@@ -2,22 +2,48 @@
     <div class="inline-block p-1">
         <div class="inline-block hover:text-orange-700 flex items-center">
             <div class="flex items-center">
-                <div
-                    class="inline-block hover:text-orange-700 hover:bg-orange-100 rounded-full p-1 duration-200"
-                >
+                <div>
                     <Link
                         :href="href ?? ''"
-                        class="fill-none stroke-slate-700 hover:stroke-orange-700"
+                        @mouseenter="isHovered = true"
+                        @mouseleave="isHovered = false"
+                        class="stroke-secondary hover:stroke-orange-700 flex items-center"
+                        :class="{ 'stroke-orange-700': isHovered }"
                     >
-                        <slot></slot>
+                        <div
+                            class="inline-block hover:text-orange-700 hover:bg-orange-100 rounded-full p-1 duration-0"
+                            :class="{
+                                'bg-orange-100': isHovered,
+                                'text-secondary': !isHovered,
+                            }"
+                        >
+                            <div :class="class">
+                                <slot :class="class"></slot>
+                            </div>
+                        </div>
+                        <span class="ms-1">{{ text }}</span>
                     </Link>
                 </div>
-                <span class="ms-1">{{ text }}</span>
             </div>
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { ref } from "vue";
+import { Link } from "@inertiajs/vue3";
+
+const props = defineProps({
+    href: {
+        required: false,
+        type: String,
+    },
+    class: null,
+    text: null,
+});
+
+const isHovered = ref(false);
+</script>
+<!-- <script>
 import { Link } from "@inertiajs/vue3";
 
 export default {
@@ -30,4 +56,4 @@ export default {
     },
     components: { Link },
 };
-</script>
+</script> -->

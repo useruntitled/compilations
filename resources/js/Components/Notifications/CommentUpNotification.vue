@@ -7,8 +7,16 @@
                     iconFirstColor="red-500"
                 >
                     <template #content>
-                        Оценил ваш комментарий
-                        {{ notifications[0].data.comment.text }}
+                        <Link
+                            :href="
+                                route('comment.redirect', [
+                                    notifications[0].data.comment.id,
+                                ])
+                            "
+                        >
+                            Оценил ваш комментарий
+                            {{ notifications[0].data.comment.text }}
+                        </Link>
                     </template>
                     <template #icon>
                         <IconHeart></IconHeart>
@@ -22,8 +30,17 @@
                 >
                     <template #header> И еще {{ count }} чел. </template>
                     <template #content>
-                        Оценили ваш комментарий
-                        {{ notifications[0].data.comment.text }}
+                        <Link
+                            :href="
+                                route(
+                                    'comment.redirect',
+                                    notifications[0].data.comment.id
+                                )
+                            "
+                        >
+                            Оценили ваш комментарий
+                            {{ notifications[0].data.comment.text }}
+                        </Link>
                     </template>
                     <template #icon>
                         <IconHeart></IconHeart>
@@ -43,8 +60,8 @@ export default {
         count: null,
     },
     computed: {
-        solor() {
-            return this.notifications.count == 1;
+        solo() {
+            return this.notifications.length == 1;
         },
     },
     components: { NotificationTemplate, IconHeart },

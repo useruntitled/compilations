@@ -47,10 +47,24 @@ class CommentController extends Controller
             $filename = null;
         }
 
+        if($request->comment_id) {
+            $comment = Comment::find($request->comment_id);
+
+
+                $level = 1;
+                while($comment->comment_id != null) {
+                    $comment = Comment::find($comment->comment_id);
+                    $level++;
+                }
+            } else {
+            $level = 0;
+        }
+
         $comment = Comment::create([
             'post_id' => $request->post_id,
             'comment_id' => $request->comment_id,
             'text' => nl2br($request->text),
+            'level' => $level,
             'user_id' => Auth::user()->id,
             'image' => $filename,
         ]);
@@ -109,9 +123,12 @@ class CommentController extends Controller
     public function getByPostId($post_id)
     {
         $comments = Comment::where('post_id', $post_id)
-        ->where('comment_id', null)
-        ->with(['replies', 'user' => ['roles'], 'reputation'])->latest()->get();
+            ->with(['replies', 'user' => ['roles'], 'reputation', 'comment'])
+            ->latest()
+            ->get();
+    
         return CommentResource::collection($comments);
     }
+
 
 }

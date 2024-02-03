@@ -21,14 +21,10 @@
             @input="handleInput()"
             v-html="text"
         ></div>
-        <div class="flex justify-between mt-5 items-end">
+        <div class="flex justify-between mt-2 ms-[-6px] items-end">
             <div class="p-2 ps-0">
                 <div v-if="!fileWasInserted">
-                    <BtnIcon
-                        @click="filepond.click()"
-                        primaryColor="gray-100"
-                        secondaryColor="neutral-800"
-                        class="text-gray-600"
+                    <BtnIcon @click="filepond.click()" primaryColor="orange-100"
                         ><IconPhoto class="stroke-2 w-5 h-5"></IconPhoto
                     ></BtnIcon>
                     <input
@@ -60,9 +56,18 @@
                     v-if="content?.innerHTML.length > 0 || fileWasInserted"
                     class="ms-2"
                     primaryColor="orange-500"
-                    @click="$emit('sendComment', form)"
-                    >Отправить</FlatPrimaryButton
+                    @click="handleSend()"
                 >
+                    <div v-if="!isLoading">Отправить</div>
+                    <div v-else class="flex items-center justify-center">
+                        <div class="text-orange-500">Отправить</div>
+                        <div class="absolute">
+                            <AnimationLoader
+                                color="text-white"
+                            ></AnimationLoader>
+                        </div>
+                    </div>
+                </FlatPrimaryButton>
             </div>
         </div>
     </div>
@@ -72,6 +77,18 @@ import { ref, computed, inject, watch, reactive, onMounted } from "vue";
 import BtnIcon from "../BtnIcon.vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
+import AnimationLoader from "../Animations/AnimationLoader.vue";
+
+const isLoading = ref(false);
+
+const emit = defineEmits(["sendComment"]);
+
+const handleSend = () => {
+    if (!isLoading.value) {
+        emit("sendComment", form);
+        isLoading.value = true;
+    }
+};
 
 const props = defineProps({
     commentIsCreated: false,
@@ -125,6 +142,7 @@ watch(
     (newValue, oldValue) => {
         if (newValue) {
             setInputValuesToNull();
+            isLoading.value = false;
             fileWasInserted.value = false;
             content.value.innerHTML = "";
             form.content = "";

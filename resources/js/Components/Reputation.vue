@@ -1,6 +1,5 @@
 <template>
     <div class="text-sm flex">
-        <Csrf></Csrf>
         <!-- <p>Up: {{ reputation["up"] }}</p> -->
         <!-- <p>Down: {{ reputation["down"] }}</p> -->
 
@@ -28,11 +27,80 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
+import { ref, inject } from "vue";
 import axios from "axios";
-import AuthModal from "@/Components/Modals/Auth.vue";
 import IconUp from "./Icons/IconUp.vue";
 import IconDown from "./Icons/IconDown.vue";
+
+const callModal = inject("callModal");
+
+const props = defineProps({
+    type: {
+        required: true,
+        default: null,
+    },
+    reputation: null,
+});
+
+const current_action = ref(props.reputation.action ?? null);
+const up = ref(props.reputation.up);
+const down = ref(props.reputation.down);
+const showModal = ref(null);
+
+const setUp = async () => {
+    if (current_action.value != "up") {
+        if (current_action.value != null) {
+            down.value -= 1;
+        }
+        current_action.value = "up";
+        up.value += 1;
+    } else {
+        up.value -= 1;
+        current_action.value = null;
+    }
+
+    await sendAction("up");
+};
+
+const setDown = async () => {
+    if (current_action.value != "down") {
+        if (current_action.value != null) {
+            up.value -= 1;
+        }
+        current_action.value = "down";
+        down.value += 1;
+    } else {
+        down.value -= 1;
+        current_action.value = null;
+    }
+
+    await sendAction("down");
+};
+
+const sendAction = async (action) => {
+    await axios
+        .post(route("new.reputation"), {
+            reputation_to_type: props.type,
+            reputation_to_id: props.reputation.reputation_to_id,
+            action: action,
+        })
+        .catch((res) => {
+            console.log(res);
+            if (res.response.status == 401) callModal("Auth");
+        })
+        .then((res) => {
+            if (res.status == 200 || res.status == 201) {
+                up.value = res.data.up;
+                down.value = res.data.down;
+                current_action.value = res.data.action;
+            }
+            console.log(res);
+        });
+};
+</script>
+<!-- <script>
+
 import Csrf from "@/Pages/shared/csrf.vue";
 export default {
     inject: ["callModal"],
@@ -86,4 +154,4 @@ export default {
     },
     components: { AuthModal, IconUp, IconDown, Csrf },
 };
-</script>
+</script> -->

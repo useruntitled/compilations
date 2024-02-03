@@ -14,9 +14,10 @@
                 v-if="!isLoaded"
                 class="mx-auto stroke-gray-500"
             ></AnimationLoader>
+
             <Comment
                 v-for="comment in comments"
-                v-show="!comment.is_reply"
+                v-show="!comment.comment"
                 :key="comment.id"
                 :comment="comment"
                 @remove="remove(comment.id)"
@@ -46,10 +47,11 @@ const loadComments = async () => {
         .catch((res) => {
             console.log(res);
         })
-        .then((res) => {
+        .then(async (res) => {
             console.log(res);
             isLoaded.value = true;
             comments.value = res.data;
+            await processComments();
         });
 };
 
@@ -84,21 +86,22 @@ const findComment = (id) => {
     return found_comment;
 };
 
-const openRepliesForComment = (comment) => {
+const openRepliesForComment = async (comment_for_search) => {
     function go(comment, id) {
         if (comment.comment) {
+            console.log(comment.comment.id);
             showRepliesArray.value.push(comment.comment.id);
             return go(comment.comment, id);
         }
         return true;
     }
-    go(comment, comment.id);
+    go(comment_for_search, comment_for_search.id);
 };
 
 const prepareToFocusComment = async () => {
     if (hasParam("comment")) {
         const comment = findComment(getParam("comment"));
-        openRepliesForComment(comment);
+        await openRepliesForComment(comment);
         console.log("array", showRepliesArray.value);
         scrollIntoComment.value = comment.id;
     }
@@ -114,22 +117,86 @@ const getParam = (param) => {
     return url.searchParams.get(param);
 };
 
+const processComments = async () => {
+    function findMaxLevel() {
+        let max_level = 0;
+
+        comments.value.forEach((comment) => {
+            if (comment.level > max_level) max_level = comment.level;
+        });
+
+        return max_level;
+    }
+
+    let depth = findMaxLevel();
+
+    const array = comments.value;
+
+    function index(id) {
+        return array.findIndex((comment) => comment.id == id);
+    }
+
+    let to_splice = [];
+
+    while (depth != 0) {
+        array.forEach((comment) => {
+            if (comment.level == depth) {
+                if (!array[index(comment.comment_id)].replies)
+                    array[index(comment.comment_id)].replies = [];
+                array[index(comment.comment_id)].replies.push(comment);
+
+                if (
+                    commentToScrollInto.value.has &&
+                    commentToScrollInto.value.id == comment.id
+                ) {
+                    showRepliesArray.value.push(comment.comment_id);
+                    commentToScrollInto.value.id = comment.comment_id;
+                }
+
+                to_splice.push(comment.id);
+            }
+        });
+        depth -= 1;
+    }
+
+    to_splice.forEach((id) => {
+        array.splice(index(id), 1);
+    });
+
+    comments.value = array;
+    return true;
+};
+
+const commentToScrollInto = ref({
+    has: false,
+    id: null,
+});
+
 onMounted(async () => {
     if (hasParam("comment")) {
         nextTick(() => {
             comments_block.value?.scrollIntoView();
+            nextTick(() => {
+                comments_block.value?.scrollIntoView();
+            });
+            commentToScrollInto.value.has = true;
+            commentToScrollInto.value.id = getParam("comment");
+            scrollIntoComment.value = getParam("comment");
         });
     }
-
     if (hasParam("comments"))
         nextTick(() => {
             comments_block.value?.scrollIntoView();
         });
     await loadComments();
-    prepareToFocusComment();
-    if (hasParam("comments")) comments_block.value.scrollIntoView();
+    if (hasParam("comments"))
+        nextTick(() => {
+            comments_block.value?.scrollIntoView();
+        });
+    // prepareToFocusComment();
+    // if (hasParam("comments")) comments_block.value.scrollIntoView();
     comments.value.forEach((comment) => {
-        if (!comment.is_reply) showRepliesArray.value.unshift(comment.id);
+        if (comment.level == 0) showRepliesArray.value.unshift(comment.id);
     });
 });
 
@@ -197,6 +264,7 @@ provide("changeShowEditingInterfaceValue", changeShowEditingInterfaceValue);
 provide("showEditingInterface", showEditingInterface);
 provide("showRepliesArray", showRepliesArray);
 provide("scrollIntoComment", scrollIntoComment);
+provide("post", props.post);
 </script>
 
 <!-- <script>

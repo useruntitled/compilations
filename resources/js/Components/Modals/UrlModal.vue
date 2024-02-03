@@ -3,7 +3,10 @@
         <component
             :is="modals[calledModal]"
             :show="showModal"
-            @close="closeModal()"
+            @close="
+                showModal = false;
+                closeModal();
+            "
         />
     </div>
 </template>

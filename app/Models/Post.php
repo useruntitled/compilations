@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ActiveScope;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,11 +23,17 @@ class Post extends Model
     protected $appends = [
         'rep','timestamp',
         'is_active', 'image_preview',
+        'has_bookmark',
     ];
 
     protected $with = [
         'user'
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ActiveScope);
+    }
 
     protected function imagePreview(): Attribute
     {
@@ -55,8 +63,16 @@ class Post extends Model
     {
         return $this->hasMany(Bookmark::class);
     }
+
+    protected function hasBookmark(): Attribute
+    {
+        $this->bookmarks ?? $this->bookmarks();
+        return Attribute::make(
+            get: fn() => $this->bookmarks->contains('user_id', auth()->id())
+        );
+    }
     
-    public function timestamp(): Attribute
+    protected function timestamp(): Attribute
     {
         return Attribute::make(
             get: fn() => (new Carbon($this->published_at))->diffForHumans()
@@ -68,5 +84,17 @@ class Post extends Model
         return Attribute::make(
             get: fn() => $this->active == true
         );
+    }
+
+    public function scopeWithFilms(Builder $query, int $count)
+    {
+        return $query->with(['films' => function ($query) use ($count) {
+            $query->limit($count);
+        }]);
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('active', true);
     }
 }

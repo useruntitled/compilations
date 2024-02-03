@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasAuthor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Bookmark extends Model
 {
     use HasFactory;
+    use HasAuthor;
 
     protected $fillable = [
         'post_id', 'user_id',
@@ -18,8 +20,4 @@ class Bookmark extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

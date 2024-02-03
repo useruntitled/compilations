@@ -25,7 +25,7 @@
                 <span
                     class="whitespace-no-wrap overflow-hidden flex flex-col ms-2"
                 >
-                    <p class="whitespace-no-wrap overflow-hidden">
+                    <p class="whitespace-no-wrap overflow-hidden font-medium">
                         {{ page.props.auth.user.name }}
                     </p>
                     <p class="opacity-80">Профиль</p>

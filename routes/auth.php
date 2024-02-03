@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,5 +65,6 @@ Route::middleware('auth')->group(function() {
     Route::get('settings',[SettingsController::class, 'index'])->name('settings');
     Route::get('settings/profile', [SettingsController::class, 'profile'])->name('settings.profile');
     Route::put('me/profile', [RegisteredUserController::class, 'updateProfileInfo'])->name('settings.profile.update');
-    Route::get('notifications',[RegisteredUserController::class, 'notifications'])->name('notifications');
+    Route::get('notifications',[NotificationController::class, 'index'])->name('notifications');
+    Route::get('me/bookmarks', [BookmarkController::class, 'index'])->name('me.bookmarks');
 });

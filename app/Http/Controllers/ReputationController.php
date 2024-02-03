@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewReputationRequest;
 use App\Models\Reputation;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 
 class ReputationController extends Controller
 {
@@ -30,12 +28,16 @@ class ReputationController extends Controller
 
     public function patch($reputation,$request)
     {
-        if($request->action == $reputation->action) Reputation::destroy($reputation->id);
+        if($request->action == $reputation->action) {
+            Reputation::destroy($reputation->id);
+            $reputation['action'] = null;
+            return $reputation;
+        }
         else {
             $reputation['action'] = $request->action;
             $reputation->save();
+            return $reputation;
         }
-        return $reputation;
     }
     
     public function store($request)

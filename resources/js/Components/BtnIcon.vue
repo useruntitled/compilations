@@ -1,39 +1,38 @@
 <template>
     <div class="inline-block p-1">
-        <div
-            class="inline-block flex items-center"
-            :class="'hover:text-' + secondaryColor"
-        >
+        <div class="inline-block hover:text-orange-700 flex items-center">
             <div class="flex items-center">
-                <div
-                    class="inline-block rounded-full p-1 duration-200 hover:cursor-pointer"
-                    :class="
-                        'hover:text-' +
-                        secondaryColor +
-                        ' ' +
-                        'hover:bg-' +
-                        primaryColor
-                    "
-                >
-                    <slot></slot>
+                <div>
+                    <button
+                        @mouseenter="isHovered = true"
+                        @mouseleave="isHovered = false"
+                        class="stroke-secondary hover:stroke-orange-700 flex items-center"
+                        :class="{ 'stroke-orange-700': isHovered }"
+                    >
+                        <div
+                            class="inline-block hover:text-orange-700 hover:bg-orange-100 rounded-full p-1 duration-0"
+                            :class="{
+                                'bg-orange-100': isHovered,
+                                'text-secondary': !isHovered,
+                            }"
+                        >
+                            <div :class="class">
+                                <slot :class="class"></slot>
+                            </div>
+                        </div>
+                        <span class="ms-1">{{ text }}</span>
+                    </button>
                 </div>
-                <span class="ms-1">{{ text }}</span>
             </div>
         </div>
     </div>
 </template>
-<script>
-export default {
-    props: {
-        text: null,
-        primaryColor: {
-            required: false,
-            default: "orange-100",
-        },
-        secondaryColor: {
-            required: false,
-            default: "orange-700",
-        },
-    },
-};
+<script setup>
+import { ref } from "vue";
+const props = defineProps({
+    class: null,
+    text: null,
+});
+
+const isHovered = ref(false);
 </script>

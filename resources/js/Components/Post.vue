@@ -42,10 +42,10 @@
         </div>
         <Link :href="route('post', [post.id, post.slug, 'films'])">
             <p
-                v-if="post.films.length > 3"
+                v-if="post.films_count > 3"
                 class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
             >
-                И еще {{ $tc("film", post.films.length - 2) }} в подборке
+                И еще {{ $tc("film", post.films_count - 2) }} в подборке
             </p></Link
         >
         <footer class="m-0 px-5 py-2 flex items-center">
@@ -59,9 +59,11 @@
                     ><IconComments class="w-5 h-5"></IconComments></LinkIcon
             ></span>
             <span class="me-2 text-slate-700">
-                <LinkIcon :text="0">
-                    <IconBookmark class="w-5 h-5 stroke-3/2"></IconBookmark>
-                </LinkIcon>
+                <Bookmark
+                    :has="post.has_bookmark"
+                    :count="post.bookmarks_count"
+                    :post_id="post.id"
+                ></Bookmark>
             </span>
             <span class="me-2 text-slate-700">
                 <LinkIcon>
@@ -89,6 +91,7 @@ import Film from "./Film.vue";
 import UserTabletWithElementInside from "./UserTabletWithElementInside.vue";
 import DropdownReportOrManage from "./Dropdowns/DropdownReportOrManage.vue";
 import LazyImage from "./LazyImage.vue";
+import Bookmark from "./Bookmark.vue";
 
 export default {
     props: {
@@ -110,6 +113,7 @@ export default {
         UserTabletWithElementInside,
         DropdownReportOrManage,
         LazyImage,
+        Bookmark,
     },
 };
 </script>

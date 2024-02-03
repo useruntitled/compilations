@@ -55,6 +55,11 @@ Route::controller(PostController::class)->group(function(){
     Route::get('new', 'new')->name('new');
 });
 
+Route::get("post/redirect/{id}", function() {
+    $post = Post::find(request()->id);
+    return redirect()->route('post', ['id' => $post->id, 'slug' => $post->slug]);
+});
+
 Route::controller(FilmController::class)->group(function(){
     Route::post('film','add')->name('film.store')->middleware('auth');
     Route::patch('film','patch')->name('film.patch')->middleware('admin');

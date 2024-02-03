@@ -1,8 +1,13 @@
 <template>
-    <IconLoader class="animate-spin text-kp"></IconLoader>
+    <IconLoader class="animate-spin" :class="color"></IconLoader>
 </template>
-<script>
+<script setup>
 import IconLoader from "../Icons/IconLoader.vue";
 
-export default { components: { IconLoader } };
+const props = defineProps({
+    color: {
+        type: String,
+        default: "text-kp",
+    },
+});
 </script>
