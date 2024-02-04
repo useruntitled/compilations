@@ -37,7 +37,7 @@ return new class extends Migration
     {
         $service = new ImageService;
         $users = User::all();
-        foreach($users as $u) {
+        foreach ($users as $u) {
             $service->delete($u->image);
             $service->delete($u->background_image);
         }

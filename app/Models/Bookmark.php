@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bookmark extends Model
 {
-    use HasFactory;
     use HasAuthor;
+    use HasFactory;
 
     protected $fillable = [
         'post_id', 'user_id',
@@ -19,5 +19,4 @@ class Bookmark extends Model
     {
         return $this->belongsTo(Post::class);
     }
-
 }

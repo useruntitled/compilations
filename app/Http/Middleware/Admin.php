@@ -16,9 +16,10 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user() && Auth::user()->isAdmin){
+        if (Auth::user() && Auth::user()->isAdmin) {
             return $next($request);
         }
+
         return redirect(route('home'))->with(403);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Http\Resources\UserResource;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -55,7 +54,7 @@ class PostUpNotification extends Notification
             'post' => $this->reputation->reputation_to,
             'object_id' => $this->reputation->reputation_to->id,
             'id' => $this->reputation->id,
-            'link_post' => route('post',$this->reputation->reputation_to->id),
+            'link_post' => route('post', $this->reputation->reputation_to->id),
             'byUser' => new UserResource($this->reputation->user),
         ];
     }

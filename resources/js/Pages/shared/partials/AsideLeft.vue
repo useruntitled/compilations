@@ -1,14 +1,15 @@
 <template>
     <div
         class="h-full mx-auto w-full text-center sticky"
-        style="height: calc(100vh - 50.6px); top: 50.6px"
+        style="height: calc(100vh - 58px); top: 58px"
     >
         <div class="px-2.5 mt-0 py-5 text-start">
-            <div
-                class="w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white"
+            <Link
+                :href="route('home')"
+                class="appearance-none block w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white"
                 :class="{ 'bg-white': isPopular }"
             >
-                <Link :href="route('home')" class="flex items-center py-[5px]">
+                <div class="flex items-center py-[5px]">
                     <span class="me-2 inline-block">
                         <IconFlame
                             class="w-[24px] text-secondary"
@@ -18,13 +19,14 @@
                         ></IconFlame>
                     </span>
                     <span class="text-lgg font-regular">Популярное</span>
-                </Link>
-            </div>
-            <div
-                class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
+                </div>
+            </Link>
+            <Link
+                :href="route('new')"
+                class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
                 :class="{ 'bg-white': isNew }"
             >
-                <Link :href="route('new')" class="flex items-center py-[5px]">
+                <div class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconClock
                             class="w-[24px] stroke-[2.2]"
@@ -35,18 +37,16 @@
                         ></IconClock
                     ></span>
                     <span class="text-lgg font-regular">Свежее</span>
-                </Link>
-            </div>
-            <div
-                class="w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
+                </div>
+            </Link>
+            <AuthLink
+                :href="route('me.bookmarks')"
+                class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
                 :class="{
                     'bg-white ': isBookmarks,
                 }"
             >
-                <Link
-                    :href="route('me.bookmarks')"
-                    class="flex items-center py-[5px]"
-                >
+                <div class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
                         ><IconBookmark
                             :class="{
@@ -57,8 +57,8 @@
                         ></IconBookmark
                     ></span>
                     <span class="text-lgg font-regular">Закладки</span>
-                </Link>
-            </div>
+                </div>
+            </AuthLink>
             <div class="w-full mt-10">
                 <PrimaryButton
                     @click="callModal('Editor')"
@@ -76,6 +76,7 @@ import IconBookmark from "@/Components/Icons/IconBookmark.vue";
 import IconClock from "@/Components/Icons/IconClock.vue";
 import IconFlame from "@/Components/Icons/IconFlame.vue";
 import { usePage } from "@inertiajs/vue3";
+import AuthLink from "@/Components/AuthLink.vue";
 
 const callModal = inject("callModal");
 

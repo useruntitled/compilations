@@ -8,7 +8,7 @@ use App\Models\Comment;
 
 class CommentObserver
 {
-     /**
+    /**
      * Handle the Post "created" event.
      */
     public function created(Comment $comment): void
@@ -47,6 +47,7 @@ class CommentObserver
     {
         event(new CommentDeletedEvent($comment));
     }
+
     public function retrieved(Comment $comment)
     {
         //

@@ -74,26 +74,26 @@ class RegisteredUserController extends Controller
 
     public function updateProfileInfo(Request $request)
     {
-       $request->validate([
-        'name' => 'required',
-        'description' => 'required',
-       ]);
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+        ]);
 
-       $user = Auth::user();
+        $user = Auth::user();
 
-       $user->name = $request->name;
-       $user->description = $request->description;
-       $user->update();
-       
-       return $user;
+        $user->name = $request->name;
+        $user->description = $request->description;
+        $user->update();
+
+        return $user;
     }
 
     public function uploadAvatar(Request $request, ImageService $service)
     {
         $user = Auth::user();
 
-        if($request->hasFile('image')) {
-            
+        if ($request->hasFile('image')) {
+
             $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
             $user->avatar = $filename;
             $user->update();
@@ -107,8 +107,7 @@ class RegisteredUserController extends Controller
     {
         $user = Auth::user();
 
-        
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $filename = $service->uploadAndDelete($request->file('image'), $user->background_image);
             $user->background_image = $filename;
             $user->update();

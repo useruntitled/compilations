@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('films', function (Blueprint $table) {
-           $table->id()->require(); // kp_id, no auto-filling
+            $table->id()->require(); // kp_id, no auto-filling
 
             $table->string('type')->nullable();
             $table->boolean('serial')->nullable();
@@ -23,8 +23,6 @@ return new class extends Migration
             $table->string('poster_url')->nullable();
             $table->string('poster_url_preview')->nullable();
             $table->string('logo_url')->nullable();
-
-
 
             $table->string('slogan')->nullable();
             $table->longText('description')->nullable();

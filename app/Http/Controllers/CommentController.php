@@ -21,12 +21,13 @@ class CommentController extends Controller
     public function index($id)
     {
         $comment = Comment::with('post')->findOrFail($id);
+
         return redirect()
-        ->route('post', [
-            'id' => $comment->post->id,
-            'slug' => $comment->post->slug,
-            'comment' => $comment->id
-        ]);
+            ->route('post', [
+                'id' => $comment->post->id,
+                'slug' => $comment->post->slug,
+                'comment' => $comment->id,
+            ]);
     }
 
     public function create(Request $request)
@@ -37,26 +38,27 @@ class CommentController extends Controller
             'post_id' => 'required',
         ]);
 
-        return Response::json($this->store($request),200);
+        return Response::json($this->store($request), 200);
 
     }
-    public function store($request){
-        if($request->hasFile('image')) {
+
+    public function store($request)
+    {
+        if ($request->hasFile('image')) {
             $filename = $this->service->uploadAndDelete($request->file('image'), null);
         } else {
             $filename = null;
         }
 
-        if($request->comment_id) {
+        if ($request->comment_id) {
             $comment = Comment::find($request->comment_id);
 
-
-                $level = 1;
-                while($comment->comment_id != null) {
-                    $comment = Comment::find($comment->comment_id);
-                    $level++;
-                }
-            } else {
+            $level = 1;
+            while ($comment->comment_id != null) {
+                $comment = Comment::find($comment->comment_id);
+                $level++;
+            }
+        } else {
             $level = 0;
         }
 
@@ -68,14 +70,16 @@ class CommentController extends Controller
             'user_id' => Auth::user()->id,
             'image' => $filename,
         ]);
-        
 
-        if($comment != null){
+        if ($comment != null) {
             $comment->load(['reputation']);
+
             return new CommentResource($comment);
         }
+
         return 'Error in store method';
     }
+
     public function delete(Request $request)
     {
         $request->validate([
@@ -83,17 +87,19 @@ class CommentController extends Controller
         ]);
 
         $comment = Comment::find($request->id);
-        
-        if($comment->replies->count() == 0){
+
+        if ($comment->replies->count() == 0) {
             $comment->forceDelete();
-            return Response::json(null,200);
+
+            return Response::json(null, 200);
         }
 
         $comment->delete();
 
-        return Response::json($comment,200);
+        return Response::json($comment, 200);
 
     }
+
     public function update(Request $request)
     {
         $validated = $request->validate([
@@ -103,32 +109,29 @@ class CommentController extends Controller
 
         $comment = Comment::find($validated['id']);
 
-
-        if($request->hasFile('image') && $request->hasImage == 'true') {
+        if ($request->hasFile('image') && $request->hasImage == 'true') {
             $filename = $this->service->uploadAndDelete($request->file('image'), null);
             $comment->image = $filename;
         }
-        
-        if($request->hasImage == 'false') {
+
+        if ($request->hasImage == 'false') {
             $comment->image = null;
             $this->service->delete($comment->image);
         }
 
-        
         $comment->text = nl2br($validated['text']);
         $comment->update();
+
         return $comment;
     }
-    
+
     public function getByPostId($post_id)
     {
         $comments = Comment::where('post_id', $post_id)
             ->with(['replies', 'user' => ['roles'], 'reputation', 'comment'])
             ->latest()
             ->get();
-    
+
         return CommentResource::collection($comments);
     }
-
-
 }

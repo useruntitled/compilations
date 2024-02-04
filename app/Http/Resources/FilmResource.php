@@ -16,6 +16,7 @@ class FilmResource extends JsonResource
     {
         $array = parent::toArray($request);
         $array['genres'] = $this->genres;
+
         return $array;
     }
 }

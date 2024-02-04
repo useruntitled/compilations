@@ -13,7 +13,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-template">
                 <AsideLeft></AsideLeft>
-                <div class="mx-auto mt-2 p-5 rounded-xl w-11/12">
+                <div class="mx-auto mt-2 p-5 rounded-xl w-11/12 min-h-screen">
                     <slot></slot>
                 </div>
                 <AsideRight></AsideRight>
@@ -35,7 +35,7 @@ import AsideLeft from "./partials/AsideLeft.vue";
 import AsideRight from "./partials/AsideRight.vue";
 import HeaderLayout from "./partials/HeaderLayout.vue";
 import UrlModal from "@/Components/Modals/UrlModal.vue";
-import { reactive, ref, provide } from "vue";
+import { reactive, ref, provide, computed } from "vue";
 
 const props = defineProps({
     title: "",

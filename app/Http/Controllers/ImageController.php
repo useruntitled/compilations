@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\ImageService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
@@ -21,14 +20,14 @@ class ImageController extends Controller
      * Show image.
      * Global storage path.
      */
-    public function index($filename,$scale)
+    public function index($filename, $scale)
     {
         return $this->service->get($filename, $scale);
     }
 
     public function upload($file)
     {
-        
+
     }
 
     // public static function crop($filename, $dimensions)
@@ -39,7 +38,6 @@ class ImageController extends Controller
     //     // $filename = str_replace('\\png','',$filename);
 
     //     $path = public_path('storage\\' . $filename);
-
 
     //     $exts = ['png','jpeg','jpg'];
     //     foreach($exts as $ext){
@@ -64,10 +62,7 @@ class ImageController extends Controller
     //         return response(Cache::get($cacheKey))->header('Content-Type', 'image/' . $encoding);
     //     }
 
-
-
     //     // Получаем полный путь к изображению
-        
 
     //     // Обрезаем изображение с помощью Intervention Image
     //     $image = Image::make($path)->fit($width, $height);

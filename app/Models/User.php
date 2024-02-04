@@ -11,10 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
@@ -26,15 +24,14 @@ class User extends Authenticatable
 
     // const ADMIN = 3;
 
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $appends = [
-        'is_creator','is_admin',
-        'avatar_preview', 'background_image_preview'
+        'is_creator', 'is_admin',
+        'avatar_preview', 'background_image_preview',
     ];
 
     protected $fillable = [
@@ -44,7 +41,7 @@ class User extends Authenticatable
         'username',
         'avatar',
         'background_image',
-        'description'
+        'description',
     ];
 
     /**
@@ -67,28 +64,30 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
     protected function isAdmin(): Attribute
     {
         $this->roles ?? $this->roles();
+
         return Attribute::make(
-            get: fn() => $this->roles->contains(fn($r) => $r->role == 'admin')
+            get: fn () => $this->roles->contains(fn ($r) => $r->role == 'admin')
         );
     }
 
     protected function isCreator(): Attribute
     {
         $this->roles ?? $this->roles();
+
         return Attribute::make(
-            get: fn() =>  $this->roles->contains(fn($r) => $r->role == 'creator')
+            get: fn () => $this->roles->contains(fn ($r) => $r->role == 'creator')
         );
     }
 
     protected function avatarPreview(): Attribute
     {
-        list($name, $ext) = explode('.', $this->avatar);
+        [$name, $ext] = explode('.', $this->avatar);
+
         return Attribute::make(
-            get: fn() => $name . '__preview' . ".$ext"
+            get: fn () => $name.'__preview'.".$ext"
         );
     }
 
@@ -96,12 +95,13 @@ class User extends Authenticatable
     {
         if ($this->background_image == null) {
             return Attribute::make(
-                get: fn() => null
+                get: fn () => null
             );
         }
-        list($name, $ext) = explode('.', $this->background_image);
+        [$name, $ext] = explode('.', $this->background_image);
+
         return Attribute::make(
-            get: fn() => $name . '__preview' . ".$ext"
+            get: fn () => $name.'__preview'.".$ext"
         );
     }
 
@@ -118,7 +118,7 @@ class User extends Authenticatable
     //                     }
     //                 }
     //             }
-                
+
     //             return "avatars." . "Default";
     //             }
     //     );
@@ -126,12 +126,12 @@ class User extends Authenticatable
 
     public function markAsReadNotifications()
     {
-        foreach($this->notifications as $n){
+        foreach ($this->notifications as $n) {
             $n->markAsRead();
         }
+
         return true;
     }
-
 
     public function countUnreadNotifications()
     {
@@ -141,11 +141,12 @@ class User extends Authenticatable
     protected function canCreatePosts(): Attribute
     {
         return Attribute::make(
-            get: function(){
-                if($this->roles()->where('role','creator')->exists()){
-            return True;
-            }
-            return False;
+            get: function () {
+                if ($this->roles()->where('role', 'creator')->exists()) {
+                    return true;
+                }
+
+                return false;
             }
         );
     }
@@ -154,7 +155,6 @@ class User extends Authenticatable
     {
         return $service->calculateUserKarma($this);
     }
-
 
     public function roles()
     {

@@ -50,10 +50,11 @@ class PostObserver
         //
         // $post->reputation = $post->getReputation();
     }
+
     public function retrieved(Post $post)
     {
         // $user->isAdmin = $user->isAdmin();
         // $post->reputation = $post->getReputation();
-        
+
     }
 }

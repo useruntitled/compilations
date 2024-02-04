@@ -35,7 +35,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         ReputationPutEvent::class => [
-                ReputationPutListener::class,
+            ReputationPutListener::class,
         ],
         ReputationDeletedEvent::class => [
             ReputationDeletedListener::class,
@@ -53,6 +53,7 @@ class EventServiceProvider extends ServiceProvider
         //     ReplyDeletedListener::class,
         // ],
     ];
+
     protected $observers = [
         Post::class => [PostObserver::class],
         User::class => [UserObserver::class],

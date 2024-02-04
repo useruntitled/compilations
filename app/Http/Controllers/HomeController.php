@@ -3,34 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Services\PostService;
+use Request;
+
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request, PostService $service)
     {
-        // $posts = Post::query()->latest('id')->limit(20)->where('active',true)->get();
-        // return inertia('home/index',[
-        //     'posts' => PostResource::collection($posts),
-        // ]);
+        // $posts = Post::with([
+        //     'user' => ['roles'],
+        //     'reputation' => function($query) {
+        //         $query->where('action', 'up');
+        //     },
+        //     'films'
+        // ])
+        // ->withCount(['comments', 'bookmarks', 'films'])
+        // ->withCount('reputation')
+        // ->orderByDesc('reputation_count')
+        // ->orderByDesc('comments_count')
+        // ->take(5)
+        // ->get();
 
+        $posts = $service->getPopular(1);
 
-        $posts = Post::with(['user' => ['roles'],
-            'reputation' => function(Builder $query) {
-                $query->where('action', 'up');
-            },
-            'films'
-        ])
-            ->withCount(['comments', 'bookmarks', 'films'])
-            ->withCount('reputation')
-            ->orderByDesc('reputation_count')
-            ->orderByDesc('comments_count')
-            ->take(5)
-            ->get(); 
-        
-       
-
-        // $posts->loadCount('comments','films');
-        return inertia('home/index',[
+        return inertia('home/index', [
             'posts' => $posts,
         ]);
     }

@@ -5,18 +5,16 @@ namespace App\Jobs;
 use App\Events\NotificationModified;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class DeleteNotificationAndCallEventJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
     protected $notifiable;
+
     protected $object;
 
     /**

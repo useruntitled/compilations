@@ -17,15 +17,14 @@ class NotificationBumpResource extends JsonResource
     public function toArray(Request $request): array
     {
         $user = User::find($this->data['byUser']['id']);
-        
+
         return [
             'notification_type' => $this->data['notification_type'],
             'id' => $this->data['id'],
-            'type' => str_replace('App\\Models\\','',$this->data['type']),
+            'type' => str_replace('App\\Models\\', '', $this->data['type']),
             'toUser' => new UserResource(Auth::user()),
             'reactionTo' => $this->data['reactionTo'],
             'byUser' => new UserResource($user),
         ];
     }
-  
 }

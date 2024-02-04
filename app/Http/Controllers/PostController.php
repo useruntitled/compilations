@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Film;
 use App\Models\Post;
 use App\Services\ImageService;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -14,13 +13,18 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    const PER_PAGE =5;
+    protected $service;
+
+    public function __construct(PostService $serivce)
+    {
+        $this->service = $serivce;
+    }
 
     public function index($id, $slug)
     {
         $post = Post::with([
             'user' => ['roles'],
-            'films' => ['genres']
+            'films' => ['genres'],
         ])->withCount(['comments', 'bookmarks'])->findOrFail($id);
 
         return inertia('post', [
@@ -32,7 +36,7 @@ class PostController extends Controller
     {
         $posts = $this->getNew(1);
 
-        return inertia('home/New',[
+        return inertia('home/New', [
             'posts' => $posts,
         ]);
     }
@@ -40,16 +44,15 @@ class PostController extends Controller
     public function getNew($page)
     {
         $posts = Post::with(['user' => ['roles'], 'reputation', 'films'])->published()
-        ->withCount(['comments', 'bookmarks', 'films'])
-        ->latest()
-        ->skip(($page - 1) * SELF::PER_PAGE)
-        ->take(SELF::PER_PAGE)
-        ->get();
-
+            ->withCount(['comments', 'bookmarks', 'films'])
+            ->latest()
+            ->skip(($page - 1) * config('app')['posts.per.page'])
+            ->take(config('app')['posts.per.page'])
+            ->get();
 
         $result = [];
 
-        for($i = 0; $i < $posts->count(); $i++) {
+        for ($i = 0; $i < $posts->count(); $i++) {
             $result[chr(97 + $i)] = $posts[$i];
         }
 
@@ -59,67 +62,38 @@ class PostController extends Controller
     public function getRandom($page)
     {
         $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
-        ->where('active', 1)
-        ->withCount(['comments', 'bookmarks'])
-        ->inRandomOrder()
-        ->skip(($page - 1) * SELF::PER_PAGE)
-        ->take(SELF::PER_PAGE)
-        ->get();
+            ->where('active', 1)
+            ->withCount(['comments', 'bookmarks'])
+            ->inRandomOrder()
+            ->skip(($page - 1) * config('app')['posts.per.page'])
+            ->take(config('app')['posts.per.page'])
+            ->get();
 
         return $posts;
     }
 
-    public function popular($page)
+    public function getPopular($page)
     {
-        $posts = Post::with(['user' => ['roles'],
-         'films' => function ($query) {
-            $query->take(3);
-         }, 
-            'reputation' => function(Builder $query) {
-                $query->where('action', 'up');
-            }
-        ])
-            ->withCount(['comments', 'bookmarks', 'reputation'])
-            ->orderByDesc('reputation_count')
-            ->orderByDesc('comments_count')
-            ->orderByDesc('bookmarks_count')
-            ->skip(($page - 1) * SELF::PER_PAGE)
-            ->take(SELF::PER_PAGE)
-            ->get(); 
+        $posts = $this->service->getPopular($page);
 
         $result = [];
 
-        for($i = 0; $i < $posts->count(); $i++) {
+        for ($i = 0; $i < $posts->count(); $i++) {
             $result[chr(97 + $i)] = $posts[$i];
         }
 
         return $posts;
     }
+
     public function create()
     {
         return inertia('create/index');
     }
 
-    public function finish($id)
-    {
-        $post = Post::where('id', $id)->with(['films', 'user', 'tags'])->first();
-        if ($post != null) {
-            if ($post->user->id != Auth::user()->id) {
-                abort(403);
-            }
-            foreach ($post->films as $film) {
-                $film->load('genres');
-            }
-            return inertia('create/finish', [
-                'post' => $post,
-            ]);
-        }
-        abort(404);
-    }
-
     public function get(int $id)
     {
         $post = Post::with(['user' => ['roles'], 'films'])->findOrFail($id);
+
         return $post;
     }
 
@@ -130,22 +104,8 @@ class PostController extends Controller
             'title' => $request->title,
             'description' => $request->description,
         ]);
+
         return Response::json($post->load('user'), 200);
-
-
-        // $post = Post::create([
-        //     'user_id' => Auth::user()->id,
-        //     'title' => $request->title,
-        //     'slug' => Str::slug($request->title),
-        //     'description' => nl2br($request->description),
-        // ]);
-        // $path = $post->id . '.png';
-        // $image = $request->file('image')->storeAs(null,$path,'public');
-
-        // if($post == null){
-        //     return Response::json('',500);
-        // }
-        // return Response::json($post,200);
     }
 
     public function update(Request $request)
@@ -153,7 +113,6 @@ class PostController extends Controller
         $post = Post::with('films')->findOrFail($request->id);
 
         $films = $request->films;
-
 
         if ($films != null && count($films) > 0) {
             if (count($post->films) > 0) {
@@ -172,13 +131,13 @@ class PostController extends Controller
             }
         }
 
-
         $post->update([
             'title' => $request->title,
             'description' => nl2br($request->description),
             'slug' => Str::slug($request->title),
         ]);
         $post->save();
+
         return Response::json($post, 200);
     }
 
@@ -186,12 +145,11 @@ class PostController extends Controller
     {
         $post = Post::find($request->id);
 
-        if (!$post->active) {
+        if (! $post->active) {
             $post->active = true;
             $post->published_at = now();
             $post->save();
         }
-
 
         return route('post', [$post->id, $post->slug]);
     }
@@ -211,8 +169,10 @@ class PostController extends Controller
             });
             $post->films()->attach($film->id);
             $post->save();
+
             return Response::json($film, 200);
         }
+
         return Response::json('', 404);
     }
 
@@ -223,14 +183,17 @@ class PostController extends Controller
             $film = Film::find($request->id);
             $post->films()->detach($film->id);
             $post->save();
+
             return Response::json('', 200);
         }
+
         return Response::json('', 404);
     }
 
     public function edit($id, $slug)
     {
         $draft = Post::where('id', $id)->where('user_id', Auth::user()->id)->firstOrFail();
+
         return inertia('create/index', [
             'post' => $draft->load('films'),
         ]);
@@ -241,8 +204,10 @@ class PostController extends Controller
         $post = Post::find($request->id);
         if ($post->user->id == Auth::user()->id) {
             $post->delete();
+
             return Response::json('', 202);
         }
+
         return Response::json('', 403);
     }
 
@@ -250,10 +215,10 @@ class PostController extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'image' => 'required'
+            'image' => 'required',
         ]);
 
-        if (!$request->hasFile('image')) {
+        if (! $request->hasFile('image')) {
             abort(422);
         }
 
@@ -264,7 +229,7 @@ class PostController extends Controller
 
         $post->image = $filename;
         $post->update();
+
         return Response::json($filename, 200);
     }
-
 }

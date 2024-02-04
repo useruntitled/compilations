@@ -7,7 +7,6 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -24,7 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $role_admin = Role::factory()->create([
-            'role' => 'admin'
+            'role' => 'admin',
         ]);
         Role::factory()->create(['role' => 'user']);
         $role_creator = Role::factory()->create(['role' => 'creator']);
@@ -44,10 +43,10 @@ class DatabaseSeeder extends Seeder
             'avatar' => 'Default.jpg',
         ]);
         $this->command->info('Admin user is created:');
-        $admin->roles()->attach([$role_admin->id,$role_creator->id]);
+        $admin->roles()->attach([$role_admin->id, $role_creator->id]);
         $admin->save();
-        $this->command->info('Email: ' . $admin->email);
-        $this->command->info('Password: ' . $password);
+        $this->command->info('Email: '.$admin->email);
+        $this->command->info('Password: '.$password);
 
     }
 }

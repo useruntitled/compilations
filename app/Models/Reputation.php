@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Reputation extends Model
 {
-    use HasFactory, HasAuthor;
+    use HasAuthor, HasFactory;
 
     protected $guarded = [];
 
@@ -38,5 +38,4 @@ class Reputation extends Model
     {
         return strtolower($this->action) == 'up';
     }
-
 }

@@ -2,8 +2,6 @@
 
 namespace App\Observers;
 
-use App\Http\Controllers\KarmaController;
-use App\Http\Resources\UserResource;
 use App\Jobs\AddUserRoleToNewUserJob;
 use App\Models\Role;
 use App\Models\User;
@@ -25,7 +23,7 @@ class UserObserver
      */
     public function updated(User $user): void
     {
-        
+
     }
 
     /**
@@ -51,9 +49,10 @@ class UserObserver
     {
         //
     }
+
     public function retrieved(User $user)
     {
-        
+
         // $user->mergeCasts(['isAdmin' => 'boolean']);
         // $user->isAdmin = $user->isAdmin;
     }

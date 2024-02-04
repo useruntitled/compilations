@@ -28,10 +28,11 @@
     </div>
 </template>
 <script setup>
-import { ref, inject } from "vue";
+import { ref, inject, computed } from "vue";
 import axios from "axios";
 import IconUp from "./Icons/IconUp.vue";
 import IconDown from "./Icons/IconDown.vue";
+import { usePage } from "@inertiajs/vue3";
 
 const callModal = inject("callModal");
 
@@ -43,12 +44,24 @@ const props = defineProps({
     reputation: null,
 });
 
+const page = usePage();
+
+const access = () => {
+    if (page.props.auth.check == false) {
+        callModal("Auth");
+        return false;
+    }
+    return true;
+};
+
 const current_action = ref(props.reputation.action ?? null);
 const up = ref(props.reputation.up);
 const down = ref(props.reputation.down);
 const showModal = ref(null);
 
 const setUp = async () => {
+    if (!access()) return;
+
     if (current_action.value != "up") {
         if (current_action.value != null) {
             down.value -= 1;
@@ -64,6 +77,7 @@ const setUp = async () => {
 };
 
 const setDown = async () => {
+    if (!access()) return;
     if (current_action.value != "down") {
         if (current_action.value != null) {
             up.value -= 1;

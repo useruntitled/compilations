@@ -12,7 +12,7 @@ class ReputationPutEvent implements ShouldQueue
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $reputation;
-    
+
     /**
      * Create a new event instance.
      */
@@ -20,6 +20,4 @@ class ReputationPutEvent implements ShouldQueue
     {
         $this->reputation = $reputation;
     }
-
-    
 }

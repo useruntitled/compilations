@@ -6,7 +6,6 @@ use App\Http\Resources\UserResource;
 use App\Models\CommentReputation;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -14,7 +13,9 @@ use Illuminate\Notifications\Notification;
 class CrutchNotification extends Notification
 {
     use Queueable;
+
     public $message;
+
     /**
      * Create a new notification instance.
      */

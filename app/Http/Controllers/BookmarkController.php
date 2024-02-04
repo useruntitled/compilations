@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookmark;
-use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,27 +19,27 @@ class BookmarkController extends Controller
 
         $posts = [];
 
-        foreach($bookmarks as $bookmark) {
+        foreach ($bookmarks as $bookmark) {
             $bookmark->post->loadCount(['comments', 'bookmarks']);
             $posts[] = $bookmark->post;
         }
 
         return inertia('Auth/Bookmarks', [
-            'posts' => $posts
+            'posts' => $posts,
         ]);
     }
 
     public function getMyBookmarkedPosts($page)
     {
         $bookmarks = Bookmark::with(['post.user', 'post.films'])
-        ->where('user_id', Auth::id())
-        ->skip(($page - 1) * self::PER_PAGE)
-        ->take(self::PER_PAGE)
-        ->get();
+            ->where('user_id', Auth::id())
+            ->skip(($page - 1) * self::PER_PAGE)
+            ->take(self::PER_PAGE)
+            ->get();
 
         $posts = [];
 
-        foreach($bookmarks as $bookmark) {
+        foreach ($bookmarks as $bookmark) {
             $bookmark->post->loadCount(['comments', 'bookmarks']);
             $posts[] = $bookmark->post;
         }
@@ -62,7 +61,7 @@ class BookmarkController extends Controller
 
         $bookmark = Bookmark::where('post_id', $request->post_id)->where('user_id', Auth::id())->first();
 
-        if($bookmark) {
+        if ($bookmark) {
             $bookmark->delete();
             $bookmark = null;
         } else {
@@ -71,6 +70,7 @@ class BookmarkController extends Controller
                 'user_id' => Auth::id(),
             ]);
         }
+
         return $bookmark;
     }
 

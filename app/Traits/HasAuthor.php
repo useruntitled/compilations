@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use App\Models\User;
@@ -11,6 +12,3 @@ trait HasAuthor
         return $this->belongsTo(User::class);
     }
 }
-
-
-?>

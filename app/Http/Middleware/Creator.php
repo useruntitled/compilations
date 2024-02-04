@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
 
 class Creator
 {
@@ -16,9 +15,10 @@ class Creator
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->isCreator){
+        if (Auth::user()->isCreator) {
             return $next($request);
         }
-        return to_route("karma.forbidden");
+
+        return to_route('karma.forbidden');
     }
 }

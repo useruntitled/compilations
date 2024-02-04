@@ -2,15 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Actions\SendPostWasCommentedNotification;
 use App\Events\CommentCreatedEvent;
-use App\Actions\SendReplyNotification;
 use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class CommentCreatedListener implements ShouldQueue
 {
-
     protected $service;
 
     /**

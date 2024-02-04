@@ -13,21 +13,22 @@ use Illuminate\Support\Carbon;
 
 class Post extends Model
 {
-    use HasFactory, HasReputation, HasAuthor;
+    use HasAuthor, HasFactory, HasReputation;
 
     protected $fillable = [
-        'user_id','title',
-        'description','active',
-        'slug', 'image'
+        'user_id', 'title',
+        'description', 'active',
+        'slug', 'image',
     ];
+
     protected $appends = [
-        'rep','timestamp',
+        'rep', 'timestamp',
         'is_active', 'image_preview',
         'has_bookmark',
     ];
 
     protected $with = [
-        'user'
+        'user',
     ];
 
     protected static function booted(): void
@@ -38,11 +39,12 @@ class Post extends Model
     protected function imagePreview(): Attribute
     {
         if ($this->image == null) {
-            return Attribute::make(get: fn() => null);
+            return Attribute::make(get: fn () => null);
         }
-        list($name, $ext) = explode('.', $this->image);
+        [$name, $ext] = explode('.', $this->image);
+
         return Attribute::make(
-            get: fn() => $name . '__preview' . ".$ext"
+            get: fn () => $name.'__preview'.".$ext"
         );
     }
 
@@ -50,10 +52,12 @@ class Post extends Model
     {
         return $this->belongsToMany(Film::class)->orderByPivot('id', 'asc');
     }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
     }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -67,22 +71,23 @@ class Post extends Model
     protected function hasBookmark(): Attribute
     {
         $this->bookmarks ?? $this->bookmarks();
+
         return Attribute::make(
-            get: fn() => $this->bookmarks->contains('user_id', auth()->id())
+            get: fn () => $this->bookmarks->contains('user_id', auth()->id())
         );
     }
-    
+
     protected function timestamp(): Attribute
     {
         return Attribute::make(
-            get: fn() => (new Carbon($this->published_at))->diffForHumans()
+            get: fn () => (new Carbon($this->published_at))->diffForHumans()
         );
     }
 
     protected function isActive(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->active == true
+            get: fn () => $this->active == true
         );
     }
 

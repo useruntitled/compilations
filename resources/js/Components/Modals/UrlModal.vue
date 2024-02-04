@@ -14,7 +14,7 @@
 import { router, usePage } from "@inertiajs/vue3";
 import Auth from "./Auth.vue";
 import Editor from "./Editor.vue";
-import { ref, computed, watch, onMounted, inject } from "vue";
+import { ref, computed, watch, onMounted, inject, nextTick } from "vue";
 const props = defineProps({
     modalIsClosed: Boolean,
     callModal: {
@@ -35,6 +35,7 @@ const page = usePage();
 
 onMounted(() => {
     console.log(url.value);
+
     if (calledModalByQuery.value != null) {
         callModalFunc(calledModalByQuery.value);
     }
@@ -96,7 +97,7 @@ const showModalFunc = (modal) => {
 };
 
 const callModalFunc = (modal) => {
-    console.log("Call modal");
+    console.log("Call modal", modal);
     console.log(url.value);
     if (!page.props.auth.check) {
         showModalFunc("Auth");

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use App\Services\KarmaService;
-use Illuminate\Support\Facades\Auth;
 
 class PersonalPageController extends Controller
 {
@@ -40,16 +38,17 @@ class PersonalPageController extends Controller
     public function getPosts($user_id, $page)
     {
         $posts = Post::query()->with([
-                    'reputation',
-                    'user' => ['roles'],
-                    'films' => ['genres'],
-                ])->where('user_id',$user_id)
-                ->latest()
-                ->withCount('comments')
-                ->skip(($page - 1) * self::PER_PAGE)
-                ->take(self::PER_PAGE)
-                ->get();
-        $posts = $posts->filter(fn($p) => $p->isActive);
+            'reputation',
+            'user' => ['roles'],
+            'films' => ['genres'],
+        ])->where('user_id', $user_id)
+            ->latest()
+            ->withCount('comments')
+            ->skip(($page - 1) * self::PER_PAGE)
+            ->take(self::PER_PAGE)
+            ->get();
+        $posts = $posts->filter(fn ($p) => $p->isActive);
+
         return PostResource::collection($posts);
     }
 
@@ -57,7 +56,8 @@ class PersonalPageController extends Controller
     {
         $user = User::query()->findOrFail($user_id);
         $comments = $this->getComments($user_id, 1);
-        return inertia('Profile/Comments',[
+
+        return inertia('Profile/Comments', [
             'section' => 2,
             'karma' => $this->service->calculateUserKarma($user),
             'user' => $user,
@@ -71,6 +71,7 @@ class PersonalPageController extends Controller
             ->skip(($page - 1) * self::PER_PAGE)
             ->take(self::PER_PAGE)
             ->get();
+
         return $comments;
     }
 }

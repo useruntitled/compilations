@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Role;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,10 +14,10 @@ class AddUserRoleToNewUserJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user;
+
     /**
      * Create a new job instance.
      */
-    
     public function __construct($user)
     {
         $this->user = $user;
@@ -29,7 +28,7 @@ class AddUserRoleToNewUserJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $user_role = Role::where('role','user')->firstOrFail();
+        $user_role = Role::where('role', 'user')->firstOrFail();
         $this->user->roles()->attach($user_role->id);
         $this->user->save();
     }

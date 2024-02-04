@@ -1,14 +1,14 @@
 <template>
-    <div class="flex w-full" v-if="!completelyDeleted">
+    <div class="flex w-full">
         <!-- branches -->
         <!-- solo branch -->
         <div
             style="width: 20px; height: 30px"
             class="border-2 border-t-0 border-e-0 border-bl-1 border-bl-gray-200 border-bl-1 rounded-bl-lg hover:cursor-pointer"
             :class="hoverAllValue ? 'border-sky-600' : ''"
-            @mouseenter="this.$emit('enableHoverBranches')"
-            @mouseleave="this.$emit('disableHoverBranches')"
-            @click="this.$emit('closeReplies')"
+            @mouseenter="emit('enableHoverBranches')"
+            @mouseleave="emit('disableHoverBranches')"
+            @click="emit('closeReplies')"
             v-if="isReply && countOfNeighbours == 0 && comment.level < 7"
         ></div>
 
@@ -18,9 +18,9 @@
             class="h-full border-s-2 hover:cursor-pointer"
             :class="hoverAllValue ? 'border-sky-600' : ''"
             style="height: auto"
-            @mouseenter="this.$emit('enableHoverBranches')"
-            @mouseleave="this.$emit('disableHoverBranches')"
-            @click="this.$emit('closeReplies')"
+            @mouseenter="emit('enableHoverBranches')"
+            @mouseleave="emit('disableHoverBranches')"
+            @click="emit('closeReplies')"
         >
             <div
                 style="width: 20px; height: 30px"
@@ -34,11 +34,11 @@
             :class="comment.level < 7 && isReply ? 'ms-2' : ''"
         >
             <section
-                ref="comment"
+                ref="commentRef"
                 class="duration-500"
                 :class="colorizeComment ? 'opacity-50' : ''"
-                @mouseenter="this.showLinkToParent = true"
-                @mouseleave="this.showLinkToParent = false"
+                @mouseenter="showLinkToParent = true"
+                @mouseleave="showLinkToParent = false"
             >
                 <header class="flex items-start p-0 m-0">
                     <!-- <UserTablet :user="comment.user"></UserTablet> -->
@@ -59,9 +59,9 @@
                     </UserTabletWithElementInside>
 
                     <button
-                        @click="this.$emit('focusEmit')"
-                        @mouseenter="this.$emit('enableColorize')"
-                        @mouseleave="this.$emit('disableColorize')"
+                        @click="emit('focusEmit')"
+                        @mouseenter="emit('enableColorize')"
+                        @mouseleave="emit('disableColorize')"
                         v-if="isReply && showLinkToParent"
                         class="pt-2"
                     >
@@ -71,12 +71,8 @@
                     </button>
                 </header>
                 <main>
-                    <p
-                        v-html="comment.text"
-                        class="text-17"
-                        v-if="!isDeleted"
-                    ></p>
-                    <div v-if="comment.image && !isDeleted">
+                    <p v-html="comment.text" class="text-17"></p>
+                    <div v-if="comment.image">
                         <ZoomableImage
                             :preview="'/media/' + comment.image_preview"
                             :then="route('im', [comment.image, 1000])"
@@ -90,16 +86,14 @@
                         /> -->
                     </div>
                 </main>
-                <footer class="flex items-center" v-if="!isDeleted">
+                <footer class="flex items-center">
                     <Reputation
                         type="Comment"
                         :reputation="comment.rep"
                     ></Reputation>
                     <button
                         class="ms-2 text-secondary text-sm"
-                        @click="
-                            this.changeShowReplyInterfaceValue(this.comment.id)
-                        "
+                        @click="changeShowReplyInterfaceValue(comment.id)"
                     >
                         Ответить
                     </button>
@@ -109,7 +103,7 @@
                             @enableEditing="
                                 changeShowEditingInterfaceValue(comment.id)
                             "
-                            :comment="this.comment"
+                            :comment="comment"
                         ></CommentDropdown
                     ></span>
                 </footer>
@@ -118,7 +112,7 @@
             <div v-if="showReplyInterface == comment.id" class="px-2 my-2">
                 <ReplyInput
                     @sendReply="sendReply"
-                    :commentIsCreated="this.commentIsCreated"
+                    :commentIsCreated="commentIsCreated"
                 ></ReplyInput>
             </div>
             <div v-if="showEditingInterface == comment.id" class="px-2 my-2">
@@ -132,7 +126,6 @@
                     @updateCommentValue="updateComment"
                 ></EditingInput>
             </div>
-
             <div
                 v-if="
                     replies?.length > 0 &&
@@ -160,16 +153,13 @@
                         !closeRepliesValues
                     "
                 >
-                    <comment
-                        @enableHoverBranches="this.hoverBranches = true"
-                        @disableHoverBranches="this.hoverBranches = false"
+                    <Comment
+                        @enableHoverBranches="hoverBranches = true"
+                        @disableHoverBranches="hoverBranches = false"
                         @focusEmit="focusFunction()"
-                        @closeReplies="this.closeReplies()"
-                        @closeRepliesAndParrentReplies="
-                            this.closeRepliesAndParrentReplies()
-                        "
-                        @enableColorize="this.colorizeComment = true"
-                        @disableColorize="this.colorizeComment = false"
+                        @closeReplies="closeReplies()"
+                        @enableColorize="colorizeComment = true"
+                        @disableColorize="colorizeComment = false"
                         v-for="(reply, index) in replies"
                         :isReply="true"
                         :key="reply.id"
@@ -184,17 +174,142 @@
         </div>
     </div>
 </template>
-<script>
-import Dropdown from "../Dropdown.vue";
+<script setup>
+import { ref, inject, watch, onMounted, onUnmounted } from "vue";
 import IconArrowUp from "../Icons/IconArrowUp.vue";
-import IconTrash from "../Icons/IconTrash.vue";
-import LazyImage from "../LazyImage.vue";
 import Reputation from "../Reputation.vue";
 import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
 import ZoomableImage from "../ZoomableImage.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";
+
+const showRepliesArray = inject("showRepliesArray");
+const changeShowReplyInterfaceValue = inject("changeShowReplyInterfaceValue");
+const changeShowEditingInterfaceValue = inject(
+    "changeShowEditingInterfaceValue"
+);
+const showReplyInterface = inject("showReplyInterface");
+const showEditingInterface = inject("showEditingInterface");
+const callModal = inject("callModal");
+const scrollIntoComment = inject("scrollIntoComment");
+const post = inject("post");
+
+const props = defineProps({
+    isReply: false,
+    comment: null,
+    type: null,
+    withoutReplies: false,
+    showRepliesByDefault: {
+        default: false,
+    },
+    countOfNeighbours: 0,
+    hoverAllValue: {
+        default: false,
+    },
+    closeAllReplies: false,
+});
+
+const commentRef = ref(false);
+const replies = ref(props.comment.replies ?? []);
+const showReplies = ref(false);
+const hoverBranches = ref(false);
+const colorizeComment = ref(false);
+const closeRepliesValues = ref(props.closeAllReplies);
+const showLinkToParent = ref(false);
+
+const focusFunction = () => {
+    commentRef.value.scrollIntoView({
+        block: "center",
+    });
+    const interval = setInterval(() => {
+        colorizeComment.value = true;
+    });
+    setTimeout(() => {
+        clearInterval(interval);
+        colorizeComment.value = false;
+    }, 500);
+};
+
+onMounted(() => {
+    if (closeRepliesValues.value) {
+        const index = showRepliesArray.value.findIndex(
+            (i) => i == props.comment.comment_id
+        );
+
+        showRepliesArray.value.splice(index);
+    }
+
+    if (props.comment.replies?.length == 1 && props.comment.level > 1) {
+        showRepliesArray.value.unshift(props.comment.id);
+    }
+    if (props.comment.id == scrollIntoComment.value) {
+        focusFunction();
+    }
+});
+
+onUnmounted(() => {
+    emit("disableHoverBranches");
+    if (scrollIntoComment.value == props.comment.id)
+        scrollIntoComment.value = null;
+});
+
+const emit = defineEmits([
+    "enableHoverBranches",
+    "disableHoverBranches",
+    "enableColorize",
+    "disableColorize",
+    "closeReplies",
+]);
+
+const closeReplies = () => {
+    showRepliesArray.value.splice(
+        showRepliesArray.value.findIndex((i) => i == props.comment.id),
+        1
+    );
+    closeRepliesValues.value = true;
+    commentRef.value.scrollIntoViewIfNeeded();
+};
+
+const commentIsCreated = ref(false);
+
+const sendReply = (form) => {
+    const formData = new FormData();
+    formData.append("_method", "POST");
+    formData.append("comment_id", showReplyInterface.value);
+    formData.append("post_id", props.comment.post_id);
+    formData.append("text", form.content);
+    formData.append("hasImage", form.image?.hasImage);
+    formData.append("image", form.image?.image);
+    axios
+        .post(route("comment.create"), formData)
+        .catch((res) => {
+            if (res.response.status == 401) callModal("Auth");
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            commentIsCreated.value = true;
+            showRepliesArray.value.unshift(props.comment.id);
+            scrollIntoComment.value = res.data.id;
+            setInterval(() => {
+                commentIsCreated.value = false;
+            }, 20);
+            if (res.status == 200 || res.status == 201) {
+                replies.value.unshift(res.data);
+            }
+        });
+};
+
+const updateComment = (value) => {
+    props.comment.text = value.text;
+    props.comment.image = value.image;
+    props.comment.image_preview = value.image_preview;
+};
+</script>
+
+<!-- <script>
+
 
 export default {
     inject: [
@@ -225,7 +340,7 @@ export default {
         return {
             isEdited: false,
             enableEditing: false,
-            replies: this.comment.replies ?? [],
+            replies: comment.replies ?? [],
             showReplies: this.showRepliesByDefault,
             commentIsCreated: false,
             openReplies: !this.showRepliesByDefault,
@@ -390,4 +505,4 @@ export default {
         ZoomableImage,
     },
 };
-</script>
+</script> -->

@@ -17,6 +17,7 @@ class NotificationResource extends JsonResource
     {
         $res = parent::toArray($request);
         $res['created_at'] = (new Carbon($this->created_at))->diffForHumans();
+
         return $res;
     }
 }

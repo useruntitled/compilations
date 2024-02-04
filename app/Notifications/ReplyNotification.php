@@ -3,9 +3,7 @@
 namespace App\Notifications;
 
 use App\Http\Resources\UserResource;
-use App\Models\Reply;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -56,8 +54,8 @@ class ReplyNotification extends Notification
             'object_id' => $this->comment->comment->id,
             'parrentComment' => $this->comment->comment,
             'id' => $this->comment->id,
-            'link_post' => route('post',$this->comment->post->id),
-            'link_comment' => route('post',['id' => $this->comment->post->id, 'comment' => $this->comment->id]),
+            'link_post' => route('post', $this->comment->post->id),
+            'link_comment' => route('post', ['id' => $this->comment->post->id, 'comment' => $this->comment->id]),
             'byUser' => new UserResource($this->comment->user),
         ];
     }

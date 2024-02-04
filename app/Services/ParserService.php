@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 class ParserService
@@ -13,7 +14,3 @@ class ParserService
         dd(11);
     }
 }
-
-
-
-?>

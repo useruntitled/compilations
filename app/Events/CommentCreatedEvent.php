@@ -2,19 +2,16 @@
 
 namespace App\Events;
 
-use App\Http\Controllers\NotificationController;
 use App\Http\Resources\PusherCommentResource;
 use App\Models\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CommentCreatedEvent implements ShouldQueue, ShouldBroadcast
+class CommentCreatedEvent implements ShouldBroadcast, ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -28,19 +25,19 @@ class CommentCreatedEvent implements ShouldQueue, ShouldBroadcast
         $this->comment = $comment;
     }
 
-    public function broadcastOn(): Array
+    public function broadcastOn(): array
     {
         return [
             new Channel('all'),
-        ];  
+        ];
     }
-    
+
     public function broadcastAs(): string
     {
         return 'comments.feed';
     }
 
-    public function broadcastWith(): Array
+    public function broadcastWith(): array
     {
         // $this->comment->load(['post', 'user']);
         return [new PusherCommentResource($this->comment)];

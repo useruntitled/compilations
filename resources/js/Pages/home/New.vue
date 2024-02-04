@@ -35,7 +35,7 @@ const isEndOfFeed = ref(false);
 const isLoading = ref(false);
 
 const handleLoadEvent = async () => {
-    if (isLoading.value == false) {
+    if (isLoading.value == false && isEndOfFeed.value == false) {
         isLoading.value = true;
         await loadPosts();
     }

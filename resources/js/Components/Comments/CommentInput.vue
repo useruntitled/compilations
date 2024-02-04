@@ -8,7 +8,7 @@
                 : '  '
         "
         @focusin="isFocused = true"
-        @click="content.focus()"
+        @click="content?.focus()"
         @focusout="isFocused = false"
     >
         <div

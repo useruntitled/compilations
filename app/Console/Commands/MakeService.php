@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class MakeService extends Command
 {
     protected $signature = 'make:service {name}';
+
     protected $description = 'Create a new service class in app/Services folder';
 
     public function handle()
@@ -15,9 +16,10 @@ class MakeService extends Command
         $name = $this->argument('name');
         $className = ucfirst($name);
 
-        $filePath = app_path('Services/' . $className . '.php');
+        $filePath = app_path('Services/'.$className.'.php');
         if (File::exists($filePath)) {
             $this->error('The service class already exists!');
+
             return;
         }
 

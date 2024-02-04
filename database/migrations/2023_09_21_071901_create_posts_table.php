@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
-            
+
             $table->boolean('active')->nullable()->default(false);
 
             $table->string('image')->nullable();
@@ -39,7 +39,7 @@ return new class extends Migration
     {
         $service = new ImageService();
         $posts = Post::all();
-        foreach($posts as $p) {
+        foreach ($posts as $p) {
             $service->delete($p->image);
         }
         Schema::dropIfExists('posts');

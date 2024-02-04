@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('reputations', function (Blueprint $table) {
             $table->id();
 
-            $table->set('action',['up','down']);
-            
+            $table->set('action', ['up', 'down']);
+
             $table->morphs('reputation_to');
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

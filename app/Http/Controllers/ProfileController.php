@@ -3,13 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Resources\CommentResource;
-use App\Http\Resources\PostResource;
-use App\Http\Resources\ReplyResource;
-use App\Http\Resources\UserResource;
-use App\Models\Comment;
 use App\Models\Post;
-use App\Models\Reply;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -21,7 +15,6 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    
     /**
      * Display the user's profile form.
      */
@@ -38,13 +31,13 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        
+
         // dd($request->hasFile('avatar'))
         // return \Illuminate\Support\Facades\Response::json($request->hasFile('avatar'),200);
         // dd($request->has);
-        if($request->hasFile('avatar') != null){
-            $path =  'avatars\\' . Auth::user()->id . '.png';
-            $avatar = $request->file('avatar')->storeAs(null,$path,'public');
+        if ($request->hasFile('avatar') != null) {
+            $path = 'avatars\\'.Auth::user()->id.'.png';
+            $avatar = $request->file('avatar')->storeAs(null, $path, 'public');
         }
         $request->user()->fill($request->validated());
         if ($request->user()->isDirty('email')) {
@@ -76,10 +69,12 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
     public function drafts()
     {
-        $drafts = Post::where('user_id',Auth::user()->id)->where('active',false)->orderBy('id','desc')->get();
-        return inertia('Auth/Drafts',[
+        $drafts = Post::where('user_id', Auth::user()->id)->where('active', false)->orderBy('id', 'desc')->get();
+
+        return inertia('Auth/Drafts', [
             'drafts' => $drafts->loadCount('films'),
         ]);
     }

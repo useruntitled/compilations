@@ -5,9 +5,9 @@ use Illuminate\Support\ServiceProvider;
 
 return [
 
+    'posts.per.page' => 5,
 
     'storage_path' => public_path('storage\\'),
-
 
     /*
     |--------------------------------------------------------------------------

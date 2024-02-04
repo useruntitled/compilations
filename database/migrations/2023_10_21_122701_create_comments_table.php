@@ -38,7 +38,7 @@ return new class extends Migration
     {
         $service = new ImageService();
         $comments = Comment::all();
-        foreach($comments as $c) {
+        foreach ($comments as $c) {
             $service->delete($c->image);
         }
         Schema::dropIfExists('comments');

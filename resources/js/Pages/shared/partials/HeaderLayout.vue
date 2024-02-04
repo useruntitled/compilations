@@ -1,6 +1,10 @@
 <template>
     <div v-for="i in 2">
-        <div class="bg-kppale" :class="i == 1 ? 'fixed w-full z-50' : 'block'">
+        <div
+            class="bg-kppale"
+            :class="i == 1 ? 'fixed w-full z-50' : 'block'"
+            id="header"
+        >
             <div class="max-w-7xl mx-auto px-5 py-1">
                 <div class="grid grid-template">
                     <section>
@@ -98,7 +102,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue";
+import { inject } from "vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import IconSearch from "@/Components/Icons/IconSearch.vue";
 import HeaderSection from "./HeaderSection.vue";
@@ -110,46 +114,9 @@ import { usePage } from "@inertiajs/vue3";
 
 const callModal = inject("callModal");
 
-const showRegister = ref(false);
-
 const page = usePage();
 </script>
 
-<!-- <script>
-import DropdownLink from "@/Components/DropdownLink.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import UserTablet from "@/Components/UserTablet.vue";
-import IconSearch from "@/Components/Icons/IconSearch.vue";
-import HeaderSection from "./HeaderSection.vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
-import PrimaryButtonWhite from "@/Components/Buttons/PrimaryButtonWhite.vue";
-import DropdownNotifications from "@/Components/Dropdowns/DropdownNotifications.vue";
-import LazyImage from "@/Components/LazyImage.vue";
-
-export default {
-    inject: ["callModal"],
-    data() {
-        return {
-            showRegister: false,
-            input_site: null,
-        };
-    },
-
-    components: {
-        DropdownLink,
-        Dropdown,
-        UserTablet,
-        IconSearch,
-        HeaderSection,
-        ApplicationLogo,
-        PrimaryButton,
-        PrimaryButtonWhite,
-        DropdownNotifications,
-        LazyImage,
-    },
-};
-</script> -->
 <style>
 .grid-template {
     grid-template-columns: 220px 640px 320px;

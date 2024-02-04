@@ -312,7 +312,9 @@
                     </linearGradient>
                 </defs>
             </svg>
-            <p class="text-17px text-secondary mt-4">Здесь пока ничего нет</p>
+            <p class="text-17px text-secondary mt-4 mb-40">
+                Здесь пока ничего нет
+            </p>
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div
         class="h-full mx-auto w-full text-center sticky overflow-y-auto overscroll-none noscrollbar"
-        style="height: calc(100vh - 100.6px); top: 65.6px"
+        style="height: calc(100vh - 52px); top: 52px"
     >
         <div class="pt-2 mt-0 ms-10">
             <p

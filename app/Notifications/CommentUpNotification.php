@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Http\Resources\UserResource;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -58,8 +57,8 @@ class CommentUpNotification extends Notification
             'comment' => $this->reputation->reputation_to,
             'object_id' => $comment->id,
             'id' => $this->reputation->id,
-            'link_post' => route('post',$post->id),
-            'link_comment' => route('post',['id' => $post->id, 'comment' => $comment->id]),
+            'link_post' => route('post', $post->id),
+            'link_comment' => route('post', ['id' => $post->id, 'comment' => $comment->id]),
             'byUser' => new UserResource($this->reputation->user),
         ];
     }

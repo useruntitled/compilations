@@ -3,16 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\ReputationDeletedEvent;
-use App\Http\Controllers\KarmaController;
 use App\Services\KarmaService;
 use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class ReputationDeletedListener implements ShouldQueue
 {
     protected $notifier;
+
     protected $karmaService;
 
     /**
@@ -31,11 +29,10 @@ class ReputationDeletedListener implements ShouldQueue
     {
         $reputation = $event->reputation;
 
-        if(!$reputation->RepToUserIsOwner){
-            $this->notifier->deleteAndCallEvent($reputation->reputationToUser,$reputation);
+        if (! $reputation->RepToUserIsOwner) {
+            $this->notifier->deleteAndCallEvent($reputation->reputationToUser, $reputation);
 
             $this->karmaService->handleCreatorRole($reputation->reputation_to->user);
         }
     }
-
 }

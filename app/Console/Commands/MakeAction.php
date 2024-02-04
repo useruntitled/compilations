@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class MakeAction extends Command
 {
     protected $signature = 'make:action {name}';
+
     protected $description = 'Create a new action class in app/Actions folder';
 
     public function handle()
@@ -15,9 +16,10 @@ class MakeAction extends Command
         $name = $this->argument('name');
         $className = ucfirst($name);
 
-        $filePath = app_path('Actions/' . $className . '.php');
+        $filePath = app_path('Actions/'.$className.'.php');
         if (File::exists($filePath)) {
             $this->error('The action class already exists!');
+
             return;
         }
 
