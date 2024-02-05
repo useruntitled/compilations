@@ -60,7 +60,7 @@
                 >
                     <div v-if="!isLoading">Отправить</div>
                     <div v-else class="flex items-center justify-center">
-                        <div class="text-orange-500">Отправить</div>
+                        <div class="opacity-0">Отправить</div>
                         <div class="absolute">
                             <AnimationLoader
                                 color="text-white"

@@ -8,7 +8,7 @@
             :class="hoverAllValue ? 'border-sky-600' : ''"
             @mouseenter="emit('enableHoverBranches')"
             @mouseleave="emit('disableHoverBranches')"
-            @click="emit('closeReplies')"
+            @click="closeReplies()"
             v-if="isReply && countOfNeighbours == 0 && comment.level < 7"
         ></div>
 
@@ -20,7 +20,7 @@
             style="height: auto"
             @mouseenter="emit('enableHoverBranches')"
             @mouseleave="emit('disableHoverBranches')"
-            @click="emit('closeReplies')"
+            @click="closeReplies()"
         >
             <div
                 style="width: 20px; height: 30px"
@@ -41,6 +41,7 @@
                 @mouseleave="showLinkToParent = false"
             >
                 <header class="flex items-start p-0 m-0">
+                    {{ index }}
                     <!-- <UserTablet :user="comment.user"></UserTablet> -->
                     <UserTabletWithElementInside :user="comment.user">
                         <template #content>
@@ -133,13 +134,10 @@
                 "
             >
                 <button
-                    @click="
-                        showRepliesArray.push(comment.id);
-                        closeRepliesValues = false;
-                    "
+                    @click="showRepliesArray.push(comment.id)"
                     class="text-dtfpr hover:opacity-80"
                 >
-                    {{ $tc("answer", replies?.length) }}
+                    {{ $tc("answer", comment.replies_count) }}
                 </button>
             </div>
 
@@ -147,35 +145,32 @@
                 <!-- <div
                     v-if="isReply && !showRepliesArray.includes(comment.id)"
                 ></div> -->
-                <div
-                    v-if="
-                        showRepliesArray.includes(comment.id) &&
-                        !closeRepliesValues
-                    "
-                >
-                    <Comment
-                        @enableHoverBranches="hoverBranches = true"
-                        @disableHoverBranches="hoverBranches = false"
-                        @focusEmit="focusFunction()"
-                        @closeReplies="closeReplies()"
-                        @enableColorize="colorizeComment = true"
-                        @disableColorize="colorizeComment = false"
-                        v-for="(reply, index) in replies"
-                        :isReply="true"
-                        :key="reply.id"
-                        :hoverAllValue="hoverBranches"
-                        :showRepliesByDefault="comment.level < 7"
-                        :comment="reply"
-                        :countOfNeighbours="replies.length - (index + 1)"
-                        :closeAllReplies="closeRepliesValues"
-                    />
+                <div v-if="showRepliesArray.includes(comment.id)">
+                    <div v-for="(reply, i) in replies">
+                        <Comment
+                            v-if="index + i + 1 < limitComments"
+                            @enableHoverBranches="hoverBranches = true"
+                            @disableHoverBranches="hoverBranches = false"
+                            @focusEmit="focusFunction()"
+                            @closeReplies="closeReplies()"
+                            @enableColorize="colorizeComment = true"
+                            @disableColorize="colorizeComment = false"
+                            :isReply="true"
+                            :key="reply.id"
+                            :hoverAllValue="hoverBranches"
+                            :showRepliesByDefault="comment.level < 7"
+                            :comment="reply"
+                            :countOfNeighbours="replies.length - (i + 1)"
+                            :index="props.index + 1"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script setup>
-import { ref, inject, watch, onMounted, onUnmounted } from "vue";
+import { ref, inject, watch, onMounted, onUnmounted, nextTick } from "vue";
 import IconArrowUp from "../Icons/IconArrowUp.vue";
 import Reputation from "../Reputation.vue";
 import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
@@ -183,6 +178,8 @@ import ZoomableImage from "../ZoomableImage.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";
+
+const limitComments = inject("limitComments");
 
 const showRepliesArray = inject("showRepliesArray");
 const changeShowReplyInterfaceValue = inject("changeShowReplyInterfaceValue");
@@ -199,7 +196,6 @@ const props = defineProps({
     isReply: false,
     comment: null,
     type: null,
-    withoutReplies: false,
     showRepliesByDefault: {
         default: false,
     },
@@ -207,7 +203,10 @@ const props = defineProps({
     hoverAllValue: {
         default: false,
     },
-    closeAllReplies: false,
+    index: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const commentRef = ref(false);
@@ -215,7 +214,6 @@ const replies = ref(props.comment.replies ?? []);
 const showReplies = ref(false);
 const hoverBranches = ref(false);
 const colorizeComment = ref(false);
-const closeRepliesValues = ref(props.closeAllReplies);
 const showLinkToParent = ref(false);
 
 const focusFunction = () => {
@@ -231,25 +229,28 @@ const focusFunction = () => {
     }, 500);
 };
 
-onMounted(() => {
-    if (closeRepliesValues.value) {
-        const index = showRepliesArray.value.findIndex(
-            (i) => i == props.comment.comment_id
-        );
-
-        showRepliesArray.value.splice(index);
-    }
-
+const openSomeReplies = () => {
     if (props.comment.replies?.length == 1 && props.comment.level > 1) {
-        showRepliesArray.value.unshift(props.comment.id);
+        if (!showRepliesArray.value.includes(props.comment.id)) {
+            showRepliesArray.value.unshift(props.comment.id);
+        }
     }
+};
+
+const visibleComments = inject("visibleComments");
+
+onMounted(() => {
+    visibleComments.value++;
+    openSomeReplies();
     if (props.comment.id == scrollIntoComment.value) {
         focusFunction();
     }
 });
 
 onUnmounted(() => {
+    visibleComments.value--;
     emit("disableHoverBranches");
+
     if (scrollIntoComment.value == props.comment.id)
         scrollIntoComment.value = null;
 });
@@ -263,12 +264,14 @@ const emit = defineEmits([
 ]);
 
 const closeReplies = () => {
-    showRepliesArray.value.splice(
-        showRepliesArray.value.findIndex((i) => i == props.comment.id),
-        1
+    // showRepliesArray.value.splice(
+    //     showRepliesArray.value.findIndex((i) => i == props.comment.id)
+    // );
+    const index = showRepliesArray.value.findIndex(
+        (i) => i == props.comment.comment_id
     );
-    closeRepliesValues.value = true;
-    commentRef.value.scrollIntoViewIfNeeded();
+    showRepliesArray.value.splice(index, 1);
+    commentRef.value.scrollIntoViewIfNeeded({ block: "center" });
 };
 
 const commentIsCreated = ref(false);
@@ -344,7 +347,7 @@ export default {
             showReplies: this.showRepliesByDefault,
             commentIsCreated: false,
             openReplies: !this.showRepliesByDefault,
-            closeRepliesValues: this.closeAllReplies,
+        : this.closeAllReplies,
             hoverBranches: this.hoverAllValue,
             colorizeComment: false,
             showLinkToParent: false,
@@ -410,7 +413,7 @@ export default {
                 this.showRepliesArray.findIndex((i) => i == this.comment.id),
                 1
             );
-            this.closeRepliesValues = true;
+            this = true;
             this.$refs["comment"].scrollIntoViewIfNeeded();
             // const index = this.showRepliesArray.findIndex((i) => i == id);
             // this.showRepliesArray.splice(index);
@@ -457,7 +460,7 @@ export default {
         },
     },
     mounted() {
-        if (this.closeRepliesValues) {
+        if (this) {
             const index = this.showRepliesArray.findIndex(
                 (i) => i == this.comment.comment_id
             );

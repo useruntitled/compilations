@@ -15,13 +15,17 @@
                 class="mx-auto stroke-gray-500"
             ></AnimationLoader>
 
-            <Comment
-                v-for="comment in comments"
-                v-show="!comment.comment"
-                :key="comment.id"
-                :comment="comment"
-                @remove="remove(comment.id)"
-            ></Comment>
+            <div v-for="(comment, index) in comments">
+                <Comment
+                    :key="comment.id"
+                    v-if="index < limitComments"
+                    :index="
+                        index == 0 ? 0 : comments[index - 1].replies_count + 1
+                    "
+                    :comment="comment"
+                    @remove="remove(comment.id)"
+                ></Comment>
+            </div>
         </main>
     </div>
 </template>
@@ -32,8 +36,17 @@ import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
 import axios from "axios";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
+import { comment } from "postcss";
 
 const isLoaded = ref(false);
+
+const limitComments = 10;
+
+const visibleComments = ref(0);
+
+provide("visibleComments", visibleComments);
+
+provide("limitComments", limitComments);
 
 const emit = defineEmits(["load"]);
 
@@ -86,27 +99,6 @@ const findComment = (id) => {
     return found_comment;
 };
 
-const openRepliesForComment = async (comment_for_search) => {
-    function go(comment, id) {
-        if (comment.comment) {
-            console.log(comment.comment.id);
-            showRepliesArray.value.push(comment.comment.id);
-            return go(comment.comment, id);
-        }
-        return true;
-    }
-    go(comment_for_search, comment_for_search.id);
-};
-
-const prepareToFocusComment = async () => {
-    if (hasParam("comment")) {
-        const comment = findComment(getParam("comment"));
-        await openRepliesForComment(comment);
-        console.log("array", showRepliesArray.value);
-        scrollIntoComment.value = comment.id;
-    }
-};
-
 const hasParam = (param) => {
     const url = new URL(window.location.href);
     return url.searchParams.has(param);
@@ -130,21 +122,22 @@ const processComments = async () => {
 
     let depth = findMaxLevel();
 
-    const array = comments.value;
-
     function index(id) {
-        return array.findIndex((comment) => comment.id == id);
+        return comments.value.findIndex((comment) => comment.id == id);
     }
 
     let to_splice = [];
 
     while (depth != 0) {
-        array.forEach((comment) => {
+        comments.value.forEach((comment) => {
             if (comment.level == depth) {
-                if (!array[index(comment.comment_id)].replies)
-                    array[index(comment.comment_id)].replies = [];
-                array[index(comment.comment_id)].replies.push(comment);
-
+                if (!comments.value[index(comment.comment_id)].replies)
+                    comments.value[index(comment.comment_id)].replies = [];
+                if (!comments.value[index(comment.id)].comment)
+                    comments.value[index(comment.id)].comment = null;
+                comments.value[index(comment.comment_id)].replies.push(comment);
+                countReplies(comment);
+                // scrollInto
                 if (
                     commentToScrollInto.value.has &&
                     commentToScrollInto.value.id == comment.id
@@ -152,19 +145,38 @@ const processComments = async () => {
                     showRepliesArray.value.push(comment.comment_id);
                     commentToScrollInto.value.id = comment.comment_id;
                 }
-
                 to_splice.push(comment.id);
+                // scrollInto End
             }
         });
         depth -= 1;
     }
 
     to_splice.forEach((id) => {
-        array.splice(index(id), 1);
+        comments.value.splice(index(id), 1);
     });
 
-    comments.value = array;
+    comments.value.forEach((comment) => {
+        countReplies(comment);
+    });
+
     return true;
+};
+
+const countReplies = (comment) => {
+    let count = 0;
+    function updateCount(comm) {
+        if (comm.replies?.length > 0) {
+            comm.replies.forEach((reply) => {
+                let r = updateCount(reply);
+                count += r;
+            });
+        }
+
+        return 1;
+    }
+    updateCount(comment);
+    comment.replies_count = count;
 };
 
 const commentToScrollInto = ref({
