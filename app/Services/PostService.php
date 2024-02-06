@@ -13,16 +13,13 @@ class PostService
 
     public function getPopular($page)
     {
-        $posts = Post::with(['user' => ['roles'],
-            'films' => function ($query) {
-                $query->take(3);
-            },
+        $posts = Post::with(['user' => ['roles'],'films' => ['genres'],
             'reputation' => function ($query) {
                 $query->where('action', 'up');
             },
         ])
             ->published()
-            ->withCount(['comments', 'bookmarks', 'reputation'])
+            ->withCount(['comments', 'bookmarks', 'reputation', 'films'])
             ->orderByDesc('reputation_count')
             ->orderByDesc('comments_count')
             ->orderByDesc('bookmarks_count')

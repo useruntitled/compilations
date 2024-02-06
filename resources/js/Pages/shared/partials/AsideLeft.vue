@@ -6,8 +6,8 @@
         <div class="px-2.5 mt-0 py-5 text-start">
             <Link
                 :href="route('home')"
-                class="appearance-none block w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white"
-                :class="{ 'bg-white': isPopular }"
+                class="appearance-none block w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white hover:shadow-sm"
+                :class="{ 'bg-white shadow-sm': isPopular }"
             >
                 <div class="flex items-center py-[5px]">
                     <span class="me-2 inline-block">
@@ -23,8 +23,8 @@
             </Link>
             <Link
                 :href="route('new')"
-                class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
-                :class="{ 'bg-white': isNew }"
+                class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:shadow-sm"
+                :class="{ 'bg-white shadow-sm': isNew }"
             >
                 <div class="flex items-center py-[5px]">
                     <span class="me-2 inline-block"
@@ -41,9 +41,9 @@
             </Link>
             <AuthLink
                 :href="route('me.bookmarks')"
-                class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer"
+                class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:shadow-sm"
                 :class="{
-                    'bg-white ': isBookmarks,
+                    'bg-white shadow-sm ': isBookmarks,
                 }"
             >
                 <div class="flex items-center py-[5px]">

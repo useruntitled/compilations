@@ -43,7 +43,7 @@ class PostController extends Controller
 
     public function getNew($page)
     {
-        $posts = Post::with(['user' => ['roles'], 'reputation', 'films'])->published()
+        $posts = Post::with(['user' => ['roles'], 'reputation', 'films' => ['genres']])->published()
             ->withCount(['comments', 'bookmarks', 'films'])
             ->latest()
             ->skip(($page - 1) * config('app')['posts.per.page'])

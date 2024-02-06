@@ -2,6 +2,7 @@
     <div class="flex w-full">
         <!-- branches -->
         <!-- solo branch -->
+
         <div
             style="width: 20px; height: 30px"
             class="border-2 border-t-0 border-e-0 border-bl-1 border-bl-gray-200 border-bl-1 rounded-bl-lg hover:cursor-pointer"
@@ -41,7 +42,6 @@
                 @mouseleave="showLinkToParent = false"
             >
                 <header class="flex items-start p-0 m-0">
-                    {{ index }}
                     <!-- <UserTablet :user="comment.user"></UserTablet> -->
                     <UserTabletWithElementInside :user="comment.user">
                         <template #content>
@@ -129,7 +129,7 @@
             </div>
             <div
                 v-if="
-                    replies?.length > 0 &&
+                    comment?.replies?.length > 0 &&
                     !showRepliesArray.includes(comment.id)
                 "
             >
@@ -140,16 +140,15 @@
                     {{ $tc("answer", comment.replies_count) }}
                 </button>
             </div>
-
-            <div v-if="replies?.length > 0">
+            <div v-if="comment?.replies?.length > 0">
                 <!-- <div
                     v-if="isReply && !showRepliesArray.includes(comment.id)"
                 ></div> -->
                 <div v-if="showRepliesArray.includes(comment.id)">
-                    <div v-for="(reply, i) in replies">
+                    <div v-for="(reply, i) in comment.replies">
                         <Comment
-                            v-if="index + i + 1 < limitComments"
                             @enableHoverBranches="hoverBranches = true"
+                            :isBranchParrent="false"
                             @disableHoverBranches="hoverBranches = false"
                             @focusEmit="focusFunction()"
                             @closeReplies="closeReplies()"
@@ -160,8 +159,10 @@
                             :hoverAllValue="hoverBranches"
                             :showRepliesByDefault="comment.level < 7"
                             :comment="reply"
-                            :countOfNeighbours="replies.length - (i + 1)"
-                            :index="props.index + 1"
+                            :countOfNeighbours="
+                                comment.replies.length - (i + 1)
+                            "
+                            :branchParrentId="branchParrentId"
                         />
                     </div>
                 </div>
@@ -180,6 +181,8 @@ import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";
 
 const limitComments = inject("limitComments");
+
+const isIgnoreLimitEnabled = inject("isIgnoreLimitEnabled");
 
 const showRepliesArray = inject("showRepliesArray");
 const changeShowReplyInterfaceValue = inject("changeShowReplyInterfaceValue");
@@ -207,6 +210,10 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
+    isBranchParrent: false,
+    branchParrentId: {
+        required: true,
+    },
 });
 
 const commentRef = ref(false);
@@ -217,16 +224,30 @@ const colorizeComment = ref(false);
 const showLinkToParent = ref(false);
 
 const focusFunction = () => {
-    commentRef.value.scrollIntoView({
-        block: "center",
-    });
-    const interval = setInterval(() => {
-        colorizeComment.value = true;
-    });
+    commentRef.value.scrollIntoView();
+
+    colorizeComment.value = true;
     setTimeout(() => {
-        clearInterval(interval);
         colorizeComment.value = false;
     }, 500);
+    nextTick(() => {
+        commentRef.value.scrollIntoView({
+            block: "center",
+        });
+    });
+    setTimeout(() => {
+        commentRef.value.scrollIntoView();
+
+        colorizeComment.value = true;
+        setTimeout(() => {
+            colorizeComment.value = false;
+        }, 500);
+        nextTick(() => {
+            commentRef.value.scrollIntoView({
+                block: "center",
+            });
+        });
+    }, 200);
 };
 
 const openSomeReplies = () => {
@@ -237,10 +258,7 @@ const openSomeReplies = () => {
     }
 };
 
-const visibleComments = inject("visibleComments");
-
 onMounted(() => {
-    visibleComments.value++;
     openSomeReplies();
     if (props.comment.id == scrollIntoComment.value) {
         focusFunction();
@@ -248,7 +266,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    visibleComments.value--;
     emit("disableHoverBranches");
 
     if (scrollIntoComment.value == props.comment.id)
@@ -276,6 +293,8 @@ const closeReplies = () => {
 
 const commentIsCreated = ref(false);
 
+const addCommentInObjectTree = inject("addCommentInObjectTree");
+
 const sendReply = (form) => {
     const formData = new FormData();
     formData.append("_method", "POST");
@@ -299,7 +318,8 @@ const sendReply = (form) => {
                 commentIsCreated.value = false;
             }, 20);
             if (res.status == 200 || res.status == 201) {
-                replies.value.unshift(res.data);
+                // replies.value.unshift(res.data);
+                addCommentInObjectTree(res.data, props.branchParrentId);
             }
         });
 };

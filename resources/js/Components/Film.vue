@@ -41,7 +41,7 @@
                         class="mb-1"
                     >
                         <a
-                            class="me-2 pe-2 py-1 text-dtfpr opacity-70 font-medium"
+                            class="me-2 pe-2 py-1 text-orange-700 opacity-70 font-medium"
                             :href="genre.kp_wire"
                         >
                             #{{ genre.name }}

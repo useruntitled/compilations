@@ -13,7 +13,7 @@
             <div class="overflow-y-auto overflow-x-hidden text-start">
                 <div v-for="comment in comments" :key="comment.id" class="mb-4">
                     <div
-                        class="flex items-center overflow-hidden whitespace-no-wrap"
+                        class="flex items-center overflow-hidden whitespace-no-wrap px"
                     >
                         <Link :href="route('profile', [comment.user.id])">
                             <img

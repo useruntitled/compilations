@@ -1,6 +1,35 @@
 <template>
-    <div class="bg-white p-5 rounded-xl mt-5" ref="comments_block">
-        <p class="text-xl mb-8 font-medium">Комментарии</p>
+    <div
+        class="bg-white p-5 rounded-xl mt-5"
+        :class="!123 ? 'rounded-b-none' : ''"
+        ref="comments_block"
+    >
+        <p class="text-xl mb-8 font-medium flex justify-between">
+            <p>Комментарии</p>
+            <div class="text-sm  hover:opacity-80  hover:cursor-pointer">
+                <!-- <select class="rounded-xl text-sm border-0 focus:ring-0 opacity-80 hover:opacity-60 hover:cursor-pointer" @change="resortComments($event)">
+                    <option value="sortByReputationOverall">По количеству оценок</option>
+                    <option value="sortByNewest">Сначала новые</option>
+                </select> -->
+                <Dropdown>
+                    <template #trigger>
+                        <div class="flex items-center">
+                            <span>{{ currentSort }}</span>
+                        <div class="ms-2">
+                                            <IconChewronDown
+                                            ></IconChewronDown>
+                                        </div>
+                        </div>
+                    </template>
+                    <template #content>
+                        <div class="items-start px-5 opacity-100 text-black space-y-1">
+                            <button class="block hover:opacity-80" @click="resortComments(sortByReputationOverall, 'sortByReputationOverall')">По количеству оценок</button>
+                            <button class="block hover:opacity-80" @click="resortComments(sortByNewest, 'sortByNewest')">Сначала новые</button>
+                        </div>
+                    </template>
+                </Dropdown>
+            </div>
+        </p>
         <div class="px-2 mb-5">
             <div v-if="!showReplyInterface && !showEditingInterface">
                 <CommentInput
@@ -9,6 +38,7 @@
                 ></CommentInput>
             </div>
         </div>
+        <div></div>
         <main>
             <AnimationLoader
                 v-if="!isLoaded"
@@ -18,16 +48,32 @@
             <div v-for="(comment, index) in comments">
                 <Comment
                     :key="comment.id"
-                    v-if="index < limitComments"
-                    :index="
-                        index == 0 ? 0 : comments[index - 1].replies_count + 1
-                    "
                     :comment="comment"
                     @remove="remove(comment.id)"
+                    :isBranchParrent="true"
+                    :branchParrentId="comment.id"
                 ></Comment>
             </div>
         </main>
+        <div v-if="!showReplyInterface && !showEditingInterface && isLoaded" class="mt-4">
+                <CommentInput
+                    @sendComment="createComment"
+                    :commentIsCreated="commentIsCreated"
+                ></CommentInput>
+            </div>
     </div>
+    
+    <!-- <div
+        v-if="!isIgnoreLimitEnabled && postCommentsCount - limitComments > 0"
+        class="bg-white border-t-2 w-full p-3 px-5 mt-[-15px] flex items-center justify-between rounded-b-xl"
+    >
+        <button
+            class="text-dtfpr hover:opacity-70 text-17px"
+            @click="isIgnoreLimitEnabled = true"
+        >
+            Раскрыть
+        </button>
+    </div> -->
 </template>
 
 <script setup>
@@ -36,15 +82,22 @@ import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
 import axios from "axios";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
-import { comment } from "postcss";
+import Dropdown from "../Dropdown.vue";
+import IconChewronDown from "../Icons/IconChewronDown.vue";
 
 const isLoaded = ref(false);
 
-const limitComments = 10;
+const limitComments = 7;
+
+const isIgnoreLimitEnabled = ref(false);
 
 const visibleComments = ref(0);
 
+const postRepliesCount = ref(0);
+
 provide("visibleComments", visibleComments);
+
+provide("isIgnoreLimitEnabled", isIgnoreLimitEnabled);
 
 provide("limitComments", limitComments);
 
@@ -68,37 +121,6 @@ const loadComments = async () => {
         });
 };
 
-const findComment = (id) => {
-    console.log("Trying to find this comment:", id);
-    function find(comment) {
-        if (comment.id == id) {
-            return comment;
-        }
-        if (comment.replies?.length) {
-            let result;
-            comment.replies.forEach((reply) => {
-                if (find(reply) != null) {
-                    result = find(reply);
-                    return;
-                }
-            });
-            return result;
-        }
-        return null;
-    }
-
-    let found_comment = null;
-
-    comments.value.forEach((comment) => {
-        if (find(comment) != null) {
-            console.log("found", find(comment));
-            found_comment = find(comment);
-        }
-    });
-
-    return found_comment;
-};
-
 const hasParam = (param) => {
     const url = new URL(window.location.href);
     return url.searchParams.has(param);
@@ -109,7 +131,29 @@ const getParam = (param) => {
     return url.searchParams.get(param);
 };
 
-const processComments = async () => {
+const sortByReputationOverall = (a, b) => {
+    if (b.rep.overall > a.rep.overall) return 1;
+    return -1;
+};
+
+const sortByNewest = (a, b) => {
+    if (b.created_at > a.created_at) return 1;
+    return -1;
+};
+
+const resortComments = (func, value) => {
+    processComments(func);
+    currentSort.value = sortingValues[value];
+}
+
+const sortingValues = {
+    sortByReputationOverall: 'По количеству оценок',
+    sortByNewest: 'Сначала новые',
+};
+
+const currentSort = ref(sortingValues.sortByReputationOverall);
+
+const processComments = async (sortFunction = sortByReputationOverall) => {
     function findMaxLevel() {
         let max_level = 0;
 
@@ -136,6 +180,9 @@ const processComments = async () => {
                 if (!comments.value[index(comment.id)].comment)
                     comments.value[index(comment.id)].comment = null;
                 comments.value[index(comment.comment_id)].replies.push(comment);
+                comments.value[index(comment.comment_id)].replies.sort(
+                    sortFunction
+                );
                 countReplies(comment);
                 // scrollInto
                 if (
@@ -158,6 +205,7 @@ const processComments = async () => {
 
     comments.value.forEach((comment) => {
         countReplies(comment);
+        comments.value.sort(sortFunction);
     });
 
     return true;
@@ -166,7 +214,7 @@ const processComments = async () => {
 const countReplies = (comment) => {
     let count = 0;
     function updateCount(comm) {
-        if (comm.replies?.length > 0) {
+        if (comm?.replies?.length > 0) {
             comm.replies.forEach((reply) => {
                 let r = updateCount(reply);
                 count += r;
@@ -176,6 +224,7 @@ const countReplies = (comment) => {
         return 1;
     }
     updateCount(comment);
+
     comment.replies_count = count;
 };
 
@@ -184,17 +233,20 @@ const commentToScrollInto = ref({
     id: null,
 });
 
+const postCommentsCount = ref(0);
+const postVisibleCommentsCount = ref(0);
+
 onMounted(async () => {
     if (hasParam("comment")) {
+        isIgnoreLimitEnabled.value = true;
+
+        comments_block.value?.scrollIntoView();
         nextTick(() => {
             comments_block.value?.scrollIntoView();
-            nextTick(() => {
-                comments_block.value?.scrollIntoView();
-            });
-            commentToScrollInto.value.has = true;
-            commentToScrollInto.value.id = getParam("comment");
-            scrollIntoComment.value = getParam("comment");
         });
+        commentToScrollInto.value.has = true;
+        commentToScrollInto.value.id = getParam("comment");
+        scrollIntoComment.value = getParam("comment");
     }
     if (hasParam("comments"))
         nextTick(() => {
@@ -209,6 +261,14 @@ onMounted(async () => {
     // if (hasParam("comments")) comments_block.value.scrollIntoView();
     comments.value.forEach((comment) => {
         if (comment.level == 0) showRepliesArray.value.unshift(comment.id);
+    });
+
+    comments.value.forEach((comment) => {
+        if (comment.replies_count == 0) {
+            comment.replies_visible_count = 0;
+        }
+        postRepliesCount.value += comment.replies_count;
+        postCommentsCount.value += postRepliesCount.value + 1;
     });
 });
 
@@ -226,6 +286,47 @@ const comments = ref(null);
 const comments_block = ref(null);
 const commentIsCreated = ref(false);
 const scrollIntoComment = ref(null);
+
+const findComment = (id) => {
+    function find(comment) {
+        if (comment.id === id) {
+            return comment;
+        }
+        if (comment.replies) {
+            for (const reply of comment.replies) {
+                const found = find(reply);
+                if (found) {
+                    return found;
+                }
+            }
+        }
+        return null;
+    }
+    for (const comment of comments.value) {
+        const found = find(comment);
+        if (found) {
+            return found;
+        }
+    }
+    return null;
+};
+
+const addCommentInObjectTree = (comment, parrent_id) => {
+    const parrent = findComment(comment.comment_id);
+    console.log("!!", parrent);
+    if (!parrent.replies) {
+        parrent.replies = [];
+    }
+    parrent.replies.unshift(comment);
+
+    const index = comments.value.findIndex((obj) => obj.id == parrent_id);
+    console.log("parrent index :", index, "parrent_id", parrent_id);
+    if (index == -1) return;
+    countReplies(comments.value[index]);
+    countReplies(findComment(comment.comment_id));
+};
+
+provide("addCommentInObjectTree", addCommentInObjectTree);
 
 const createComment = (form) => {
     const formData = new FormData();

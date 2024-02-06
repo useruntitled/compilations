@@ -2,7 +2,9 @@
     <div v-for="i in 2">
         <div
             class="bg-kppale"
-            :class="i == 1 ? 'fixed w-full z-50' : 'block'"
+            :class="
+                i == 1 ? 'fixed w-full z-50 border-b-4 border-kpnpale' : 'block'
+            "
             id="header"
         >
             <div class="max-w-7xl mx-auto px-5 py-1">

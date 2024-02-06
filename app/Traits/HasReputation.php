@@ -41,6 +41,7 @@ trait HasReputation
             'down' => $minuses,
             'action' => $user_action ?? null,
             'reputation_to_id' => $this->id,
+            'overall' => $pluses + $minuses,
         ];
     }
 

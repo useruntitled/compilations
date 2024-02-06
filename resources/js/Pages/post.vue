@@ -32,9 +32,11 @@
                     class="rounded-lg mx-auto w-full object-cover"
                 /> -->
                 <LazyImage
+                    v-if="post.image"
                     :preview="`/media/${post.image_preview}`"
                     :then="route('im', [post.image, 800])"
                     class="rounded-lg mx-auto w-full object-cover"
+                    style="min-width: 600px; min-height: 200px"
                 ></LazyImage>
             </div>
         </Link>
