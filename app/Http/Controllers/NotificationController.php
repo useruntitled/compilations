@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
-    const PER_PAGE = 10;
+    const PER_PAGE = 5;
 
     public function index()
     {
@@ -16,10 +16,15 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function getMyNotifications($page)
+    public function getMyNotifications(?int $page = 1)
     {
         $notifications = Auth::user()->notifications->skip(($page - 1) * self::PER_PAGE)->take(self::PER_PAGE);
 
         return NotificationResource::collection($notifications);
+    }
+    
+    public function read()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
     }
 }

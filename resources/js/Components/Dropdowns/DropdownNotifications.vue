@@ -1,9 +1,6 @@
 <template>
     <Dropdown width="350" v-if="$page.props.auth.user">
-        <template
-            #trigger
-            v-if="notifications_count <= 0 || notificationsHaveBeenRead"
-        >
+        <template #trigger v-if="!unreadNotificationsCount">
             <div class="px-3" @click="open()">
                 <BtnIcon class="flex items-center text-black"
                     ><IconBell class="w-[28px] h-[28px] stroke-[2px]"></IconBell
@@ -19,7 +16,7 @@
                         ></IconBell>
                         <span
                             class="absolute ms-3 mt-3 px-[5px] text-xs rounded-full bg-red-500 text-white"
-                            >{{ notifications_count }}</span
+                            >{{ unreadNotificationsCount }}</span
                         >
                     </div>
                 </BtnIcon>
@@ -27,15 +24,14 @@
         </template>
         <template #content>
             <p class="text-start font-medium p-5 py-2">Уведомления</p>
-            <div v-if="notifications_count">
-                <div v-for="(items, key) in notificationsGroup">
+            <div v-if="notifications?.length">
+                <div v-for="(notification, key) in notifications">
                     <component
-                        :is="items[0].type.replace('App\\Notifications\\', '')"
-                        :notifications="items"
-                        :count="notificationsGroup[key].length"
+                        :is="notificationsList[notification.type]"
+                        :notification="notification"
                     ></component>
                 </div>
-                <div v-if="notifications_count >= 5">
+                <div v-if="notifications.length >= 5">
                     <hr />
                     <Link :href="route('notifications')">
                         <button class="p-[5px] text-dtfpr">
@@ -45,7 +41,7 @@
                 </div>
             </div>
             <div
-                v-if="notifications_count == 0 && notificationsIsLoaded"
+                v-if="notifications?.length == 0 && notificationsIsLoaded"
                 class="p-5"
             >
                 <p class="text-xl font-medium">Уведомлений пока нет</p>
@@ -54,7 +50,7 @@
                     станет не так пусто!
                 </p>
             </div>
-            <div v-if="isLoading" class="p-5">
+            <div v-if="!notificationsIsLoaded" class="p-5">
                 <div class="flex justify-center">
                     <AnimationLoader></AnimationLoader>
                 </div>
@@ -62,8 +58,13 @@
         </template>
     </Dropdown>
 </template>
-<script>
-import axios from "axios";
+<script setup>
+import { ref, onMounted } from "vue";
+import {
+    listenNotifications,
+    LoadNotifications,
+    markNotificationsAsRead,
+} from "../Notifications/NotificationsApi.js";
 import BtnIcon from "../BtnIcon.vue";
 import Dropdown from "../Dropdown.vue";
 import IconBell from "../Icons/IconBell.vue";
@@ -72,108 +73,46 @@ import PostWasCommentedNotification from "@/Components/Notifications/PostWasComm
 import ReplyNotification from "../Notifications/ReplyNotification.vue";
 import PostUpNotification from "../Notifications/PostUpNotification.vue";
 import CommentUpNotification from "../Notifications/CommentUpNotification.vue";
+import { usePage } from "@inertiajs/vue3";
 
-export default {
-    props: {},
-    data() {
-        return {
-            notifications_count: this.$page.props.auth.user
-                ? this.$page.props.auth.user.unreadNotifications_count
-                : 0,
-            notificationsHaveBeenRead: false,
-            notificationsIsLoaded: false,
-            notifications: null,
-            isLoading: false,
-            notificationsGroup: this.notifications,
-        };
-    },
+const page = usePage();
 
-    methods: {
-        open() {
-            if (!this.notificationsHaveBeenRead) {
-                this.LoadNotificationsAndRead();
-            }
-        },
-        group() {
-            const resultObject = {};
-            let count;
-            if (this.notifications) {
-                this.notifications.forEach((n) => {
-                    const type = n.type;
-                    const readed = n.read_at == null ? false : true;
-                    const id = n.data.object_id;
-                    const key = `${type}-${readed}-${id}`;
-                    if (!resultObject[key]) resultObject[key] = [];
-                    resultObject[key].push(n);
-                    count++;
-                });
-            }
-            // return resultObject;
-            this.notifications_count = count;
-            this.notificationsGroup = resultObject;
-        },
-        LoadNotificationsAndRead() {
-            this.isLoading = true;
-            this.notificationsIsLoaded = false;
-            axios
-                .get(
-                    route("notifications.get", [this.$page.props.auth.user.id])
-                )
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    this.notifications = res.data;
-                    this.group();
-                    this.notifications_count = res.data.length;
-                    this.isLoading = false;
-                    this.notificationsIsLoaded = true;
-                });
-            this.readNotifications();
-        },
-        readNotifications() {
-            axios
-                .post(route("notifications.read"))
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    this.notificationsHaveBeenRead = true;
-                });
-        },
-    },
-    mounted() {
-        if (this.$page.props.auth.user) {
-            console.log("Connecting");
-            // Echo.channel(`private-users.${this.$page.props.auth.user.id}`).listen(
-            //     "reputation.put.event",
-            //     (data) => {
-            //         console.log(data);
-            //     }
-            // );
-            // console.log(Echo);
-
-            var channel = Echo.private(
-                `users.${this.$page.props.auth.user.id}`
-            );
-            channel.listen(".unread.notifications.count", (data) => {
-                console.log(data);
-                this.notifications_count = data.unreadNotifications_count;
-                this.notificationsHaveBeenRead = false;
-            });
-        }
-    },
-    components: {
-        Dropdown,
-        IconBell,
-        BtnIcon,
-        AnimationLoader,
+const notificationsList = {
+    "App\\Notifications\\PostWasCommentedNotification":
         PostWasCommentedNotification,
-        ReplyNotification,
-        PostUpNotification,
-        CommentUpNotification,
-    },
+    "App\\Notifications\\ReplyNotification": ReplyNotification,
+    "App\\Notifications\\PostUpNotification": PostUpNotification,
+    "App\\Notifications\\CommentUpNotification": CommentUpNotification,
 };
+
+const unreadNotificationsCount = ref(
+    page.props.auth.user.unreadNotifications_count ?? 0
+);
+
+const notifications = ref([]);
+
+const notificationsIsLoaded = ref(false);
+
+const notificationsHaveBeenRead = ref(false);
+
+const open = async () => {
+    if (!notificationsHaveBeenRead.value) {
+        await LoadNotifications((res) => (notifications.value = res.data));
+        notificationsIsLoaded.value = true;
+        await markNotificationsAsRead(
+            (res) => (notificationsHaveBeenRead.value = true)
+        );
+        unreadNotificationsCount.value = 0;
+    }
+};
+
+const updateNotifications = (data) => {
+    console.log(data);
+    unreadNotificationsCount.value = data.unreadNotifications_count;
+    notificationsHaveBeenRead.value = false;
+};
+
+onMounted(() => {
+    listenNotifications(page.props.auth.user.id, updateNotifications);
+});
 </script>

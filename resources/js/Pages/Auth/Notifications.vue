@@ -7,13 +7,8 @@
         <main class="px-5 py-5">
             <InfiniteScrollContainer @load="handleLoadEvent()">
                 <div v-for="n in notifications">
-                    <!-- <NotificationTemplate :notification="n" :hasIcon="false">
-                    <template #content>
-                        <p>{{ notificationType[n.type] }}</p>
-                    </template>
-                </NotificationTemplate> -->
                     <component
-                        :notifications="[n]"
+                        :notification="n"
                         :is="components[n.type]"
                     ></component>
                 </div>
@@ -73,6 +68,7 @@ const handleLoadEvent = async () => {
     if (!isEnd.value && !isLoading.value) {
         isLoading.value = true;
         await loadNotifications();
+        currentPage.value += 1;
         isLoading.value = false;
     }
 };

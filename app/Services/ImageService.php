@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -17,7 +18,7 @@ class ImageService
 
     const CACHE_MINUTES = 1000;
 
-    protected $uploads_path;
+    protected $upload_path;
 
     protected $filename;
 
@@ -27,17 +28,13 @@ class ImageService
 
     public function __construct()
     {
-        $this->uploads_path = public_path('media\\');
+        $this->upload_path = public_path('media\\');
     }
 
-    /**
-     * Filename like P5WuyYVLVUcmcffkGwQJb8mxqVKdVPAkvTPOqEbc.jpg or 'Default.jpg'
-     * Path like C:\OSPanel\domains\compilations\public\storage\P5WuyYVLVUcmcffkGwQJb8mxqVKdVPAkvTPOqEbc.jpg
-     */
     public function get($filename, $scale)
     {
         $this->filename = $filename;
-        $this->path = $this->uploads_path.$filename;
+        $this->path = $this->upload_path.$filename;
         $this->key = $this->generateKey($filename, $scale);
 
         if ($this->isCached()) {
@@ -54,7 +51,7 @@ class ImageService
 
     protected function scaleAndCache($scale)
     {
-        $image = ImageManager::imagick()->read($this->uploads_path.$this->filename)->scale(width: $scale)->encodeByPath();
+        $image = ImageManager::imagick()->read($this->upload_path.$this->filename)->scale(width: $scale)->encodeByPath();
 
         $content = $image;
         Cache::put($this->key, $content, now()->addMinutes(self::CACHE_MINUTES));
@@ -79,7 +76,7 @@ class ImageService
         return "image:$filename:$scale";
     }
 
-    public function uploadAndDelete($file, $old)
+    public function uploadAndDelete(UploadedFile $file, ?string $old): string
     {
         $this->delete($old);
 
@@ -89,7 +86,7 @@ class ImageService
         $path = Storage::disk('media')->put(null, $file);
         [$new_file_name, $new_file_ext] = explode('.', $path);
         // $file_preview = Image::make(public_path("media\\$path"))->resize(width: 30);
-        $file_preview = ImageManager::imagick()->read(public_path("media\\$path"))->scaleDown(width: 30)->blur(3)->encodeByPath();
+        $file_preview = ImageManager::imagick()->read(media_path($path))->scaleDown(width: 15)->blur(3)->encodeByPath();
         Storage::disk('media')->put($new_file_name.'__preview'.".$new_file_ext", $file_preview);
 
         return $path;

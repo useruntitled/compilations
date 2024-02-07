@@ -26,6 +26,7 @@ export default {
                 'secondary': '#595959',
                 'field': '#F5F5F5',
                 'shit': '#4f3d36',  
+                'primary2': '#0066FF',
             },
             fontSize:{
                 '13px': ['13px','18px'],

@@ -1,69 +1,36 @@
 <template>
     <div class="p-2 px-3">
         <main class="text-start">
-            <div v-if="solo">
-                <NotificationTemplate
-                    :notification="notifications[0]"
-                    iconFirstColor="red-500"
-                >
-                    <template #content>
-                        <Link
-                            :href="
-                                route('comment.redirect', [
-                                    notifications[0].data.comment.id,
-                                ])
-                            "
-                        >
-                            Оценил ваш комментарий
-                            {{ notifications[0].data.comment.text }}
-                        </Link>
-                    </template>
-                    <template #icon>
-                        <IconHeart></IconHeart>
-                    </template>
-                </NotificationTemplate>
-            </div>
-            <div v-else>
-                <NotificationTemplate
-                    :notification="notifications[0]"
-                    iconFirstColor="red-500"
-                >
-                    <template #header> И еще {{ count }} чел. </template>
-                    <template #content>
-                        <Link
-                            :href="
-                                route(
-                                    'comment.redirect',
-                                    notifications[0].data.comment.id
-                                )
-                            "
-                        >
-                            Оценили ваш комментарий
-                            {{ notifications[0].data.comment.text }}
-                        </Link>
-                    </template>
-                    <template #icon>
-                        <IconHeart></IconHeart>
-                    </template>
-                </NotificationTemplate>
-            </div>
+            <NotificationTemplate
+                :notification="notification"
+                iconFirstColor="red-500"
+            >
+                <template #content>
+                    <Link
+                        :href="
+                            route('comment.redirect', [
+                                notification.data.comment.id,
+                            ])
+                        "
+                    >
+                        Оценил ваш комментарий
+                        {{ notification.data.comment.text }}
+                    </Link>
+                </template>
+                <template #icon>
+                    <!-- <IconHeart></IconHeart> -->
+                    <IconHeartFilled></IconHeartFilled>
+                </template>
+            </NotificationTemplate>
         </main>
     </div>
 </template>
-<script>
+<script setup>
 import IconHeart from "../Icons/IconHeart.vue";
+import IconHeartFilled from "../Icons/IconHeartFilled.vue";
 import NotificationTemplate from "./NotificationTemplate.vue";
 
-export default {
-    props: {
-        notifications: null,
-        count: null,
-    },
-    computed: {
-        solo() {
-            return this.notifications.length == 1;
-        },
-    },
-    components: { NotificationTemplate, IconHeart },
-};
+const props = defineProps({
+    notification: null,
+});
 </script>

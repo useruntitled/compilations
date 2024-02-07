@@ -1,6 +1,7 @@
 <template>
+    <!-- <p class="bg-primary2"></p> -->
     <div
-        class="p-1 rounded-full"
+        class="p-[0.2] rounded-full"
         :class="[sizeClass, firstColorClass, secondColorClass]"
     >
         <slot :class="secondColorClass"></slot>
@@ -13,7 +14,7 @@ export default {
             default: 4,
         },
         firstColor: {
-            default: "primary",
+            default: "primary2",
         },
         secondColor: {
             default: "white",
@@ -27,7 +28,7 @@ export default {
             return `bg-${this.firstColor}`;
         },
         secondColorClass() {
-            return `fill-${this.secondColor} stroke-${this.secondColor} text-${this.secondColor}`;
+            return `fill-${this.secondColor}  text-${this.secondColor}`;
         },
     },
 };

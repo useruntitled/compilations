@@ -10,7 +10,12 @@ class Genre extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'slug', 'kp_wire',
+        'name', 'slug',
+        'kp_wire',
+    ];
+
+    protected $hidden = [
+        'created_at', 'updated_at',
     ];
 
     public function films()

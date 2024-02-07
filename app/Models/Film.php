@@ -9,13 +9,11 @@ class Film extends Model
 {
     use HasFactory;
 
-    protected $guarded = [
+    protected $guarded = [];
 
+    protected $hidden = [
+        'created_at', 'updated_at',
     ];
-
-    // protected $with = [
-    //     'genres'
-    // ];
 
     public function genres()
     {

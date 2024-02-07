@@ -79,6 +79,7 @@
 import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import LazyImage from "@/Components/LazyImage.vue";
+import { getFeed, listenFeedUpdates } from "./AsideRightApi";
 
 const comments = ref([]);
 
@@ -90,30 +91,19 @@ const prepareHref = (comment) => {
     ]);
 };
 
-const getLastComments = () => {
-    axios
-        .get(route("comments.get.last"))
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            // console.log(res);
-            if (res.status == 200) {
-                console.log(res);
-                comments.value = res.data;
-            }
-        });
+const setComments = (data) => {
+    comments.value = data;
+};
+
+const addComment = (data) => {
+    console.log("data", data);
+    comments.value.unshift(data.data);
 };
 
 onMounted(() => {
-    getLastComments();
+    getFeed(setComments);
 
-    console.log("AsideRight: Connecting");
-
-    const channel = Echo.channel(`all`);
-    channel.listen(".comments.feed", (data) => {
-        comments.value.unshift(data[0]);
-    });
+    listenFeedUpdates(addComment);
 });
 
 watch(comments, () => {
@@ -122,63 +112,7 @@ watch(comments, () => {
     }
 });
 </script>
-<!-- <script>
 
-
-export default {
-    data() {
-        return {
-            flag: false,
-            comments: [],
-        };
-    },
-
-    methods: {
-        prepareHref(comment) {
-            if (comment.isReply)
-                return (
-                    route("post", [comment.post.id, comment.post.slug]) +
-                    `#reply-${comment.id}`
-                );
-            else
-                return (
-                    route("post", [comment.post.id, comment.post.slug]) +
-                    `#comment-${comment.id}`
-                );
-        },
-        getLastComments() {
-            axios
-                .get(route("comments.get.last"), {
-                    // transformResponse: [
-                    //     function (data) {
-                    //         // Возвращаем данные без изменений
-                    //         return data;
-                    //     },
-                    // ],
-                })
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    // console.log(res);
-                    if (res.status == 200) {
-                        this.comments = res.data;
-                    }
-                });
-        },
-    },
-    mounted() {
-        this.getLastComments();
-        console.log("Connecting");
-
-        const channel = Echo.private(`users`);
-        channel.listen(".comments.feed", (data) => {
-            this.comments.unshift(data[0]);
-        });
-    },
-    components: { Comment, UserTablet },
-};
-</script> -->
 <style>
 /* хром, сафари */
 .noscrollbar::-webkit-scrollbar {

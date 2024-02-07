@@ -1,6 +1,6 @@
 <template>
     <svg viewBox="0 0 16 16" fill="currentColor">
-        <circle cx="8" cy="8" r="8" fill="#0066FF" />
+        <circle cx="8" cy="8" r="8" fill="none" />
         <circle cx="8" cy="8" r="8" fill="white" fill-opacity="0.2" />
         <circle cx="8" cy="8" r="8" fill="black" fill-opacity="0.06" />
         <path

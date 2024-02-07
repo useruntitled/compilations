@@ -16,11 +16,11 @@
                                 preserve-state
                                 :only="[]"
                             >
-                                <ApplicationLogo
+                                <!-- <ApplicationLogo
                                     class="inline-block rounded hover:opacity-80"
                                     :size="'200x200'"
                                     style="max-width: 50px"
-                                ></ApplicationLogo>
+                                ></ApplicationLogo> -->
                             </Link>
                         </div>
                     </section>
@@ -53,7 +53,9 @@
                             class="w-full flex justify-end items-center"
                         >
                             <div class="inline-block me-2">
-                                <DropdownNotifications></DropdownNotifications>
+                                <DropdownNotifications
+                                    v-if="page.props.auth.check"
+                                ></DropdownNotifications>
                             </div>
                             <Dropdown width="300">
                                 <template #trigger>

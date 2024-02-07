@@ -31,6 +31,10 @@ class Post extends Model
         'user',
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
+
     protected static function booted(): void
     {
         static::addGlobalScope(new ActiveScope);
@@ -39,13 +43,11 @@ class Post extends Model
     protected function imagePreview(): Attribute
     {
         if ($this->image == null) {
-            return Attribute::make(get: fn () => null);
+            return Attribute::get(fn () => null);
         }
         [$name, $ext] = explode('.', $this->image);
 
-        return Attribute::make(
-            get: fn () => $name.'__preview'.".$ext"
-        );
+        return Attribute::get(fn () => $name.'__preview'.".$ext");
     }
 
     public function films()
@@ -72,23 +74,17 @@ class Post extends Model
     {
         $this->bookmarks ?? $this->bookmarks();
 
-        return Attribute::make(
-            get: fn () => $this->bookmarks->contains('user_id', auth()->id())
-        );
+        return Attribute::get(fn () => $this->bookmarks->contains('user_id', auth()->id()));
     }
 
     protected function timestamp(): Attribute
     {
-        return Attribute::make(
-            get: fn () => (new Carbon($this->published_at))->diffForHumans()
-        );
+        return Attribute::get(fn () => (new Carbon($this->published_at))->diffForHumans());
     }
 
     protected function isActive(): Attribute
     {
-        return Attribute::make(
-            get: fn () => $this->active == true
-        );
+        return Attribute::get(fn () => $this->active == true);
     }
 
     public function scopeWithFilms(Builder $query, int $count)

@@ -46,8 +46,8 @@ class PostController extends Controller
         $posts = Post::with(['user' => ['roles'], 'reputation', 'films' => ['genres']])->published()
             ->withCount(['comments', 'bookmarks', 'films'])
             ->latest()
-            ->skip(($page - 1) * config('app')['posts.per.page'])
-            ->take(config('app')['posts.per.page'])
+            ->skip(($page - 1) * config('post.per_page'))
+            ->take(config('post.per_page'))
             ->get();
 
         $result = [];
@@ -63,10 +63,10 @@ class PostController extends Controller
     {
         $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
             ->where('active', 1)
-            ->withCount(['comments', 'bookmarks'])
+            ->withCount(['comments', 'bookmarks', 'films'])
             ->inRandomOrder()
-            ->skip(($page - 1) * config('app')['posts.per.page'])
-            ->take(config('app')['posts.per.page'])
+            ->skip(($page - 1) * config('post.per_page'))
+            ->take(config('post.per_page'))
             ->get();
 
         return $posts;

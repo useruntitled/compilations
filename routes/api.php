@@ -84,17 +84,18 @@ Route::controller(ReputationController::class)->group(function () {
     Route::post('reputation', 'index')->name('new.reputation')->middleware('auth');
 });
 
-Route::get('/notifications/get', function () {
-    return NotificationResource::collection(Auth::user()->notifications);
-})->name('notifications.get')->middleware('auth');
+// Route::get('/notifications/get', function () {
+//     return NotificationResource::collection(Auth::user()->notifications);
+// })->name('notifications.get')->middleware('auth');
 
 Route::controller(NotificationController::class)->group(function () {
-    Route::get('me/notifications/page/{page}', 'getMyNotifications')->name('me.notifications.get')->middleware('auth');
+    Route::get('me/notifications/page/{page?}', 'getMyNotifications')->name('me.notifications.get')->middleware('auth');
+    Route::patch('me/notifications/read', 'read')->name('me.notifications.read')->middleware('auth');
 });
 
-Route::post('notifications/read', function () {
-    return Auth::user()->markAsReadNotifications();
-})->name('notifications.read')->middleware('auth');
+// Route::post('notifications/read', function () {
+//     return Auth::user()->markAsReadNotifications();
+// })->name('notifications.read')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::post('user/avatar', [RegisteredUserController::class, 'uploadAvatar'])->name('user.upload.avatar');

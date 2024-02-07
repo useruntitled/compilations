@@ -141,8 +141,13 @@ const sortByNewest = (a, b) => {
     return -1;
 };
 
-const resortComments = (func, value) => {
-    processComments(func);
+const resortComments = async (func, value) => {
+    
+    await processComments(func);
+    nextTick(() => {
+        comments_block.value.scrollIntoViewIfNeeded();
+    })
+    
     currentSort.value = sortingValues[value];
 }
 

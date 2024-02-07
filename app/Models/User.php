@@ -62,6 +62,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'bool',
+        'is_creator' => 'bool',
     ];
 
     protected function isAdmin(): Attribute
@@ -77,9 +79,7 @@ class User extends Authenticatable
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::make(
-            get: fn () => $this->roles->contains(fn ($r) => $r->role == 'creator')
-        );
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->role == 'creator'));
     }
 
     protected function avatarPreview(): Attribute
@@ -100,29 +100,8 @@ class User extends Authenticatable
         }
         [$name, $ext] = explode('.', $this->background_image);
 
-        return Attribute::make(
-            get: fn () => $name.'__preview'.".$ext"
-        );
+        return Attribute::get(fn () => $name.'__preview'.".$ext");
     }
-
-    // protected function avatar(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: function(){
-    //             if($this->id != null){
-    //                 $path = public_path("storage\\avatars\\" . $this->id);
-    //                 $exts = ['.png','.jpeg','.jpg'];
-    //                 foreach($exts as $ext){
-    //                     if(file_exists($path . $ext)){
-    //                     return "avatars." . $this->id;
-    //                     }
-    //                 }
-    //             }
-
-    //             return "avatars." . "Default";
-    //             }
-    //     );
-    // }
 
     public function markAsReadNotifications()
     {
@@ -140,15 +119,10 @@ class User extends Authenticatable
 
     protected function canCreatePosts(): Attribute
     {
-        return Attribute::make(
-            get: function () {
-                if ($this->roles()->where('role', 'creator')->exists()) {
-                    return true;
-                }
+        $this->roles ?? $this->roles();
+        $isCan = $this->roles->where('role', 'creator')->count();
 
-                return false;
-            }
-        );
+        return Attribute::get(fn () => $isCan);
     }
 
     public function karma(KarmaService $service)
