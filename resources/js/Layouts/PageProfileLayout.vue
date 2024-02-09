@@ -33,7 +33,7 @@
                 "
                 @mouseenter="backgroundImageIsHovered = true"
             /> -->
-            <div class="overflow-hidden" v-if="user.background_image">
+            <div class="overflow-hidden" v-if="user.background_image && !backgroundImageIsUploading">
                 <LazyImage
                     @mouseenter="backgroundImageIsHovered = true"
                     :preview="`/media/${user.background_image_preview}`"
@@ -47,12 +47,22 @@
                 v-else
                 @mouseenter="backgroundImageIsHovered = true"
                 class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
-            ></div>
+            >
+            </div>
         </div>
         <div class="px-5 pb-2">
             <div class="flex justify-between items-center">
                 <div class="mt-[-32px]">
-                    <div v-if="page.props.auth.user?.id != user.id">
+                    <div v-if="avatarIsUploading">
+                        <ZoomableImage
+                            :preview="'data:image/png;base64,' + props.user.avatar"
+                            :then="'data:image/png;base64,' + props.user.avatar"
+                            class="border-gray-100 border-[3.5px] rounded-full w-[90px] h-[90px] object-cover"
+                            style="width: 90px; height: 90px"
+                        >
+                        </ZoomableImage>
+                    </div>
+                    <div v-if="page.props.auth.user?.id != user.id && !avatarIsUploading">
                         <ZoomableImage
                             :preview="'/media/' + user.avatar_preview"
                             :then="route('im', [user.avatar, '1000'])"
@@ -96,6 +106,7 @@
                             alt=""
                         /> -->
                         <LazyImage
+                            v-if="!avatarIsUploading"
                             @mouseenter="avatarIsHovered = true"
                             class="rounded-full border-gray-100 border-[3.5px] z-20"
                             style="width: 90px; height: 90px"
@@ -267,8 +278,9 @@ const uploadBackgroundImage = (file, base64) => {
         })
         .then((res) => {
             console.log(res);
+            backgroundImageIsUploading.value = false;
             if (res.status == 200) {
-                backgroundImageIsUploading.value = false;
+
                 props.user.background_image = res.data;
             }
         });

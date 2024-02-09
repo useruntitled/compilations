@@ -55,7 +55,7 @@
                 ></Comment>
             </div>
         </main>
-        <div v-if="!showReplyInterface && !showEditingInterface && isLoaded" class="mt-4">
+        <div v-if="!showReplyInterface && !showEditingInterface && isLoaded && comments?.length > 10" class="mt-4">
                 <CommentInput
                     @sendComment="createComment"
                     :commentIsCreated="commentIsCreated"

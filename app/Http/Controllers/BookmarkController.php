@@ -15,7 +15,7 @@ class BookmarkController extends Controller
      */
     public function index()
     {
-        $bookmarks = Bookmark::with(['post.user', 'post.films'])->where('user_id', Auth::id())->get();
+        $bookmarks = Bookmark::with(['post.user', 'post.films.genres'])->where('user_id', Auth::id())->get();
 
         $posts = [];
 
@@ -29,21 +29,6 @@ class BookmarkController extends Controller
         ]);
     }
 
-    public function getMyBookmarkedPosts($page)
-    {
-        $bookmarks = Bookmark::with(['post.user', 'post.films'])
-            ->where('user_id', Auth::id())
-            ->skip(($page - 1) * self::PER_PAGE)
-            ->take(self::PER_PAGE)
-            ->get();
-
-        $posts = [];
-
-        foreach ($bookmarks as $bookmark) {
-            $bookmark->post->loadCount(['comments', 'bookmarks']);
-            $posts[] = $bookmark->post;
-        }
-    }
 
     /**
      * Show the form for creating a new resource.

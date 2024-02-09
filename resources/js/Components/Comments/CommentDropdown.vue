@@ -1,52 +1,67 @@
 <template>
-    <Dropdown width="auto" :align="'Right'">
+    <Dropdown align="left">
         <template #trigger>
-            <DropdownDotsTrigger class="w-6 h-6"> </DropdownDotsTrigger>
+            <button class="p-1 hover:bg-gray-100 text-secondary rounded-full">
+                <IconDots :class="class"></IconDots>
+            </button>
         </template>
-        <template
-            #content
-            v-if="
-                this.$page.props.auth.user &&
-                this.comment.user.id == this.$page.props.auth.user.id
-            "
-        >
-            <div class="px-2">
+        <template #content v-if="page.props.auth.user?.id != comment.user.id">
+            <div class="py-1 text-sm">
                 <button
-                    @click="this.$emit('enableEditing')"
-                    class="block text-sm"
-                    type="button"
+                    @click="showReportModal = true"
+                    class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
-                    Редактировать
-                </button>
-                <button
-                    @click.prevent="this.$emit('remove')"
-                    class="block text-sm"
-                    type="button"
-                >
-                    Удалить
+                    <icon-flag
+                        class="w-5 h-5  me-2 inline-block"
+                    ></icon-flag>
+                    <span>Пожаловаться</span>
                 </button>
             </div>
         </template>
         <template #content v-else>
-            <DropdownContentReport></DropdownContentReport>
+            <div class="py-1 text-start text-sm">
+                <button
+                    @click="emit('enableEditing')"
+                    class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
+                >
+                    <icon-pencil
+                        class="w-5 h-5  me-2 inline-block"
+                    ></icon-pencil>
+                    <span>Редактировать</span>
+                </button>
+                <button
+                    @click="emit('delete')"
+                    class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
+                >
+                    <icon-trash
+                        class="w-5 h-5  me-2 inline-block"
+                    ></icon-trash>
+                    <span>Удалить</span>
+                </button>
+            </div>
         </template>
     </Dropdown>
+    <Report
+        :show="showReportModal"
+        @close="showReportModal = !showReportModal"
+    ></Report>
 </template>
-<script>
+<script setup>
 import Dropdown from "../Dropdown.vue";
-import DropdownDotsTrigger from "../Dropdowns/DropdownDotsTrigger.vue";
 import IconDots from "../Icons/IconDots.vue";
-import DropdownContentReport from "@/Components/Dropdowns/DropdownContentReport.vue";
+import IconTrash from "@/Components/Icons/IconTrash.vue";
+import IconFlag from "@/Components/Icons/IconFlag.vue";
+import Report from "@/Components/Modals/Report.vue";
+import IconPencil from "@/Components/Icons/IconPencil.vue";
+import {usePage} from "@inertiajs/vue3";
 
-export default {
-    props: {
-        comment: null,
-    },
-    components: {
-        Dropdown,
-        IconDots,
-        DropdownContentReport,
-        DropdownDotsTrigger,
-    },
-};
+const emit = defineEmits(['enableEditing', 'remove']);
+
+const page = usePage();
+
+const props = defineProps({
+    comment: null,
+    class: null,
+})
+
 </script>

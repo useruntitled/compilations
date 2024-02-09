@@ -48,7 +48,6 @@ const alignmentClasses = computed(() => {
 
 const open = ref(false);
 </script>
-
 <template>
     <div class="relative">
         <div @click="open = !open">

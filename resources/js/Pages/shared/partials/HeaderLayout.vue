@@ -9,18 +9,18 @@
         >
             <div class="max-w-7xl mx-auto px-5 py-1">
                 <div class="grid grid-template">
-                    <section>
+                    <section class="flex items-center">
                         <div>
                             <Link
                                 :href="route('home')"
                                 preserve-state
                                 :only="[]"
                             >
-                                <!-- <ApplicationLogo
-                                    class="inline-block rounded hover:opacity-80"
+                                <ApplicationLogo
+                                    class="inline-block rounded hover:opacity-70 opacity-90"
                                     :size="'200x200'"
-                                    style="max-width: 50px"
-                                ></ApplicationLogo> -->
+                                    style="max-width: 130px"
+                                ></ApplicationLogo>
                             </Link>
                         </div>
                     </section>
@@ -71,10 +71,10 @@
                                             :then="
                                                 route('im', [
                                                     page.props.auth.user.avatar,
-                                                    40,
+                                                    100,
                                                 ])
                                             "
-                                            class="w-[40px] h-[40px] rounded-full hover:brightness-[1.2]"
+                                            class="w-[40px] h-[40px] rounded-full hover:brightness-[1.2] border-secondary border-1"
                                         ></LazyImage>
                                         <div class="ms-2">
                                             <svg

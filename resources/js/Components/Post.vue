@@ -23,19 +23,19 @@
             <section class="px-3 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div class="p-2">
+            <div class="p-2 ">
                 <!-- <img
                     v-lazy="route('im', [post.image, '800'])"
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
                 /> -->
-                <LazyImage
-                    v-if="post.image"
-                    :preview="`/media/${post.image_preview}`"
-                    :then="route('im', [post.image, 800])"
-                    class="rounded-lg mx-auto w-full object-cover"
-                    style="min-width: 600px; min-height: 200px"
-                ></LazyImage>
+                    <LazyImage
+                        v-if="post.image"
+                        :preview="`/media/${post.image_preview}`"
+                        :then="route('im', [post.image, 800])"
+                        class="rounded-lg mx-auto w-full object-cover w-full"
+                        style="min-width: auto; min-height: 400px;"
+                    ></LazyImage>
             </div>
         </Link>
         <div v-for="(film, index) in post.films" class="px-2">

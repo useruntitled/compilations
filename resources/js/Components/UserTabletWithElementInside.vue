@@ -15,7 +15,7 @@
                         <LazyImage
                             :preview="`/media/${user.avatar_preview}`"
                             :then="route('im', [user.avatar, 100])"
-                            class="rounded-full inline-block hover:brightness-110"
+                            class="rounded-full inline-block hover:brightness-110 border-2"
                             style="width: 40px; height: 40px"
                         >
                         </LazyImage>

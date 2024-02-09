@@ -10,7 +10,7 @@
                 style="height: calc(100vh - 100px)"
             >
                 <p v-if="postIsPublished" class="font-medium">
-                    Будьте осторожны. Пост уже опубликован.
+                    Будьте осторожны. Подборка уже опубликована.
                 </p>
                 <div class="overflow-auto h-full noscrollbar pb-20">
                     <main class="overflow-y-auto px-1">

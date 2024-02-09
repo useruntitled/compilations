@@ -16,14 +16,21 @@
                         class="flex items-center overflow-hidden whitespace-no-wrap px"
                     >
                         <Link :href="route('profile', [comment.user.id])">
-                            <img
-                                :src="
-                                    route('im', [comment.user.avatar, ['50']])
-                                "
-                                class="rounded-full inline-block me-2 w-[36px] h-[36px] object-cover"
+                            <LazyImage
+                                :preview="'/media/' + comment.user.avatar_preview"
+                                :then="route('im', [comment.user.avatar, ['50']])"
+                                class="rounded-full inline-block me-2 w-[36px] h-[36px] object-cover border-2"
                                 style="max-width: 36px; max-height: 36px"
-                                alt=""
-                        /></Link>
+                            >
+
+                            </LazyImage>
+<!--                            <img-->
+
+<!--                                -->
+<!--                                -->
+<!--                                alt=""-->
+<!--                        />-->
+                        </Link>
 
                         <div class="flex flex-col">
                             <div>

@@ -7,14 +7,14 @@
                     {{ notification.data.post.title }}
                 </template>
                 <template #icon>
-                    <IconComments></IconComments>
+                    <IconCommentsFilled></IconCommentsFilled>
                 </template>
             </NotificationTemplate>
         </main>
     </div>
 </template>
 <script setup>
-import IconComments from "../Icons/IconComments.vue";
+import IconCommentsFilled from "../Icons/IconCommentsFilled.vue";
 import NotificationTemplate from "./NotificationTemplate.vue";
 
 const props = defineProps({

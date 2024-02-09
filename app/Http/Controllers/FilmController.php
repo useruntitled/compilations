@@ -22,7 +22,7 @@ class FilmController extends Controller
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'X-API-KEY: '.env('kp2_token'),
+            'X-API-KEY: '.env('KP2_TOKEN'),
             'Content-Type: application/json',
         ]);
 
@@ -33,7 +33,7 @@ class FilmController extends Controller
         curl_close($ch);
 
         $json = json_decode($response);
-        if ($json != null || $json != '') {
+        if ($json != null || $json != '' || !isset($json->id)) {
             return $json;
         }
         abort(500);

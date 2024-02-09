@@ -4,19 +4,23 @@ namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class ImageService
 {
-    const EXTS = ['png', 'jpeg', 'jpg'];
+    public const EXTS = ['png', 'jpeg', 'jpg'];
 
-    const DEFAULT_IMAGE_AVATAR_USER_VALUE = 'Default.jpg';
+    public const DEFAULT_IMAGE_AVATAR_USER_VALUE = 'Default.jpg';
 
-    const DEFAULT_IMAGE_AVATAR_USER_ENCODING = 'jpg';
+    public const DEFAULT_IMAGE_AVATAR_USER_ENCODING = 'jpg';
 
-    const CACHE_MINUTES = 1000;
+    public const CACHE_MINUTES = 1000;
 
     protected $upload_path;
 
@@ -28,7 +32,7 @@ class ImageService
 
     public function __construct()
     {
-        $this->upload_path = public_path('media\\');
+        $this->upload_path = public_path('media/');
     }
 
     public function get($filename, $scale)
@@ -44,14 +48,31 @@ class ImageService
         return $this->scaleAndCache($scale);
     }
 
-    protected function isCached()
+    public function generateDefaultUserAvatar(): string
+    {
+        $base64 = config('image.default_image');
+
+        $hashname = Str::random(40);
+
+        $randomColor = fake()->hexColor();
+
+        $image = ImageManager::imagick()->create(1000,1000)->fill($randomColor)->encode(new JpegEncoder());
+        $previewImage = ImageManager::imagick()->create(15, 15)->fill($randomColor)->blur(3)->encode(new JpegEncoder());
+
+        Storage::disk('media')->put($hashname . '.jpeg', $image);
+        Storage::disk('media')->put($hashname . '__preview' . '.jpeg', $previewImage);
+
+        return $hashname . '.jpeg';
+    }
+
+    protected function isCached(): bool
     {
         return Cache::has($this->key) == 1;
     }
 
     protected function scaleAndCache($scale)
     {
-        $image = ImageManager::imagick()->read($this->upload_path.$this->filename)->scale(width: $scale)->encodeByPath();
+        $image = ImageManager::imagick()->read($this->upload_path.$this->filename)->scale(width: $scale)->encodeByMediaType();
 
         $content = $image;
         Cache::put($this->key, $content, now()->addMinutes(self::CACHE_MINUTES));

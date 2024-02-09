@@ -53,8 +53,11 @@ class RegisteredUserController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'avatar' => $service::DEFAULT_IMAGE_AVATAR_USER_VALUE,
+            'avatar' => null,
         ]);
+
+        $user->avatar = $service->generateDefaultUserAvatar($user->id);
+        $user->save();
         // $user_role = Role::where('role','user')->firstOrFail();
         // $user->roles()->attach($user_role->id);
 

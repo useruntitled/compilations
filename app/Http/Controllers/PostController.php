@@ -20,7 +20,7 @@ class PostController extends Controller
         $this->service = $serivce;
     }
 
-    public function index($id, $slug)
+    public function index(int $id, ?string $slug)
     {
         $post = Post::with([
             'user' => ['roles'],
@@ -39,6 +39,12 @@ class PostController extends Controller
         return inertia('home/New', [
             'posts' => $posts,
         ]);
+    }
+
+    public function redirect($id)
+    {
+        $slug = Post::find($id)->slug;
+        return redirect()->route('post',[$id, $slug]);
     }
 
     public function getNew($page)

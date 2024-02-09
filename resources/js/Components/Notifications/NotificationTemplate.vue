@@ -3,7 +3,9 @@
         <UserTablet :user="notification.data.byUser">
             <template #header>
                 <span class="font-medium">
-                    {{ notification.data.byUser.name }}
+                    <Link :href="route('profile', [notification.data.byUser.id])">
+                        {{ notification.data.byUser.name }}
+                    </Link>
                 </span>
                 <span class="text-black font-medium text-sm">
                     <slot name="header"></slot>

@@ -20,21 +20,21 @@
             </div>
         </template>
         <template #content v-else>
-            <div class="py-1 text-start">
+            <div class="py-1 text-start text-sm">
                 <button
                     @click="editPost()"
-                    class="text-base text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
+                    class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
                     <IconPencil
-                        class="stroke-2 inline-block me-2 w-5 h-5"
+                        class="w-5 h-5  me-2 inline-block"
                     ></IconPencil>
                     <span>Редактировать</span>
                 </button>
                 <button
-                    class="text-base text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
+                    class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
                     <IconTrash
-                        class="stroke-2 inline-block me-2 w-5 h-5"
+                        class="w-5 h-5  me-2 inline-block"
                     ></IconTrash>
                     <span>Удалить</span>
                 </button>

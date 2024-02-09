@@ -17,7 +17,7 @@
                 <LazyImage
                     :preview="`/media/${page.props.auth.user.avatar_preview}`"
                     :then="route('im', [page.props.auth.user.avatar, [100]])"
-                    class="rounded-full inline-block"
+                    class="rounded-full inline-block border-2 border-bck border"
                     alt=""
                     style="width: 45px; height: 45px"
                 >
