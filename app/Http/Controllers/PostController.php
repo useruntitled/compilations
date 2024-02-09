@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    protected $service;
+    protected PostService $service;
 
     public function __construct(PostService $serivce)
     {
