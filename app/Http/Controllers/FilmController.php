@@ -2,98 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\FilmData;
 use App\Models\Film;
 use App\Models\Genre;
+use App\Services\Parser\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
 class FilmController extends Controller
 {
-    public function index()
-    {
+    protected ParserInterface $parser;
 
+    public function __construct(ParserInterface $parser)
+    {
+        $this->parser = $parser;
     }
 
-    public function parse($id)
+    protected function getFilm(int $id)
     {
-        $ch = curl_init();
-        $url = 'https://api.kinopoisk.dev/v1.3/movie/'.$id;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'X-API-KEY: '.env('KP2_TOKEN'),
-            'Content-Type: application/json',
-        ]);
-
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Curl error: '.curl_error($ch);
-        }
-        curl_close($ch);
-
-        $json = json_decode($response);
-        if ($json != null || $json != '' || !isset($json->id)) {
-            return $json;
-        }
-        abort(500);
+        $json = $this->parser->getFilm($id);
+        if($json == null) abort(404);
+        return $json;
     }
 
     public function refresh(Request $request)
     {
-        $json = $this->parse($request->id);
+        $json = $this->getFilm($request->id);
         $film = Film::find($request->id);
-        $film->update([
-            'id' => $json->id,
-            'type' => $json->type ?? null,
-            'serial' => $json->isSeries ?? null,
-            'name_en' => $json->enName ?? null,
-            'name_ru' => $json->name ?? null,
-            'poster_url' => $json->poster->url ?? null,
-            'poster_url_preview' => $json->poster->previewUrl ?? null,
-            'logo_url' => $json->logo->url ?? null,
-            'slogan' => $json->slogan ?? null,
-            'description' => $json->description ?? null,
-            'short_description' => $json->shortDescription ?? null,
-            'country' => $json->countries[0]->name ?? null,
-            'start_year' => $json->releaseYears[0]->start ?? null,
-            'year' => $json->year ?? null,
-        ]);
+        $filmData = new FilmData($json);
+        $film->update((array) $filmData);
 
         return Response::json($film, 200);
     }
 
-    public function create($id)
+    public function create(int $id): Film
     {
-        $json = $this->parse($id);
-        $film = Film::create([
-            'id' => $json->id,
-            'type' => $json->type ?? null,
-            'serial' => $json->isSeries ?? null,
-            'name_en' => $json->enName ?? null,
-            'name_ru' => $json->name ?? null,
-            'poster_url' => $json->poster->url ?? null,
-            'poster_url_preview' => $json->poster->previewUrl ?? null,
-            'logo_url' => $json->logo->url ?? null,
-            'slogan' => $json->slogan ?? null,
-            'description' => $json->description ?? null,
-            'short_description' => $json->shortDescription ?? null,
-            'country' => $json->countries[0]->name ?? null,
-            'start_year' => $json->releaseYears[0]->start ?? null,
-            'year' => $json->year ?? null,
-        ]);
-        if (count($json->genres) != 0) {
-            foreach ($json->genres as $genre) {
-                $created = Genre::where('name', $genre->name)->first();
-                if ($created == null) {
-                    $created = Genre::create([
-                        'name' => $genre->name,
-                        'slug' => Str::slug($genre->name),
-                    ]);
-                }
-                $film->genres()->attach($created->id);
-            }
-        }
+        $json = $this->getFilm($id);
+
+        $filmData = new FilmData($json);
+
+        $film = Film::create((array) $filmData);
+
+        $genres = collect($json->genres)->map(function ($genre) {
+            return Genre::firstOrCreate([
+                'name' => $genre->name,
+                'slug' => Str::slug($genre->name),
+            ])->id;
+        });
+
+        $film->genres()->attach($genres);
 
         return $film;
     }
@@ -117,7 +75,7 @@ class FilmController extends Controller
         return $this->searchByName($query);
     }
 
-    protected function searchByName($query)
+    protected function searchByName(string $query)
     {
         $films = Film::where('name_ru', 'LIKE', "%$query%")->limit(5)->get();
         $films_en = Film::where('name_en', 'LIKE', "%$query%")->limit(5)->get();
@@ -128,7 +86,8 @@ class FilmController extends Controller
         return Response::json($films, 200);
     }
 
-    protected function searchById($id)
+    protected function searchById(int $id)
+
     {
         $films = Film::where('id', 'LIKE', "$id%")->limit(5)->get();
         if ($films->count() == 0) {

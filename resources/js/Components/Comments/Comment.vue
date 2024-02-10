@@ -99,7 +99,8 @@
                         Ответить
                     </button>
                     <span class="ms-5"
-                        ><CommentDropdown class="w-5 h-5 text-secondary opacity-80"
+                        >
+                        <CommentDropdown class="w-5 h-5 text-secondary opacity-80"
                             @remove="deleteComment()"
                             @enableEditing="
                                 changeShowEditingInterfaceValue(comment.id)

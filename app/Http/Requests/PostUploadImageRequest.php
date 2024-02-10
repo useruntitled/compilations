@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Validation\Rule;
 
-class StorePostRequest extends FormRequest
+class PostUploadImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +24,12 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required',
-            'user_id' => 'required, exists:App\Models\User,id',
+            'image' => [
+                'required',
+                File::image()
+                ->dimensions(Rule::dimensions()->maxWidth(4000)->maxHeight(4000)),
+            ],
+            'id' => 'exists:App\Models\Post,id',
         ];
     }
 }

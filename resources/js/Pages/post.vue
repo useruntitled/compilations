@@ -4,6 +4,7 @@
     </Head>
     <div class="rounded-xl rounded-b-sm mb-0 px-3 block w-full bg-white">
         <header class="p-3 flex justify-between">
+            <!-- <UserTablet :user="post.user" class="font-medium"></UserTablet> -->
             <UserTabletWithElementInside :user="post.user">
                 <template #content>
                     <p class="text-13px text-secondary">
@@ -25,7 +26,7 @@
             <section class="px-3 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div class="p-2">
+            <div :class="{'p-2': post.image}">
                 <!-- <img
                     v-lazy="route('im', [post.image, '800'])"
                     alt="Image"
@@ -35,18 +36,17 @@
                     v-if="post.image"
                     :preview="`/media/${post.image_preview}`"
                     :then="route('im', [post.image, 800])"
-                    class="rounded-lg mx-auto w-full object-cover"
-                    style="min-width: 600px; min-height: 200px"
+                    class="rounded-lg mx-auto w-full object-cover w-full"
+                    style="min-width: auto; min-height: 400px;"
                 ></LazyImage>
             </div>
         </Link>
-    </div>
-    <div class="bg-white p-5 pt-4 rounded-b-xl pb-0">
         <div ref="films_block">
-            <div v-for="film in post.films">
+            <div v-for="(film, index) in post.films" class="px-2" >
                 <Film :film="film"></Film>
             </div>
         </div>
+
         <footer class="m-0 px-5 py-2 flex items-center">
             <span class="me-0"
                 ><Reputation type="Post" :reputation="post.rep"></Reputation

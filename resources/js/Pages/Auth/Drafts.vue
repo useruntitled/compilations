@@ -1,21 +1,21 @@
 <template>
-    <Base>
-        <p>Черновики</p>
-        <div class="shadow rounded-lg p-5 mt-5">
-            <div v-for="draft in drafts" :key="draft.id">
-                <Compilation :post="draft" mode="draft"></Compilation>
-            </div>
-        </div>
-    </Base>
+    <div v-if="!drafts.length" class="mt-10">
+        <EmptyFeed></EmptyFeed>
+    </div>
+    <div class="space-y-5">
+        <Post v-for="post in drafts" :post="post"></Post>
+    </div>
 </template>
-<script>
-import Compilation from "@/Components/Compilation.vue";
-export default {
-    props: {
-        drafts: null,
-    },
-    components: {
-        Compilation,
-    },
-};
+<script setup>
+import base from '@/Pages/shared/base.vue';
+import Post from '@/Components/Post.vue';
+import EmptyFeed from "@/Components/EmptyFeed.vue";
+defineOptions({
+    layout: base,
+})
+
+const props = defineProps({
+    drafts: null,
+});
+
 </script>

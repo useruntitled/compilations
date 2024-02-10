@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostUploadImageRequest;
+use App\Http\Requests\StorePostRequest;
 use App\Models\Film;
 use App\Models\Post;
 use App\Services\ImageService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
@@ -15,9 +18,20 @@ class PostController extends Controller
 {
     protected PostService $service;
 
+    protected int $per_page;
+
     public function __construct(PostService $serivce)
     {
         $this->service = $serivce;
+        $this->per_page = config('post.per_page');
+    }
+
+    public function drafts()
+    {
+        $drafts = $this->service->getDrafts();
+        return inertia('Auth/Drafts', [
+            'drafts' => $drafts,
+        ]);
     }
 
     public function index(int $id, ?string $slug)
@@ -25,7 +39,9 @@ class PostController extends Controller
         $post = Post::with([
             'user' => ['roles'],
             'films' => ['genres'],
-        ])->withCount(['comments', 'bookmarks'])->findOrFail($id);
+        ])->withCount(['comments', 'bookmarks'])
+            ->published()
+            ->findOrFail($id);
 
         return inertia('post', [
             'post' => $post,
@@ -41,55 +57,6 @@ class PostController extends Controller
         ]);
     }
 
-    public function redirect($id)
-    {
-        $slug = Post::find($id)->slug;
-        return redirect()->route('post',[$id, $slug]);
-    }
-
-    public function getNew($page)
-    {
-        $posts = Post::with(['user' => ['roles'], 'reputation', 'films' => ['genres']])->published()
-            ->withCount(['comments', 'bookmarks', 'films'])
-            ->latest()
-            ->skip(($page - 1) * config('post.per_page'))
-            ->take(config('post.per_page'))
-            ->get();
-
-        $result = [];
-
-        for ($i = 0; $i < $posts->count(); $i++) {
-            $result[chr(97 + $i)] = $posts[$i];
-        }
-
-        return $posts;
-    }
-
-    public function getRandom($page)
-    {
-        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
-            ->where('active', 1)
-            ->withCount(['comments', 'bookmarks', 'films'])
-            ->inRandomOrder()
-            ->skip(($page - 1) * config('post.per_page'))
-            ->take(config('post.per_page'))
-            ->get();
-
-        return $posts;
-    }
-
-    public function getPopular($page)
-    {
-        $posts = $this->service->getPopular($page);
-
-        $result = [];
-
-        for ($i = 0; $i < $posts->count(); $i++) {
-            $result[chr(97 + $i)] = $posts[$i];
-        }
-
-        return $posts;
-    }
 
     public function create()
     {
@@ -103,7 +70,7 @@ class PostController extends Controller
         return $post;
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         $post = Post::create([
             'user_id' => Auth::user()->id,
@@ -118,6 +85,8 @@ class PostController extends Controller
     {
         $post = Post::with('films')->findOrFail($request->id);
 
+
+
         $films = $request->films;
 
         if ($films != null && count($films) > 0) {
@@ -130,7 +99,7 @@ class PostController extends Controller
                 $array_of_ids[] = $film['id'];
             }
 
-            $post->films()->attach(array_unique($array_of_ids), ['created_at' => now()]);
+            $post->films()->attach(array_unique($array_of_ids));
         } else {
             if (count($films) == 0 && count($post->films) > 0) {
                 $post->films()->detach();
@@ -163,38 +132,25 @@ class PostController extends Controller
     public function postAttachFilm(Request $request)
     {
         $post = Post::find($request->post_id);
-        if ($post != null) {
-            $film = Film::find($request->id);
-            if ($film == null) {
-                $film = (new FilmController())->create($request->id);
-            }
-            $post->films()->each(function ($f) use ($film) {
-                if ($f->id == $film->id) {
-                    abort(422, 'Вы не можете прикрепить один и тот же фильм дважды.');
-                }
-            });
-            $post->films()->attach($film->id);
-            $post->save();
-
-            return Response::json($film, 200);
+        if ($post == null) {
+            return response()->json('', 404);
         }
 
-        return Response::json('', 404);
-    }
-
-    public function postDettachFilm(Request $request)
-    {
-        $post = Post::find($request->post_id);
-        if ($post != null) {
-            $film = Film::find($request->id);
-            $post->films()->detach($film->id);
-            $post->save();
-
-            return Response::json('', 200);
+        $film = Film::find($request->id);
+        if ($film == null) {
+            $film = (new FilmController())->create($request->id);
         }
 
-        return Response::json('', 404);
+        if ($post->films->contains($film->id)) {
+            abort(422, 'Вы не можете прикрепить один и тот же фильм дважды.');
+        }
+
+        $post->films()->attach($film->id);
+        $post->save();
+
+        return response()->json($film, 200);
     }
+
 
     public function edit($id, $slug)
     {
@@ -217,25 +173,36 @@ class PostController extends Controller
         return Response::json('', 403);
     }
 
-    public function uploadImage(Request $request, ImageService $service)
+    public function uploadImage(PostUploadImageRequest $request, ImageService $service)
     {
-        $request->validate([
-            'id' => 'required',
-            'image' => 'required',
-        ]);
-
-        if (! $request->hasFile('image')) {
-            abort(422);
-        }
-
         $post = Post::findOrFail($request->id);
 
-        $file = $request->file('image');
-        $filename = $service->uploadAndDelete($file, $post->image);
+        $filename = $service->uploadAndDelete($request->file('image'), $post->image);
 
         $post->image = $filename;
         $post->update();
 
         return Response::json($filename, 200);
+    }
+
+    public function redirect($id)
+    {
+        $slug = Post::find($id)->slug;
+        return redirect()->route('post',[$id, $slug]);
+    }
+
+    public function getNew($page)
+    {
+        return $this->service->getNew($page);
+    }
+
+    public function getRandom($page)
+    {
+        return $this->service->getRandom($page);
+    }
+
+    public function getPopular($page)
+    {
+        return $this->service->getPopular($page);
     }
 }

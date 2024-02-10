@@ -12,16 +12,31 @@
         <HeaderLayout></HeaderLayout>
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-template">
-                <AsideLeft></AsideLeft>
-                <div class="mx-auto mt-2 p-5 rounded-xl w-11/12 min-h-screen">
+                <AsideLeft class="hidden lg:block"></AsideLeft>
+                <div class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 md:w-full min-h-screen mb-10 md:mb-2">
                     <slot></slot>
                 </div>
-                <AsideRight></AsideRight>
+                <AsideRight class="hidden 2xl:block"></AsideRight>
             </div>
         </div>
     </div>
 
-    <!-- <AuthModal :show="showModal" @close="closeModal()"></AuthModal> -->
+    <div class="lg:hidden bg-white bottom-0 w-full mx-auto text-center px-10 md:px-20 py-2 fixed">
+        <div class="flex justify-between items-center py-1 sticky bottom-0">
+            <div>
+                <icon-home class="w-7 h-7"></icon-home>
+            </div>
+            <div>
+                <icon-search class="w-7 h-7"></icon-search>
+            </div>
+            <div>
+                <icon-bell class="w-7 h-7"></icon-bell>
+            </div>
+            <div>
+                <icon-login class="w-7 h-7"></icon-login>
+            </div>
+        </div>
+    </div>
 
     <Message :message="calledMessage"></Message>
     <UrlModal
@@ -31,11 +46,15 @@
 </template>
 <script setup>
 import Message from "@/Components/Messages/Message.vue";
+import IconHome from "@/Components/Icons/IconHome.vue";
 import AsideLeft from "./partials/AsideLeft.vue";
 import AsideRight from "./partials/AsideRight.vue";
 import HeaderLayout from "./partials/HeaderLayout.vue";
 import UrlModal from "@/Components/Modals/UrlModal.vue";
 import { reactive, ref, provide, computed } from "vue";
+import IconSearch from "@/Components/Icons/IconSearch.vue";
+import IconBell from '@/Components/Icons/IconBell.vue';
+import IconLogin from "@/Components/Icons/IconLogin.vue";
 
 const props = defineProps({
     title: "",
@@ -75,63 +94,29 @@ provide("closeModal", closeModal);
 provide("callModal", callModal);
 provide("callMessage", callMessage);
 
-// export default {
-//     props: {
-//         title: String,
-//     },
-//     data() {
-//         return {
-//             // showModal: false,
-//             modalIsClosed: false,
-//             calledModal: null,
-//             calledMessage: reactive({
-//                 type: null,
-//                 message: null,
-//             }),
-//         };
-//     },
-//     provide() {
-//         return {
-//             closeModal: this.closeModal,
-//             callModal: this.callModal,
-//             callMessage: this.callMessage,
-//         };
-//     },
-//     methods: {
-//         closeModal() {
-//             console.log();
-//             this.calledModal = null;
-//             this.modalIsClosed = true;
-//             setTimeout(() => {
-//                 this.modalIsClosed = false;
-//             }, 200);
-//         },
-//         callModal(name) {
-//             this.calledModal = name;
-//         },
-//         callMessage(type, message) {
-//             this.callMessage.type = type;
-//             this.callMessage.message = message;
-//             setTimeout(() => {
-//                 this.callMessage.type = null;
-//                 this.callMessage.message = null;
-//             }, 20);
-//         },
-//     },
 
-//     components: {
-//         HeaderLayout,
-//         AsideLeft,
-//         AsideRight,
-//         UrlModal,
-//         Message,
-//     },
-// };
 </script>
 <style>
-.grid-template {
-    grid-template-columns: 220px auto 320px;
+
+
+@media(min-width: 922px) {
+    .grid-template {
+        grid-template-columns: 220px auto 0;
+    }
 }
+
+@media(min-width: 1280px) {
+    .grid-template {
+        grid-template-columns: 220px auto 320px;
+    }
+}
+
+@media(max-width: 640px) {
+    .grid-template {
+        grid-template-columns: auto;
+    }
+}
+
 
 * {
     font-family: Roboto;

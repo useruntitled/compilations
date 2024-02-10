@@ -19,6 +19,7 @@ class PusherCommentResource extends JsonResource
                 'id' => $this->user->id,
                 'name' => $this->user->name,
                 'avatar' => $this->user->avatar,
+                'avatar_preview' => $this->user->avatar_preview,
             ],
             'post' => [
                 'id' => $this->post->id,

@@ -62,7 +62,7 @@
                 ></CommentInput>
             </div>
     </div>
-    
+
     <!-- <div
         v-if="!isIgnoreLimitEnabled && postCommentsCount - limitComments > 0"
         class="bg-white border-t-2 w-full p-3 px-5 mt-[-15px] flex items-center justify-between rounded-b-xl"
@@ -142,12 +142,12 @@ const sortByNewest = (a, b) => {
 };
 
 const resortComments = async (func, value) => {
-    
+
     await processComments(func);
     nextTick(() => {
         comments_block.value.scrollIntoViewIfNeeded();
     })
-    
+
     currentSort.value = sortingValues[value];
 }
 
@@ -209,7 +209,6 @@ const processComments = async (sortFunction = sortByReputationOverall) => {
     });
 
     comments.value.forEach((comment) => {
-        countReplies(comment);
         comments.value.sort(sortFunction);
     });
 
@@ -266,14 +265,7 @@ onMounted(async () => {
     // if (hasParam("comments")) comments_block.value.scrollIntoView();
     comments.value.forEach((comment) => {
         if (comment.level == 0) showRepliesArray.value.unshift(comment.id);
-    });
-
-    comments.value.forEach((comment) => {
-        if (comment.replies_count == 0) {
-            comment.replies_visible_count = 0;
-        }
-        postRepliesCount.value += comment.replies_count;
-        postCommentsCount.value += postRepliesCount.value + 1;
+        countReplies(comment);
     });
 });
 

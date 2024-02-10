@@ -25,7 +25,7 @@ export default {
                 'fox': '#d35400',
                 'secondary': '#595959',
                 'field': '#F5F5F5',
-                'shit': '#4f3d36',  
+                'shit': '#4f3d36',
                 'primary2': '#0066FF',
             },
             fontSize:{
@@ -53,6 +53,9 @@ export default {
             },
             fontFamily:{
                 'roboto': ['Roboto','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','sans-serif'] ,
+            },
+            screens: {
+                'lg': '922px',
             },
         },
     },

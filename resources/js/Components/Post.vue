@@ -23,7 +23,7 @@
             <section class="px-3 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div class="p-2 ">
+            <div :class="{'p-2': post.image}">
                 <!-- <img
                     v-lazy="route('im', [post.image, '800'])"
                     alt="Image"
@@ -43,7 +43,7 @@
         </div>
         <Link :href="route('post', [post.id, post.slug, 'films'])">
             <p
-                v-if="post.films_count > 3"
+                v-if="post.films_count >= 3"
                 class="mt-4 mx-4 px-3 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
             >
                 И еще {{ $tc("film", post.films_count - 2) }} в подборке

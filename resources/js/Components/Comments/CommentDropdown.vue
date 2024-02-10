@@ -2,7 +2,7 @@
     <Dropdown align="left">
         <template #trigger>
             <button class="p-1 hover:bg-gray-100 text-secondary rounded-full">
-                <IconDots :class="class"></IconDots>
+                <icon-dots :class="class" />
             </button>
         </template>
         <template #content v-if="page.props.auth.user?.id != comment.user.id">
@@ -41,21 +41,25 @@
             </div>
         </template>
     </Dropdown>
+
     <Report
         :show="showReportModal"
         @close="showReportModal = !showReportModal"
     ></Report>
 </template>
 <script setup>
-import Dropdown from "../Dropdown.vue";
+import { ref } from 'vue';
 import IconDots from "../Icons/IconDots.vue";
 import IconTrash from "@/Components/Icons/IconTrash.vue";
 import IconFlag from "@/Components/Icons/IconFlag.vue";
-import Report from "@/Components/Modals/Report.vue";
 import IconPencil from "@/Components/Icons/IconPencil.vue";
 import {usePage} from "@inertiajs/vue3";
+import Report from '@/Components/Modals/Report.vue';
+import Dropdown from '@/Components/Dropdown.vue';
 
 const emit = defineEmits(['enableEditing', 'remove']);
+
+const showReportModal = ref(false);
 
 const page = usePage();
 

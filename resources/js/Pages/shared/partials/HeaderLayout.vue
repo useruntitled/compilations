@@ -8,9 +8,9 @@
             id="header"
         >
             <div class="max-w-7xl mx-auto px-5 py-1">
-                <div class="grid grid-template">
+                <div class="grid grid-layout">
                     <section class="flex items-center">
-                        <div>
+                        <div >
                             <Link
                                 :href="route('home')"
                                 preserve-state
@@ -24,9 +24,9 @@
                             </Link>
                         </div>
                     </section>
-                    <section class="flex items-center">
+                    <section class="flex items-center hidden lg:block">
                         <div class="flex items-center w-11/12 mx-auto">
-                            <span class="text-sm absolute pl-2"
+                            <span class="text-sm absolute pl-2 "
                                 ><IconSearch
                                     class="text-slate-600 stroke-[2px] w-5 h-5"
                                 ></IconSearch
@@ -39,7 +39,7 @@
                             />
                         </div>
                     </section>
-                    <section class="flex items-center">
+                    <section class="flex items-center hidden lg:block">
                         <div
                             class="w-full flex justify-end"
                             v-if="!page.props.auth.check"
@@ -122,7 +122,21 @@ const page = usePage();
 </script>
 
 <style>
-.grid-template {
-    grid-template-columns: 220px 640px 320px;
+@media(min-width: 922px) {
+    .grid-layout {
+        grid-template-columns: 220px auto 0;
+    }
+}
+
+@media(min-width: 1280px) {
+    .grid-layout {
+        grid-template-columns: 220px auto 320px;
+    }
+}
+
+@media(max-width: 640px) {
+    .grid-layout {
+        grid-template-columns: auto;
+    }
 }
 </style>
