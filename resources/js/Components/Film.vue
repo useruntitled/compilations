@@ -7,24 +7,21 @@
             >
                 <img
                     v-if="film.poster_url_preview"
-                    class="rounded-lg h-full w-full object-cover"
+                    class="rounded-lg h-full w-full object-cover min-w-[200px] w-1/4 "
                     :src="film.poster_url_preview"
                     alt=""
-                    style="min-width: 200px"
                 />
                 <img
                     v-else
                     :src="film.poster_url"
-                    class="rounded-lg h-full w-full object-cover"
+                    class="rounded-lg h-full w-full object-cover min-w-[200px] w-1/4 "
                     alt=""
-                    style="min-width: 200px"
                 />
                 <img
                     v-if="!film.cover_url && !film.poster_url"
-                    class="rounded-lg h-full w-full object-cover"
+                    class="rounded-lg h-full w-full object-cover min-w-[200px]  w-1/4"
                     src="https://dummyimage.com/400x400/000/fff&text=No+image"
                     alt=""
-                    style="min-width: 200px"
                 />
             </a>
             <div class="ms-5 inline-block">
@@ -48,9 +45,12 @@
                         </a>
                     </span>
                 </div>
-                <p class="text-sm text-slate-800 break-words">
+                <p class="text-sm text-slate-800 break-words w-full overflow-hidden min-w-min" ref="film_description"  :class="{'max-h-20': isTooLong}" >
                     {{ film.description }}
                 </p>
+                    <button @click="isTooLong = false" v-show="isTooLong" class="block text-black opacity-60 hover:opacity-40 my-2 text-sm">
+                        Читать дальше
+                    </button>
                 <p
                     class="px-2 py-1 my-2 bg-orange-50 text-sm rounded-lg text-orange-700 inline-block font-medium"
                 >
@@ -59,6 +59,7 @@
                 <div class="my-2">
                     <img
                         :src="'https://rating.kinopoisk.ru/' + film.id + '.gif'"
+                        class="bg-gray-100 rounded"
                         style="width: 102px; height: 38px"
                         alt="Rating"
                     />
@@ -67,11 +68,23 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    props: {
-        film: null,
-        mode: "edit",
-    },
-};
+<script setup>
+import { ref, onMounted, nextTick } from 'vue';
+const props = defineProps({
+    film: null,
+})
+
+const film_description = ref(null);
+
+const isTooLong = ref(false);
+
+onMounted(() => {
+    nextTick(() => {
+        if(film_description.value.clientHeight > 100 ){
+            isTooLong.value = true;
+        }
+    })
+})
+
+
 </script>
