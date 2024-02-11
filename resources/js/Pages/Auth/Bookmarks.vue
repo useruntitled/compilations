@@ -3,7 +3,7 @@
         <Post v-for="post in posts" :post="post"></Post>
     </InfiniteScrollContainer>
 
-    <div v-if="!posts.length" class="mt-10">
+    <div v-if="!posts.length" class="mt-20">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>

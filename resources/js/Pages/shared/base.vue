@@ -56,6 +56,7 @@ import IconSearch from "@/Components/Icons/IconSearch.vue";
 import IconBell from '@/Components/Icons/IconBell.vue';
 import IconLogin from "@/Components/Icons/IconLogin.vue";
 
+
 const props = defineProps({
     title: "",
 });

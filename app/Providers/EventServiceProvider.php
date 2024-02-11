@@ -46,12 +46,10 @@ class EventServiceProvider extends ServiceProvider
         CommentDeletedEvent::class => [
             CommentDeletedListener::class,
         ],
-        // ReplyCreatedEvent::class => [
-        //     ReplyCreatedListener::class,
-        // ],
-        // ReplyDeletedEvent::class => [
-        //     ReplyDeletedListener::class,
-        // ],
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            // ... other providers
+            \SocialiteProviders\Yandex\YandexExtendSocialite::class.'@handle',
+        ],
     ];
 
     protected $observers = [

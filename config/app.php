@@ -174,6 +174,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\ParserServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
     ])->toArray(),
 
     /*

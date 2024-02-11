@@ -16,6 +16,7 @@ use App\Models\Post;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,12 @@ Route::controller(PersonalPageController::class)->group(function () {
 });
 
 // Route::get('test',[RegisteredUserController::class,'uploadAvatar']);
+
+
+Route::controller(\App\Http\Controllers\Auth\SocialiteProviderController::class)->group(function() {
+   Route::get('oauth/redirect/{provider}','redirect')->name('oauth.redirect');
+   Route::get('oauth/callback/{provider}','callback');
+});
 
 require __DIR__.'/auth.php';
 require __DIR__.'/404.php';

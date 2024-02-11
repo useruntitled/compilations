@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!drafts.length" class="mt-10">
+    <div v-if="!drafts.length" class="mt-20">
         <EmptyFeed></EmptyFeed>
     </div>
     <div class="space-y-5">

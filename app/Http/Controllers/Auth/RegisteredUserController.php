@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
             'avatar' => null,
         ]);
 
-        $user->avatar = $service->generateDefaultUserAvatar($user->id);
+        $user->avatar = $service->generateDefaultUserAvatar();
         $user->save();
         // $user_role = Role::where('role','user')->firstOrFail();
         // $user->roles()->attach($user_role->id);
@@ -79,7 +79,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'description' => 'required',
+            'description' => 'max:200',
         ]);
 
         $user = Auth::user();

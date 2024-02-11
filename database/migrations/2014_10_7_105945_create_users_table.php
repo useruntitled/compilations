@@ -20,11 +20,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->string('avatar')->nullable();
             $table->string('background_image')->nullable();
             $table->text('description')->nullable();
+
+            $table->string('provider')->nullable();
+            $table->string('provider_user_id')->nullable();
 
             $table->timestamps();
         });
@@ -38,7 +41,7 @@ return new class extends Migration
         $service = new ImageService;
         $users = User::all();
         foreach ($users as $u) {
-            $service->delete($u->image);
+            $service->delete($u->avatar);
             $service->delete($u->background_image);
         }
         Schema::dropIfExists('users');

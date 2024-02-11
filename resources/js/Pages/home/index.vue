@@ -8,7 +8,7 @@
             <Post :post="post"></Post>
         </div>
     </InfiniteScrollContainer>
-    <div v-if="posts.length == 0 && !isLoading" class="mt-20 mb-20">
+    <div v-if="posts?.length == 0 && !isLoading" class="mt-20 mb-20">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>
@@ -19,12 +19,24 @@ import Post from "@/Components/Post.vue";
 import Base from "../shared/base.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import {usePage} from "@inertiajs/vue3";
 
 defineOptions({ layout: Base });
 
 const props = defineProps({
     posts: null,
+    close_window_token: null,
 });
+
+const page = usePage();
+
+onMounted(() => {
+    console.log(page);
+    if(page.props?.close_window_token == props.close_window_token && props.close_window_token != null) {
+        window.opener.postMessage('auth.window.closed', "*");
+        window.close();
+    }
+})
 
 const posts = ref(props.posts);
 

@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\Facades\Image;
@@ -63,6 +64,21 @@ class ImageService
         Storage::disk('media')->put($hashname . '__preview' . '.jpeg', $previewImage);
 
         return $hashname . '.jpeg';
+    }
+
+    public function parseProviderUserAvatar($url): string
+    {
+        $im = file_get_contents($url);
+        $filename = Str::random(40);
+
+        $image = ImageManager::imagick()->read($im)->encode(new JpegEncoder);
+
+        $previewImage = ImageManager::imagick()->read($im)->scaleDown(15)->blur(3)->encode(new JpegEncoder);
+
+        Storage::disk('media')->put($filename . '.jpeg', $image);
+        Storage::disk('media')->put($filename . '__preview' . '.jpeg', $previewImage);
+
+        return $filename . '.jpeg';
     }
 
     protected function isCached(): bool

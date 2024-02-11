@@ -42,6 +42,8 @@ class User extends Authenticatable
         'avatar',
         'background_image',
         'description',
+        'provider',
+        'provider_user_id',
     ];
 
     /**

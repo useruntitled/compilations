@@ -8,7 +8,7 @@
             id="header"
         >
             <div class="max-w-7xl mx-auto px-5 py-1">
-                <div class="grid grid-layout">
+                <div class="grid grid-layout items-center">
                     <section class="flex items-center">
                         <div >
                             <Link

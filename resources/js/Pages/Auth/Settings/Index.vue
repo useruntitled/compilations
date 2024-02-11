@@ -19,7 +19,7 @@
         <div class="block hover:bg-zinc-100 p-6 rounded-xl">
             <div class="flex items-center">
                 <div class="me-4 opacity-80">
-                    <IconTooth class="stroke-2"></IconTooth>
+                    <IconTooth class="w-6 h-6"></IconTooth>
                 </div>
                 <div class="flex flex-col">
                     <p class="font-medium">Основные</p>
@@ -32,7 +32,7 @@
         <div class="block hover:bg-zinc-100 p-6 rounded-xl">
             <div class="flex items-center">
                 <div class="me-4 opacity-80">
-                    <IconBell class="stroke-2"></IconBell>
+                    <IconBell class="text-black w-6 h-6 stroke-[0.1]"></IconBell>
                 </div>
                 <div class="flex flex-col">
                     <p class="font-medium">Уведомления</p>

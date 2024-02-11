@@ -43,11 +43,11 @@
         </DropdownLink>
 
         <DropdownLink :href="route('drafts')" class="my-4 text-17px">
-            <IconPencil class="me-2 inline-block w-5 h-5"></IconPencil>
+            <IconPencil class="me-2 inline-block w-6 h-6"></IconPencil>
             Черновики
         </DropdownLink>
         <DropdownLink :href="route('settings')" class="my-4 text-17px">
-            <IconTooth class="me-2 inline-block stroke-[2]"></IconTooth>
+            <IconTooth class="me-2 w-6 h-6 inline-block"></IconTooth>
             Настройки
         </DropdownLink>
         <DropdownLink

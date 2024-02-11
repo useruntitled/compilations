@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                     'create_posts' => $user ? $user->isCreator : false,
                 ],
             ],
+            'close_window_token' => null,
             'app_url' => env('APP_URL'),
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

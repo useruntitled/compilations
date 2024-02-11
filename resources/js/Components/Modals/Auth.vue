@@ -9,24 +9,24 @@
         v-if="showModal"
     >
         <div class="px-20 p-5">
-            <header class="text-center mx-auto">
+            <header class="text-center mx-auto w-full flex">
                 <button
-                    :class="{ 'bg-gray-100 ': isLoginForm }"
+                    :class="{ 'bg-orange-400 text-white ': isLoginForm }"
                     @click="
                         currentForm = 'LoginForm';
                         errors = {};
                     "
-                    class="mx-2 px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
+                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"
                 >
                     Вход
                 </button>
                 <button
-                    :class="{ 'bg-gray-100 ': !isLoginForm }"
+                    :class="{ 'bg-orange-400 text-white ': !isLoginForm }"
                     @click="
                         currentForm = 'RegisterForm';
                         errors = {};
                     "
-                    class="mx-2 px-4 py-2 rounded-lg font-medium hover:bg-gray-100"
+                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"
                 >
                     Регистрация
                 </button>
@@ -51,12 +51,18 @@
                     :is="forms[currentForm]"
                 ></component>
             </main>
+            <section class="space-x-4 w-full">
+                <button class="w-full justify-center bg-[rgb(24,_24,_27)] rounded-2xl px-10 py-2 space-x-2 flex items-center" @click="openAuthWindow('yandex')">
+                    <span><img class="w-7 h-7 inline-block" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NCIgaGVpZ2h0PSI0NCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0ZDM0YxRCIgZD0iTTIyIDQzYTIxIDIxIDAgMSAwIDAtNDIgMjEgMjEgMCAwIDAgMCA0MloiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMjUuMyAzNS4xM2g0LjU3VjguODZoLTYuNjZjLTYuNyAwLTEwLjIyIDMuNDQtMTAuMjIgOC41IDAgNC4wMiAxLjkzIDYuNDMgNS4zNyA4Ljg4bC01Ljk5IDguODhoNC45N0wyNCAyNS4xOGwtMi4zMi0xLjU0Yy0yLjgtMS45LTQuMTctMy4zNi00LjE3LTYuNTQgMC0yLjc5IDEuOTctNC42OCA1LjcyLTQuNjhoMi4wNXYyMi43aC4wMVoiLz48L3N2Zz4=" alt=""></span>
+                    <span class="text-white font-semibold">Войти с Яндекс</span>
+                </button>
+            </section>
         </div>
     </Modal>
 </template>
 <script setup>
 import Modal from "./Modal.vue";
-import { ref, computed } from "vue";
+import {ref, computed, onUnmounted} from "vue";
 import LoginForm from "../Forms/Auth/LoginForm.vue";
 import RegisterForm from "../Forms/Auth/RegisterForm.vue";
 import axios from "axios";
@@ -67,6 +73,22 @@ const emit = defineEmits("close");
 const props = defineProps({
     show: Boolean,
 });
+
+const listenClosedWindowStatus = (event) => {
+    if(event?.data == 'auth.window.closed') {
+        router.reload({preserveState: false});
+        emit('close');
+    }
+}
+
+const openAuthWindow = (provider) => {
+    const auth = window.open(route('oauth.redirect', [provider]), '_blank', 'popup');
+    window.addEventListener('message', listenClosedWindowStatus);
+}
+
+onUnmounted(() => {
+    window.removeEventListener('message', listenClosedWindowStatus);
+})
 
 const currentForm = ref("LoginForm");
 
