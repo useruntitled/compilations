@@ -30,7 +30,7 @@
                     <span>Редактировать</span>
                 </button>
                 <button
-                    @click="emit('delete')"
+                    @click="emit('remove')"
                     class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
                     <icon-trash

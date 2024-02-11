@@ -47,15 +47,16 @@
 
             <div v-for="(comment, index) in comments">
                 <Comment
-                    :key="comment.id"
+                    v-if="index < limitComments || isIgnoreLimitEnabled"
                     :comment="comment"
-                    @remove="remove(comment.id)"
+                    @remove="removeComment(comment.id)"
                     :isBranchParrent="true"
                     :branchParrentId="comment.id"
+                    :key="comment.id"
                 ></Comment>
             </div>
         </main>
-        <div v-if="!showReplyInterface && !showEditingInterface && isLoaded && comments?.length > 10" class="mt-4">
+        <div v-if="!showReplyInterface && !showEditingInterface && isLoaded && comments?.length > 10 && isIgnoreLimitEnabled" class="mt-4">
                 <CommentInput
                     @sendComment="createComment"
                     :commentIsCreated="commentIsCreated"
@@ -63,8 +64,8 @@
             </div>
     </div>
 
-    <!-- <div
-        v-if="!isIgnoreLimitEnabled && postCommentsCount - limitComments > 0"
+     <div
+        v-if="comments?.length > limitComments && !isIgnoreLimitEnabled"
         class="bg-white border-t-2 w-full p-3 px-5 mt-[-15px] flex items-center justify-between rounded-b-xl"
     >
         <button
@@ -73,7 +74,7 @@
         >
             Раскрыть
         </button>
-    </div> -->
+    </div>
 </template>
 
 <script setup>
@@ -84,6 +85,7 @@ import axios from "axios";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import Dropdown from "../Dropdown.vue";
 import IconChewronDown from "../Icons/IconChewronDown.vue";
+import {usePage} from "@inertiajs/vue3";
 
 const isLoaded = ref(false);
 
@@ -94,6 +96,8 @@ const isIgnoreLimitEnabled = ref(false);
 const visibleComments = ref(0);
 
 const postRepliesCount = ref(0);
+
+const page = usePage();
 
 provide("visibleComments", visibleComments);
 
@@ -326,6 +330,7 @@ const addCommentInObjectTree = (comment, parrent_id) => {
 provide("addCommentInObjectTree", addCommentInObjectTree);
 
 const createComment = (form) => {
+    if(!page.props.auth.check) callModal('auth');
     const formData = new FormData();
     formData.append("_method", "POST");
     formData.append("post_id", props.post.id);
@@ -351,6 +356,21 @@ const createComment = (form) => {
             }
         });
 };
+
+const removeComment = (id) => {
+    axios.post(route('comment.delete'), {
+        '_method': 'DELETE',
+        id: id,
+    })
+        .then((res) => {
+            console.log(res.data);
+            if(!res.data.is_force_deleted) {
+                comments.value[comments.value.findIndex((c) => c.id == id)].text = res.data.data.text;
+            } else {
+                comments.value.splice(comments.value.findIndex((c) => c.id == id), 1);
+            }
+        })
+}
 
 const setInputValuesToNull = () => {
     showReplyInterface.value = null;

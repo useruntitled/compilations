@@ -4,7 +4,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import {ref, onMounted, computed, onUnmounted} from "vue";
 
 const container = ref(null);
 const layout = ref(null);
@@ -21,6 +21,8 @@ const handleScroll = () => {
     }
 };
 
+const interval = ref(null);
+
 const containerTop = computed(() => {
     if (container.value.scrollTop == document.documentElement.scrollTop) {
         return Math.max(
@@ -36,12 +38,13 @@ const containerTop = computed(() => {
 
 onMounted(() => {
     handleScroll();
-    setInterval(() => {
+    interval.value = setInterval(() => {
         if (document.documentElement.scrollTop >= containerTop.value) {
             handleScroll();
         }
     }, 200);
 });
 
+onUnmounted(() => clearInterval(interval.value));
 const emit = defineEmits(["load"]);
 </script>

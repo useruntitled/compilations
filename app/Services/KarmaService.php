@@ -14,7 +14,7 @@ class KarmaService
 
     public function __construct()
     {
-        $this->KARMA_CONDITION_VALUE = env('KARMA_CAN_POST');
+        $this->KARMA_CONDITION_VALUE = config('karma.posts_creating_condition');
         $this->creatorRole = Role::where('role', 'creator')->first();
     }
 

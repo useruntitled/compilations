@@ -25,19 +25,7 @@
                         </div>
                     </section>
                     <section class="flex items-center hidden lg:block">
-                        <div class="flex items-center w-11/12 mx-auto">
-                            <span class="text-sm absolute pl-2 "
-                                ><IconSearch
-                                    class="text-slate-600 stroke-[2px] w-5 h-5"
-                                ></IconSearch
-                            ></span>
-                            <input
-                                list="films"
-                                type="text"
-                                placeholder="Поиск"
-                                class="w-full font-regular ps-10 bg-kpnpale border-kpnpale rounded-xl border-1 text-md duration-300 text-slate-900 hover:bg-white hover:ring-kp hover:ring-1 focus:bg-white focus:ring-kp focus:border-kp"
-                            />
-                        </div>
+                        <Search></Search>
                     </section>
                     <section class="flex items-center hidden lg:block">
                         <div
@@ -115,6 +103,7 @@ import PrimaryButtonWhite from "@/Components/Buttons/PrimaryButtonWhite.vue";
 import DropdownNotifications from "@/Components/Dropdowns/DropdownNotifications.vue";
 import LazyImage from "@/Components/LazyImage.vue";
 import { usePage } from "@inertiajs/vue3";
+import Search from "@/Components/Search/Search.vue";
 
 const callModal = inject("callModal");
 
@@ -130,7 +119,7 @@ const page = usePage();
 
 @media(min-width: 1280px) {
     .grid-layout {
-        grid-template-columns: 220px auto 320px;
+        grid-template-columns: 220px 640px auto;
     }
 }
 

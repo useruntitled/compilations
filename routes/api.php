@@ -101,3 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::post('user/avatar', [RegisteredUserController::class, 'uploadAvatar'])->name('user.upload.avatar');
     Route::post('user/background-image', [RegisteredUserController::class, 'uploadBackgroundImage'])->name('user.upload.background.image');
 });
+
+Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
+   Route::get('search/{query}','search')->name('search.query');
+});

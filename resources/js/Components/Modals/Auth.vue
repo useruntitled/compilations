@@ -90,7 +90,7 @@ onUnmounted(() => {
     window.removeEventListener('message', listenClosedWindowStatus);
 })
 
-const currentForm = ref("LoginForm");
+const currentForm = ref("RegisterForm");
 
 const forms = {
     LoginForm,

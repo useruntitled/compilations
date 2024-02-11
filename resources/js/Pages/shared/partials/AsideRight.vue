@@ -6,7 +6,6 @@
         <div class="pt-2 mt-0 ms-10">
             <p
                 class="font-medium py-5 text-lg text-start flex sticky top-0 bg-bck z-50"
-                v-show="comments && comments.length > 0"
             >
                 Сейчас обсуждают
             </p>
@@ -48,9 +47,8 @@
                             </div>
                             <Link
                                 :href="
-                                    route('post', [
+                                    route('post.redirect', [
                                         comment.post.id,
-                                        comment.post.slug,
                                     ])
                                 "
                             >
@@ -84,7 +82,6 @@
 </template>
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import axios from "axios";
 import LazyImage from "@/Components/LazyImage.vue";
 import { getFeed, listenFeedUpdates } from "./AsideRightApi";
 
@@ -105,6 +102,9 @@ const setComments = (data) => {
 const addComment = (data) => {
     console.log("data", data);
     comments.value.unshift(data.data);
+    if (comments.value?.length > 20) {
+        comments.value.splice(20,1);
+    }
 };
 
 onMounted(() => {
@@ -113,11 +113,7 @@ onMounted(() => {
     listenFeedUpdates(addComment);
 });
 
-watch(comments, () => {
-    if (comments.length == 20) {
-        comments.value.splice(-20);
-    }
-});
+
 </script>
 
 <style>

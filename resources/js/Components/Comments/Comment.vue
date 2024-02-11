@@ -101,7 +101,7 @@
                     <span class="ms-5"
                         >
                         <CommentDropdown class="w-5 h-5 text-secondary opacity-80"
-                            @remove="deleteComment()"
+                            @remove="emit('remove', comment.id)"
                             @enableEditing="
                                 changeShowEditingInterfaceValue(comment.id)
                             "
@@ -148,6 +148,7 @@
                 <div v-if="showRepliesArray.includes(comment.id)">
                     <div v-for="(reply, i) in comment.replies">
                         <Comment
+                            @remove="remove(reply.id)"
                             @enableHoverBranches="hoverBranches = true"
                             :isBranchParrent="false"
                             @disableHoverBranches="hoverBranches = false"
@@ -279,6 +280,7 @@ const emit = defineEmits([
     "enableColorize",
     "disableColorize",
     "closeReplies",
+    'remove',
 ]);
 
 const closeReplies = () => {
@@ -315,7 +317,7 @@ const sendReply = (form) => {
             commentIsCreated.value = true;
             showRepliesArray.value.unshift(props.comment.id);
             scrollIntoComment.value = res.data.id;
-            setInterval(() => {
+            setTimeout(() => {
                 commentIsCreated.value = false;
             }, 20);
             if (res.status == 200 || res.status == 201) {
@@ -330,6 +332,19 @@ const updateComment = (value) => {
     props.comment.image = value.image;
     props.comment.image_preview = value.image_preview;
 };
+
+const remove = (id) => {
+    axios.post(route('comment.delete'),{
+        '_method': 'DELETE',
+        id: id,
+    }).then((res) => {
+        if(!res.data.is_force_deleted) {
+            props.comment.replies[props.comment.replies.findIndex((c) => c.id == id)].text = res.data.data.text;
+        } else {
+            props.comment.replies.splice(props.comment.replies.findIndex((c) => c.id == id), 1);
+        }
+    })
+}
 </script>
 
 <!-- <script>

@@ -80,7 +80,7 @@ class CommentController extends Controller
         return 'Error in store method';
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, ImageService $service)
     {
         $request->validate([
             'id' => 'required',
@@ -88,15 +88,30 @@ class CommentController extends Controller
 
         $comment = Comment::find($request->id);
 
+        $isForceDeleted = 0;
+
         if ($comment->replies->count() == 0) {
+            $isForceDeleted = 1;
             $comment->forceDelete();
 
-            return Response::json(null, 200);
+
+            return response()->json([
+                'is_force_deleted' => $isForceDeleted,
+                'data' => $comment,
+            ]);
         }
 
         $comment->delete();
 
-        return Response::json($comment, 200);
+        $comment->text = 'Комментарий удалён';
+        $service->delete($comment->image);
+        $comment->image = null;
+        $comment->update();
+
+        return response()->json([
+            'is_force_deleted' => $isForceDeleted,
+            'data' => $comment,
+        ]);
 
     }
 
