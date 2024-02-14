@@ -50,6 +50,7 @@ class SocialiteProviderController extends Controller
                 'provider' => $provider,
                 'provider_user_id' => $socialiteUser->getId(),
                 'password' => Hash::make(Str::random(20)),
+                'email_verified_at' => now(),
             ]);
             if(!$hasImage) {
                 $user->avatar = $service->generateDefaultUserAvatar();

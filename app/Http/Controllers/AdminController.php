@@ -6,6 +6,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Film;
 use App\Models\Genre;
 use App\Models\Post;
+use App\Models\Report;
 use App\Models\Tag;
 use App\Models\User;
 
@@ -13,7 +14,9 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return inertia('Admin/Index');
+        return inertia('Admin/Index', [
+            'reports' => Report::all(),
+        ]);
     }
 
     public function genres()

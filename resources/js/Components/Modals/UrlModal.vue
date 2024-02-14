@@ -70,6 +70,7 @@ const url = computed(() => {
 });
 
 const showModal = ref(false);
+const modalIsOpened = ref(false);
 const calledModal = ref(null);
 
 const setQuery = () => {
@@ -78,7 +79,14 @@ const setQuery = () => {
         uri.searchParams.append("modal", calledModal.value);
         console.log("Query set:", uri);
         window.history.pushState(null, null, uri);
-        router.reload({preserveState: true});
+        // router.reload({preserveState: true});
+        router.visit(uri, {
+            method: 'get',
+            replace: true,
+            preserveState: true,
+            preserveScroll: true,
+            onFinish: visit => {modalIsOpened.value = showModal.value},
+        })
     }
 };
 const unsetQuery = () => {
@@ -87,7 +95,14 @@ const unsetQuery = () => {
     uri.searchParams.delete("id");
     console.log("Unset query:", uri);
     window.history.pushState(null, null, uri);
-    router.reload({preserveState: true});
+    // router.reload({preserveState: true});
+    router.visit(uri, {
+        method: 'get',
+        replace: true,
+        preserveState: true,
+        preserveScroll: true,
+        onFinish: visit => {modalIsOpened.value = showModal.value},
+    })
 };
 
 const showModalFunc = (modal) => {

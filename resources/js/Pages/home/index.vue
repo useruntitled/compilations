@@ -19,13 +19,14 @@ import Post from "@/Components/Post.vue";
 import Base from "../shared/base.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
-import {usePage} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 
 defineOptions({ layout: Base });
 
 const props = defineProps({
     posts: null,
     close_window_token: null,
+    close_auth_modal: false,
 });
 
 const page = usePage();
@@ -34,6 +35,11 @@ onMounted(() => {
     console.log(page);
     if(page.props?.close_window_token == props.close_window_token && props.close_window_token != null) {
         window.opener.postMessage('auth.window.closed', "*");
+        window.close();
+    }
+    if(props.close_auth_modal) {
+        const channel = new BroadcastChannel('auth.modal');
+        channel.postMessage('close');
         window.close();
     }
 })

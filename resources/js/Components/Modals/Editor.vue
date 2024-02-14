@@ -205,6 +205,7 @@ import IconUp from "../Icons/IconUp.vue";
 import IconDown from "../Icons/IconDown.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import IconCheck from "../Icons/IconCheck.vue";
+import {throttle} from "lodash/function.js";
 
 const emit = defineEmits(["close"]);
 
@@ -376,12 +377,30 @@ watch(
     }
 );
 
-watch(form, () => {
-    if (!postIsLoading.value) {
-        savePost();
+// watch(form, () => {
+//     if (!postIsLoading.value) {
+//         throttle(() => {
+//             savePost();
+//         }, 100)
+//     }
+//     postIsLoading.value = false;
+// });
+watch(form, throttle(async() => {
+    if (!postIsLoading.value && !isUpdating.value) {
+            isUpdating.value = true;
+            isUpdated.value = false;
+
+            await savePost();
+
+            isUpdating.value = false;
+            isUpdated.value = true;
+            setTimeout(() => {
+                isUpdated.value = false;
+            }, 1000)
     }
-    postIsLoading.value = false;
-});
+            postIsLoading.value = false;
+}, 1000))
+
 const access = computed({
     get() {
         return page.props.auth.can.create_posts;
@@ -400,7 +419,13 @@ const pushState = () => {
     append("id", post.value.id);
 
     window.history.pushState(null, null, url);
-    router.reload({preserveState: true});
+    // router.reload({preserveState: true});
+    router.visit(url, {
+        method: 'get',
+        replace: true,
+        preserveState: true,
+        preserveScroll: true,
+    })
 };
 
 const createPost = async () => {
@@ -425,32 +450,24 @@ const createPost = async () => {
 };
 
 const savePost = async () => {
-    if (!postIsCreated.value && !POSTWASLOADED.value && !isUpdating.value) {
+    if (!postIsCreated.value && !POSTWASLOADED.value) {
         await createPost();
     }
-    isUpdating.value = true;
-    setTimeout(async () => {
         await axios
-            .post(route("post.update"), {
-                _method: "PUT",
-                title: form.title,
-                description: form.description,
-                id: post.value.id,
-                films: form.films,
-            })
-            .catch((res) => {
-                console.log(res);
-            })
-            .then((res) => {
-                if (res.status == 200) {
-                    isUpdating.value = false;
-                    isUpdated.value = true;
-                    setTimeout(() => {
-                        isUpdated.value = false;
-                    }, 1000);
-                }
-            });
-    }, 1000);
+                .post(route("post.update"), {
+                    _method: "PUT",
+                    title: form.title,
+                    description: form.description,
+                    id: post.value.id,
+                    films: form.films,
+                })
+                .catch((res) => {
+                    console.log(res);
+                })
+                .then((res) => {
+                    if (res.status == 200) {
+                    }
+                });
 };
 
 const formQuery = () => {

@@ -1,5 +1,4 @@
 <template>
-    <Csrf></Csrf>
     <Modal
         :show="show"
         @close="
@@ -21,7 +20,7 @@
                     Вход
                 </button>
                 <button
-                    :class="{ 'bg-orange-400 text-white ': !isLoginForm }"
+                    :class="{ 'bg-orange-400 text-white ': isRegisterForm }"
                     @click="
                         currentForm = 'RegisterForm';
                         errors = {};
@@ -63,6 +62,7 @@
 <script setup>
 import Modal from "./Modal.vue";
 import {ref, computed, onUnmounted} from "vue";
+import EmailVerificationForm from "@/Components/Forms/Auth/EmailVerificationForm.vue";
 import LoginForm from "../Forms/Auth/LoginForm.vue";
 import RegisterForm from "../Forms/Auth/RegisterForm.vue";
 import axios from "axios";
@@ -95,11 +95,16 @@ const currentForm = ref("RegisterForm");
 const forms = {
     LoginForm,
     RegisterForm,
+    EmailVerificationForm,
 };
 
 const isLoginForm = computed(() => {
     return currentForm.value == "LoginForm";
 });
+
+const isRegisterForm = computed(() => {
+    return currentForm.value == "RegisterForm";
+})
 
 const showModal = ref(props.show);
 
@@ -126,9 +131,16 @@ const register = (form) => {
         })
         .then((res) => {
             console.log(res);
-            if (res.status == 200) {
-                router.reload({ preserveState: false });
-                emit("close");
+            if (res.status === 200) {
+                currentForm.value = 'EmailVerificationForm';
+                const channel = new BroadcastChannel('auth.modal');
+                channel.onmessage = e => {
+                    if(e.data === 'close') {
+                        emit('close');
+                    }
+                }
+                // router.reload({ preserveState: false });
+                // emit("close");
             }
         });
 };
