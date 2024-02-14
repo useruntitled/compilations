@@ -5,70 +5,30 @@ services:
             - ./:/var/www
             - ./_docker/nginx/conf.d:/etc/nginx/conf.d
         ports:
-            - 80:80
+            - 8876:80
         depends_on:
             - app
-        container_name: compilations
+        container_name: project_nginx
+
     app:
         build:
             context: .
             dockerfile: _docker/app/Dockerfile
         volumes:
             - ./:/var/www
-        container_name: compilations
         depends_on:
             - db
+        container_name: project_app
+
     db:
         image: mysql:8.0
         restart: always
         volumes:
             - ./tmp/db:/var/lib/mysql
         environment:
-            MYSQL_DATABASE: compilations
+            MYSQL_DATABASE: lardocker
             MYSQL_ROOT_PASSWORD: root
         ports:
             - 8101:3306
         command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-        container_name: compilations_db
-    meilisearch:
-        image: 'getmeili/meilisearch:latest'
-        ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
-        environment:
-            MEILI_NO_ANALYTICS: '${MEILISEARCH_NO_ANALYTICS:-false}'
-        volumes:
-            - 'sail-meilisearch:/meili_data'
-        networks:
-            - sail
-        healthcheck:
-            test:
-                - CMD
-                - wget
-                - '--no-verbose'
-                - '--spider'
-                - 'http://localhost:7700/health'
-            retries: 3
-            timeout: 5s
-    mailpit:
-        image: 'axllent/mailpit:latest'
-        ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
-        networks:
-            - sail
-    selenium:
-        image: selenium/standalone-chrome
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        volumes:
-            - '/dev/shm:/dev/shm'
-        networks:
-            - sail
-networks:
-    sail:
-        driver: bridge
-volumes:
-    sail-mysql:
-        driver: local
-    sail-meilisearch:
-        driver: local
+        container_name: project_db
