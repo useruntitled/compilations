@@ -25,6 +25,7 @@ class HomeController extends Controller
         // ->get();
 
         $posts = $service->getPopular(1);
+        $service->countView($posts);
 
         return inertia('home/index', [
             'posts' => $posts,

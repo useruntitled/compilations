@@ -400,7 +400,7 @@ const pushState = () => {
     append("id", post.value.id);
 
     window.history.pushState(null, null, url);
-    router.reload();
+    router.reload({preserveState: true});
 };
 
 const createPost = async () => {

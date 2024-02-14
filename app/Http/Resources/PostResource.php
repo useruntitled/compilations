@@ -33,6 +33,8 @@ class PostResource extends JsonResource
             'image' => $this->image,
             'image_preview' => $this->image_preview,
             'rep' => $this->rep,
+            'views' => $this->views,
+            'visits' => $this->visits,
         ];
     }
 }

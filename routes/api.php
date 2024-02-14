@@ -105,3 +105,7 @@ Route::middleware('auth')->group(function () {
 Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
    Route::get('search/{query}','search')->name('search.query');
 });
+
+Route::controller(\App\Http\Controllers\ReportController::class)->group(function () {
+   Route::post('report/store', 'store')->name('report.store');
+});

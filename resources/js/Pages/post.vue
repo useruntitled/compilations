@@ -47,30 +47,42 @@
             </div>
         </div>
 
-        <footer class="m-0 px-5 py-2 flex items-center">
+        <footer class="px-5 py-2">
+            <div class="flex flex-col ">
+                <div class="flex items-center space-x-5 text-secondary ">
+                    <div>
+                        {{ $tc('view', post.views) }}
+                    </div>
+                    <div>
+                        {{ $tc('visit', post.visits) }}
+                    </div>
+                </div>
+                <div class="m-0  flex items-center">
             <span class="me-0"
-                ><Reputation type="Post" :reputation="post.rep"></Reputation
+            ><Reputation type="Post" :reputation="post.rep"></Reputation
             ></span>
-            <span class="me-2 text-slate-700"
-                ><LinkIcon
-                    :text="post.comments_count"
-                    :href="route('post', [post.id, post.slug, 'comments'])"
+                    <span class="me-2 text-slate-700"
+                    ><LinkIcon
+                        :text="post.comments_count"
+                        :href="route('post', [post.id, post.slug, 'comments'])"
                     ><IconComments class="w-5 h-5"></IconComments></LinkIcon
-            ></span>
-            <span class="me-2 text-slate-700">
+                    ></span>
+                    <span class="me-2 text-slate-700">
                 <Bookmark
                     :has="post.has_bookmark"
                     :count="post.bookmarks_count"
                     :post_id="post.id"
                 ></Bookmark>
             </span>
-            <span class="me-2 text-slate-700">
+                    <span class="me-2 text-slate-700">
                 <LinkIcon>
                     <IconArrowForwardUp
                         class="w-6 h-6 stroke-3/2"
                     ></IconArrowForwardUp>
                 </LinkIcon>
             </span>
+                </div>
+            </div>
         </footer>
     </div>
     <section>

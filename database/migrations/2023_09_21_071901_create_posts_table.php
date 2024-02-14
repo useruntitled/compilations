@@ -29,6 +29,9 @@ return new class extends Migration
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
             $table->timestamp('deleted_at')->nullable();
+
+            $table->bigInteger('views')->nullable()->default(0);
+            $table->bigInteger('visits')->nullable()->default(0);
         });
     }
 

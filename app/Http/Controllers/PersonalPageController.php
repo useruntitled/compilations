@@ -43,7 +43,7 @@ class PersonalPageController extends Controller
             'films' => ['genres'],
         ])->where('user_id', $user_id)
             ->latest()
-            ->withCount('comments')
+            ->withCount('comments', 'films')
             ->skip(($page - 1) * self::PER_PAGE)
             ->take(self::PER_PAGE)
             ->get();

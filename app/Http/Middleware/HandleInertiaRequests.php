@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user ? new UserResource($user) : $user,
                 'check' => $user ? true : false,
                 'can' => [
-                    'create_posts' => $user ? $user->isCreator : false,
+                    'create_posts' => $user ? ($user->isCreator || config('karma.chaos_mode')) : false,
                 ],
             ],
             'close_window_token' => null,

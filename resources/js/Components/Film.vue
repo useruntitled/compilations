@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div class="flex" @mouseenter="showReportTrigger = true" @mouseleave="showReportTrigger = false">
         <div class="mt-5 text-start flex items-center w-full rounded-lg">
             <a
                 :href="'https://kinopoisk.ru/film/' + film.id"
@@ -57,12 +57,21 @@
                     {{ film.type == "movie" ? "Фильм" : "Сериал" }}
                 </p>
                 <div class="my-2">
-                    <img
-                        :src="'https://rating.kinopoisk.ru/' + film.id + '.gif'"
-                        class="bg-gray-100 rounded"
-                        style="width: 102px; height: 38px"
-                        alt="Rating"
-                    />
+                    <div class="flex items-end justify-between space-x-2">
+                        <img
+                            :src="'https://rating.kinopoisk.ru/' + film.id + '.gif'"
+                            class="bg-gray-100 rounded"
+                            style="width: 102px; height: 38px"
+                            alt="Rating"
+                        />
+                        <div v-show="showReportTrigger">
+                            <DropdownReport
+                                report_to_type="film"
+                                :report_to_id="film.id"
+                                align="right" class="text-gray-400 w-6 h-6"></DropdownReport>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -70,6 +79,7 @@
 </template>
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
+import DropdownReport from "@/Components/Dropdowns/DropdownReport.vue";
 const props = defineProps({
     film: null,
 })
@@ -77,6 +87,8 @@ const props = defineProps({
 const film_description = ref(null);
 
 const isTooLong = ref(false);
+
+const showReportTrigger = ref(false);
 
 onMounted(() => {
     nextTick(() => {

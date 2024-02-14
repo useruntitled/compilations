@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Jobs\PostCountViewJob;
+use App\Jobs\PostCountVisitJob;
 use App\Models\Post;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class PostService
@@ -74,5 +77,15 @@ class PostService
             ->get();
 
         return $posts;
+    }
+
+    public function countView(Collection $posts)
+    {
+        dispatch(new PostCountViewJob($posts));
+    }
+
+    public function countVisit(Post $post)
+    {
+        dispatch(new PostCountVisitJob($post));
     }
 }

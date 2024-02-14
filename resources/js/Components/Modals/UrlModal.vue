@@ -78,7 +78,7 @@ const setQuery = () => {
         uri.searchParams.append("modal", calledModal.value);
         console.log("Query set:", uri);
         window.history.pushState(null, null, uri);
-        router.reload();
+        router.reload({preserveState: true});
     }
 };
 const unsetQuery = () => {
@@ -87,7 +87,7 @@ const unsetQuery = () => {
     uri.searchParams.delete("id");
     console.log("Unset query:", uri);
     window.history.pushState(null, null, uri);
-    router.reload();
+    router.reload({preserveState: true});
 };
 
 const showModalFunc = (modal) => {

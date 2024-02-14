@@ -42,6 +42,8 @@
         </template>
     </Dropdown>
     <Report
+        report_to_type="post"
+        :report_to_id="post.id"
         :show="showReportModal"
         @close="showReportModal = !showReportModal"
     ></Report>
@@ -54,7 +56,7 @@ import IconDots from "../Icons/IconDots.vue";
 import IconFlag from "../Icons/IconFlag.vue";
 import IconPencil from "../Icons/IconPencil.vue";
 import IconTrash from "../Icons/IconTrash.vue";
-import Report from "../Modals/Report.vue";
+import Report from "../Modals/Report/Report.vue";
 
 const props = defineProps({
     user: null,

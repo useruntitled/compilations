@@ -43,6 +43,8 @@ class PostController extends Controller
             ->published()
             ->findOrFail($id);
 
+        $this->service->countVisit($post);
+
         return inertia('post', [
             'post' => $post,
         ]);
@@ -51,7 +53,7 @@ class PostController extends Controller
     public function new()
     {
         $posts = $this->getNew(1);
-
+        $this->service->countView($posts);
         return inertia('home/New', [
             'posts' => $posts,
         ]);
@@ -66,11 +68,10 @@ class PostController extends Controller
     public function get(int $id)
     {
         $post = Post::with(['user' => ['roles'], 'films'])->findOrFail($id);
-
         return $post;
     }
 
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
         $post = Post::create([
             'user_id' => Auth::user()->id,
@@ -193,16 +194,22 @@ class PostController extends Controller
 
     public function getNew($page)
     {
-        return $this->service->getNew($page);
+        $posts = $this->service->getNew($page);
+        $this->service->countView($posts);
+        return $posts;
     }
 
     public function getRandom($page)
     {
-        return $this->service->getRandom($page);
+        $posts =  $this->service->getRandom($page);
+        $this->service->countView($posts);
+        return $posts;
     }
 
     public function getPopular($page)
     {
-        return $this->service->getPopular($page);
+        $posts = $this->service->getPopular($page);
+        $this->service->countView($posts);
+        return $posts;
     }
 }

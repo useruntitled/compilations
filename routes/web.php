@@ -29,21 +29,16 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+//Route::get('/', function () {
+//    return Inertia::render('Welcome', [
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+//});
 
 Route::controller(PostController::class)->group(function () {
-    // Route::get('create','create')->name('post.create')->middleware(['auth','creator']);
-    // Route::get('post-finish/{id}','finish')->name('post.finish')->middleware(['auth','creator']);
-    // Route::post('create','store')->name('post.create')->middleware(['auth','creator']);
-    // Route::put('create','update')->name('post.update')->middleware('auth');
-    // Route::put('publish','publish')->name('post.publish')->middleware(['auth','creator']);
     Route::get('post-edit/{id}/{slug}', 'edit')->name('post.edit')->middleware('auth');
     Route::post('post-film-attach', 'postAttachFilm')->name('post.attach.film')->middleware(['auth', 'creator']);
     Route::patch('post-film-dettach', 'postDettachFilm')->name('post.dettach.film')->middleware(['auth', 'creator']);
@@ -129,7 +124,7 @@ Route::controller(PersonalPageController::class)->group(function () {
 
 
 Route::controller(\App\Http\Controllers\Auth\SocialiteProviderController::class)->group(function() {
-   Route::get('oauth/redirect/{provider}','redirect')->name('oauth.redirect');
+   Route::get('oauth/redirect/{provider}','redirect')->name('oauth.redirect')->middleware('guest');
    Route::get('oauth/callback/{provider}','callback');
 });
 

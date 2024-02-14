@@ -49,6 +49,8 @@ const i18n = createI18n({
       comment: '0 комментариев | {n} комментарий | {n} комментария | {n} комментариев',
       user: '0 пользователей | {n} пользователь | {n} пользователя | {n} пользователя',
       film: '0 фильмов | {n} фильм | {n} фильма | {n} фильмов',
+      view: '0 показов | {n} показ | {n} показа | {n} показов',
+      visit: '0 открытий | {n} открытие | {n} открытия | {n} открытий',
     }
   }
 })
@@ -66,7 +68,7 @@ createInertiaApp({
             .use(VueLazyLoad, {
                 adapter: {
                   loading (listener, Init) {
-                    
+
                   }
                 },
                 attempt: 3,
@@ -77,10 +79,10 @@ createInertiaApp({
             .component('Head',Head)
             .component('Link',Link)
             .component('Base',Base)
-            
+
             .mount(el)
     },
-    
+
     progress: {
         delay: 300,
         color: '#d4620b',

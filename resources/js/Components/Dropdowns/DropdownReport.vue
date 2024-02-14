@@ -1,13 +1,14 @@
 <template>
-    <Dropdown>
+    <Dropdown :align="align">
         <template #trigger>
-            <button class="p-1 hover:bg-gray-100 text-gray-600 rounded-full">
-                <IconDots></IconDots>
+            <button class="p-1 hover:bg-gray-100 text-gray-600 rounded-full" >
+                <IconDots :class="class"></IconDots>
             </button>
         </template>
         <template #content>
             <div class="py-1">
                 <button
+                    @click="showModal = true"
                     class="text-base text-black hover:bg-neutral-100 rounded-lg px-5"
                 >
                     <IconFlag
@@ -18,12 +19,27 @@
             </div>
         </template>
     </Dropdown>
+    <report @close="showModal = false" :show="showModal" :report_to_type="report_to_type" :report_to_id="report_to_id"></report>
 </template>
-<script>
+<script setup>
 import Dropdown from "@/Components/Dropdown.vue";
 import IconFlag from "@/Components/Icons/IconFlag.vue";
 import IconDots from "@/Components/Icons/IconDots.vue";
-export default {
-    components: { Dropdown, IconFlag, IconDots },
-};
+import Report from '@/Components/Modals/Report/Report.vue';
+import { ref } from 'vue';
+
+const showModal = ref(false);
+
+const props = defineProps({
+    report_to_type: null,
+    report_to_id: null,
+    class: null,
+    align: 'right',
+})
 </script>
+<!--<script>-->
+
+<!--export default {-->
+<!--    components: { Dropdown, IconFlag, IconDots },-->
+<!--};-->
+<!--</script>-->

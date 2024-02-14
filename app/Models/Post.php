@@ -19,6 +19,7 @@ class Post extends Model
         'user_id', 'title',
         'description', 'active',
         'slug', 'image',
+        'views', 'visits',
     ];
 
     protected $appends = [

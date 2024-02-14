@@ -15,7 +15,7 @@ class Creator
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->isCreator) {
+        if (Auth::user()->isCreator || config('karma.chaos_mode')) {
             return $next($request);
         }
 

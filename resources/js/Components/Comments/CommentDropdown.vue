@@ -43,6 +43,8 @@
     </Dropdown>
 
     <Report
+        report_to_type="comment"
+        :report_to_id="comment.id"
         :show="showReportModal"
         @close="showReportModal = !showReportModal"
     ></Report>
@@ -54,7 +56,7 @@ import IconTrash from "@/Components/Icons/IconTrash.vue";
 import IconFlag from "@/Components/Icons/IconFlag.vue";
 import IconPencil from "@/Components/Icons/IconPencil.vue";
 import {usePage} from "@inertiajs/vue3";
-import Report from '@/Components/Modals/Report.vue';
+import Report from '@/Components/Modals/Report/Report.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 
 const emit = defineEmits(['enableEditing', 'remove']);

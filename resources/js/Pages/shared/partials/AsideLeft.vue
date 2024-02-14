@@ -5,6 +5,7 @@
     >
         <div class="px-2.5 mt-0 py-5 text-start">
             <Link
+                preserve-state
                 :href="route('home')"
                 class="appearance-none block w-full p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:bg-white hover:shadow-sm"
                 :class="{ 'bg-white shadow-sm': isPopular }"
@@ -22,6 +23,7 @@
                 </div>
             </Link>
             <Link
+                preserve-state
                 :href="route('new')"
                 class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:shadow-sm"
                 :class="{ 'bg-white shadow-sm': isNew }"

@@ -13,9 +13,9 @@
                                 <div
                                     class="p-[1px] bg-green-400 text-white rounded-full me-2"
                                 >
-                                    <IconCheck
+                                    <icon-check
                                         class="w-5 h-5 stroke-2"
-                                    ></IconCheck>
+                                    ></icon-check>
                                 </div>
                                 <p class="text-center font-medium">
                                     {{ msg.message }}

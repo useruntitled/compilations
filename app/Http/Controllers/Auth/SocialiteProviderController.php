@@ -49,6 +49,7 @@ class SocialiteProviderController extends Controller
                 'avatar' => $hasImage ? $filename : null,
                 'provider' => $provider,
                 'provider_user_id' => $socialiteUser->getId(),
+                'password' => Hash::make(Str::random(20)),
             ]);
             if(!$hasImage) {
                 $user->avatar = $service->generateDefaultUserAvatar();

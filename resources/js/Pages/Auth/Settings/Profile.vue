@@ -14,7 +14,7 @@
         <div class="ms-1 flex justify-between items-center mt-5">
             <button
                 @click="send()"
-                class="font-medium text-orange-500 hover:opacity-70"
+                class="font-semibold text-orange-500 hover:opacity-70"
             >
                 Сохранить
             </button>
