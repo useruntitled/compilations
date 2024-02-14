@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('comment_id')->nullable()->constrained();
 
-            $table->integer('level')->constrained();
+            $table->integer('level');
 
             $table->longText('text');
 
