@@ -1,0 +1,99 @@
+<template>
+    <InfiniteScrollContainer @load="handleLoadEvent()">
+        <div class="rounded-xl">
+            <div>
+                <div v-for="post in posts" :key="post.id">
+                    <Post :post="post"></Post>
+                    <!-- {{ post }} -->
+                </div>
+            </div>
+        </div>
+    </InfiniteScrollContainer>
+
+    <div class="mt-20" v-if="!posts.length">
+        <EmptyFeed></EmptyFeed>
+    </div>
+</template>
+<script setup>
+import { ref } from "vue";
+import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
+import Base from "../shared/base.vue";
+import EmptyFeed from "@/Components/EmptyFeed.vue";
+import Post from "@/Components/Post.vue";
+import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import axios from "axios";
+
+defineOptions({ layout: [Base, PageProfileLayout] });
+
+const props = defineProps({
+    user: null,
+    posts: null,
+});
+
+const isLoading = ref(false);
+
+const currentPage = ref(2);
+
+const isEnd = ref(false);
+
+const loadPosts = async () => {
+    await axios
+        .get(route("profile.posts.get", [props.user.id, currentPage.value]))
+        .catch((res) => {
+            console.log(res);
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+                if (res.data.length == 0) isEnd.value = true;
+                res.data.forEach((post) => {
+                    props.posts.push(post);
+                });
+            }
+        });
+};
+
+const handleLoadEvent = async () => {
+    if (!isLoading.value && !isEnd.value) {
+        isLoading.value = true;
+        await loadPosts();
+        currentPage.value += 1;
+        isLoading.value = false;
+    }
+};
+</script>
+<!-- <script>
+import Pagination from "@/Components/Pagination.vue";
+import { Link } from "@inertiajs/vue3";
+import Post from "@/Components/Post.vue";
+import Base from "../shared/base.vue";
+import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
+import Comment from "@/Components/Comments/Comment.vue";
+import EmptyFeed from "@/Components/EmptyFeed.vue";
+
+export default {
+    layout: [Base, PageProfileLayout],
+    props: {
+        user: null,
+        karma: null,
+        posts: null,
+        comments: null,
+        replies: null,
+        section: null,
+    },
+    data() {
+        return {
+            selectedSection: parseInt(this.section) ?? 1,
+        };
+    },
+    methods: {},
+    components: {
+        Link,
+        Pagination,
+        Post,
+        PageProfileLayout,
+        Comment,
+        EmptyFeed,
+    },
+};
+</script> -->
