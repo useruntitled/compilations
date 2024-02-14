@@ -53,7 +53,7 @@ class CommentController extends Controller
         if ($request->comment_id) {
             $comment = Comment::find($request->comment_id);
 
-            $level = Comment::find($comment->comment_id)->level + 1;
+            $level = $comment->level + 1;
         } else {
             $level = 0;
         }
