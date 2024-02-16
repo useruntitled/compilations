@@ -1,30 +1,30 @@
 <template>
     <div class="flex" @mouseenter="showReportTrigger = true" @mouseleave="showReportTrigger = false">
-        <div class="mt-5 text-start flex items-center w-full rounded-lg">
+        <div class="mt-5 grid grid-tmp items-center  rounded-lg">
             <a
                 :href="'https://kinopoisk.ru/film/' + film.id"
-                class="object-cover h-full"
+                class="object-cover md:h-full xs:h-[300px] clear-auto"
             >
                 <img
                     v-if="film.poster_url_preview"
-                    class="rounded-lg h-full w-full object-cover min-w-[200px] w-1/4 "
+                    class="rounded-lg  object-cover xs:h-full md:h-full w-full"
                     :src="film.poster_url_preview"
                     alt=""
                 />
                 <img
                     v-else
                     :src="film.poster_url"
-                    class="rounded-lg h-full w-full object-cover min-w-[200px] w-1/4 "
+                    class="rounded-lg  object-cover xs:h-full md:h-full w-full"
                     alt=""
                 />
                 <img
                     v-if="!film.cover_url && !film.poster_url"
-                    class="rounded-lg h-full w-full object-cover min-w-[200px]  w-1/4"
+                    class="rounded-lg  object-cover xs:h-full md:h-full w-full"
                     src="https://dummyimage.com/400x400/000/fff&text=No+image"
                     alt=""
                 />
             </a>
-            <div class="ms-5 inline-block">
+            <div class="md:ms-5 inline-block xs:mt-4 md:mt-0 md:pe-4">
                 <a
                     :href="'https://kinopoisk.ru/film/' + film.id"
                     class="text-sky-600 font-semibold"
@@ -45,7 +45,7 @@
                         </a>
                     </span>
                 </div>
-                <p class="text-sm text-slate-800 break-words w-full overflow-hidden min-w-min" ref="film_description"  :class="{'max-h-20': isTooLong}" >
+                <p class="text-sm text-slate-800 break-words overflow-hidden" ref="film_description"  :class="{'max-h-20': isTooLong}" >
                     {{ film.description }}
                 </p>
                     <button @click="isTooLong = false" v-show="isTooLong" class="block text-black opacity-60 hover:opacity-40 my-2 text-sm">
@@ -100,3 +100,16 @@ onMounted(() => {
 
 
 </script>
+<style>
+@media(min-width: 1280px) {
+    .grid-tmp {
+        grid-template-columns: 40% auto;
+    }
+}
+
+@media(max-width: 400px) {
+    .grid-tmp {
+        grid-template-rows: auto;
+    }
+}
+</style>

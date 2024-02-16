@@ -2,8 +2,8 @@
     <Head>
         <title>{{ post.title }}</title>
     </Head>
-    <div class="rounded-xl rounded-b-sm mb-0 px-3 block w-full bg-white">
-        <header class="p-3 flex justify-between">
+    <div class="rounded-xl mb-5 sm:px-3 xs:px-1 block w-full bg-white">
+        <header class="sm:px-2 pt-3 pb-1  flex justify-between">
             <!-- <UserTablet :user="post.user" class="font-medium"></UserTablet> -->
             <UserTabletWithElementInside :user="post.user">
                 <template #content>
@@ -20,13 +20,13 @@
             </div>
         </header>
         <Link :href="route('post', [post.id, post.slug])">
-            <section class="px-3 text-xl font-medium">
+            <section class="sm:px-3 xs:px-1 text-xl font-medium">
                 <p>{{ post.title }}</p>
             </section>
-            <section class="px-3 mt-2 text-base mb-2">
+            <section class="sm:px-3 xs:px-1 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div :class="{'p-2': post.image}">
+            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}">
                 <!-- <img
                     v-lazy="route('im', [post.image, '800'])"
                     alt="Image"
@@ -42,12 +42,12 @@
             </div>
         </Link>
         <div ref="films_block">
-            <div v-for="(film, index) in post.films" class="px-2" >
+            <div v-for="(film, index) in post.films" class="sm:px-3 xs:px-1" >
                 <Film :film="film"></Film>
             </div>
         </div>
 
-        <footer class="px-5 py-2">
+        <footer class="sm:px-3 xs:px-1 py-2">
             <div class="flex flex-col ">
                 <div class="flex items-center space-x-5 text-secondary ">
                     <div>
@@ -154,7 +154,7 @@ const handleLoadFooterEvent = async () => {
 
 const loadFooterFeed = async () => {
     axios
-        .get(route("posts.random", [footerFeedPage.value]))
+        .get(route("posts.random", [footerFeedPage.value, props.post.id]))
         .catch((res) => {
             console.log(res);
         })
