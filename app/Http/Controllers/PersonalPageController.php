@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use App\Services\KarmaService;
+use Illuminate\Support\Facades\Auth;
 
 class PersonalPageController extends Controller
 {
@@ -19,8 +20,13 @@ class PersonalPageController extends Controller
         $this->service = $service;
     }
 
-    public function index($user_id)
+    public function index(?int $user_id = null)
     {
+        if($user_id == null) {
+            if(!Auth::check()) abort(403);
+            $user_id = Auth::id();
+        }
+
         $user = User::query()->findOrFail($user_id);
 
         $karma = $this->service->calculateUserKarma($user);

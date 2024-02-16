@@ -10,12 +10,12 @@ class SearchController extends Controller
 {
     public function index()
     {
-        // view for mobile
+        return inertia('Search');
     }
 
     public function search(string $query)
     {
-        $posts = Post::where('title', 'like',"%$query%")->take(5)->get();
+        $posts = Post::where('title', 'like',"%$query%")->published()->take(5)->get();
         $users = User::where('name', 'like', "%$query%")->take(5)->get();
         return response()->json([
            'posts' => $posts,
