@@ -2,7 +2,7 @@
     <Head>
         <title>Настройки</title>
     </Head>
-    <div class="bg-white rounded-xl">
+    <div class="bg-white rounded-xl max-w-screen">
         <header class="font-medium text-lgg px-5 py-4 flex items-center">
             <Link
                 preserve-state
@@ -18,7 +18,7 @@
             <span>{{ pages[page.component] }}</span>
         </header>
         <hr />
-        <main class="py-5">
+        <main class="py-5 xs:w-screen md:w-auto">
             <slot></slot>
         </main>
     </div>

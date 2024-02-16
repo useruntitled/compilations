@@ -102,8 +102,8 @@
                             <section
                                 @mouseleave="searchInputFocused = false"
                                 v-show="
-                                    searchResult.length > 0 &&
-                                    searchInputFocused
+                                    searchResult.length > 0
+                                    && searchInput.length
                                 "
                                 class="mt-2 p-2 px-5 bg-white shadow-lg rounded-lg"
                             >

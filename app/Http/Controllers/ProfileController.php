@@ -70,6 +70,11 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    public function account()
+    {
+        return inertia('Account');
+    }
+
     public function drafts()
     {
         $drafts = Post::where('user_id', Auth::user()->id)->where('active', false)->orderBy('id', 'desc')->get();

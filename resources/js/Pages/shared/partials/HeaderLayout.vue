@@ -8,7 +8,7 @@
             id="header"
         >
             <div class="max-w-7xl mx-auto px-5 py-1">
-                <div class="grid grid-layout items-center">
+                <div class="grid grid-layout gap-4 items-center">
                     <section class="flex items-center">
                         <div >
                             <Link
@@ -24,8 +24,10 @@
                             </Link>
                         </div>
                     </section>
-                    <section class="flex items-center hidden lg:block">
-                        <Search></Search>
+                    <section class="ms-3 hidden lg:block  ">
+                        <div class="w-[640px] mx-auto ">
+                                <search class="relative "></search>
+                        </div>
                     </section>
                     <section class="flex items-center hidden lg:block">
                         <div
@@ -110,7 +112,7 @@ const callModal = inject("callModal");
 const page = usePage();
 </script>
 
-<style>
+<style scoped>
 @media(min-width: 922px) {
     .grid-layout {
         grid-template-columns: 220px auto 0;

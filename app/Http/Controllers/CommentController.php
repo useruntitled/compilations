@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentDeletedEvent;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Services\ImageService;
+use App\Services\NotificationService;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class CommentController extends Controller
 {
-    protected $service;
+    protected ImageService $service;
 
     public function __construct(ImageService $service)
     {
         $this->service = $service;
     }
 
-    public function index($id)
+    public function index($id, NotificationService $service)
     {
-        $comment = Comment::with('post')->findOrFail($id);
+        $comment = Comment::with('post')->find($id);
+        if($comment == null) {
+            $service->deleteByObjectId(Auth::id(),$id);
+            abort(404);
+        };
 
         return redirect()
             ->route('post', [
@@ -53,7 +60,7 @@ class CommentController extends Controller
         if ($request->comment_id) {
             $comment = Comment::find($request->comment_id);
 
-            $level = Comment::find($comment->comment_id)->level + 1;
+            $level = $comment->level + 1;
         } else {
             $level = 0;
         }
@@ -119,6 +126,8 @@ class CommentController extends Controller
         ]);
 
         $comment = Comment::find($validated['id']);
+
+        if($comment->is_deleted) abort(422);
 
         if ($request->hasFile('image') && $request->hasImage == 'true') {
             $filename = $this->service->uploadAndDelete($request->file('image'), null);

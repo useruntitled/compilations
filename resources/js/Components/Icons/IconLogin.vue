@@ -5,6 +5,7 @@
         stroke="currentColor"
     >
         <path
+            fill="currentColor"
             stroke-width="0%"
             fill-rule="evenodd"
             clip-rule="evenodd"

@@ -29,7 +29,6 @@ class VerifyEmailController extends Controller
         }
 
 
-
         Auth::login($user);
 
         return inertia('home/index', [

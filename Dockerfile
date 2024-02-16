@@ -4,25 +4,13 @@ FROM php:8.1-fpm
 WORKDIR /var/www
 
 # Копируем composer.lock и composer.json
-COPY composer.lock composer.json /var/www
+COPY composer.lock  /var/www/
+COPY composer.json /var/www/
 
 
 # Устанавливаем зависимости
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    libpq-dev \
-    libonig-dev \
-    libzip-dev
+    curl
 
 # Очищаем кэш
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*

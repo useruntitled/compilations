@@ -22,6 +22,7 @@ class Comment extends Model
     protected $appends = [
         'rep', 'timestamp',
         'image_preview',
+        'is_deleted',
     ];
 
     protected $with = [

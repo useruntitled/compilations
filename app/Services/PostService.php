@@ -66,10 +66,11 @@ class PostService
         return $posts;
     }
 
-    public function getRandom(?int $page = 1)
+    public function getRandom(?int $page = 1, ?int $post_id)
     {
         $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
             ->where('active', 1)
+            ->where('id','!=',$post_id)
             ->withCount(['comments', 'bookmarks', 'films'])
             ->inRandomOrder()
             ->skip(($page - 1) * $this->per_page)

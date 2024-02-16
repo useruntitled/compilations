@@ -4,7 +4,7 @@
         :class="!123 ? 'rounded-b-none' : ''"
         ref="comments_block"
     >
-        <p class="text-xl mb-8 font-medium flex justify-between">
+        <p class="text-xl mb-8 font-medium flex justify-between items-center">
             <p>Комментарии</p>
             <div class="text-sm  hover:opacity-80  hover:cursor-pointer">
                 <!-- <select class="rounded-xl text-sm border-0 focus:ring-0 opacity-80 hover:opacity-60 hover:cursor-pointer" @change="resortComments($event)">
@@ -30,7 +30,7 @@
                 </Dropdown>
             </div>
         </p>
-        <div class="px-2 mb-5">
+        <div class="md:px-2 mb-5">
             <div v-if="!showReplyInterface && !showEditingInterface">
                 <CommentInput
                     @sendComment="createComment"
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div></div>
-        <main>
+        <main class="max-w-screen">
             <AnimationLoader
                 v-if="!isLoaded"
                 class="mx-auto stroke-gray-500"

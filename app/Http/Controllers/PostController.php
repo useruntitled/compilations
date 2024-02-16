@@ -199,9 +199,9 @@ class PostController extends Controller
         return $posts;
     }
 
-    public function getRandom($page)
+    public function getRandom(?int $page, int $post_id)
     {
-        $posts =  $this->service->getRandom($page);
+        $posts =  $this->service->getRandom($page, $post_id);
         $this->service->countView($posts);
         return $posts;
     }
