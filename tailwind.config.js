@@ -12,9 +12,6 @@ export default {
 
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
             colors: {
                 'kp': '#d4620b',
                 'kppale': '#fcc7a2',
@@ -55,6 +52,7 @@ export default {
                 'roboto': ['Roboto','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','sans-serif'] ,
             },
             screens: {
+                'xs': '200px',
                 'lg': '922px',
             },
         },
