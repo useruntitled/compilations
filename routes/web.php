@@ -74,9 +74,9 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('drafts', [PostController::class, 'drafts'])->name('drafts');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::middleware('admin')->group(function () {
@@ -113,7 +113,7 @@ Route::controller(GenreController::class)->group(function () {
 // });
 
 Route::controller(PersonalPageController::class)->group(function () {
-    Route::get('profile/{id}/', 'index')->name('profile');
+    Route::get('profile/{id?}/', 'index')->name('profile');
 });
 
 Route::controller(PersonalPageController::class)->group(function () {
@@ -123,10 +123,16 @@ Route::controller(PersonalPageController::class)->group(function () {
 // Route::get('test',[RegisteredUserController::class,'uploadAvatar']);
 
 
+Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
+   Route::get('search', 'index')->name('search');
+});
+
 Route::controller(\App\Http\Controllers\Auth\SocialiteProviderController::class)->group(function() {
    Route::get('oauth/redirect/{provider}','redirect')->name('oauth.redirect')->middleware('guest');
    Route::get('oauth/callback/{provider}','callback');
 });
+
+
 
 require __DIR__.'/auth.php';
 require __DIR__.'/404.php';

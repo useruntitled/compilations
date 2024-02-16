@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white rounded-xl">
+    <div class="bg-white rounded-xl" v-if="notifications.length">
         <header class="text-lgg px-5 py-4">
             <p class="font-medium">Уведомления</p>
         </header>
@@ -15,7 +15,7 @@
             </InfiniteScrollContainer>
         </main>
     </div>
-    <div v-if="!notifications.length">
+    <div v-if="!notifications.length" class="mt-20">
         <EmptyFeed></EmptyFeed>
     </div>
 </template>
