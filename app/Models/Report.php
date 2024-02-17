@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Report extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'report_to_type',
         'message',
         'report_to_id',
     ];
 
-    public function reportable()
+    protected $with = [
+      'report_to',
+    ];
+
+    public function report_to(): MorphTo
     {
         return $this->morphTo();
     }

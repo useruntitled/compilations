@@ -37,27 +37,37 @@
                 <div class="overflow-hidden" v-if="user.background_image && !backgroundImageIsUploading">
                     <LazyImage
                         @mouseenter="backgroundImageIsHovered = true"
-                        :preview="`/media/${user.background_image_preview}`"
+                        :preview="`/media/${!isUploaded ? user.background_image_preview : user.background_image}`"
                         :then="route('im', [user.background_image, 1000])"
-                        class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
-                        style="min-width: 640px"
+                        class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover xs:w-screen"
                     >
                     </LazyImage>
                 </div>
+
                 <div
                     v-else
                     @mouseenter="backgroundImageIsHovered = true"
                     class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
                 >
+                    <div v-if="backgroundImageIsUploading">
+                        <LazyImage
+                            @mouseenter="backgroundImageIsHovered = true"
+                            :preview="user.background_image"
+                            :then="user.background_image"
+                            class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover xs:w-screen"
+                        >
+                        </LazyImage>
+                    </div>
                 </div>
+
             </div>
             <div class="sm:px-5 xs:px-2 pb-2">
                 <div class="flex justify-between items-center">
                     <div class="mt-[-32px]">
                         <div v-if="avatarIsUploading">
                             <ZoomableImage
-                                :preview="'data:image/png;base64,' + props.user.avatar"
-                                :then="'data:image/png;base64,' + props.user.avatar"
+                                :preview=" props.user.avatar"
+                                :then=" props.user.avatar"
                                 class="border-gray-100 border-[3.5px] rounded-full w-[90px] h-[90px] object-cover"
                                 style="width: 90px; height: 90px"
                             >
@@ -111,7 +121,7 @@
                                 @mouseenter="avatarIsHovered = true"
                                 class="rounded-full border-gray-100 border-[3.5px] z-20"
                                 style="width: 90px; height: 90px"
-                                :preview="`/media/${user.avatar_preview}`"
+                                :preview="`/media/${!isUploaded ? user.avatar_preview : user.avatar}`"
                                 :then="route('im', [user.avatar, 1000])"
                             ></LazyImage>
                         </div>
@@ -180,6 +190,7 @@ import { usePage } from "@inertiajs/vue3";
 import axios from "axios";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import LazyImage from "@/Components/LazyImage.vue";
+import { nextTick } from "vue";
 
 const props = defineProps({
     user: null,
@@ -222,6 +233,10 @@ watch(selectedSection, () => {
 });
 
 onMounted(() => {
+    setTimeout(() => {
+        backgroundImageIsHovered.value = false;
+        avatarIsHovered.value = false;
+    }, 200)
     selectedSection.value = props.section;
 });
 
@@ -244,6 +259,7 @@ const showUploadBackground = computed(() => {
 });
 const avatarIsUploading = ref(false);
 const backgroundImageIsUploading = ref(false);
+const isUploaded = ref(false);
 
 const uploadAvatar = (file, base64) => {
     avatarIsUploading.value = true;
@@ -262,6 +278,7 @@ const uploadAvatar = (file, base64) => {
             if (res.status == 200) {
                 avatarIsUploading.value = false;
                 props.user.avatar = res.data;
+                isUploaded.value = true;
             }
         });
 };
@@ -280,10 +297,12 @@ const uploadBackgroundImage = (file, base64) => {
         })
         .then((res) => {
             console.log(res);
-            backgroundImageIsUploading.value = false;
+
             if (res.status == 200) {
 
                 props.user.background_image = res.data;
+                backgroundImageIsUploading.value = false;
+                isUploaded.value = true;
             }
         });
 };

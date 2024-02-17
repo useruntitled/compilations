@@ -1,16 +1,27 @@
 <template>
+    <Head>
+        <title>
+            Панель
+        </title>
+    </Head>
     <div class="grid grid-template">
         <section class="h-full mx-auto w-full text-center sticky overflow-y-auto overscroll-none min-h-screen border-e-2">
-            <div class="my-10 mt-5 pb-4 font-semibold text-xl border-b-2">
+            <Link :href="route('panel.index')" class="my-10 mt-5 pb-4 font-semibold text-xl border-b-2">
                 Панель
-            </div>
-            <div class="flex flex-col space-y-10 ">
+            </Link>
+            <div class="flex flex-col space-y-10  mt-10">
                 <button class="hover:opacity-80">
                     Фильмы
                 </button>
                 <button class="hover:opacity-80">
                     Подборки
                 </button>
+                <Link :href="route('panel.moders')">
+                    Модераторы
+                </Link>
+                <Link :href="route('panel.admins')">
+                    Администраторы
+                </Link>
             </div>
         </section>
         <div class="ms-8 mt-4">

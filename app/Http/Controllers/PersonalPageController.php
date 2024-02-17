@@ -48,12 +48,12 @@ class PersonalPageController extends Controller
             'user' => ['roles'],
             'films' => ['genres'],
         ])->where('user_id', $user_id)
+            ->published()
             ->latest()
             ->withCount('comments', 'films')
             ->skip(($page - 1) * self::PER_PAGE)
             ->take(self::PER_PAGE)
             ->get();
-        $posts = $posts->filter(fn ($p) => $p->isActive);
 
         return PostResource::collection($posts);
     }

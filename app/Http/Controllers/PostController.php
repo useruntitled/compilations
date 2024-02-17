@@ -86,7 +86,7 @@ class PostController extends Controller
     {
         $post = Post::with('films')->findOrFail($request->id);
 
-
+        $post->active = false;
 
         $films = $request->films;
 
@@ -101,11 +101,12 @@ class PostController extends Controller
             }
 
             $post->films()->attach(array_unique($array_of_ids));
-        } else {
-            if (count($films) == 0 && count($post->films) > 0) {
-                $post->films()->detach();
-            }
         }
+//        else {
+//            if (count($films) == 0 && count($post->films) > 0) {
+//                $post->films()->detach();
+//            }
+//        }
 
         $post->update([
             'title' => $request->title,
@@ -122,11 +123,14 @@ class PostController extends Controller
         $post = Post::find($request->id);
 
         if (! $post->active) {
-            $post->active = true;
-            $post->published_at = now();
-            $post->save();
+            if($post->title != null && $post->films()->count() > 0) {
+                $post->active = true;
+                if(! $post->published_at) $post->published_at = now();
+                $post->save();
+            } else {
+                abort(422);
+            }
         }
-
         return route('post', [$post->id, $post->slug]);
     }
 

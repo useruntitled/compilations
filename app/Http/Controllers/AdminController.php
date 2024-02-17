@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function index()
     {
         return inertia('Admin/Index', [
-            'reports' => Report::all(),
+            'reports' => Report::with('report_to.user')->get(),
         ]);
     }
 
@@ -61,7 +61,19 @@ class AdminController extends Controller
         });
 
         return inertia('Admin/Admins', [
-            'admins' => $admins->load('roles'),
+            'admins' => $admins,
+        ]);
+    }
+
+    public function moders()
+    {
+        $moders = User::all();
+        $moders = $moders->filter(function ($user) {
+            return $user->roles()->where('role', 'moder')->exists();
+        });
+
+        return inertia('Admin/Moders', [
+            'admins' => $moders,
         ]);
     }
 
@@ -74,12 +86,20 @@ class AdminController extends Controller
         ]);
     }
 
-    public function tags()
-    {
-        $tags = Tag::all();
 
-        return inertia('Admin/Tags', [
-            'tags' => $tags,
+    public function viewObjectCreator($id)
+    {
+        $user = User::with('posts')->findOrFail($id);
+        return inertia('Admin/ObjectCreator', [
+           'user' => $user,
+        ]);
+    }
+
+    public function viewObject($id)
+    {
+        $object = Report::findOrFail($id)->report_to;
+        return inertia('Admin/Object', [
+            'report_to' => $object,
         ]);
     }
 }

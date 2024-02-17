@@ -33,6 +33,13 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
 
+        $access_level = 0;
+
+        if($user) {
+            if($user->isAdmin) $access_level = 2;
+            else if($user->isModer) $access_level = 1;
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -41,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                 'can' => [
                     'create_posts' => $user ? ($user->isCreator || config('karma.chaos_mode')) : false,
                 ],
+                'access_level' => $access_level,
             ],
             'close_window_token' => null,
             'app_url' => env('APP_URL'),

@@ -5,15 +5,17 @@ namespace App\Models;
 use App\Models\Scopes\ActiveScope;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
+use App\Traits\Reportable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 
 class Post extends Model
 {
-    use HasAuthor, HasFactory, HasReputation;
+    use HasAuthor, HasFactory, HasReputation, Reportable;
 
     protected $fillable = [
         'user_id', 'title',
@@ -40,6 +42,7 @@ class Post extends Model
     {
         static::addGlobalScope(new ActiveScope);
     }
+
 
     protected function imagePreview(): Attribute
     {

@@ -35,13 +35,13 @@
             <auth-link :href="route('notifications')" :class="{'text-orange-600': page.component==='Auth/Notifications'}">
                 <icon-bell class="w-7 h-7"></icon-bell>
             </auth-link>
-            <auth-link :href="route('profile')" :class="{'text-orange-600': page.component==='Profile/Index'}">
+            <auth-link :href="route('profile')" :class="{'text-orange-600': (page.component==='Profile/Index' || page.component==='Profile/Comments')}">
                 <icon-login class="w-7 h-7"></icon-login>
             </auth-link>
         </div>
     </div>
 
-    <Message :message="calledMessage"></Message>
+    <Message :message="calledMessage" ></Message>
     <UrlModal
         :modalIsClosed="modalIsClosed"
         :callModal="calledModal"
