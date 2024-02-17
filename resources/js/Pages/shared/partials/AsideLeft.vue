@@ -55,7 +55,7 @@
                                 'text-amber-500 ': isBookmarks,
                                 'text-secondary': !isBookmarks,
                             }"
-                            class="w-[24px] stroke-[2.2]"
+                            class="w-[24px]"
                         ></IconBookmark
                     ></span>
                     <span class="text-lgg font-regular">Закладки</span>

@@ -79,15 +79,15 @@ Route::middleware('auth')->group(function () {
 //    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('admin')->group(function () {
-    Route::get('panel', [AdminController::class, 'index'])->name('panel.index');
-    Route::get('genres', [AdminController::class, 'genres'])->name('panel.genres');
-    Route::get('films/{page?}', [AdminController::class, 'films'])->name('panel.films');
-    Route::get('users', [AdminController::class, 'users'])->name('panel.users');
-    Route::get('admins', [AdminController::class, 'admins'])->name('panel.admins');
-    Route::get('posts', [AdminController::class, 'posts'])->name('panel.posts');
-    Route::get('tags', [AdminController::class, 'tags'])->name('panel.tags');
-});
+//Route::middleware('admin')->group(function () {
+//    Route::get('panel', [AdminController::class, 'index'])->name('panel.index');
+//    Route::get('genres', [AdminController::class, 'genres'])->name('panel.genres');
+//    Route::get('films/{page?}', [AdminController::class, 'films'])->name('panel.films');
+//    Route::get('users', [AdminController::class, 'users'])->name('panel.users');
+//    Route::get('admins', [AdminController::class, 'admins'])->name('panel.admins');
+//    Route::get('posts', [AdminController::class, 'posts'])->name('panel.posts');
+//    Route::get('tags', [AdminController::class, 'tags'])->name('panel.tags');
+//});
 
 Route::controller(TagController::class)->group(function () {
     Route::post('tag-post', 'attach')->name('tag.attach.post')->middleware('auth');
@@ -135,4 +135,5 @@ Route::controller(\App\Http\Controllers\Auth\SocialiteProviderController::class)
 
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
 require __DIR__.'/404.php';

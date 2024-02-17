@@ -1,6 +1,6 @@
 <template>
     <Teleport to="body">
-        <div class="z-50" v-if="messages.length > 0">
+        <div class="z-[100] absolute" v-if="messages.length > 0">
             <Transition name="message">
                 <div>
                     <div v-for="msg in messages">
@@ -11,11 +11,15 @@
                         >
                             <div class="flex items-center">
                                 <div
-                                    class="p-[1px] bg-green-400 text-white rounded-full me-2"
+                                    class="p-[1px] me-2"
                                 >
-                                    <icon-check
-                                        class="w-5 h-5 stroke-2"
+                                    <icon-check v-show="msg.type === 'success'"
+                                        class="w-5 h-5 stroke-2 text-white bg-green-400 rounded-full"
                                     ></icon-check>
+                                    <icon-circle-cross
+                                        v-show="msg.type === 'error'"
+                                        class="w-5 h-5 text-white"></icon-circle-cross>
+
                                 </div>
                                 <p class="text-center font-medium">
                                     {{ msg.message }}
@@ -31,6 +35,7 @@
 <script setup>
 import { watch, ref } from "vue";
 import IconCheck from "../Icons/IconCheck.vue";
+import IconCircleCross from "@/Components/Icons/IconCircleCross.vue";
 
 const props = defineProps({
     message: null,

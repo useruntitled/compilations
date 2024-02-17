@@ -1,30 +1,29 @@
 <template>
-    <Base title="Администраторы">
-        <p>Администраторы</p>
-        <main class="p-5 my-5 shadow rounded-xl">
-            <div
-                v-for="admin in admins"
-                :key="admin.id"
-                class="shadow p-5 rounded-lg text-sm flex justify-between"
-            >
-                <div>#{{ admin.id }} {{ admin.name }}</div>
-                <div>
-                    <span
-                        v-for="role in admin.roles"
-                        :key="role.id"
-                        class="me-2"
-                    >
-                        {{ role.role }}
-                    </span>
+    <div class="space-y-4">
+        <section>
+            <p>Выдать админку по айдишнику</p>
+            <input type="text"/>
+            <button> Go</button>
+        </section>
+        Кол-во {{ admins?.length ?? 0 }}
+        <div v-for="admin in admins" class="border-b-2">
+            <div>
+                <div v-for="admin in admins">
+                    <p>{{ admin.id }}</p>
+                    <p> {{ admin.name }} </p>
                 </div>
             </div>
-        </main>
-    </Base>
+        </div>
+    </div>
 </template>
-<script>
-export default {
-    props: {
-        admins: null,
-    },
-};
+<script setup>
+import PanelLayout from "@/Layouts/PanelLayout.vue";
+
+const props = defineProps({
+    admins: null,
+})
+
+defineOptions({
+    layout: PanelLayout,
+})
 </script>

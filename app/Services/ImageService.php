@@ -88,7 +88,11 @@ class ImageService
 
     protected function scaleAndCache($scale)
     {
-        $image = ImageManager::imagick()->read($this->upload_path.$this->filename)->scale(width: $scale)->encodeByMediaType();
+        $image = ImageManager::imagick()->read($this->upload_path.$this->filename);
+        if(str_contains($image->origin()->mediaType(), 'gif')) {
+            return $this->response(Storage::disk('media')->get($this->filename));
+        }
+        return $this->response(ImageManager::imagick()->read($this->upload_path.$this->filename)->scale(width: $scale)->encodeByMediaType());
 
         $content = $image;
         Cache::put($this->key, $content, now()->addMinutes(self::CACHE_MINUTES));
@@ -113,7 +117,7 @@ class ImageService
         return "image:$filename:$scale";
     }
 
-    public function uploadAndDelete(UploadedFile $file, ?string $old): string
+    public function uploadAndDelete(UploadedFile $file, ?string $old, ?bool $allowGif = false): string
     {
         $this->delete($old);
 
@@ -121,6 +125,7 @@ class ImageService
 
         // $path = $file->storePubliclyAs('media', $name, 'media');
         $path = Storage::disk('media')->put(null, $file);
+        if($path === false) abort(500, 'Ошибка при сохранении файла');
         [$new_file_name, $new_file_ext] = explode('.', $path);
         // $file_preview = Image::make(public_path("media\\$path"))->resize(width: 30);
         $file_preview = ImageManager::imagick()->read(media_path($path))->scaleDown(width: 15)->blur(3)->encodeByPath();

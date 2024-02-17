@@ -3,7 +3,7 @@
         <div
             class="bg-kppale"
             :class="
-                i == 1 ? 'fixed w-full z-50 border-b-4 border-kpnpale' : 'block'
+                i == 1 ? 'fixed w-full z-[48] border-b-4 border-kpnpale' : 'block'
             "
             id="header"
         >

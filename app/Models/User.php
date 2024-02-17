@@ -87,6 +87,13 @@ class User extends Authenticatable implements  MustVerifyEmail
         return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->role == 'creator'));
     }
 
+    protected function isModer(): Attribute
+    {
+        $this->roles ?? $this->roles();
+
+        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->role == 'moder'));
+    }
+
     protected function avatarPreview(): Attribute
     {
         [$name, $ext] = explode('.', $this->avatar);

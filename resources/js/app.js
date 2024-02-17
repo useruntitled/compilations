@@ -7,13 +7,11 @@ import { createInertiaApp,Head,Link } from '@inertiajs/vue3';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import VueLazyLoad from 'vue-lazyload';
 
+
 import Base from './Pages/shared/base.vue';
 
 
-
-// import NavLink from './Pages/shared/navLink.vue';
-
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'fcbc';
 
 
 function customRule(choice, choicesLength, orgRule) {

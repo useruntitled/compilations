@@ -103,7 +103,6 @@
                                 @mouseleave="searchInputFocused = false"
                                 v-show="
                                     searchResult.length > 0
-                                    && searchInput.length
                                 "
                                 class="mt-2 p-2 px-5 bg-white shadow-lg rounded-lg"
                             >
@@ -196,7 +195,8 @@ import SecondaryInput from "@/Components/Forms/SecondaryInput.vue";
 import { ref, reactive, computed, watch, onMounted, inject } from "vue";
 import Modal from "./Modal.vue";
 import { router, usePage } from "@inertiajs/vue3";
-import axios from "axios";
+import axiosInstance from '@/AxiosWrapper.js';
+import axios from "@/AxiosWrapper.js";
 import PrimaryButton from "../Buttons/PrimaryButton.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import SecondaryContent from "../Forms/SecondaryContent.vue";
@@ -228,6 +228,8 @@ const props = defineProps({
 });
 
 const injectedCallMessage = inject("callMessage");
+
+axiosInstance.setCallbackFunction(injectedCallMessage);
 
 onMounted(() => {
     if (!access.value)
