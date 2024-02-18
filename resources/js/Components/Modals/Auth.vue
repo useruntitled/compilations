@@ -7,53 +7,61 @@
         "
         v-if="showModal"
     >
-        <div class="md:px-20  p-5">
-            <header class="text-center mx-auto w-full flex">
-                <button
-                    :class="{ 'bg-orange-400 text-white ': isLoginForm }"
-                    @click="
-                        currentForm = 'LoginForm';
-                        errors = {};
-                    "
-                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"
-                >
-                    Вход
-                </button>
-                <button
-                    :class="{ 'bg-orange-400 text-white ': isRegisterForm }"
-                    @click="
-                        currentForm = 'RegisterForm';
-                        errors = {};
-                    "
-                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"
-                >
-                    Регистрация
-                </button>
-            </header>
-            <div>
-                <div
-                    v-if="Object.keys(errors).length"
-                    class="bg-red-200 rounded px-2 py-3 my-2"
-                >
-                    <div
-                        v-for="error in Object.keys(errors)"
-                        class="text-sm text-slate-900"
-                    >
-                        {{ errors[error][0] }}
-                    </div>
-                </div>
-            </div>
-            <main>
-                <component
-                    @register="register"
-                    @login="login"
-                    :is="forms[currentForm]"
-                ></component>
-            </main>
-            <section class="space-x-4 w-full">
+        <div class="md:px-20  p-5 py-20">
+<!--            <header class="text-center mx-auto w-full flex">-->
+<!--                <button-->
+<!--                    :class="{ 'bg-orange-400 text-white ': isLoginForm }"-->
+<!--                    @click="-->
+<!--                        currentForm = 'LoginForm';-->
+<!--                        errors = {};-->
+<!--                    "-->
+<!--                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"-->
+<!--                >-->
+<!--                    Вход-->
+<!--                </button>-->
+<!--                <button-->
+<!--                    :class="{ 'bg-orange-400 text-white ': isRegisterForm }"-->
+<!--                    @click="-->
+<!--                        currentForm = 'RegisterForm';-->
+<!--                        errors = {};-->
+<!--                    "-->
+<!--                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"-->
+<!--                >-->
+<!--                    Регистрация-->
+<!--                </button>-->
+<!--            </header>-->
+<!--            <div>-->
+<!--                <div-->
+<!--                    v-if="Object.keys(errors).length"-->
+<!--                    class="bg-red-200 rounded px-2 py-3 my-2"-->
+<!--                >-->
+<!--                    <div-->
+<!--                        v-for="error in Object.keys(errors)"-->
+<!--                        class="text-sm text-slate-900"-->
+<!--                    >-->
+<!--                        {{ errors[error][0] }}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <main>-->
+<!--                <component-->
+<!--                    @register="register"-->
+<!--                    @login="login"-->
+<!--                    :is="forms[currentForm]"-->
+<!--                ></component>-->
+<!--            </main>-->
+            <section class="w-full space-y-10">
                 <button class="w-full justify-center bg-[rgb(24,_24,_27)] rounded-2xl px-10 py-2 space-x-2 flex items-center" @click="openAuthWindow('yandex')">
                     <span><img class="w-7 h-7 inline-block" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NCIgaGVpZ2h0PSI0NCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0ZDM0YxRCIgZD0iTTIyIDQzYTIxIDIxIDAgMSAwIDAtNDIgMjEgMjEgMCAwIDAgMCA0MloiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMjUuMyAzNS4xM2g0LjU3VjguODZoLTYuNjZjLTYuNyAwLTEwLjIyIDMuNDQtMTAuMjIgOC41IDAgNC4wMiAxLjkzIDYuNDMgNS4zNyA4Ljg4bC01Ljk5IDguODhoNC45N0wyNCAyNS4xOGwtMi4zMi0xLjU0Yy0yLjgtMS45LTQuMTctMy4zNi00LjE3LTYuNTQgMC0yLjc5IDEuOTctNC42OCA1LjcyLTQuNjhoMi4wNXYyMi43aC4wMVoiLz48L3N2Zz4=" alt=""></span>
                     <span class="text-white font-semibold">Войти с Яндекс ID</span>
+                </button>
+                <button @click="openAuthWindow('google')" class="w-full space-x-2 justify-center border-2 bg-white rounded-2xl px-10 py-2 flex items-center">
+                    <span>
+                        <icon-google class="w-7 h-7"></icon-google>
+                    </span>
+                    <span class="text-black font-semibold">
+                        Войти с google
+                    </span>
                 </button>
             </section>
         </div>
@@ -67,6 +75,7 @@ import LoginForm from "../Forms/Auth/LoginForm.vue";
 import RegisterForm from "../Forms/Auth/RegisterForm.vue";
 import axios from "axios";
 import { router } from "@inertiajs/vue3";
+import IconGoogle from "@/Components/Icons/IconGoogle.vue";
 
 const emit = defineEmits("close");
 

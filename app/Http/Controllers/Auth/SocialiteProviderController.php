@@ -23,6 +23,7 @@ class SocialiteProviderController extends Controller
     {
         $socialiteUser = Socialite::driver($provider)->user();
 
+
         if(User::where('email', $socialiteUser->getEmail())->exists()) {
             if(!empty($socialiteUser->getEmail())) return redirect()->route('home');
         }
@@ -36,14 +37,14 @@ class SocialiteProviderController extends Controller
 
 
         if(!$user) {
-            $hasImage = !$socialiteUser->user['is_avatar_empty'];
+            $hasImage = true;
 
             if($hasImage) {
                 $filename = $service->parseProviderUserAvatar($socialiteUser->getAvatar());
             }
 
             $user = User::create([
-                'name' => $socialiteUser->user['display_name'],
+                'name' => $socialiteUser->getName(),
                 'email' => $socialiteUser->getEmail(),
                 'username' => $socialiteUser->getNickname(),
                 'avatar' => $hasImage ? $filename : null,

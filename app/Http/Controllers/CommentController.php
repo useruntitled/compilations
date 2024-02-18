@@ -49,7 +49,7 @@ class CommentController extends Controller
 
     }
 
-    public function store($request)
+    public function store(Request $request)
     {
         if ($request->hasFile('image')) {
             $filename = $this->service->uploadAndDelete($request->file('image'), null);
