@@ -20,8 +20,23 @@ class PostService
 
     public function getPopular(?int $page = 1)
     {
-        $posts = Cache::tags('posts')->remember("popular-$page", now()->addMinutes(5), function() use ($page) {
-            return Post::with(['user' => ['roles'], 'films' => ['genres'],
+//        $posts = Cache::tags('posts')->remember("popular-$page", now()->addMinutes(5), function() use ($page) {
+//            return Post::with(['user' => ['roles'], 'films' => ['genres'],
+//                'reputation' => function ($query) {
+//                    $query->where('action', 'up');
+//                },
+//            ])
+//                ->published()
+//                ->withCount(['comments', 'bookmarks', 'reputation', 'films'])
+//                ->orderByDesc('reputation_count')
+//                ->orderByDesc('comments_count')
+//                ->orderByDesc('bookmarks_count')
+//                ->skip(($page - 1) * config('post.per_page'))
+//                ->take(config('post.per_page'))
+//                ->get();
+//        });
+
+        $posts = Post::with(['user' => ['roles'], 'films' => ['genres'],
                 'reputation' => function ($query) {
                     $query->where('action', 'up');
                 },
@@ -34,7 +49,7 @@ class PostService
                 ->skip(($page - 1) * config('post.per_page'))
                 ->take(config('post.per_page'))
                 ->get();
-        });
+
         return $posts;
     }
 
@@ -72,8 +87,17 @@ class PostService
 
     public function getRandom(?int $page = 1, ?int $post_id)
     {
-        $posts = Cache::tags(['posts'])->remember("random-$page", now()->addMinutes(120), function() use ($page, $post_id) {
-            return Post::with(['user' => ['roles'], 'films', 'reputation'])
+//        $posts = Cache::tags(['posts'])->remember("random-$page", now()->addMinutes(120), function() use ($page, $post_id) {
+//            return Post::with(['user' => ['roles'], 'films', 'reputation'])
+//                ->published()
+//                ->where('id','!=',$post_id)
+//                ->withCount(['comments', 'bookmarks', 'films'])
+//                ->inRandomOrder()
+//                ->skip(($page - 1) * $this->per_page)
+//                ->take($this->per_page)
+//                ->get();
+//        });
+        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
                 ->published()
                 ->where('id','!=',$post_id)
                 ->withCount(['comments', 'bookmarks', 'films'])
@@ -81,7 +105,6 @@ class PostService
                 ->skip(($page - 1) * $this->per_page)
                 ->take($this->per_page)
                 ->get();
-        });
 
         return $posts;
     }

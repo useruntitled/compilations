@@ -66,7 +66,7 @@ class SocialiteProviderController extends Controller
         $close_window_token = Str::random(10);
 
         Inertia::share('close_window_token', $close_window_token);
-        return inertia('home/index', [
+        return inertia('Home/Index', [
             'close_window_token' => $close_window_token,
         ]);
     }

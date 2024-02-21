@@ -21,8 +21,8 @@ class PostObserver
      */
     public function updated(Post $post): void
     {
-        Cache::forget("post-$post->id");
-        //
+//        Cache::forget("post-$post->id");
+
         // $post->reputation = $post->getReputation();
     }
 
@@ -31,8 +31,8 @@ class PostObserver
      */
     public function deleted(Post $post): void
     {
-        Cache::tags(['posts'])->flush();
-        Cache::forget("post-$post->id");
+//        Cache::tags(['posts'])->flush();
+//        Cache::forget("post-$post->id");
         //
         // $post->reputation = $post->getReputation();
     }
