@@ -56,12 +56,13 @@
                     <span class="text-white font-semibold">Войти с Яндекс ID</span>
                 </button>
                 <button @click="openAuthWindow('google')" class="w-full space-x-2 justify-center border-2 bg-white rounded-2xl px-10 py-2 flex items-center">
-                    <span>
+                    <span >
                         <icon-google class="w-7 h-7"></icon-google>
                     </span>
-                    <span class="text-black font-semibold">
+                    <span class="text-black font-semibold ">
                         Войти с google
                     </span>
+                    <span class="text-red-600 font-medium">*Временно не работает</span>
                 </button>
             </section>
         </div>

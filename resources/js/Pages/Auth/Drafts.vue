@@ -1,4 +1,9 @@
 <template>
+    <Head>
+        <title>
+            Черновики
+        </title>
+    </Head>
     <div v-if="!drafts.length" class="mt-20">
         <EmptyFeed></EmptyFeed>
     </div>
@@ -7,11 +12,11 @@
     </div>
 </template>
 <script setup>
-import base from '@/Pages/shared/base.vue';
 import Post from '@/Components/Post.vue';
 import EmptyFeed from "@/Components/EmptyFeed.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 defineOptions({
-    layout: base,
+    layout: MainLayout,
 })
 
 const props = defineProps({

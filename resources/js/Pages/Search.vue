@@ -9,10 +9,10 @@
     </div>
 </template>
 <script setup>
-import Base from "@/Pages/shared/base.vue";
 import Search from "@/Components/Search/Search.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
 defineOptions({
-    layout: Base
+    layout: MainLayout
 })
 </script>

@@ -71,13 +71,18 @@ class User extends Authenticatable implements  MustVerifyEmail
         'is_creator' => 'bool',
     ];
 
+    protected function isBanned(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->banned_at != null
+        );
+    }
+
     protected function isAdmin(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::make(
-            get: fn () => $this->roles->contains(fn ($r) => $r->role == 'admin')
-        );
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->role == 'admin'));
     }
 
     protected function isCreator(): Attribute

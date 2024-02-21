@@ -1,30 +1,31 @@
 <template>
-    <Base title="Пользователи">
-        <p>Пользователи</p>
-        <main class="p-5 my-5 shadow rounded-xl">
-            <div
-                v-for="user in users"
-                :key="user.id"
-                class="shadow p-5 rounded-lg text-sm flex justify-between"
-            >
-                <div>#{{ user.id }} {{ user.name }}</div>
-                <div>
-                    <span
-                        v-for="role in user.roles"
-                        :key="role.id"
-                        class="me-2"
-                    >
-                        {{ role.role }}
-                    </span>
-                </div>
-            </div>
-        </main>
-    </Base>
+    <div v-for="user in users" class="flex justify-between items-center">
+        <div>
+            {{ user.name }}
+        </div>
+        <div>
+            <button @click="ban(user.id)">
+                Забанить
+            </button>
+        </div>
+    </div>
 </template>
-<script>
-export default {
-    props: {
-        users: null,
-    },
-};
+<script setup>
+import PanelLayout from "@/Layouts/PanelLayout.vue";
+
+
+defineOptions({
+    layout: PanelLayout
+})
+
+const props = defineProps({
+    users: null,
+})
+
+const ban = (id) => {
+    axios.post(route('panel.user.ban'), {
+        _method: 'PATCH',
+        id: id,
+    })
+}
 </script>

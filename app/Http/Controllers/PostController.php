@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostUploadImageRequest;
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UploadFileRequest;
 use App\Models\Film;
 use App\Models\Post;
 use App\Services\ImageService;
@@ -11,6 +12,7 @@ use App\Services\PostService;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -36,12 +38,15 @@ class PostController extends Controller
 
     public function index(int $id, ?string $slug)
     {
-        $post = Post::with([
-            'user' => ['roles'],
-            'films' => ['genres'],
-        ])->withCount(['comments', 'bookmarks'])
-            ->published()
-            ->findOrFail($id);
+        $post = Cache::remember("post-$id", now()->addMinutes(5), function () use ($id, $slug) {
+            return Post::with([
+                'user' => ['roles'],
+                'films' => ['genres'],
+                ])
+                ->withCount(['comments', 'bookmarks'])
+                ->published()
+                ->findOrFail($id);
+        });
 
         $this->service->countVisit($post);
 
@@ -54,16 +59,11 @@ class PostController extends Controller
     {
         $posts = $this->getNew(1);
         $this->service->countView($posts);
-        return inertia('home/New', [
+        return inertia('Home/New', [
             'posts' => $posts,
         ]);
     }
 
-
-    public function create()
-    {
-        return inertia('create/index');
-    }
 
     public function get(int $id)
     {
@@ -78,15 +78,20 @@ class PostController extends Controller
             'title' => $request->title,
             'description' => $request->description,
         ]);
-
         return Response::json($post->load('user'), 200);
+    }
+
+    public function delete(Request $request)
+    {
+        $post = Post::findOrFail($request->id);
+        $post->forceDelete();
+        return 204;
     }
 
     public function update(Request $request)
     {
         $post = Post::with('films')->findOrFail($request->id);
 
-        $post->active = false;
 
         $films = $request->films;
 
@@ -122,15 +127,15 @@ class PostController extends Controller
     {
         $post = Post::find($request->id);
 
-        if (! $post->active) {
+        if (! $post->isActive) {
             if($post->title != null && $post->films()->count() > 0) {
-                $post->active = true;
                 if(! $post->published_at) $post->published_at = now();
                 $post->save();
             } else {
                 abort(422);
             }
         }
+        Cache::tags(['posts'])->flush();
         return route('post', [$post->id, $post->slug]);
     }
 
@@ -157,28 +162,7 @@ class PostController extends Controller
     }
 
 
-    public function edit($id, $slug)
-    {
-        $draft = Post::where('id', $id)->where('user_id', Auth::user()->id)->firstOrFail();
-
-        return inertia('create/index', [
-            'post' => $draft->load('films'),
-        ]);
-    }
-
-    public function destroy(Request $request)
-    {
-        $post = Post::find($request->id);
-        if ($post->user->id == Auth::user()->id) {
-            $post->delete();
-
-            return Response::json('', 202);
-        }
-
-        return Response::json('', 403);
-    }
-
-    public function uploadImage(PostUploadImageRequest $request, ImageService $service)
+    public function uploadImage(UploadFileRequest $request, ImageService $service)
     {
         $post = Post::findOrFail($request->id);
 

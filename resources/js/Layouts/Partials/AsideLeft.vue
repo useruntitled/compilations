@@ -85,15 +85,15 @@ const callModal = inject("callModal");
 const page = usePage();
 
 const isPopular = computed(() => {
-    return page.component == "home/index";
+    return page.component === "Home/Index";
 });
 
 const isNew = computed(() => {
-    return page.component == "home/New";
+    return page.component === "Home/New";
 });
 
 const isBookmarks = computed(() => {
-    return page.component == "Auth/Bookmarks";
+    return page.component === "Auth/Bookmarks";
 });
 </script>
 

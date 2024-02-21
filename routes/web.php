@@ -18,33 +18,16 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-//Route::get('/', function () {
-//    return Inertia::render('Welcome', [
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
-//    ]);
-//});
+Route::get('banned', function () {
+    return inertia('Banned');
+})->name('banned');
 
 Route::controller(PostController::class)->group(function () {
-    Route::get('post-edit/{id}/{slug}', 'edit')->name('post.edit')->middleware('auth');
-    Route::post('post-film-attach', 'postAttachFilm')->name('post.attach.film')->middleware(['auth', 'creator']);
-    Route::patch('post-film-dettach', 'postDettachFilm')->name('post.dettach.film')->middleware(['auth', 'creator']);
+//    Route::get('post-edit/{id}/{slug}', 'edit')->name('post.edit')->middleware('auth');
+//    Route::post('post-film-attach', 'postAttachFilm')->name('post.attach.film')->middleware(['auth', 'creator']);
+//    Route::patch('post-film-dettach', 'postDettachFilm')->name('post.dettach.film')->middleware(['auth', 'creator']);
     Route::get('post/{id}', 'redirect')->name('post.redirect');
     Route::get('post/{id}/{slug?}', 'index')->name('post');
-    Route::delete('post', 'destroy')->name('post.delete')->middleware('auth');
 
     Route::get('new', 'new')->name('new');
 });
@@ -74,20 +57,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('drafts', [PostController::class, 'drafts'])->name('drafts');
-//    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-//Route::middleware('admin')->group(function () {
-//    Route::get('panel', [AdminController::class, 'index'])->name('panel.index');
-//    Route::get('genres', [AdminController::class, 'genres'])->name('panel.genres');
-//    Route::get('films/{page?}', [AdminController::class, 'films'])->name('panel.films');
-//    Route::get('users', [AdminController::class, 'users'])->name('panel.users');
-//    Route::get('admins', [AdminController::class, 'admins'])->name('panel.admins');
-//    Route::get('posts', [AdminController::class, 'posts'])->name('panel.posts');
-//    Route::get('tags', [AdminController::class, 'tags'])->name('panel.tags');
-//});
 
 Route::controller(TagController::class)->group(function () {
     Route::post('tag-post', 'attach')->name('tag.attach.post')->middleware('auth');
@@ -104,14 +74,6 @@ Route::controller(GenreController::class)->group(function () {
     Route::post('wire', 'wire')->name('genre.wire')->middleware('admin');
 });
 
-// Route::controller(KarmaController::class)->group(function(){
-//     Route::get('forbidden/karma','forbidden')->name('karma.forbidden')->middleware('auth');
-// });
-
-// Route::controller(NotificationController::class)->group(function(){
-//     Route::get('notifications')->name('notifications')->middleware('auth');
-// });
-
 Route::controller(PersonalPageController::class)->group(function () {
     Route::get('profile/{id?}/', 'index')->name('profile');
 });
@@ -120,17 +82,17 @@ Route::controller(PersonalPageController::class)->group(function () {
     Route::get('profile/{id}/comments', 'comments')->name('profile.comments');
 });
 
-// Route::get('test',[RegisteredUserController::class,'uploadAvatar']);
-
+Route::middleware('auth')->group(function () {
+    Route::get('settings', [\App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
+    Route::get('settings/profile', [\App\Http\Controllers\SettingsController::class, 'profile'])->name('settings.profile');
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
+    Route::get('me/bookmarks', [\App\Http\Controllers\BookmarkController::class, 'index'])->name('me.bookmarks');
+});
 
 Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
    Route::get('search', 'index')->name('search');
 });
 
-Route::controller(\App\Http\Controllers\Auth\SocialiteProviderController::class)->group(function() {
-   Route::get('oauth/redirect/{provider}','redirect')->name('oauth.redirect')->middleware('guest');
-   Route::get('oauth/callback/{provider}','callback');
-});
 
 
 

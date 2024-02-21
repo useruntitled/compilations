@@ -8,8 +8,6 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import VueLazyLoad from 'vue-lazyload';
 
 
-import Base from './Pages/shared/base.vue';
-
 
 const appName = import.meta.env.VITE_APP_NAME || 'fcbc';
 
@@ -76,7 +74,6 @@ createInertiaApp({
             .use(i18n)
             .component('Head',Head)
             .component('Link',Link)
-            .component('Base',Base)
 
             .mount(el)
     },

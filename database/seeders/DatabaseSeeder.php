@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Services\ImageGeneratorService;
 use App\Services\ImageService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => $password, // password
             'remember_token' => Str::random(10),
-            'avatar' => (new ImageService)->generateDefaultUserAvatar(),
+            'avatar' => (new ImageGeneratorService())->make(),
         ]);
         $this->command->info('Admin user is created:');
         $admin->roles()->attach([$role_admin->id, $role_creator->id]);

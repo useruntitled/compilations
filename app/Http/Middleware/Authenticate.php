@@ -19,10 +19,14 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if (! $this->auth::check()) {
+        if (! $this->auth::check() ){
             return redirect()->back();
-
         }
+
+        if(Auth::user()->isBanned) {
+            Auth::logout();
+            return redirect()->route('banned');
+        };
 
         return $next($request);
     }

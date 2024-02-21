@@ -22,13 +22,11 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
 
-            $table->boolean('active')->nullable()->default(false);
-
             $table->string('image')->nullable();
 
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
 
             $table->bigInteger('views')->nullable()->default(0);
             $table->bigInteger('visits')->nullable()->default(0);

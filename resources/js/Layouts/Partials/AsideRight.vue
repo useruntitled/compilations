@@ -83,7 +83,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import LazyImage from "@/Components/LazyImage.vue";
-import { getFeed, listenFeedUpdates } from "./AsideRightApi";
+import { getFeed, listenFeedUpdates } from "./AsideRightApi.js";
 
 const comments = ref([]);
 

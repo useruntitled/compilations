@@ -12,7 +12,7 @@
                     type="file"
                     class="hidden"
                     ref="filepond_background"
-                    accept="image/*"
+                    accept="image/png, image/jpeg, image/jpg, image/webp"
                     @input="handleFile('background_image', $event)"
                 />
                 <div
@@ -182,21 +182,27 @@
     </div>
 </template>
 <script setup>
-import { ref, watch, computed, onMounted } from "vue";
+import {ref, watch, computed, onMounted, inject} from "vue";
 import IconPhoto from "@/Components/Icons/IconPhoto.vue";
 import ZoomableImage from "@/Components/ZoomableImage.vue";
 import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
-import axios from "axios";
+import axios from "@/AxiosWrapper.js";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import LazyImage from "@/Components/LazyImage.vue";
 import { nextTick } from "vue";
+import axiosInstance from "@/AxiosWrapper.js";
 
 const props = defineProps({
     user: null,
     karma: null,
     section: null,
 });
+
+
+const injectedCallMessage = inject("callMessage");
+
+axiosInstance.setCallbackFunction(injectedCallMessage);
 
 const page = usePage();
 

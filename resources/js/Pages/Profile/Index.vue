@@ -17,13 +17,13 @@
 <script setup>
 import { ref } from "vue";
 import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
-import Base from "../shared/base.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import Post from "@/Components/Post.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import axios from "axios";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
-defineOptions({ layout: [Base, PageProfileLayout] });
+defineOptions({ layout: [MainLayout, PageProfileLayout] });
 
 const props = defineProps({
     user: null,

@@ -31,7 +31,7 @@
                         ref="filepond"
                         type="file"
                         class="hidden"
-                        accept="image/*"
+                        accept="image/png, image/jpg, image/jpeg, image/webp"
                         @input="handleFilepond"
                     />
                 </div>

@@ -28,14 +28,14 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import Base from "@/Pages/shared/base.vue";
 import SettingsLayout from "./SettingsLayout.vue";
 import SecondaryInput from "@/Components/Forms/SecondaryInput.vue";
 import SecondaryContent from "@/Components/Forms/SecondaryContent.vue";
 import axios from "axios";
 import IconCheck from "@/Components/Icons/IconCheck.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
-defineOptions({ layout: [Base, SettingsLayout] });
+defineOptions({ layout: [MainLayout, SettingsLayout] });
 
 const page = usePage();
 

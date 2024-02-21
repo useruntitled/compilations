@@ -42,16 +42,10 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
-
-//Route::get('verify-email', EmailVerificationPromptController::class)
-//    ->name('verification.notice');
-
 Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
     ->name('verification.verify');
 
 Route::middleware('auth')->group(function () {
-
-
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
@@ -67,10 +61,12 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('settings', [SettingsController::class, 'index'])->name('settings');
-    Route::get('settings/profile', [SettingsController::class, 'profile'])->name('settings.profile');
-    Route::put('me/profile', [RegisteredUserController::class, 'updateProfileInfo'])->name('settings.profile.update');
-    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
-    Route::get('me/bookmarks', [BookmarkController::class, 'index'])->name('me.bookmarks');
+
+
+Route::middleware('guest')->group(function() {
+    Route::controller(\App\Http\Controllers\Auth\SocialiteProviderController::class)->group(function() {
+        Route::get('oauth/redirect/{provider}','redirect')->name('oauth.redirect');
+        Route::get('oauth/callback/{provider}','callback');
+    });
 });
+

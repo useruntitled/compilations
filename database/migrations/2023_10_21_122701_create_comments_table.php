@@ -16,15 +16,14 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('post_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('comment_id')->nullable()->constrained();
+            $table->foreignId('post_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');;
+            $table->foreignId('comment_id')->nullable()->constrained()->onDelete('cascade');
 
             $table->integer('level');
 
             $table->longText('text');
 
-            $table->boolean('active')->nullable()->default(false);
             $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);

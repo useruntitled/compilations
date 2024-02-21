@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Report;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -43,13 +44,10 @@ class AdminController extends Controller
 
     public function users()
     {
-        $users = User::all();
-        $users = $users->filter(function ($user) {
-            return ! $user->roles()->where('role', 'admin')->exists();
-        });
+        $users = User::with('roles')->get();
 
         return inertia('Admin/Users', [
-            'users' => $users->load('roles'),
+            'users' => $users,
         ]);
     }
 
@@ -86,6 +84,23 @@ class AdminController extends Controller
         ]);
     }
 
+    public function ban(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->banned_at = now();
+        $user->update();
+        return true;
+    }
+
+    public function deletePost(Request $request)
+    {
+        $post = Post::findOrFail($request->id);
+        $post->forceDelete();
+        $reports = Report::where('report_to_id', '=', $post->id)->where('report_to_type','=','App\\Models\\Post')->get();
+        foreach($reports as $report) {$report->delete();}
+
+        return 204;
+    }
 
     public function viewObjectCreator($id)
     {
@@ -97,9 +112,10 @@ class AdminController extends Controller
 
     public function viewObject($id)
     {
-        $object = Report::findOrFail($id)->report_to;
+        $object = Report::findOrFail($id);
         return inertia('Admin/Object', [
-            'report_to' => $object,
+            'report_to' => $object->report_to,
+            'report' => $object,
         ]);
     }
 }

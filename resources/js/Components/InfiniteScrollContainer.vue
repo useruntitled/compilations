@@ -16,7 +16,6 @@ const handleScroll = () => {
         document.documentElement.scrollTop >=
         container.value?.scrollHeight - diff.value
     ) {
-        console.log("load");
         emit("load");
     }
 };
