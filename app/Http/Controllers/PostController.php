@@ -38,15 +38,22 @@ class PostController extends Controller
 
     public function index(int $id, ?string $slug)
     {
-        $post = Cache::remember("post-$id", now()->addMinutes(5), function () use ($id, $slug) {
-            return Post::with([
+//        $post = Cache::remember("post-$id", now()->addMinutes(5), function () use ($id, $slug) {
+//            return Post::with([
+//                'user' => ['roles'],
+//                'films' => ['genres'],
+//                ])
+//                ->withCount(['comments', 'bookmarks'])
+//                ->published()
+//                ->findOrFail($id);
+//        });
+        $post = Post::with([
                 'user' => ['roles'],
                 'films' => ['genres'],
                 ])
                 ->withCount(['comments', 'bookmarks'])
                 ->published()
                 ->findOrFail($id);
-        });
 
         $this->service->countVisit($post);
 
@@ -135,7 +142,7 @@ class PostController extends Controller
                 abort(422);
             }
         }
-        Cache::tags(['posts'])->flush();
+//        Cache::tags(['posts'])->flush();
         return route('post', [$post->id, $post->slug]);
     }
 
