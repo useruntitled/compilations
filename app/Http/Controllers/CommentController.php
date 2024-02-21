@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CommentDeletedEvent;
+use App\Http\Requests\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Services\ImageService;
@@ -49,7 +50,7 @@ class CommentController extends Controller
 
     }
 
-    public function store($request)
+    public function store(StoreCommentRequest $request)
     {
         if ($request->hasFile('image')) {
             $filename = $this->service->uploadAndDelete($request->file('image'), null);
@@ -118,7 +119,7 @@ class CommentController extends Controller
 
     }
 
-    public function update(Request $request)
+    public function update(StoreCommentRequest $request)
     {
         $validated = $request->validate([
             'text' => 'min:0|max:2000',

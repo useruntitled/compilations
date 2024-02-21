@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('provider_user_id')->nullable();
 
             $table->timestamps();
+            $table->timestamp('banned_at')->nullable();
+            $table->string('ban_reason')->nullable();
         });
     }
 

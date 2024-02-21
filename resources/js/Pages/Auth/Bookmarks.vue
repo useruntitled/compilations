@@ -1,4 +1,7 @@
 <template>
+    <Head>
+        <title>Закладки</title>
+    </Head>
     <InfiniteScrollContainer @load="handleLoadEvent">
         <Post v-for="post in posts" :post="post"></Post>
     </InfiniteScrollContainer>
@@ -12,8 +15,8 @@ import { ref } from "vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import Post from "@/Components/Post.vue";
-import Base from "@/Pages/shared/base.vue";
-defineOptions({ layout: Base });
+import MainLayout from "@/Layouts/MainLayout.vue";
+defineOptions({ layout: MainLayout });
 
 const props = defineProps({
     posts: null,

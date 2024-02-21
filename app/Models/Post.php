@@ -6,27 +6,26 @@ use App\Models\Scopes\ActiveScope;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
 use App\Traits\Reportable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 class Post extends Model
 {
-    use HasAuthor, HasFactory, HasReputation, Reportable;
+    use HasAuthor, HasReputation, Reportable, SoftDeletes;
 
     protected $fillable = [
         'user_id', 'title',
-        'description', 'active',
+        'description',
         'slug', 'image',
         'views', 'visits',
     ];
 
     protected $appends = [
-        'rep', 'timestamp',
-        'is_active', 'image_preview',
+        'rep', 'timestamp', 'image_preview',
         'has_bookmark',
     ];
 
@@ -43,6 +42,10 @@ class Post extends Model
         static::addGlobalScope(new ActiveScope);
     }
 
+    public function scopePublished($query)
+    {
+        return $query->whereNotNull('published_at')->whereNull('deleted_at');
+    }
 
     protected function imagePreview(): Attribute
     {
@@ -54,22 +57,22 @@ class Post extends Model
         return Attribute::get(fn () => $name.'__preview'.".$ext");
     }
 
-    public function films()
+    public function films(): BelongsToMany
     {
         return $this->belongsToMany(Film::class)->orderByPivot('id', 'asc');
     }
 
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function bookmarks()
+    public function bookmarks(): HasMany
     {
         return $this->hasMany(Bookmark::class);
     }
@@ -88,18 +91,6 @@ class Post extends Model
 
     protected function isActive(): Attribute
     {
-        return Attribute::get(fn () => $this->active == true);
-    }
-
-    public function scopeWithFilms(Builder $query, int $count)
-    {
-        return $query->with(['films' => function ($query) use ($count) {
-            $query->limit($count);
-        }]);
-    }
-
-    public function scopePublished($query)
-    {
-        return $query->where('active', true);
+        return Attribute::get(fn() => $this->published_at != null && $this->deleted_at == null);
     }
 }

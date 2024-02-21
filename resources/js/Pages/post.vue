@@ -115,7 +115,6 @@ import IconArrowForwardUp from "@/Components/Icons/IconArrowForwardUp.vue";
 import IconBookmark from "@/Components/Icons/IconBookmark.vue";
 import IconComments from "@/Components/Icons/IconComments.vue";
 import LinkIcon from "@/Components/LinkIcon.vue";
-import Base from "./shared/base.vue";
 import UserTabletWithElementInside from "@/Components/UserTabletWithElementInside.vue";
 import DropdownReportOrManage from "@/Components/Dropdowns/DropdownReportOrManage.vue";
 import LazyImage from "@/Components/LazyImage.vue";
@@ -123,8 +122,9 @@ import axios from "axios";
 import Post from "@/Components/Post.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import Bookmark from "@/Components/Bookmark.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
-defineOptions({ layout: Base });
+defineOptions({ layout: MainLayout });
 
 const films_block = ref(null);
 

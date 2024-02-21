@@ -330,7 +330,10 @@ const addCommentInObjectTree = (comment, parrent_id) => {
 provide("addCommentInObjectTree", addCommentInObjectTree);
 
 const createComment = (form) => {
-    if(!page.props.auth.check) callModal('auth');
+    if(!page.props.auth.check) {
+        callModal('auth');
+        return;
+    }
     const formData = new FormData();
     formData.append("_method", "POST");
     formData.append("post_id", props.post.id);

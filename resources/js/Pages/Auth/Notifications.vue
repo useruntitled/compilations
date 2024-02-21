@@ -21,7 +21,6 @@
 </template>
 <script setup>
 import { reactive, ref } from "vue";
-import Base from "../shared/base.vue";
 import CommentUpNotification from "@/Components/Notifications/CommentUpNotification.vue";
 import PostWasCommentedNotification from "@/Components/Notifications/PostWasCommentedNotification.vue";
 import ReplyNotification from "@/Components/Notifications/ReplyNotification.vue";
@@ -29,8 +28,9 @@ import PostUpNotification from "@/Components/Notifications/PostUpNotification.vu
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import axios from "axios";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
-defineOptions({ layout: Base });
+defineOptions({ layout: MainLayout });
 
 const props = defineProps({
     notifications: null,

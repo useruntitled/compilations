@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Reputation;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class KarmaService
 {
@@ -67,11 +68,17 @@ class KarmaService
         // $reps = Reputation::with(['reputation_to.user','user'])->where('user_id','!=',$user->id)->get()
         // ->reject(fn($rep) => $rep->reputation_to->user->id != $user->id);
 
-        $reps = Reputation::with(['reputation_to' => ['user'], 'user'])->where('user_id', '!=', $user->id)->get()
-            ->filter(fn ($r) => $r->reputation_to?->user->id == $user->id);
-        $reputation = $reps->sum(fn ($rep) => $rep->action == 'up');
-        $reputation -= $reps->sum(fn ($rep) => $rep->action == 'down');
+        $reputation = Cache::remember("karma-$user->id", now()->addMinutes(5), function() use ($user) {
+            $reps = Reputation::with(['reputation_to' => ['user'], 'user'])->where('user_id', '!=', $user->id)->get()
+                ->filter(fn ($r) => $r->reputation_to?->user->id == $user->id);
+            $reputation = $reps->sum(fn ($rep) => $rep->action == 'up');
+            $reputation -= $reps->sum(fn ($rep) => $rep->action == 'down');
+
+            return $reputation;
+        });
 
         return $reputation;
+
+
     }
 }

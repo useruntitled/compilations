@@ -73,22 +73,22 @@ const showModal = ref(false);
 const modalIsOpened = ref(false);
 const calledModal = ref(null);
 
-const setQuery = () => {
-    const uri = new URL(window.location.href);
-    if (!uri.searchParams.has("modal")) {
-        uri.searchParams.append("modal", calledModal.value);
-        console.log("Query set:", uri);
-        window.history.pushState(null, null, uri);
-        // router.reload({preserveState: true});
-        router.visit(uri, {
-            method: 'get',
-            replace: true,
-            preserveState: true,
-            preserveScroll: true,
-            onFinish: visit => {modalIsOpened.value = showModal.value},
-        })
-    }
-};
+// const setQuery = () => {
+//     const uri = new URL(window.location.href);
+//     if (!uri.searchParams.has("modal")) {
+//         uri.searchParams.append("modal", calledModal.value);
+//         console.log("Query set:", uri);
+//         window.history.pushState(null, null, uri);
+//         // router.reload({preserveState: true});
+//         router.visit(uri, {
+//             method: 'get',
+//             replace: true,
+//             preserveState: true,
+//             preserveScroll: true,
+//             onFinish: visit => {modalIsOpened.value = showModal.value},
+//         })
+//     }
+// };
 const unsetQuery = () => {
     const uri = new URL(window.location.href);
     uri.searchParams.delete("modal");
@@ -96,19 +96,19 @@ const unsetQuery = () => {
     console.log("Unset query:", uri);
     window.history.pushState(null, null, uri);
     // router.reload({preserveState: true});
-    router.visit(uri, {
-        method: 'get',
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-        onFinish: visit => {modalIsOpened.value = showModal.value},
-    })
+    // router.visit(uri, {
+    //     method: 'get',
+    //     replace: true,
+    //     preserveState: true,
+    //     preserveScroll: true,
+    //     onFinish: visit => {modalIsOpened.value = showModal.value},
+    // })
 };
 
 const showModalFunc = (modal) => {
     showModal.value = true;
     calledModal.value = modal;
-    setQuery();
+    // setQuery();
 };
 
 const callModalFunc = (modal) => {

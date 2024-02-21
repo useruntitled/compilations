@@ -2,9 +2,10 @@
 
 </template>
 <script setup>
-import Base from "@/Pages/shared/base.vue";
+
+import MainLayout from "@/Layouts/MainLayout.vue";
 
 defineOptions({
-    layout: Base,
+    layout: MainLayout,
 })
 </script>

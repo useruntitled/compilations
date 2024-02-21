@@ -13,7 +13,7 @@ instance.setCallbackFunction = function(callback) {
 instance.interceptors.response.use(
     response => response,
     error => {
-        let errorMessage = 'An error occurred';
+        let errorMessage = 'Непредвиденная ошибка.';
 
         if (error.response.status === 400) {
             errorMessage = 'Bad request. Please check your request data.';

@@ -43,11 +43,11 @@
     </div>
 </template>
 <script setup>
-import Base from "@/Pages/shared/base.vue";
 import SettingsLayout from "./SettingsLayout.vue";
 import IconLogin from "@/Components/Icons/IconLogin.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import IconBell from "@/Components/Icons/IconBell.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 
-defineOptions({ layout: [Base, SettingsLayout] });
+defineOptions({ layout: [MainLayout, SettingsLayout] });
 </script>

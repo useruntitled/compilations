@@ -16,6 +16,9 @@
                 <button class="hover:opacity-80">
                     Подборки
                 </button>
+                <Link :href="route('panel.users')">
+                    Пользователи
+                </Link>
                 <Link :href="route('panel.moders')">
                     Модераторы
                 </Link>

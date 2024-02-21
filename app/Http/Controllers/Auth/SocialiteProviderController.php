@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\ImageGeneratorService;
+use App\Services\ImageParserService;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +21,10 @@ class SocialiteProviderController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-    public function callback($provider, ImageService $service)
+    public function callback($provider, ImageParserService $avatarParser, ImageGeneratorService $avatarGenerator)
     {
         $socialiteUser = Socialite::driver($provider)->user();
+
 
         if(User::where('email', $socialiteUser->getEmail())->exists()) {
             if(!empty($socialiteUser->getEmail())) return redirect()->route('home');
@@ -36,14 +39,14 @@ class SocialiteProviderController extends Controller
 
 
         if(!$user) {
-            $hasImage = !$socialiteUser->user['is_avatar_empty'];
+            $hasImage = true;
 
             if($hasImage) {
-                $filename = $service->parseProviderUserAvatar($socialiteUser->getAvatar());
+                $filename = $avatarParser->get($socialiteUser->getAvatar());
             }
 
             $user = User::create([
-                'name' => $socialiteUser->user['display_name'],
+                'name' => $socialiteUser->getName(),
                 'email' => $socialiteUser->getEmail(),
                 'username' => $socialiteUser->getNickname(),
                 'avatar' => $hasImage ? $filename : null,
@@ -53,7 +56,7 @@ class SocialiteProviderController extends Controller
                 'email_verified_at' => now(),
             ]);
             if(!$hasImage) {
-                $user->avatar = $service->generateDefaultUserAvatar();
+                $user->avatar = $avatarGenerator->make();
             }
             $user->update();
         }

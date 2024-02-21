@@ -30,7 +30,7 @@
                     ></IconPencil>
                     <span>Редактировать</span>
                 </button>
-                <button
+                <button @click="deletePost"
                     class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
                     <IconTrash
@@ -80,4 +80,11 @@ const editPost = async () => {
         },
     });
 };
+
+const deletePost = async () => {
+    axios.post(route('post.delete'), {
+        _method: 'DELETE',
+        id: props.post.id
+    })
+}
 </script>

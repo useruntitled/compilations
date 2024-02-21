@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\UploadFileRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\ImageGeneratorService;
 use App\Services\ImageService;
 use App\Services\NotificationService;
 use Illuminate\Auth\Events\Registered;
@@ -22,7 +24,7 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    protected $service;
+    protected NotificationService $service;
 
     public function __construct(NotificationService $service)
     {
@@ -42,7 +44,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(RegisterRequest $request, ImageService $service): RedirectResponse
+    public function store(RegisterRequest $request, ImageGeneratorService $service): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -69,7 +71,7 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
                 'avatar' => null,
             ]);
-            $user->avatar = $service->generateDefaultUserAvatar();
+            $user->avatar = $service->make();
             $user->save();
         }
 
@@ -120,7 +122,7 @@ class RegisteredUserController extends Controller
         return $user;
     }
 
-    public function uploadAvatar(Request $request, ImageService $service)
+    public function uploadAvatar(UploadFileRequest $request, ImageService $service)
     {
         $user = Auth::user();
 
@@ -135,7 +137,7 @@ class RegisteredUserController extends Controller
         abort(422);
     }
 
-    public function uploadBackgroundImage(Request $request, ImageService $service)
+    public function uploadBackgroundImage(UploadFileRequest $request, ImageService $service)
     {
         $user = Auth::user();
 

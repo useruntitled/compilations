@@ -9,14 +9,14 @@
     </Head>
 
     <div class="bg-bck min-h-screen">
-        <HeaderLayout></HeaderLayout>
+        <HeaderLayout/>
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-template">
-                <AsideLeft class="hidden lg:block"></AsideLeft>
+                <AsideLeft class="hidden lg:block"/>
                 <div class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 md:w-full min-h-screen mb-10 md:mb-2 mx-auto">
                     <slot></slot>
                 </div>
-                <AsideRight class="hidden 2xl:block"></AsideRight>
+                <AsideRight class="hidden 2xl:block"/>
             </div>
         </div>
     </div>
@@ -51,9 +51,9 @@
 import AuthLink from '@/Components/AuthLink.vue';
 import Message from "@/Components/Messages/Message.vue";
 import IconHome from "@/Components/Icons/IconHome.vue";
-import AsideLeft from "./partials/AsideLeft.vue";
-import AsideRight from "./partials/AsideRight.vue";
-import HeaderLayout from "./partials/HeaderLayout.vue";
+import AsideLeft from "@/Layouts/Partials/AsideLeft.vue";
+import AsideRight from "@/Layouts/Partials/AsideRight.vue";
+import HeaderLayout from "@/Layouts/Partials/HeaderLayout.vue";
 import UrlModal from "@/Components/Modals/UrlModal.vue";
 import { reactive, ref, provide, computed } from "vue";
 import IconSearch from "@/Components/Icons/IconSearch.vue";
@@ -95,7 +95,7 @@ const callMessage = (type, message) => {
     setTimeout(() => {
         calledMessage.type = null;
         calledMessage.message = null;
-    }, 2000);
+    }, 5000);
 };
 
 provide("closeModal", closeModal);
