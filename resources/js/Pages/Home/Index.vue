@@ -1,6 +1,7 @@
 <template>
     <Head>
         <title>Популярное</title>
+        <meta name="description" content="Здесь делают подборки фильмов.">
     </Head>
 
     <InfiniteScrollContainer @load="handleLoadEvent()">

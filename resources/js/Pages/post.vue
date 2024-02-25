@@ -1,6 +1,7 @@
 <template>
     <Head>
         <title>{{ post.title }}</title>
+        <meta name="description" :content="post.description">
     </Head>
     <div class="rounded-xl mb-5 sm:px-3 xs:px-1 block w-full bg-white">
         <header class="sm:px-2 pt-3 pb-1  flex justify-between">

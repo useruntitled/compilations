@@ -62,7 +62,6 @@
                     <span class="text-black font-semibold ">
                         Войти с google
                     </span>
-                    <span class="text-red-600 font-medium">*Временно не работает</span>
                 </button>
             </section>
         </div>
