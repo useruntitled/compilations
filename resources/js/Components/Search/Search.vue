@@ -54,7 +54,10 @@
 <script setup>
 import IconSearch from "@/Components/Icons/IconSearch.vue";
 import {ref, watch} from "vue";
-import {throttle} from "lodash/function.js";
+// import {throttle} from "lodash/function.js";
+import pkg from 'lodash/function.js';
+
+const {throttle} = pkg;
 import LazyImage from "@/Components/LazyImage.vue";
 
 const props = defineProps({

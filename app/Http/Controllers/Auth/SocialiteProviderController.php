@@ -26,11 +26,6 @@ class SocialiteProviderController extends Controller
         $socialiteUser = Socialite::driver($provider)->user();
 
 
-        if(User::where('email', $socialiteUser->getEmail())->exists()) {
-            if(!empty($socialiteUser->getEmail())) return redirect()->route('home');
-        }
-
-
         $user = User::where([
             'provider' => $provider,
             'provider_user_id' => $socialiteUser->getId(),

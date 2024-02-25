@@ -205,7 +205,9 @@ import IconUp from "../Icons/IconUp.vue";
 import IconDown from "../Icons/IconDown.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import IconCheck from "../Icons/IconCheck.vue";
-import {throttle} from "lodash/function.js";
+import pkg from 'lodash/function.js';
+
+const {throttle} = pkg;
 
 const emit = defineEmits(["close"]);
 

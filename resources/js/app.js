@@ -1,7 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 
-import { createApp, h } from 'vue';
+import {createSSRApp, h} from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createInertiaApp,Head,Link } from '@inertiajs/vue3';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
@@ -58,9 +58,9 @@ createInertiaApp({
         return pages[`./Pages/${name}.vue`];
     },
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
+        createSSRApp({render: () => h(App, props)})
             .use(plugin)
-            .use(ZiggyVue, Ziggy)
+            .use(ZiggyVue)
             .use(VueLazyLoad, {
                 adapter: {
                   loading (listener, Init) {
@@ -79,7 +79,7 @@ createInertiaApp({
     },
 
     progress: {
-        delay: 300,
+        delay: 150,
         color: '#d4620b',
     },
 });
