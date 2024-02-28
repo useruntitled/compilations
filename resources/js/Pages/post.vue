@@ -73,12 +73,12 @@
                 ></Bookmark>
             </span>
                     <span class="me-2 text-slate-700">
-                <LinkIcon>
-                    <IconArrowForwardUp
-                        class="w-6 h-6 stroke-3/2"
-                    ></IconArrowForwardUp>
-                </LinkIcon>
-            </span>
+                        <copy-link-button :href="route('post', [post.id, post.slug])">
+                            <IconArrowForwardUp
+                                class="w-6 h-6 stroke-3/2"
+                            ></IconArrowForwardUp>
+                        </copy-link-button>
+                    </span>
                 </div>
             </div>
         </footer>
@@ -121,6 +121,7 @@ import Post from "@/Components/Post.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import Bookmark from "@/Components/Bookmark.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
+import CopyLinkButton from "@/Components/CopyLinkButton.vue";
 
 defineOptions({ layout: MainLayout });
 
@@ -176,7 +177,7 @@ const props = defineProps({
 onMounted(() => {
     if (new URL(window.location.href).searchParams.has("films")) {
         nextTick(() => {
-            films_block.value.scrollIntoView();
+            films_block.value.scrollIntoView({behavior: 'smooth'});
         });
     }
 });

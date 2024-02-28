@@ -1,11 +1,12 @@
 import './bootstrap';
 import '../css/app.css';
 
-import {createSSRApp, h} from 'vue'
+import {createApp, createSSRApp, h} from 'vue'
 import { createI18n } from 'vue-i18n'
 import { createInertiaApp,Head,Link } from '@inertiajs/vue3';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import {ZiggyVue} from 'ziggy-js';
 import VueLazyLoad from 'vue-lazyload';
+import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
 
 
 
@@ -53,20 +54,12 @@ const i18n = createI18n({
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: name => {
-        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true });
-        return pages[`./Pages/${name}.vue`];
-    },
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        createSSRApp({render: () => h(App, props)})
+        return createApp({render: () => h(App, props)})
             .use(plugin)
             .use(ZiggyVue)
             .use(VueLazyLoad, {
-                adapter: {
-                  loading (listener, Init) {
-
-                  }
-                },
                 attempt: 3,
                 loading: '/preloader.png',
                 // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
@@ -79,7 +72,6 @@ createInertiaApp({
     },
 
     progress: {
-        delay: 150,
         color: '#d4620b',
     },
 });
