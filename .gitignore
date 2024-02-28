@@ -4,6 +4,7 @@
 /public/media/*
 /public/hot
 /public/sitemap.xml
+/bootstrap/ssr/*
 /public/storage
 /storage/*.key
 /vendor
