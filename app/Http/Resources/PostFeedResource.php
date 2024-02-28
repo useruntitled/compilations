@@ -29,6 +29,8 @@ class PostFeedResource extends JsonResource
             'films' => $films,
             'comments_count' => $this->comments_count,
             'films_count' => $this->films_count,
+            'views' => $this->views,
+            'visits' => $this->visits,
         ];
     }
 }
