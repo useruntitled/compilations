@@ -12,10 +12,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 
-class Post extends Model
+class Post extends Model implements Sitemapable
 {
     use HasAuthor, HasReputation, Reportable, SoftDeletes;
+
+    public function toSitemapTag(): Url
+    {
+        // Return with fine-grained control:
+        return Url::create(route('post', [$this->id, $this->slug]))
+            ->setLastModificationDate(Carbon::create($this->updated_at))
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+            ->setPriority(0.8);
+    }
 
     protected $fillable = [
         'user_id', 'title',
@@ -93,4 +104,9 @@ class Post extends Model
     {
         return Attribute::get(fn() => $this->published_at != null && $this->deleted_at == null);
     }
+
+//    public function limitFilms()
+//    {
+//        $this->films = $this->films->splice(2);
+//    }
 }

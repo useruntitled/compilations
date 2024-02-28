@@ -17,8 +17,8 @@
                                 'text-secondary': !isHovered,
                             }"
                         >
-                            <div :class="class">
-                                <slot :class="class"></slot>
+                            <div :class="props.class">
+                                <slot :class="props.class"></slot>
                             </div>
                         </div>
                         <span class="ms-1">{{ text }}</span>

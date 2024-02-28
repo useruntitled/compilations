@@ -52,15 +52,26 @@
 <!--            </main>-->
             <section class="w-full space-y-10">
                 <button class="w-full justify-center bg-[rgb(24,_24,_27)] rounded-2xl px-10 py-2 space-x-2 flex items-center" @click="openAuthWindow('yandex')">
-                    <span><img class="w-7 h-7 inline-block" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NCIgaGVpZ2h0PSI0NCIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0ZDM0YxRCIgZD0iTTIyIDQzYTIxIDIxIDAgMSAwIDAtNDIgMjEgMjEgMCAwIDAgMCA0MloiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNMjUuMyAzNS4xM2g0LjU3VjguODZoLTYuNjZjLTYuNyAwLTEwLjIyIDMuNDQtMTAuMjIgOC41IDAgNC4wMiAxLjkzIDYuNDMgNS4zNyA4Ljg4bC01Ljk5IDguODhoNC45N0wyNCAyNS4xOGwtMi4zMi0xLjU0Yy0yLjgtMS45LTQuMTctMy4zNi00LjE3LTYuNTQgMC0yLjc5IDEuOTctNC42OCA1LjcyLTQuNjhoMi4wNXYyMi43aC4wMVoiLz48L3N2Zz4=" alt=""></span>
+                    <span>
+                        <icon-yandex class="w-7 h-7"></icon-yandex>
+                    </span>
                     <span class="text-white font-semibold">Войти с Яндекс ID</span>
+                </button>
+                <button @click="openAuthWindow('vkontakte')"
+                        class="w-full space-x-2 justify-center border-2 bg-[#0077ff] rounded-2xl px-10 py-2 flex items-center">
+                    <span>
+                        <icon-vkontakte class="w-7 h-7"></icon-vkontakte>
+                    </span>
+                    <span class="text-white font-semibold ">
+                        Войти с VK ID
+                    </span>
                 </button>
                 <button @click="openAuthWindow('google')" class="w-full space-x-2 justify-center border-2 bg-white rounded-2xl px-10 py-2 flex items-center">
                     <span >
                         <icon-google class="w-7 h-7"></icon-google>
                     </span>
                     <span class="text-black font-semibold ">
-                        Войти с google
+                        Войти с Google
                     </span>
                 </button>
             </section>
@@ -76,6 +87,8 @@ import RegisterForm from "../Forms/Auth/RegisterForm.vue";
 import axios from "axios";
 import { router } from "@inertiajs/vue3";
 import IconGoogle from "@/Components/Icons/IconGoogle.vue";
+import IconVkontakte from "@/Components/Icons/IconVkontakte.vue";
+import IconYandex from "@/Components/Icons/IconYandex.vue";
 
 const emit = defineEmits("close");
 

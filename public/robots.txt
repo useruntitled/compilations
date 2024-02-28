@@ -3,3 +3,4 @@ Disallow: /panel/*
 Disallow: /login
 Disallow: /register
 Disallow: /settings/*
+Disallow: /oauth/*

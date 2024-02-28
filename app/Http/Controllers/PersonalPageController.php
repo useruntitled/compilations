@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostFeedResource;
 use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use App\Models\Post;
@@ -13,11 +14,12 @@ class PersonalPageController extends Controller
 {
     protected $service;
 
-    const PER_PAGE = 5;
+    protected int $per_page;
 
     public function __construct(KarmaService $service)
     {
         $this->service = $service;
+        $this->per_page = config('post.per_page');
     }
 
     public function index(?int $user_id = null)
@@ -51,11 +53,10 @@ class PersonalPageController extends Controller
             ->published()
             ->latest()
             ->withCount('comments', 'films')
-            ->skip(($page - 1) * self::PER_PAGE)
-            ->take(self::PER_PAGE)
+            ->skip(($page - 1) * $this->per_page)
+            ->take($this->per_page)
             ->get();
-
-        return PostResource::collection($posts);
+        return PostFeedResource::collection($posts);
     }
 
     public function comments($user_id)
@@ -74,8 +75,8 @@ class PersonalPageController extends Controller
     public function getComments($user_id, $page)
     {
         $comments = Comment::query()->where('user_id', $user_id)
-            ->skip(($page - 1) * self::PER_PAGE)
-            ->take(self::PER_PAGE)
+            ->skip(($page - 1) * $this->per_page)
+            ->take($this->per_page)
             ->get();
 
         return $comments;

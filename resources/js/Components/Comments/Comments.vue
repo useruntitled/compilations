@@ -361,17 +361,13 @@ const createComment = (form) => {
 };
 
 const removeComment = (id) => {
+    comments.value[comments.value.findIndex((c) => c.id == id)].text = 'Комментарий удалён';
     axios.post(route('comment.delete'), {
         '_method': 'DELETE',
         id: id,
     })
         .then((res) => {
             console.log(res.data);
-            if(!res.data.is_force_deleted) {
-                comments.value[comments.value.findIndex((c) => c.id == id)].text = res.data.data.text;
-            } else {
-                comments.value.splice(comments.value.findIndex((c) => c.id == id), 1);
-            }
         })
 }
 

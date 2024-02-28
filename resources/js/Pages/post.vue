@@ -27,18 +27,15 @@
             <section class="sm:px-3 xs:px-1 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}">
-                <!-- <img
-                    v-lazy="route('im', [post.image, '800'])"
-                    alt="Image"
-                    class="rounded-lg mx-auto w-full object-cover"
-                /> -->
+            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}" class="flex justify-center relative">
+                <img :src="`/media/${post.image_preview}`" class="rounded-lg mx-auto w-full" style="max-height: 600px"
+                     alt="">
                 <LazyImage
                     v-if="post.image"
                     :preview="`/media/${post.image_preview}`"
                     :then="route('im', [post.image, 800])"
-                    class="rounded-lg mx-auto w-full object-cover w-full"
-                    style="min-width: auto; min-height: 400px;"
+                    class="rounded-lg object-scale-down absolute"
+                    style="min-width: auto; max-height: 600px"
                 ></LazyImage>
             </div>
         </Link>

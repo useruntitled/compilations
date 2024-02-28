@@ -187,10 +187,10 @@ import IconPhoto from "@/Components/Icons/IconPhoto.vue";
 import ZoomableImage from "@/Components/ZoomableImage.vue";
 import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
-import axios from "@/AxiosWrapper.js";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import LazyImage from "@/Components/LazyImage.vue";
 import { nextTick } from "vue";
+import axios from "@/AxiosWrapper.js";
 import axiosInstance from "@/AxiosWrapper.js";
 
 const props = defineProps({
