@@ -73,18 +73,16 @@
                 </header>
                 <main>
                     <p v-html="comment.text" class="text-17"></p>
-                    <div v-if="comment.image">
+                    <div v-if="comment.image" class="flex justify-center relative"
+                         style="max-width: 40%; max-height: 400px">
+                        <img :src="'/media/' + comment.image_preview" class="rounded-lg mx-auto w-full"
+                             style="max-height: 400px" alt="">
                         <ZoomableImage
                             :preview="'/media/' + comment.image_preview"
-                            :then="route('im', [comment.image, 1000])"
-                            class="rounded-xl w-[300px]"
+                            :then="route('im', [comment.image, 500])"
+                            class="rounded-lg absolute inset-x-0 w-full h-full object-scale-down"
+                            style="max-height: 400px"
                         ></ZoomableImage>
-                        <!-- <img
-                            :src="route('im', [comment.image, 1000])"
-                            alt=""
-                            class="rounded-xl"
-                            style="max-width: 300px"
-                        /> -->
                     </div>
                 </main>
                 <footer class="flex items-center">
@@ -334,15 +332,11 @@ const updateComment = (value) => {
 };
 
 const remove = (id) => {
+    props.comment.replies[props.comment.replies.findIndex((c) => c.id == id)].text = "Комментарий удалён";
     axios.post(route('comment.delete'),{
         '_method': 'DELETE',
         id: id,
     }).then((res) => {
-        if(!res.data.is_force_deleted) {
-            props.comment.replies[props.comment.replies.findIndex((c) => c.id == id)].text = res.data.data.text;
-        } else {
-            props.comment.replies.splice(props.comment.replies.findIndex((c) => c.id == id), 1);
-        }
     })
 }
 </script>

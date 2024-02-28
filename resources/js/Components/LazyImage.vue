@@ -5,7 +5,7 @@
         @load="isLoaded = true"
         :class="classes"
         :style="style"
-        class="duration-[200ms] ease-out object-cover"
+        class="duration-[200ms] ease-out"
     />
 </template>
 <script setup>
@@ -16,10 +16,14 @@ const props = defineProps({
     then: null,
     class: null,
     style: null,
+    showWhenLoaded: false,
 });
 
 const classes = computed(() => {
     if (isLoaded.value == false) {
+        if (props.showWhenLoaded == true) {
+            return props.class + "hidden";
+        }
         return props.class + " " + "brightness-[.5]";
     }
     return props.class;

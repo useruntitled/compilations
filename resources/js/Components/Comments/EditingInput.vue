@@ -23,11 +23,16 @@
 import { ref, inject } from "vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import CommentInput from "./CommentInput.vue";
-import axios from "axios";
+import axios from "@/AxiosWrapper.js";
+import axiosInstance from "@/AxiosWrapper.js";
 
 const vFocus = {
     mounted: (el) => el.click(),
 };
+
+const injectedCallMessage = inject("callMessage");
+
+axiosInstance.setCallbackFunction(injectedCallMessage);
 
 const props = defineProps({
     commentIsCreated: false,

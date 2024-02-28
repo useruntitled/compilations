@@ -67,11 +67,15 @@
                             style="max-height: 100px"
                             v-html="comment.text"
                         ></p>
-                        <div v-if="comment.image" class="text-center mt-2">
+                        <div v-if="comment.image" class="text-center mt-2 flex justify-center relative">
+                            <img :src="'/media/' + comment.image_preview" class="rounded-lg mx-auto w-full"
+                                 style="max-height: 200px" alt="">
                             <LazyImage
                                 :preview="'/media/' + comment.image_preview"
-                                :then="route('im', [comment.image, 200])"
-                                class="rounded-xl w-2/3 hover:brightness-[1.2]"
+                                :then="route('im', [comment.image, 300])"
+                                class="rounded-lg mx-auto object-scale-down w-full h-full absolute"
+                                style="max-height: 200px"
+                                :show-when-loaded="true"
                             ></LazyImage>
                         </div>
                     </Link>

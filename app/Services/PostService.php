@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\PostFeedResource;
 use App\Jobs\PostCountViewJob;
 use App\Jobs\PostCountVisitJob;
 use App\Models\Post;
@@ -49,8 +50,7 @@ class PostService
                 ->skip(($page - 1) * config('post.per_page'))
                 ->take(config('post.per_page'))
                 ->get();
-
-        return $posts;
+        return PostFeedResource::collection($posts);
     }
 
     public function getDrafts(?int $page = 1)
@@ -81,8 +81,7 @@ class PostService
         for ($i = 0; $i < $posts->count(); $i++) {
             $result[chr(97 + $i)] = $posts[$i];
         }
-
-        return $posts;
+        return PostFeedResource::collection($posts);
     }
 
     public function getRandom(?int $page = 1, ?int $post_id)
@@ -105,11 +104,10 @@ class PostService
                 ->skip(($page - 1) * $this->per_page)
                 ->take($this->per_page)
                 ->get();
-
-        return $posts;
+        return PostFeedResource::collection($posts);
     }
 
-    public function countView(Collection $posts)
+    public function countView($posts)
     {
         dispatch(new PostCountViewJob($posts));
     }

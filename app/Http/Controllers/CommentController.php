@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\CommentDeletedEvent;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\StoreCommentResource;
 use App\Models\Comment;
 use App\Services\ImageService;
 use App\Services\NotificationService;
@@ -78,7 +79,7 @@ class CommentController extends Controller
         if ($comment != null) {
             $comment->load(['reputation']);
 
-            return new CommentResource($comment);
+            return new StoreCommentResource($comment);
         }
 
         return 'Error in store method';
@@ -94,6 +95,9 @@ class CommentController extends Controller
 
         $isForceDeleted = 0;
 
+        $service->delete($comment->image);
+        $comment->image = null;
+
         if ($comment->replies->count() == 0) {
             $isForceDeleted = 1;
             $comment->forceDelete();
@@ -101,20 +105,19 @@ class CommentController extends Controller
 
             return response()->json([
                 'is_force_deleted' => $isForceDeleted,
-                'data' => $comment,
+                'data' => $comment->only(['id', 'text']),
             ]);
         }
 
         $comment->delete();
 
         $comment->text = 'Комментарий удалён';
-        $service->delete($comment->image);
-        $comment->image = null;
+
         $comment->update();
 
         return response()->json([
             'is_force_deleted' => $isForceDeleted,
-            'data' => $comment,
+            'data' => $comment->only(['id', 'text', 'image', 'image_preview']),
         ]);
 
     }
@@ -143,7 +146,7 @@ class CommentController extends Controller
         $comment->text = nl2br($validated['text']);
         $comment->update();
 
-        return $comment;
+        return $comment->only(['image', 'image_preview', 'text']);
     }
 
     public function getByPostId($post_id)
