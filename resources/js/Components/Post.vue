@@ -29,7 +29,8 @@
                     alt="Image"
                     class="rounded-lg mx-auto w-full object-cover"
                 /> -->
-                <img :src="`/media/${post.image_preview}`" class="rounded-lg mx-auto w-full" style="max-height: 600px"
+                <img :src="`/media/${post.image_preview}`" class="rounded-lg mx-auto w-full h-full"
+                     style="max-height: 600px"
                      alt="">
                     <LazyImage
                         v-if="post.image"
@@ -43,7 +44,9 @@
         <div v-for="(film, index) in post.films" class="sm:px-3 xs:px-1">
             <Film v-if="index < 2" :film="film"></Film>
         </div>
-        <Link :href="route('post', [post.id, post.slug, 'films'])">
+        <Link
+            preserve-scroll
+            :href="route('post', [post.id, post.slug, 'films'])">
             <p
                 v-if="post.films_count >= 3"
                 class="mt-4 sm:px-3 xs:px-1 py-1 inline-block rounded-full text-dtfpr hover:bg-dtfpr hover:bg-opacity-10 duration-200"
@@ -80,12 +83,12 @@
                 ></Bookmark>
             </span>
                     <span class="me-2 text-slate-700">
-                <LinkIcon>
-                    <IconArrowForwardUp
-                        class="w-6 h-6 stroke-3/2"
-                    ></IconArrowForwardUp>
-                </LinkIcon>
-            </span>
+                        <copy-link-button :href="route('post', [post.id, post.slug])">
+                            <IconArrowForwardUp
+                                class="w-6 h-6 stroke-3/2"
+                            ></IconArrowForwardUp>
+                        </copy-link-button>
+                    </span>
                 </div>
             </div>
         </footer>
@@ -108,12 +111,14 @@ import UserTabletWithElementInside from "./UserTabletWithElementInside.vue";
 import DropdownReportOrManage from "./Dropdowns/DropdownReportOrManage.vue";
 import LazyImage from "./LazyImage.vue";
 import Bookmark from "./Bookmark.vue";
+import CopyLinkButton from "@/Components/CopyLinkButton.vue";
 
 export default {
     props: {
         post: null,
     },
     components: {
+        CopyLinkButton,
         Reputation,
         IconComments,
         UserTablet,

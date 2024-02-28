@@ -1,10 +1,5 @@
 <template>
     <Head>
-        <meta
-            type="description"
-            content="Information about my app"
-            head-key="description"
-        />
         <title>{{ title ?? "Подборки" }}</title>
     </Head>
 
