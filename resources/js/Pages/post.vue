@@ -27,7 +27,7 @@
             <section class="sm:px-3 xs:px-1 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}" class="flex justify-center relative">
+            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}" class="flex justify-center relative" v-if="post.image">
                 <img :src="`/media/${post.image_preview}`" class="rounded-lg mx-auto w-full" style="max-height: 600px"
                      alt="">
                 <LazyImage
