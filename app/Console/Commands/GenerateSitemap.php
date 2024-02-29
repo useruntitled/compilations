@@ -45,7 +45,7 @@ class GenerateSitemap extends Command
 
         $token = '7067333232:AAEATW46Q-CZ5GyH7Klt33WjXuyvAe3CuQQ'; // Замените на ваш токен Telegram Bot
         $chatId = '5695875735'; // Замените на chat_id получателя
-        $message = 'Попытка сгенерировать сайтмапу'; // Ваше сообщение
+        $message = "sitemap:generate"; // Ваше сообщение
 
         $url = "https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chatId}&text={$message}";
 
@@ -55,12 +55,10 @@ class GenerateSitemap extends Command
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $response = curl_exec($ch);
-
-        if ($response === false) {
-            echo 'Ошибка при выполнении запроса: ' . curl_error($ch);
-        } else {
-            echo 'Запрос успешно выполнен. Ответ сервера: ' . $response;
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
         }
+        curl_close($ch);
 
         curl_close($ch);
 
