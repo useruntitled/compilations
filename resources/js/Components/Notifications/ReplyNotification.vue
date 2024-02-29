@@ -9,7 +9,7 @@
                         "
                     >
                         Ответил на ваш комментарий
-                        {{ notification.data.parrentComment.text }}
+                        <span v-html="notification.data.parrentComment.text"></span>
                     </Link>
                 </template>
                 <template #icon>

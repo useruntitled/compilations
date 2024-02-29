@@ -20,7 +20,7 @@
         <div class="flex justify-between items-center py-1 sticky bottom-0">
             <Link :href="route('home')">
                 <icon-home class="w-7 h-7"
-                :class="{'text-orange-600': page.component==='home/index'}"
+                           :class="{'text-orange-600': page.component==='Home/Index'}"
                 ></icon-home>
             </Link>
             <Link :href="route('search')"
@@ -30,7 +30,7 @@
             <auth-link :href="route('notifications')" :class="{'text-orange-600': page.component==='Auth/Notifications'}">
                 <icon-bell class="w-7 h-7"></icon-bell>
             </auth-link>
-            <auth-link :href="route('profile')" :class="{'text-orange-600': (page.component==='Profile/Index' || page.component==='Profile/Comments')}">
+            <auth-link :href="route('profile')" :class="{'text-orange-600': isAccoutPageActive}">
                 <icon-login class="w-7 h-7"></icon-login>
             </auth-link>
         </div>
@@ -61,6 +61,17 @@ const page = usePage();
 
 const props = defineProps({
     title: "",
+});
+
+const isAccoutPageActive = computed(() => {
+    if (page.component === 'Profile/Index' || page.component === 'Profile/Comments') {
+        let pathname = (new URL(window.location.href)).pathname;
+        pathname = pathname.replace('/profile/', '').replace('/comments', '');
+        if (pathname == page.props.auth.user?.id || pathname === '/profile') {
+            return true
+        }
+    }
+    return false
 });
 
 const modalIsClosed = ref(false);

@@ -14,7 +14,7 @@
                         "
                     >
                         Оценил ваш комментарий
-                        {{ notification.data.comment.text }}
+                        <span v-html="notification.data.comment.text"></span>
                     </Link>
                 </template>
                 <template #icon>
