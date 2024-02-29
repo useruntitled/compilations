@@ -11,7 +11,7 @@ class HomeController extends Controller
     public function index(Request $request, PostService $service)
     {
         $posts = $service->getPopular(1);
-        $service->countView($posts);
+
 
         return inertia('Home/Index', [
             'posts' => $posts,

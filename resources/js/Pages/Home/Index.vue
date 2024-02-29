@@ -1,7 +1,7 @@
 <template>
     <Head>
-        <title>Популярное</title>
-        <meta name="description" content="Здесь делают подборки фильмов.">
+        <title>Подборки фильмов от сообщества</title>
+        <meta name="description" content="Films Compilations By Community. Здесь делают подборки фильмов.">
     </Head>
 
     <InfiniteScrollContainer @load="handleLoadEvent()">
