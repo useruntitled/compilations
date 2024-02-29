@@ -43,8 +43,8 @@ class GenerateSitemap extends Command
     public function handle(): void
     {
 
-        $token = 'YOUR_BOT_TOKEN'; // Замените на ваш токен Telegram Bot
-        $chatId = 'CHAT_ID'; // Замените на chat_id получателя
+        $token = '7067333232:AAEATW46Q-CZ5GyH7Klt33WjXuyvAe3CuQQ'; // Замените на ваш токен Telegram Bot
+        $chatId = '5695875735'; // Замените на chat_id получателя
         $message = 'Попытка сгенерировать сайтмапу'; // Ваше сообщение
 
         $url = "https://api.telegram.org/bot{$token}/sendMessage?chat_id={$chatId}&text={$message}";
