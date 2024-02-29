@@ -4,7 +4,8 @@
         <meta charset="utf-8">
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+        <link rel="icon" sizes="32x32" href="https:/fcbc.site/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="https:/fcbc.site/favicon.ico" type="image/x-icon">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
