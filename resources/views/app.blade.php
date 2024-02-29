@@ -7,6 +7,7 @@
         <link rel="icon" sizes="32x32" href="https:/fcbc.site/favicon.ico" type="image/x-icon">
         <link rel="shortcut icon" href="https:/fcbc.site/favicon.ico" type="image/x-icon">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","name":"FCBC"}</script>
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -41,6 +42,22 @@
             <div><img src="https://mc.yandex.ru/watch/96570526" style="position:absolute; left:-9999px;" alt=""/></div>
         </noscript>
         <!-- /Yandex.Metrika counter -->
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-L89FSBG9WY"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            gtag('js', new Date());
+
+            gtag('config', 'G-L89FSBG9WY');
+        </script>
+
+        <!-- /Google tag (gtag.js) -->
 
         @routes
 

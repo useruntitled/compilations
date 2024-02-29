@@ -1,6 +1,6 @@
 <template>
     <div
-        class="h-full mx-auto w-full text-center sticky"
+        class="h-full w-full text-center sticky"
         style="height: calc(100vh - 58px); top: 58px"
     >
         <div class="px-2.5 mt-0 py-5 text-start">

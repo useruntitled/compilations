@@ -7,7 +7,7 @@
         <HeaderLayout/>
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-template">
-                <AsideLeft class="hidden lg:block"/>
+                <AsideLeft class="hidden lg:block relative"/>
                 <div class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 md:w-full min-h-screen mb-10 md:mb-2 mx-auto">
                     <slot></slot>
                 </div>

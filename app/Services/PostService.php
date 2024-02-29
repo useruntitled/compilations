@@ -50,6 +50,7 @@ class PostService
                 ->skip(($page - 1) * config('post.per_page'))
                 ->take(config('post.per_page'))
                 ->get();
+        $this->countView($posts);
         return PostFeedResource::collection($posts);
     }
 
@@ -81,6 +82,8 @@ class PostService
         for ($i = 0; $i < $posts->count(); $i++) {
             $result[chr(97 + $i)] = $posts[$i];
         }
+
+        $this->countView($posts);
         return PostFeedResource::collection($posts);
     }
 
@@ -104,6 +107,7 @@ class PostService
                 ->skip(($page - 1) * $this->per_page)
                 ->take($this->per_page)
                 ->get();
+        $this->countView($posts);
         return PostFeedResource::collection($posts);
     }
 

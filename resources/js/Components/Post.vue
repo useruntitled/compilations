@@ -112,12 +112,14 @@ import DropdownReportOrManage from "./Dropdowns/DropdownReportOrManage.vue";
 import LazyImage from "./LazyImage.vue";
 import Bookmark from "./Bookmark.vue";
 import CopyLinkButton from "@/Components/CopyLinkButton.vue";
+import BtnIcon from "@/Components/BtnIcon.vue";
 
 export default {
     props: {
         post: null,
     },
     components: {
+        BtnIcon,
         CopyLinkButton,
         Reputation,
         IconComments,
