@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\ActiveScope;
+use App\Traits\Declineable;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
 use App\Traits\Reportable;
@@ -17,7 +18,7 @@ use Spatie\Sitemap\Tags\Url;
 
 class Post extends Model implements Sitemapable
 {
-    use HasAuthor, HasReputation, Reportable, SoftDeletes;
+    use HasAuthor, HasReputation, Reportable, SoftDeletes, Declineable;
 
     public function toSitemapTag(): Url
     {
@@ -37,7 +38,7 @@ class Post extends Model implements Sitemapable
 
     protected $appends = [
         'rep', 'timestamp', 'image_preview',
-        'has_bookmark',
+        'has_bookmark', 'is_active'
     ];
 
     protected $with = [
@@ -55,7 +56,7 @@ class Post extends Model implements Sitemapable
 
     public function scopePublished($query)
     {
-        return $query->whereNotNull('published_at')->whereNull('deleted_at');
+        return $query->whereNotNull('published_at')->whereNull('declined_at');
     }
 
     protected function imagePreview(): Attribute
@@ -102,11 +103,6 @@ class Post extends Model implements Sitemapable
 
     protected function isActive(): Attribute
     {
-        return Attribute::get(fn() => $this->published_at != null && $this->deleted_at == null);
+        return Attribute::get(fn() => $this->published_at != null && $this->declined_at == null);
     }
-
-//    public function limitFilms()
-//    {
-//        $this->films = $this->films->splice(2);
-//    }
 }

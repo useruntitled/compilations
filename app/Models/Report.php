@@ -21,4 +21,10 @@ class Report extends Model
     {
         return $this->morphTo();
     }
+
+    protected function serializeDate($date): string
+    {
+        return $date->diffForHumans();
+    }
+
 }

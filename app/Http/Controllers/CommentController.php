@@ -39,18 +39,6 @@ class CommentController extends Controller
             ]);
     }
 
-    public function create(Request $request)
-    {
-        $validated = $request->validate([
-            'text' => 'min:0|max:2000',
-            'comment_id' => 'min:1',
-            'post_id' => 'required',
-        ]);
-
-        return Response::json($this->store($request), 200);
-
-    }
-
     public function store(StoreCommentRequest $request)
     {
         if ($request->hasFile('image')) {
@@ -70,7 +58,7 @@ class CommentController extends Controller
         $comment = Comment::create([
             'post_id' => $request->post_id,
             'comment_id' => $request->comment_id,
-            'text' => nl2br($request->text),
+            'text' => rtrim($request->text, '<div><br></div>'),
             'level' => $level,
             'user_id' => Auth::user()->id,
             'image' => $filename,
@@ -143,7 +131,7 @@ class CommentController extends Controller
             $this->service->delete($comment->image);
         }
 
-        $comment->text = nl2br($validated['text']);
+        $comment->text = rtrim($request->text, '<div><br></div>');
         $comment->update();
 
         return $comment->only(['image', 'image_preview', 'text']);

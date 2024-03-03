@@ -2,6 +2,7 @@
     <Head>
         <title>{{ post.title }}</title>
         <meta name="description" :content="post.description + (post.meta_description ?? '')">
+        <link rel="canonical" :href="route('post', [post.id, post.title])"/>
     </Head>
     <div class="rounded-xl mb-5 sm:px-3 xs:px-1 block w-full bg-white">
         <header class="sm:px-2 pt-3 pb-1  flex justify-between">
@@ -27,15 +28,18 @@
             <section class="sm:px-3 xs:px-1 mt-2 text-base mb-2">
                 <p v-html="post.description"></p>
             </section>
-            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}" class="flex justify-center relative" v-if="post.image">
-                <img :src="`/media/${post.image_preview}`" class="rounded-lg mx-auto w-full" style="max-height: 600px"
-                     alt="">
+            <div :class="{'p-2 sm:px-3 xs:px-1': post.image}"
+                 class="flex items-center justify-center rounded-lg relative max-h-[500px]"
+                 v-if="post.image">
+                <img :src="`/media/${post.image_preview}`" class="rounded-lg w-full h-full"
+                     style="max-height: 500px"
+                     alt=""
+                />
                 <LazyImage
-                    v-if="post.image"
+
                     :preview="`/media/${post.image_preview}`"
-                    :then="route('im', [post.image, 800])"
-                    class="rounded-lg object-scale-down absolute"
-                    style="min-width: auto; max-height: 600px"
+                    :then="route('im', [post.image, 600])"
+                    class="rounded-lg mx-auto object-scale-down h-full w-full absolute"
                 ></LazyImage>
             </div>
         </Link>
@@ -177,7 +181,7 @@ const props = defineProps({
 onMounted(() => {
     if (new URL(window.location.href).searchParams.has("films")) {
         nextTick(() => {
-            films_block.value.scrollIntoView({behavior: 'smooth'});
+            films_block.value.scrollIntoView();
         });
     }
 });

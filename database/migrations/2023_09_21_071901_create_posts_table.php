@@ -26,7 +26,13 @@ return new class extends Migration
 
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
-            $table->softDeletes($column = 'deleted_at', $precision = 0);
+
+            $table->timestamp('declined_at')->nullable();
+            $table->unsignedBigInteger('declined_by')->unsigned()->nullable();
+            $table->foreign('declined_by')->references('id')->on('users')->onDelete('CASCADE');
+            $table->text('declined_reason')->nullable();
+
+
 
             $table->bigInteger('views')->nullable()->default(0);
             $table->bigInteger('visits')->nullable()->default(0);

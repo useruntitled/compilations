@@ -33,6 +33,7 @@ class User extends Authenticatable implements  MustVerifyEmail
     protected $appends = [
         'is_creator', 'is_admin',
         'avatar_preview', 'background_image_preview',
+        'is_banned',
     ];
 
     protected $fillable = [

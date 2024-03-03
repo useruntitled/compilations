@@ -29,11 +29,11 @@ watch(
     }
 );
 
-const closeModal = inject("closeModal");
+// const closeModal = inject("closeModal");
 
 const close = () => {
     if (props.closeable) {
-        closeModal();
+        // closeModal();
         emit("close");
     }
 };

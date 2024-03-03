@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('message');
             $table->morphs('report_to');
 
+            $table->boolean('active')->nullable()->default(false);
+
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@
                 <LazyImage
                     :preview="`/media/${page.props.auth.user.avatar_preview}`"
                     :then="route('im', [page.props.auth.user.avatar, [100]])"
-                    class="rounded-full inline-block border-2 border-bck border"
+                    class="rounded-full inline-block border-2 object-cover border-bck border"
                     alt=""
                     style="width: 45px; height: 45px"
                 >
@@ -34,7 +34,7 @@
         </DropdownLink>
 
         <DropdownLink
-            v-if="page.props.auth.user.isAdmin"
+            v-if="page.props.auth.access_level > 0"
             :href="route('panel.index')"
             class="my-4 text-17px"
         >

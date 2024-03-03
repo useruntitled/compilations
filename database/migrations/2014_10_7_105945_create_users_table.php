@@ -31,7 +31,9 @@ return new class extends Migration
 
             $table->timestamps();
             $table->timestamp('banned_at')->nullable();
-            $table->string('ban_reason')->nullable();
+            $table->unsignedBigInteger('banned_by')->unsigned()->nullable();
+            $table->foreign('banned_by')->references('id')->on('users')->onDelete('CASCADE');
+            $table->string('banned_reason')->nullable();
         });
     }
 
