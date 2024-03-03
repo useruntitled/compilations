@@ -97,21 +97,4 @@ class FilmController extends Controller
         return Response::json($films, 200);
     }
 
-    public function edit($id)
-    {
-        $film = Film::find($id);
-
-        return inertia('Admin/Film', [
-            'film' => $film,
-        ]);
-    }
-
-    public function patch(Request $request)
-    {
-        $film = Film::find($request->film_id);
-        // return Response::json($request->except(['film_id','_method']),200);
-        $film->update($request->except(['film_id', '_method']));
-
-        return Response::json($film, 200);
-    }
 }

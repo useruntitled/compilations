@@ -10,14 +10,17 @@
                 Панель
             </Link>
             <div class="flex flex-col space-y-10  mt-10">
-                <button class="hover:opacity-80">
+                <Link :href="route('panel.films')" class="hover:opacity-80">
                     Фильмы
-                </button>
-                <button class="hover:opacity-80">
+                </Link>
+                <Link :href="route('panel.posts')" class="hover:opacity-80">
                     Подборки
-                </button>
+                </Link>
                 <Link :href="route('panel.users')">
                     Пользователи
+                </Link>
+                <Link :href="route('panel.comments')">
+                    Комментарии
                 </Link>
                 <Link :href="route('panel.moders')">
                     Модераторы
@@ -27,7 +30,7 @@
                 </Link>
             </div>
         </section>
-        <div class="ms-8 mt-4">
+        <div class="ms-8 mt-4 px-10 max-w-5xl min-h-screen pb-10">
             <slot></slot>
         </div>
     </div>

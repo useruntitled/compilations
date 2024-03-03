@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Declineable;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,7 +12,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use HasAuthor, HasFactory, HasReputation, SoftDeletes;
+    use HasAuthor, HasFactory, HasReputation, SoftDeletes, Declineable;
+
+    const DELETED_TEXT = 'Комментарий удалён';
+    const DECLINED_TEXT = 'Комментарий удалён модератором';
 
     protected $fillable = [
         'text', 'user_id',
@@ -23,11 +27,17 @@ class Comment extends Model
         'rep', 'timestamp',
         'image_preview',
         'is_deleted',
+        'is_active',
     ];
 
     protected $with = [
         'user',
     ];
+
+    public function scopePublished($query)
+    {
+        return $query->whereNull('deleted_at');
+    }
 
     public function post()
     {
@@ -53,6 +63,11 @@ class Comment extends Model
     protected function isDeleted(): Attribute
     {
         return Attribute::get(fn () => $this->deleted_at != null);
+    }
+
+    protected function isActive(): Attribute
+    {
+        return Attribute::get(fn() => $this->deleted_at == null && $this->declined_at == null);
     }
 
     protected function isReply(): Attribute
@@ -99,4 +114,5 @@ class Comment extends Model
 
         return Attribute::get(fn () => $name.'__preview'.".$ext");
     }
+
 }

@@ -60,7 +60,7 @@ class PostService
             ->withCount('films')
             ->where('user_id', Auth::user()->id)
             ->whereNull('published_at')
-            ->whereNull('deleted_at')
+            ->whereNull('declined_at')
             ->latest()
             ->skip($this->per_page * ($page - 1))
             ->take($this->per_page)

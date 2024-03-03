@@ -64,7 +64,7 @@
                                                     100,
                                                 ])
                                             "
-                                            class="w-[40px] h-[40px] rounded-full hover:brightness-[1.2] border-secondary border-1"
+                                            class="w-[40px] h-[40px] rounded-full object-cover hover:brightness-[1.2] border-secondary border-1"
                                         ></LazyImage>
                                         <div class="ms-2">
                                             <svg

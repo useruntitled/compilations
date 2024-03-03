@@ -119,7 +119,7 @@
                             <LazyImage
                                 v-if="!avatarIsUploading"
                                 @mouseenter="avatarIsHovered = true"
-                                class="rounded-full border-gray-100 border-[3.5px] z-20"
+                                class="rounded-full border-gray-100 border-[3.5px] object-cover z-20"
                                 style="width: 90px; height: 90px"
                                 :preview="`/media/${!isUploaded ? user.avatar_preview : user.avatar}`"
                                 :then="route('im', [user.avatar, 1000])"
