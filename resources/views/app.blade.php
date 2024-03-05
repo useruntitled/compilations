@@ -8,7 +8,7 @@
         <link rel="shortcut icon" href="https:/fcbc.site/favicon.ico" type="image/x-icon">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","name":"FCBC"}</script>
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        {{--        <title inertia>{{ config('app.name', 'Laravel') }}</title>--}}
 
         <!-- Fonts -->
         {{-- <link rel="preconnect" href="https://fonts.bunny.net"> --}}
