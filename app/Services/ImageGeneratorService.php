@@ -9,7 +9,7 @@ use Intervention\Image\ImageManager;
 
 class ImageGeneratorService
 {
-    public function make(): string
+    public static function make(): string
     {
         $hashName = Str::random(40);
 

@@ -9,7 +9,7 @@ use Intervention\Image\Facades\Image;
 
 class ImageController extends Controller
 {
-    protected $service;
+    protected ImageService $service;
 
     public function __construct(ImageService $service)
     {

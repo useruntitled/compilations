@@ -8,6 +8,7 @@ use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
 use App\Traits\Reportable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,11 +19,10 @@ use Spatie\Sitemap\Tags\Url;
 
 class Post extends Model implements Sitemapable
 {
-    use HasAuthor, HasReputation, Reportable, SoftDeletes, Declineable;
+    use HasFactory, HasReputation, HasAuthor, Reportable, SoftDeletes, Declineable;
 
     public function toSitemapTag(): Url
     {
-        // Return with fine-grained control:
         return Url::create(route('post', [$this->id, $this->slug]))
             ->setLastModificationDate(Carbon::create($this->updated_at))
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
@@ -34,6 +34,7 @@ class Post extends Model implements Sitemapable
         'description',
         'slug', 'image',
         'views', 'visits',
+        'published_at',
     ];
 
     protected $appends = [
@@ -43,10 +44,6 @@ class Post extends Model implements Sitemapable
 
     protected $with = [
         'user',
-    ];
-
-    protected $casts = [
-        'user_id' => 'integer',
     ];
 
     protected static function booted(): void

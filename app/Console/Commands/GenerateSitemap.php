@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Services\TelegramNotifier;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use mysql_xdevapi\Exception;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
@@ -43,19 +44,22 @@ class GenerateSitemap extends Command
      */
     public function handle(): void
     {
+        try {
+            Sitemap::create(config('app.url'))
+                ->add(Url::create('/')
+                    ->setLastModificationDate(Carbon::yesterday())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+                    ->setPriority(1))
+                ->add(Url::create('/new')
+                    ->setLastModificationDate(Carbon::yesterday())
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
+                    ->setPriority(0.9))
+                ->add(Post::all())
+                ->writeToFile(public_path('sitemap.xml'));
 
-        TelegramNotifier::text('Sitemap:generate');
-
-        Sitemap::create(config('app.url'))
-            ->add(Url::create('/')
-                ->setLastModificationDate(Carbon::yesterday())
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
-                ->setPriority(1))
-            ->add(Url::create('/new')
-                ->setLastModificationDate(Carbon::yesterday())
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
-                ->setPriority(0.9))
-            ->add(Post::all())
-            ->writeToFile(public_path('sitemap.xml'));
+            TelegramNotifier::text('Sitemap:generate');
+        } catch (\Exception $e) {
+            TelegramNotifier::text('sitemap failed');
+        }
     }
 }

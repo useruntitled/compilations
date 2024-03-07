@@ -33,6 +33,8 @@ const widthClass = computed(() => {
         350: "w-[350px]",
         400: "w-[400px]",
         48: "w-48",
+        20: "w-20",
+        15: "w-15"
     }[props.width.toString()];
 });
 

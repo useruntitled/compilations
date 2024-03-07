@@ -31,9 +31,6 @@ export default {
                 '17px': ['17px','22px'],
                 'lgg': ['17px','20px'],
             },
-            fontWeight:{
-                'w500': '500',
-            },
             strokeWidth:{
                 '1/2': '0.5px',
                 '3/2': '1.5px',
@@ -49,7 +46,7 @@ export default {
                 5: '5px',
             },
             fontFamily:{
-                'roboto': ['Roboto','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','sans-serif'] ,
+                'Roboto': ['Roboto'],
             },
             screens: {
                 'xs': '200px',
