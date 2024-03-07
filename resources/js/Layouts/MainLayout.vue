@@ -9,7 +9,7 @@
             <div class="grid grid-template">
                 <AsideLeft class="hidden lg:block relative max-w-[220px]"/>
                 <div
-                    class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 md:w-full min-h-screen mb-10 md:mb-2 sm:mx-auto">
+                    class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 overflow-hidden md:w-full min-h-screen mb-10 md:mb-2 sm:mx-auto">
                     <slot></slot>
                 </div>
                 <AsideRight class="hidden 2xl:block"/>
