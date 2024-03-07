@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col align-center ms-2 text-15 font-500">
-                    <p class="font-medium">{{ user.name }}</p>
+                    <p class="font-medium opacity-80">{{ user.name }}</p>
                     <p><slot name="content" /></p>
                 </div>
             </div>

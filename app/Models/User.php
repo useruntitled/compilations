@@ -19,11 +19,11 @@ class User extends Authenticatable implements  MustVerifyEmail
     use HasFactory;
     use Notifiable;
 
-    // const DEFAULT = 1;
-
-    // const MODERATOR = 2;
-
-    // const ADMIN = 3;
+//     const DEFAULT = 1;
+//
+//     const MODERATOR = 2;
+//
+//     const ADMIN = 3;
 
     /**
      * The attributes that are mass assignable.

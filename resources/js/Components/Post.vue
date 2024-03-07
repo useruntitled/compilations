@@ -17,14 +17,14 @@
             </div>
         </header>
         <Link :href="route('post', [post.id, post.slug])">
-            <section class="sm:px-3 xs:px-1 text-xl font-medium">
+            <section class="sm:px-3 xs:px-1 leading-[30px] font-medium text-[22px] max-w-screen-sm break-words">
                 <p>{{ post.title }}</p>
             </section>
-            <section class="sm:px-3 xs:px-1 mt-2 text-base mb-2">
+            <section class="sm:px-3 xs:px-1 mt-2 text-17px mb-2">
                 <p v-html="post.description"></p>
             </section>
             <div :class="{'p-2 sm:px-3 xs:px-1': post.image}"
-                 class="flex items-center justify-center rounded-lg relative max-h-[500px]"
+                 class="flex items-center justify-center rounded-lg relative max-h-[500px] mt-4"
                  v-if="post.image">
                 <!-- <img
                     v-lazy="route('im', [post.image, '800'])"
@@ -71,7 +71,7 @@
             <span class="me-0"
             ><Reputation type="Post" :reputation="post.rep"></Reputation
             ></span>
-                    <span class="me-2 text-slate-700"
+                    <span class="me-2 text-slate-700 font-[15px]"
                     ><LinkIcon
                         :text="post.comments_count"
                         :href="route('post', [post.id, post.slug, 'comments'])"

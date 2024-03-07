@@ -146,6 +146,7 @@ class PostController extends Controller
         return route('post', [$post->id, $post->slug]);
     }
 
+
     public function postAttachFilm(Request $request)
     {
         $post = Post::find($request->post_id);
@@ -190,21 +191,24 @@ class PostController extends Controller
     public function getNew($page)
     {
         $posts = $this->service->getNew($page);
-        $this->service->countView($posts);
         return $posts;
     }
 
     public function getRandom(?int $page, int $post_id)
     {
         $posts =  $this->service->getRandom($page, $post_id);
-        $this->service->countView($posts);
         return $posts;
     }
 
     public function getPopular($page)
     {
         $posts = $this->service->getPopular($page);
-        $this->service->countView($posts);
+        return $posts;
+    }
+
+    public function getMostCommented($page)
+    {
+        $posts = $this->service->getMostCommented($page);
         return $posts;
     }
 }

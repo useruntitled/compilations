@@ -44,6 +44,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('posts/popular/page/{page?}', 'getPopular')->name('posts.popular');
     Route::get('posts/new/page/{page?}', 'getNew')->name('posts.new');
     Route::get('posts/random/page/{page?}/except/{post_id}', 'getRandom')->name('posts.random');
+    Route::get('posts/most-commented/page/{page?}', 'getMostCommented')->name('posts.most-commented');
     Route::post('post/image', 'uploadImage')->name('post.upload.image')->middleware(['auth']);
     Route::post('post/publish', 'publish')->name('post.publish')->middleware(['auth', 'creator']);
 });
