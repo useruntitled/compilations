@@ -1,16 +1,12 @@
 <template>
     <div
-        class="bg-white p-5 rounded-xl mt-5"
+        class="bg-white p-5 rounded-xl mt-5  break-all overflow-hidden"
         :class="!123 ? 'rounded-b-none' : ''"
         ref="comments_block"
     >
         <p class="text-xl mb-8 font-medium flex justify-between items-center">
             <p>Комментарии</p>
             <div class="text-sm  hover:opacity-80  hover:cursor-pointer">
-                <!-- <select class="rounded-xl text-sm border-0 focus:ring-0 opacity-80 hover:opacity-60 hover:cursor-pointer" @change="resortComments($event)">
-                    <option value="sortByReputationOverall">По количеству оценок</option>
-                    <option value="sortByNewest">Сначала новые</option>
-                </select> -->
                 <Dropdown>
                     <template #trigger>
                         <div class="flex items-center">
