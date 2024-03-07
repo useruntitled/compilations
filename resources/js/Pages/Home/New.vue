@@ -3,6 +3,7 @@
         <title>Последние подборки</title>
     </Head>
 
+    <mobile-header-nav/>
     <InfiniteScrollContainer @load="handleLoadEvent()">
         <div v-for="post in posts">
             <Post :post="post"></Post>
@@ -19,6 +20,7 @@ import Post from "@/Components/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
+import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
 
 defineOptions({ layout: MainLayout});
 

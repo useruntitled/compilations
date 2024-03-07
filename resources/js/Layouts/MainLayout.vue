@@ -8,7 +8,8 @@
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-template">
                 <AsideLeft class="hidden lg:block relative max-w-[220px]"/>
-                <div class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 md:w-full min-h-screen mb-10 md:mb-2 mx-auto">
+                <div
+                    class="mt-2 md:p-5 rounded-xl 2xl:w-11/12 xl:w-11/12 md:w-full min-h-screen mb-10 md:mb-2 sm:mx-auto">
                     <slot></slot>
                 </div>
                 <AsideRight class="hidden 2xl:block"/>
@@ -16,7 +17,16 @@
         </div>
     </div>
 
-    <div class="lg:hidden bg-white bottom-0 w-full mx-auto text-center px-10 md:px-20 py-2 fixed">
+
+    <div class="lg:hidden bottom-0 text-end px-6 md:px-20 py-2 fixed z-40 right-0 bottom-[60px]">
+        <button @click="callModal('Editor')">
+            <div class="p-2 sticky   bg-white shadow-md rounded-full">
+                <icon-pencil class="w-6 h-6 text-orange-600 "/>
+            </div>
+        </button>
+    </div>
+
+    <div class="lg:hidden bg-white bottom-0 w-full mx-auto text-center px-8 md:px-20 py-2 fixed">
         <div class="flex justify-between items-center py-1 sticky bottom-0">
             <Link :href="route('home')">
                 <icon-home class="w-7 h-7"
@@ -55,6 +65,7 @@ import IconSearch from "@/Components/Icons/IconSearch.vue";
 import IconBell from '@/Components/Icons/IconBell.vue';
 import IconLogin from "@/Components/Icons/IconLogin.vue";
 import {usePage} from "@inertiajs/vue3";
+import IconPencil from "@/Components/Icons/IconPencil.vue";
 
 
 const page = usePage();

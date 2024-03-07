@@ -72,7 +72,8 @@
                     </button>
                 </header>
                 <main>
-                    <p v-html="comment.text" class="text-17"></p>
+                    <p v-html="comment.text"
+                       class="text-17 xs:w-screen sm:w-auto sm:max-w-screen-sm overflow-hidden"></p>
                     <div v-if="comment.image" class="flex justify-center relative"
                          style="max-width: 40%; max-height: 400px">
                         <img :src="'/media/' + comment.image_preview" class="rounded-lg mx-auto w-full"

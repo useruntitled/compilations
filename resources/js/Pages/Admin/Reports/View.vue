@@ -9,7 +9,9 @@
             </div>
         </template>
         <template #footer>
-            <Link :href="route('panel.view.post', [report.report_to_id])">Рассмотреть {{
+            <Link
+                :href="route('panel.view.' + report.report_to_type.replace('App\\Models\\','').toLowerCase() , [report.report_to_id])">
+                Рассмотреть {{
                     models[report.report_to_type]
                 }}
             </Link>
