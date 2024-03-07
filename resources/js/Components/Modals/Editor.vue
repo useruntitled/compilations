@@ -1,6 +1,6 @@
 <template>
     <Modal :show="show" @close="close()" v-if="showModal">
-        <div class="p-5 px-20 pb-0">
+        <div class="p-5 sm:px-20 pb-0">
             <div v-if="postIsLoading" class="flex justify-center my-10">
                 <AnimationLoader></AnimationLoader>
             </div>

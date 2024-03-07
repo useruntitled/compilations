@@ -4,14 +4,18 @@
         <meta name="description" content="Films Compilations By Community. Здесь делают подборки фильмов.">
     </Head>
 
-    <div class="bg-white rounded-xl mb-5 space-y-4 px-6 py-4">
-        <ShortPost v-for="post in most_commented_posts" :post="post"></ShortPost>
-        <button class="font-medium text-17px flex items-center" @click="loadMostCommented">
-            <div class="font-medium">Показать ещё</div>
-            <div class="ms-2">
-                <icon-chewron-down/>
-            </div>
-        </button>
+    <mobile-header-nav/>
+
+    <div class="xs:w-screen sm:max-w-screen-sm">
+        <div class="bg-white rounded-xl mb-5 space-y-4 px-4 py-4 ">
+            <ShortPost v-for="post in most_commented_posts" :post="post"></ShortPost>
+            <button class="font-medium text-17px flex items-center hover:opacity-80" @click="loadMostCommented">
+                <div class="font-medium">Показать ещё</div>
+                <div class="ms-2">
+                    <icon-chewron-down class="w-5 h-5"/>
+                </div>
+            </button>
+        </div>
     </div>
 
     <InfiniteScrollContainer @load="handleLoadEvent()">
@@ -34,6 +38,7 @@ import MainLayout from "@/Layouts/MainLayout.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import IconChewronDown from "@/Components/Icons/IconChewronDown.vue";
 import ShortPost from "@/Components/ShortPost.vue";
+import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
 
 defineOptions({ layout: MainLayout });
 

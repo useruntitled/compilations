@@ -16,8 +16,7 @@
                         <div class="flex items-center">
                             <span>{{ currentSort }}</span>
                         <div class="ms-2">
-                                            <IconChewronDown
-                                            ></IconChewronDown>
+                            <icon-chewron-down class="w-5 h-5"/>
                                         </div>
                         </div>
                     </template>

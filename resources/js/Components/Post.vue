@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-xl mb-5 sm:px-3 xs:px-1 block w-full bg-white">
+    <div class="rounded-xl mb-5 sm:px-3 xs:px-4 block w-full bg-white xs:w-screen sm:max-w-screen-sm">
         <header class="sm:px-2 pt-3 pb-1  flex justify-between">
             <!-- <UserTablet :user="post.user" class="font-medium"></UserTablet> -->
             <UserTabletWithElementInside :user="post.user">
@@ -17,7 +17,7 @@
             </div>
         </header>
         <Link :href="route('post', [post.id, post.slug])">
-            <section class="sm:px-3 xs:px-1 leading-[30px] font-medium text-[22px] max-w-screen-sm break-words">
+            <section class="sm:px-3 xs:px-1 leading-[30px] font-medium text-[22px]  break-words">
                 <p>{{ post.title }}</p>
             </section>
             <section class="sm:px-3 xs:px-1 mt-2 text-17px mb-2">

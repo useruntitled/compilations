@@ -16,7 +16,7 @@ class AdminController extends Controller
     public function index()
     {
         return inertia('Admin/Reports/Index', [
-            'reports' => Report::with('report_to.user')->paginate(config('admin.per_page')),
+            'reports' => Report::with('report_to')->paginate(config('admin.per_page')),
         ]);
     }
 
