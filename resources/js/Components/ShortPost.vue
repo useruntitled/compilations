@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center break-all overflow-hidden">
+    <div class="flex items-center overflow-hidden">
         <Link :href="route('post', [post.id, post.slug])">
             <div class="text-17px hover:opacity-70 break-words">
                 <span>{{ post.title }}</span>
