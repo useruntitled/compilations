@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
@@ -124,17 +125,18 @@ class RegisteredUserController extends Controller
 
     public function uploadAvatar(UploadFileRequest $request, ImageService $service)
     {
-        $user = Auth::user();
-
-        if ($request->hasFile('image')) {
-
-            $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
-            $user->avatar = $filename;
-            $user->update();
-
-            return $filename;
-        }
-        abort(422);
+        Http::post('89.111.174.6:81/api/image', [123]);
+//        $user = Auth::user();
+//
+//        if ($request->hasFile('image')) {
+//
+//            $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
+//            $user->avatar = $filename;
+//            $user->update();
+//
+//            return $filename;
+//        }
+//        abort(422);
     }
 
     public function uploadBackgroundImage(UploadFileRequest $request, ImageService $service)
