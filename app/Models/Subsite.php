@@ -13,6 +13,7 @@ class Subsite extends Model
 
     protected $fillable = [
         'description',
+        'user_id',
     ];
 
     protected $with = [
