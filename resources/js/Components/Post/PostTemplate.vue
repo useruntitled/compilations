@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-xl mb-5 sm:px-3 xs:px-4 block w-full bg-white xs:w-screen sm:max-w-screen-sm">
+    <div class="rounded-xl mb-5 sm:px-3 xs:px-2 block w-full bg-white xs:w-screen sm:max-w-screen-sm">
         <header class="sm:px-2 pt-3 pb-1  flex justify-between">
             <!-- <UserTablet :user="post.user" class="font-medium"></UserTablet> -->
             <UserTabletWithElementInside :user="post.user">

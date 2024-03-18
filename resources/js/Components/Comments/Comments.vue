@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white p-5 rounded-xl mt-5 z-0"
+        class="bg-white md:p-5 xs:py-4 xs:px-2 rounded-xl mt-5 z-0"
         :class="!123 ? 'rounded-b-none' : ''"
         ref="comments_block"
     >

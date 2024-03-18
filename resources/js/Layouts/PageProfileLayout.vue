@@ -8,9 +8,7 @@
             class="bg-white rounded-xl "
 
         >
-            <div class="flex">
                 <subsite-cover :user="props.user"/>
-            </div>
             <div class="sm:px-5 xs:px-2 pb-2">
                 <div class="flex justify-between items-center">
                     <div class="mt-[-32px]">

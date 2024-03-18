@@ -2,7 +2,7 @@
     <InfiniteScrollContainer @load="handleLoadEvent()">
         <div v-for="comment in comments" class="my-5">
             <Link :href="route('comment.redirect', [comment.id])">
-                <div class="bg-white rounded-xl py-3 sm:px-5 xs:px-4">
+                <div class="bg-white rounded-xl py-3 sm:px-5 xs:px-2">
                     <header>
                         <UserTabletWithElementInside :user="comment.user">
                             <template #content>

@@ -15,7 +15,7 @@
                 width="640"
                 height="200"
                 rounded="t-xl"
-                class="appearance-none bg-zinc-200 aspect-[640/200]  w-full rounded-t-xl object-cover xs:w-screen"
+                class="appearance-none bg-zinc-200 aspect-[640/200]  w-full object-cover xs:w-screen"
                 :class="{'cursor-pointer': canUpload}"
                 :can-upload="canUpload"
             />
@@ -24,7 +24,7 @@
             v-else
             @mouseenter="backgroundImageIsHovered = true"
             @click="handleClick"
-            class="appearance-none bg-zinc-200 aspect-[640/200] min-w-[640px] w-full rounded-t-xl object-cover z-0"
+            class="appearance-none bg-zinc-200 aspect-[640/200] min-w-[640px] rounded-t-xl  object-cover z-0"
             :class="{'cursor-pointer': canUpload}"
         >
             <icon-photo v-show="canUpload" class="w-full h-full"/>

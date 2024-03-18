@@ -1,5 +1,5 @@
 <template>
-    <Dropdown width="200">
+    <Dropdown width="200" align="left">
         <template #trigger>
             <button class="p-[1px] rounded-full hover:bg-orange-100 hover:text-orange-700">
                 <slot/>
