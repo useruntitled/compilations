@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Services\KarmaService;
+use App\Traits\HasAvatar;
+use App\Traits\HasSubsite;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +20,10 @@ class User extends Authenticatable implements  MustVerifyEmail
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use HasSubsite;
+    use HasAvatar;
+
+    const TABLE = 'users';
 
 //     const DEFAULT = 1;
 //
@@ -32,8 +38,11 @@ class User extends Authenticatable implements  MustVerifyEmail
      */
     protected $appends = [
         'is_creator', 'is_admin',
-        'avatar_preview', 'background_image_preview',
         'is_banned',
+    ];
+
+    protected $with = [
+        'avatar'
     ];
 
     protected $fillable = [
@@ -41,9 +50,6 @@ class User extends Authenticatable implements  MustVerifyEmail
         'email',
         'password',
         'username',
-        'avatar',
-        'background_image',
-        'description',
         'provider',
         'provider_user_id',
     ];
@@ -100,26 +106,6 @@ class User extends Authenticatable implements  MustVerifyEmail
         return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->role == 'moder'));
     }
 
-    protected function avatarPreview(): Attribute
-    {
-        [$name, $ext] = explode('.', $this->avatar);
-
-        return Attribute::make(
-            get: fn () => $name.'__preview'.".$ext"
-        );
-    }
-
-    protected function backgroundImagePreview(): Attribute
-    {
-        if ($this->background_image == null) {
-            return Attribute::make(
-                get: fn () => null
-            );
-        }
-        [$name, $ext] = explode('.', $this->background_image);
-
-        return Attribute::get(fn () => $name.'__preview'.".$ext");
-    }
 
     public function markAsReadNotifications()
     {

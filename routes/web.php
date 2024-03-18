@@ -26,6 +26,10 @@ Route::controller(PostController::class)->group(function () {
     Route::get('new', 'new')->name('new');
 });
 
+Route::controller(\App\Http\Controllers\MediaController::class)->group(function () {
+    Route::get('media/{filename}', 'index')->name('media.view');
+});
+
 Route::get('post/redirect/{id}', function () {
     $post = Post::find(request()->id);
 

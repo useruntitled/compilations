@@ -2,129 +2,36 @@
     <Head>
         <title>Страница {{ user.name }}</title>
     </Head>
+
     <div class="max-w-screen">
         <div
             class="bg-white rounded-xl "
 
         >
             <div class="flex">
-                <input
-                    type="file"
-                    class="hidden"
-                    ref="filepond_background"
-                    accept="image/png, image/jpeg, image/jpg, image/webp"
-                    @input="handleFile('background_image', $event)"
-                />
-                <div
-                    @click="filepond_background.click()"
-                    v-if="showUploadBackground"
-                    @mouseleave="backgroundImageIsHovered = false"
-                    class="absolute bg-black bg-opacity-20 rounded-t-xl flex items-center cursor-pointer aspect-[640/200] w-[640px]"
-                >
-                    <IconPhoto
-                        class="w-10 h-10 mx-auto stroke-4 border-white"
-                    ></IconPhoto>
-                </div>
-                <!-- <img
-                    class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
-                    v-lazy="
-                        !backgroundImageIsUploading
-                            ? route('im', [user.background_image ?? '', '1000'])
-                            : user.background_image
-                    "
-                    @mouseenter="backgroundImageIsHovered = true"
-                /> -->
-                <div class="overflow-hidden" v-if="user.background_image && !backgroundImageIsUploading">
-                    <LazyImage
-                        @mouseenter="backgroundImageIsHovered = true"
-                        :preview="`/media/${!isUploaded ? user.background_image_preview : user.background_image}`"
-                        :then="route('im', [user.background_image, 1000])"
-                        class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover xs:w-screen"
-                    >
-                    </LazyImage>
-                </div>
-
-                <div
-                    v-else
-                    @mouseenter="backgroundImageIsHovered = true"
-                    class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover"
-                >
-                    <div v-if="backgroundImageIsUploading">
-                        <LazyImage
-                            @mouseenter="backgroundImageIsHovered = true"
-                            :preview="user.background_image"
-                            :then="user.background_image"
-                            class="appearance-none bg-zinc-200 aspect-[640/200] w-full rounded-t-xl object-cover xs:w-screen"
-                        >
-                        </LazyImage>
-                    </div>
-                </div>
-
+                <subsite-cover :user="props.user"/>
             </div>
             <div class="sm:px-5 xs:px-2 pb-2">
                 <div class="flex justify-between items-center">
                     <div class="mt-[-32px]">
-                        <div v-if="avatarIsUploading">
-                            <ZoomableImage
-                                :preview=" props.user.avatar"
-                                :then=" props.user.avatar"
-                                class="border-gray-100 border-[3.5px] rounded-full w-[90px] h-[90px] object-cover"
-                                style="width: 90px; height: 90px"
-                            >
-                            </ZoomableImage>
-                        </div>
-                        <div v-if="page.props.auth.user?.id != user.id && !avatarIsUploading">
-                            <ZoomableImage
-                                :preview="'/media/' + user.avatar_preview"
-                                :then="route('im', [user.avatar, '1000'])"
-                                class="border-gray-100 border-[3.5px] rounded-full w-[90px] h-[90px] object-cover"
-                                style="width: 90px; height: 90px"
-                            >
-                            </ZoomableImage>
-                        </div>
-                        <div
-                            v-else
-                            class="flex items-center justify-between"
-                            @mouseleave="avatarIsHovered = false"
-                        >
-                            <input
-                                type="file"
-                                class="hidden"
-                                ref="filepond_avatar"
-                                accept="image/*"
-                                @input="handleFile('avatar', $event)"
-                            />
-                            <div
-                                @click="filepond_avatar.click()"
-                                v-if="showUploadAvatar"
-                                @mouseleave="avatarIsHovered = false"
-                                class="absolute bg-black bg-opacity-20 rounded-full flex items-center cursor-pointer z-30"
-                                style="width: 90px; height: 90px"
-                            >
-                                <IconPhoto
-                                    class="w-10 h-10 mx-auto stroke-4 border-white"
-                                ></IconPhoto>
-                            </div>
-                            <!-- <img
-                                @mouseenter="avatarIsHovered = true"
-                                class="rounded-full border-gray-100 border-[3.5px] z-20"
-                                :src="
-                                    !avatarIsUploading
-                                        ? `/media/${user.avatar_preview}`
-                                        : user.avatar
-                                "
-                                style="width: 90px; height: 90px"
-                                alt=""
-                            /> -->
-                            <LazyImage
-                                v-if="!avatarIsUploading"
-                                @mouseenter="avatarIsHovered = true"
-                                class="rounded-full border-gray-100 border-[3.5px] object-cover z-20"
-                                style="width: 90px; height: 90px"
-                                :preview="`/media/${!isUploaded ? user.avatar_preview : user.avatar}`"
-                                :then="route('im', [user.avatar, 1000])"
-                            ></LazyImage>
-                        </div>
+                        <input
+                            type="file"
+                            class="hidden"
+                            ref="filepond_avatar"
+                            accept="image/*"
+                            @input="handleFile('avatar', $event)"
+                        />
+                        <uploadable-lazy-media
+                            @click="!avatarIsUploading && canUpload  ? filepond_avatar.click() : ''"
+                            @mouseenter="avatarIsHovered = true"
+                            :media="user.avatar"
+                            width="90"
+                            height="90"
+                            rounded="full"
+                            border="3.5"
+                            class="cursor-pointer"
+                            :canUpload="canUpload"
+                        />
                     </div>
                     <Link
                         v-if="
@@ -192,6 +99,10 @@ import LazyImage from "@/Components/LazyImage.vue";
 import { nextTick } from "vue";
 import axios from "@/AxiosWrapper.js";
 import axiosInstance from "@/AxiosWrapper.js";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import AnimationLoader from "@/Components/Animations/AnimationLoader.vue";
+import SubsiteCover from "@/Components/Media/SubsiteCover.vue";
+import UploadableLazyMedia from "@/Components/Media/UploadableLazyMedia.vue";
 
 const props = defineProps({
     user: null,
@@ -204,11 +115,19 @@ const injectedCallMessage = inject("callMessage");
 
 axiosInstance.setCallbackFunction(injectedCallMessage);
 
+const canUpload = computed(() => {
+    return page.props.auth.check && page.props.auth.user.id === props.user.id;
+})
+
 const page = usePage();
 
 const selectedSection = ref(parseInt(props.section.value));
 const linkWidth = ref(null);
 const linkPosition = ref(null);
+
+// const vPlay = {
+//     mounted: (el) => el.play(),
+// };
 
 const linkFirst = ref(null);
 const linkSecond = ref(null);
@@ -239,32 +158,23 @@ watch(selectedSection, () => {
 });
 
 onMounted(() => {
-    setTimeout(() => {
-        backgroundImageIsHovered.value = false;
-        avatarIsHovered.value = false;
-    }, 200)
     selectedSection.value = props.section;
 });
 
 const avatarIsHovered = ref(false);
-const backgroundImageIsHovered = ref(false);
+
 
 const filepond_avatar = ref(null);
-const filepond_background = ref(null);
+
 const showUploadAvatar = computed(() => {
     if (page.props.auth.check && page.props.auth.user.id == props.user.id) {
         return avatarIsHovered.value;
     }
     return false;
 });
-const showUploadBackground = computed(() => {
-    if (page.props.auth.check && page.props.auth.user.id == props.user.id) {
-        return backgroundImageIsHovered.value;
-    }
-    return false;
-});
+
 const avatarIsUploading = ref(false);
-const backgroundImageIsUploading = ref(false);
+
 const isUploaded = ref(false);
 
 const uploadAvatar = (file, base64) => {
@@ -289,40 +199,13 @@ const uploadAvatar = (file, base64) => {
         });
 };
 
-const uploadBackgroundImage = (file, base64) => {
-    backgroundImageIsUploading.value = true;
-    props.user.background_image = base64;
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    axios
-        .post(route("user.upload.background.image"), formData)
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            console.log(res);
-
-            if (res.status == 200) {
-
-                props.user.background_image = res.data;
-                backgroundImageIsUploading.value = false;
-                isUploaded.value = true;
-            }
-        });
-};
 
 const handleFile = (type, e) => {
     const file = e.target.files[0];
 
     const reader = new FileReader();
     reader.onload = (e) => {
-        if (type == "avatar") {
-            uploadAvatar(file, e.target.result);
-        } else {
-            uploadBackgroundImage(file, e.target.result);
-        }
+        uploadAvatar(file, e.target.result);
     };
     reader.readAsDataURL(file);
 };

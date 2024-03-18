@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CommentDeletedEvent;
+use App\Events\CommentCreatedEvent;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\StoreCommentResource;
 use App\Models\Comment;
-use App\Services\ImageService;
+use App\Models\Media;
+use App\Services\Media\MediaService;
+use App\Services\Media\MediaUploader;
 use App\Services\NotificationService;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 
 class CommentController extends Controller
 {
-    protected ImageService $service;
+    protected MediaService $service;
 
-    public function __construct(ImageService $service)
+    public function __construct(MediaService $service)
     {
         $this->service = $service;
     }
@@ -41,12 +41,6 @@ class CommentController extends Controller
 
     public function store(StoreCommentRequest $request)
     {
-        if ($request->hasFile('image')) {
-            $filename = $this->service->uploadAndDelete($request->file('image'), null);
-        } else {
-            $filename = null;
-        }
-
         if ($request->comment_id) {
             $comment = Comment::find($request->comment_id);
 
@@ -61,19 +55,21 @@ class CommentController extends Controller
             'text' => rtrim($request->text, '<div><br></div>'),
             'level' => $level,
             'user_id' => Auth::user()->id,
-            'image' => $filename,
         ]);
 
-        if ($comment != null) {
-            $comment->load(['reputation']);
-
-            return new StoreCommentResource($comment);
+        if ($request->image != null) {
+            MediaUploader::toObject($request->input('image')['href'], [
+                'object' => 'comment',
+                'object_id' => $comment->id,
+            ]);
         }
 
-        return 'Error in store method';
+        $comment->load(['reputation']);
+        event(new CommentCreatedEvent($comment));
+        return StoreCommentResource::make($comment);
     }
 
-    public function delete(Request $request, ImageService $service)
+    public function delete(Request $request, MediaService $service)
     {
         $request->validate([
             'id' => 'required',
@@ -83,14 +79,11 @@ class CommentController extends Controller
 
         $isForceDeleted = 0;
 
-        $service->delete($comment->image);
-        $comment->image = null;
+        if ($comment->image) $service->delete($comment->image);
 
         if ($comment->replies->count() == 0) {
             $isForceDeleted = 1;
             $comment->forceDelete();
-
-
             return response()->json([
                 'is_force_deleted' => $isForceDeleted,
                 'data' => $comment->only(['id', 'text']),
@@ -98,6 +91,7 @@ class CommentController extends Controller
         }
 
         $comment->delete();
+
 
         $comment->text = 'Комментарий удалён';
 
@@ -110,7 +104,7 @@ class CommentController extends Controller
 
     }
 
-    public function update(StoreCommentRequest $request)
+    public function update(StoreCommentRequest $request, MediaService $service)
     {
         $validated = $request->validate([
             'text' => 'min:0|max:2000',
@@ -121,14 +115,14 @@ class CommentController extends Controller
 
         if($comment->is_deleted) abort(422);
 
-        if ($request->hasFile('image') && $request->hasImage == 'true') {
-            $filename = $this->service->uploadAndDelete($request->file('image'), null);
-            $comment->image = $filename;
-        }
-
-        if ($request->hasImage == 'false') {
-            $comment->image = null;
-            $this->service->delete($comment->image);
+        if ($request->image != null) {
+            MediaUploader::toObject($request->input('image')['href'], [
+                'object' => 'comment',
+                'object_id' => $comment->id,
+            ]);
+        } else if ($comment->image) {
+            $service->delete($comment->image);
+            $comment->image()->delete();
         }
 
         $comment->text = rtrim($request->text, '<div><br></div>');
@@ -140,7 +134,7 @@ class CommentController extends Controller
     public function getByPostId($post_id)
     {
         $comments = Comment::where('post_id', $post_id)
-            ->with(['replies', 'user' => ['roles'], 'reputation', 'comment'])
+            ->with(['replies', 'user' => ['roles'], 'reputation', 'comment', 'image'])
             ->latest()
             ->get();
 

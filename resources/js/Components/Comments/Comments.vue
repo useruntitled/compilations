@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white p-5 rounded-xl mt-5  overflow-hidden"
+        class="bg-white p-5 rounded-xl mt-5 z-0"
         :class="!123 ? 'rounded-b-none' : ''"
         ref="comments_block"
     >
@@ -30,6 +30,7 @@
                 <CommentInput
                     @sendComment="createComment"
                     :commentIsCreated="commentIsCreated"
+                    :post_id="post.id"
                 ></CommentInput>
             </div>
         </div>
@@ -81,6 +82,7 @@ import AnimationLoader from "../Animations/AnimationLoader.vue";
 import Dropdown from "../Dropdown.vue";
 import IconChewronDown from "../Icons/IconChewronDown.vue";
 import {usePage} from "@inertiajs/vue3";
+import {store} from "@/Components/Comments/api.js";
 
 const isLoaded = ref(false);
 
@@ -324,35 +326,24 @@ const addCommentInObjectTree = (comment, parrent_id) => {
 
 provide("addCommentInObjectTree", addCommentInObjectTree);
 
+
+const onStore = (res) => {
+    if (res.status == 200 || res.status == 201) {
+        comments.value.unshift(res.data);
+        commentIsCreated.value = true;
+        scrollIntoComment.value = res.data.id;
+
+        setTimeout(() => {
+            commentIsCreated.value = false;
+        }, 20);
+    }
+}
 const createComment = (form) => {
-    if(!page.props.auth.check) {
+    if (!page.props.auth.check) {
         callModal('auth');
         return;
     }
-    const formData = new FormData();
-    formData.append("_method", "POST");
-    formData.append("post_id", props.post.id);
-    formData.append("text", form.content);
-    formData.append("hasImage", form.image?.hasImage);
-    formData.append("image", form.image?.image);
-    axios
-        .post(route("comment.create"), formData)
-        .catch((res) => {
-            if (res.response.status == 401) callModal("Auth");
-            console.log(res);
-        })
-        .then((res) => {
-            console.log(res);
-            if (res.status == 200 || res.status == 201) {
-                comments.value.unshift(res.data);
-                commentIsCreated.value = true;
-                scrollIntoComment.value = res.data.id;
-
-                setTimeout(() => {
-                    commentIsCreated.value = false;
-                }, 20);
-            }
-        });
+    store(form, onStore);
 };
 
 const removeComment = (id) => {
@@ -390,162 +381,3 @@ provide("showRepliesArray", showRepliesArray);
 provide("scrollIntoComment", scrollIntoComment);
 provide("post", props.post);
 </script>
-
-<!-- <script>
-
-
-export default {
-    inject: ["callModal"],
-    props: {
-        post: null,
-    },
-    data() {
-        return {
-            showRepliesArray: [],
-            showReplyInterface: null,
-            showReplyEditingInterface: null,
-            showEditingInterface: null,
-            showReplyToReplyInterface: null,
-            comments: this.post.comments,
-            commentIsCreated: false,
-        };
-    },
-    provide() {
-        return {
-            showRepliesArray: computed(() => this.showRepliesArray),
-            showReplyInterface: computed(() => this.showReplyInterface),
-            showEditingInterface: computed(() => this.showEditingInterface),
-            changeShowReplyInterfaceValue: this.changeShowReplyInterfaceValue,
-            changeShowEditingInterfaceValue:
-                this.changeShowEditingInterfaceValue,
-            setInputValuesToNull: this.setInputValuesToNull,
-            sendReply: this.sendReply,
-        };
-    },
-    mounted() {
-        if (window.location.hash == "#comments") {
-            setTimeout(() => {
-                this.$refs["comments"].scrollIntoView();
-            }, 200);
-        }
-    },
-    methods: {
-        changeShowReplyInterfaceValue(value) {
-            this.setInputValuesToNull();
-            this.showReplyInterface = value;
-        },
-        changeShowEditingInterfaceValue(value) {
-            this.setInputValuesToNull();
-
-            this.showEditingInterface = value;
-        },
-        setInputValuesToNull() {
-            this.showReplyInterface = null;
-            this.showReplyToReplyInterface = null;
-            this.showEditingInterface = null;
-            this.showReplyEditingInterface = null;
-        },
-        showRepliesFunction(comment_id) {
-            this.showRepliesArray.push(comment_id);
-        },
-        findCommentAndOpenReplies(reply_id) {
-            console.log(reply_id);
-            let index = this.comments.findIndex(
-                (obj) =>
-                    obj.replies.findIndex((reply) => reply.id == reply_id) >= 0
-            );
-            this.showRepliesArray.unshift(this.comments[index].id);
-        },
-        sendComment(form) {
-            const formData = new FormData();
-            formData.append("_method", "POST");
-            formData.append("post_id", this.post.id);
-            formData.append("text", form.content);
-            formData.append("image", form.image?.image);
-            axios
-                .post(route("comment.create"), formData)
-                .catch((res) => {
-                    if (res.response.status == 401) this.callModal("Auth");
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    if (res.status == 200 || res.status == 201) {
-                        this.comments.unshift(res.data);
-                        this.commentIsCreated = true;
-                        setTimeout(() => {
-                            this.commentIsCreated = false;
-                        }, 20);
-                    }
-                });
-        },
-        sendReply(form) {
-            console.log("FORM", form);
-            const formData = new FormData();
-            formData.append("_method", "POST");
-            formData.append("comment_id", this.showReplyInterface);
-            formData.append("post_id", this.post.id);
-            formData.append("text", form.content);
-            formData.append("image", form.image?.image);
-            axios
-                .post(route("comment.create"), formData)
-                .catch((res) => {
-                    if (res.response.status == 401) this.callModal("Auth");
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    let index = this.comments.findIndex(
-                        (obj) => obj.id == this.showReplyInterface
-                    );
-                    if (res.status == 200 || res.status == 201) {
-                        this.commentIsCreated = true;
-                        setTimeout(() => {
-                            this.commentIsCreated = false;
-                        }, 20);
-                    }
-                });
-        },
-        removeComment(comment_id) {
-            axios
-                .post(route("comment.delete"), {
-                    _method: "DELETE",
-                    id: comment_id,
-                })
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    let listIndex = this.comments.findIndex(
-                        (obj) => obj.id == comment_id
-                    );
-                    this.comments.splice(listIndex, 1);
-                });
-        },
-        updateCommentOrReplyValue(type, id, text) {
-            if (type == "Comment") {
-                let listIndex = this.comments.findIndex((obj) => obj.id == id);
-                this.comments[listIndex].text = text;
-            } else {
-                let listIndex = this.comments.findIndex((obj) =>
-                    obj.replies.findIndex((obj) => obj.id == id)
-                );
-                let replyIndex = this.comments[listIndex].replies.findIndex(
-                    (obj) => obj.id == id
-                );
-                this.comments[listIndex].replies[replyIndex].text = text;
-            }
-        },
-    },
-    components: {
-        Comment,
-        Reply,
-        CommentInput,
-        Csrf,
-        ReplyInput,
-        EditingInput,
-        ZoomableImage,
-    },
-};
-</script> -->

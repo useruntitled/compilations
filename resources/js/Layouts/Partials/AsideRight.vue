@@ -15,20 +15,12 @@
                         class="flex items-center overflow-hidden whitespace-no-wrap px"
                     >
                         <Link :href="route('profile', [comment.user.id])">
-                            <LazyImage
-                                :preview="'/media/' + comment.user.avatar_preview"
-                                :then="route('im', [comment.user.avatar, ['50']])"
-                                class="rounded-full inline-block me-2 w-[36px] h-[36px] object-cover border-2"
-                                style="max-width: 36px; max-height: 36px"
-                            >
-
-                            </LazyImage>
-<!--                            <img-->
-
-<!--                                -->
-<!--                                -->
-<!--                                alt=""-->
-<!--                        />-->
+                            <lazy-media
+                                :media="comment.user.avatar"
+                                class="rounded-full inline-block me-2 object-cover border-2"
+                                width="36"
+                                height="36"
+                            />
                         </Link>
 
                         <div class="flex flex-col">
@@ -67,16 +59,19 @@
                             style="max-height: 100px"
                             v-html="comment.text"
                         ></p>
-                        <div v-if="comment.image" class="text-center mt-2 flex justify-center relative">
-                            <img :src="'/media/' + comment.image_preview" class="rounded-lg mx-auto w-full"
-                                 style="max-height: 200px" alt="">
-                            <LazyImage
-                                :preview="'/media/' + comment.image_preview"
-                                :then="route('im', [comment.image, 300])"
-                                class="rounded-lg mx-auto object-scale-down w-full h-full absolute"
-                                style="max-height: 200px"
-                                :show-when-loaded="true"
-                            ></LazyImage>
+                        <div v-if="comment.image" class="text-center mt-2">
+                            <!--                            <lazy-media-->
+                            <!--                                :media="comment.image"-->
+                            <!--                                class="rounded-lg mx-auto object-scale-down w-full h-full hover:opacity-80"-->
+                            <!--                                rounded="lg"-->
+                            <!--                                style="max-height: 200px"-->
+                            <!--                            />-->
+                            <fluid-lazy-media
+                                :media="comment.image"
+                                max-height="200"
+                                rounded="lg"
+                                class="hover:opacity-80"
+                            />
                         </div>
                     </Link>
                 </div>
@@ -88,6 +83,8 @@
 import { ref, onMounted, watch } from "vue";
 import LazyImage from "@/Components/LazyImage.vue";
 import { getFeed, listenFeedUpdates } from "./AsideRightApi.js";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
 
 const comments = ref([]);
 

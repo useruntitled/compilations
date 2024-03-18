@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
-use App\Services\ImageGeneratorService;
+use App\Services\Media\ImageGeneratorService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MakeUser extends Command

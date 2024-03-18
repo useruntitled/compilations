@@ -16,7 +16,7 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import Post from "@/Components/Post.vue";
+import Post from "@/Components/Post/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";

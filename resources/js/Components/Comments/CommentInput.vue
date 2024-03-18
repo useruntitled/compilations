@@ -8,7 +8,7 @@
                 : '  '
         "
         @focusin="isFocused = true"
-        @click="content?.focus()"
+        @click="content?.focus(); checkAuth()"
         @focusout="isFocused = false"
     >
         <div
@@ -19,11 +19,11 @@
             @paste.prevent="handlePaste($event)"
             @drop.prevent="handlePaste($event)"
             @input="handleInput()"
-            v-html="text"
+            v-html="comment?.text"
         ></div>
         <div class="flex justify-between mt-2 ms-[-6px] items-end">
             <div class="p-2 ps-0">
-                <div v-if="!fileWasInserted">
+                <div v-if="!hasImage">
                     <BtnIcon @click="filepond.click()" primaryColor="orange-100"
                         ><IconPhoto class="stroke-2 w-5 h-5"></IconPhoto
                     ></BtnIcon>
@@ -31,29 +31,31 @@
                         ref="filepond"
                         type="file"
                         class="hidden"
-                        accept="image/png, image/jpg, image/jpeg, image/webp"
+                        accept="image/png, image/jpg, image/jpeg, image/webp, image/gif"
                         @input="handleFilepond"
                     />
                 </div>
-                <div v-else>
-                    <img
-                        @click="
-                            fileWasInserted = false;
-                            insertedImage.image = null;
-                            insertedImage.hasImage = false;
-                        "
-                        :src="
-                            insertedImage.base64 ??
-                            route('im', [insertedImage.image, 200])
-                        "
-                        class="rounded-lg w-20 h-20 object-cover cursor-pointer"
+                <div v-else class="flex justify-center items-center">
+                    <div>
+                        <lazy-media
+                            v-if="hasImage"
+                            :media="form.image"
+                            rounded="lg"
+                            width="75"
+                            height="75"
+                            class="object-cover cursor-pointer"
+                            @click="form.image = null"
+                        />
+                    </div>
+                    <animation-loader v-show="imageIsLoading"
+                                      class="w-8 h-8 absolute"
                     />
                 </div>
             </div>
             <div class="flex mb-2">
                 <slot name="button"></slot>
                 <FlatPrimaryButton
-                    v-if="content?.innerHTML.length > 0 || fileWasInserted"
+                    v-if="content?.innerHTML.length > 0 || form?.image"
                     class="ms-2"
                     primaryColor="orange-500"
                     @click="handleSend()"
@@ -78,41 +80,57 @@ import BtnIcon from "../BtnIcon.vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
+import {handleFile} from "@/Components/File/FileHandler.js";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import {usePage} from "@inertiajs/vue3";
+
+
 
 const isLoading = ref(false);
+const imageIsLoading = ref(false);
+
+const callModal = inject('callModal');
+
+
+const page = usePage();
 
 const emit = defineEmits(["sendComment"]);
 
+const checkAuth = () => {
+    if (!page.props.auth.check) {
+        callModal('auth');
+        return false;
+    }
+    return true;
+}
+
 const handleSend = () => {
-    if (!isLoading.value) {
+    if (!isLoading.value && checkAuth) {
         emit("sendComment", form);
         isLoading.value = true;
     }
 };
 
+const hasImage = computed(() => {
+    return form.image != null;
+});
+
+const post = inject('post');
+
 const props = defineProps({
     commentIsCreated: false,
-    text: {
-        required: false,
-        default: "",
-    },
-    image: {
-        required: false,
-        default: null,
-    },
+    post_id: null,
+    comment: null,
+    comment_id: null,
 });
 
 const form = reactive({
-    content: "",
-    image: null,
-});
-
-const fileWasInserted = ref(false);
-const insertedImage = reactive({
-    base64: null,
-    image: null,
-    hasImage: false,
-});
+    id: props.comment?.id ?? null,
+    text: props.comment?.text ?? "",
+    post_id: props.post_id ?? post.id,
+    image: props.comment?.image ?? null,
+    comment_id: props.comment_id,
+})
 
 const filepond = ref(null);
 
@@ -123,7 +141,9 @@ const isFocused = ref(false);
 const placeholder = ref("Комментарий...");
 
 const placeholderClass = computed(() => {
-    return `before:content-['${placeholder.value}']`;
+    if (!form.text) {
+        return `before:content-['${placeholder.value}']`;
+    }
 });
 
 const setInputValuesToNull = inject("setInputValuesToNull");
@@ -134,7 +154,7 @@ const handleInput = () => {
     } else {
         placeholder.value = "Комментарий...";
     }
-    form.content = content.value.innerHTML;
+    form.text = content.value.innerHTML;
 };
 
 watch(
@@ -142,12 +162,12 @@ watch(
     (newValue, oldValue) => {
         if (newValue) {
             setInputValuesToNull();
-            isLoading.value = false;
-            fileWasInserted.value = false;
+            form.id = null;
+            form.text = "";
             content.value.innerHTML = "";
-            form.content = "";
-            form.image = null;
             placeholder.value = "Комментарий...";
+            form.image = null;
+            isLoading.value = false;
         }
     }
 );
@@ -162,91 +182,27 @@ const handlePaste = (e) => {
 };
 
 const handleFilepond = (e) => {
+    if (!checkAuth()) return false;
     const file = e.target.files[0];
-    handleFile(file);
-};
-
-const handleFile = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-        fileWasInserted.value = true;
-        insertedImage.base64 = reader.result;
-        insertedImage.image = file;
-        insertedImage.hasImage = true;
-        form.image = insertedImage;
-    };
-};
-
-watch(insertedImage, () => {
-    form.image = insertedImage;
-});
-
-onMounted(() => {
-    content.value.innerHTML = props.text;
-    form.content = content.value.innerHTML;
-    if (props.image != null) {
-        fileWasInserted.value = true;
-        insertedImage.image = props.image;
-        insertedImage.hasImage = true;
-    }
-    if (props.text != "") {
-        placeholder.value = "";
-    }
-});
-</script>
-
-<!-- <script>
-
-
-export default {
-    props: {
-        commentIsCreated: false,
-        text: {
-            required: false,
-            default: null,
-        },
-    },
-    data() {
-        return {
-            textareaValueLength: null,
-            isFocused: false,
-            textarea: null,
-            textareaValue: null,
-        };
-    },
-    watch: {
-        commentIsCreated(newValue, oldValue) {
-            if (newValue) {
-                this.$refs["textarea"].innerHTML = "";
-                this.handleInput();
-                this.considerTextareaLength();
-            }
-        },
-    },
-    methods: {
-        considerTextareaLength() {
-            return this.textareaValue.length;
-        },
-        handleInput() {
-            this.textarea = this.$refs["textarea"];
-            this.textareaValue = this.textarea.innerHTML;
-            this.textareaValueLength = this.considerTextareaLength();
-        },
-        handlePaste(e) {
-            const text = e.clipboardData.getData("text/plain");
-            document.execCommand("insertText", false, text);
-        },
-    },
-    updated() {
-        const textarea = this.$refs["textarea"];
-        if (textarea.innerHtml != "") {
+    handleFile(file, onFileRead)
+    const formData = new FormData();
+    formData.append("image", file)
+    imageIsLoading.value = true;
+    axios.post(route('media.upload.without-save'), formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
         }
-    },
-    mounted() {
-        this.handleInput();
-    },
-    emits: ["sendComment"],
-    components: { IconPhoto, PrimaryButton, BtnIcon, FlatPrimaryButton },
+    })
+        .then((res) => {
+            console.log(res.data);
+            form.image = res.data;
+            imageIsLoading.value = false;
+        })
 };
-</script> -->
+
+const onFileRead = (result) => {
+    if (form.image === null) form.image = {};
+    form.image.base64_preview = result;
+    imageIsLoading.value = true;
+}
+</script>

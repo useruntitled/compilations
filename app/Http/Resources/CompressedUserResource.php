@@ -17,8 +17,7 @@ class CompressedUserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'avatar' => $this->avatar,
-            'avatar_preview' => $this->avatar_preview,
+            'avatar' => MediaResource::make($this->avatar),
         ];
     }
 }

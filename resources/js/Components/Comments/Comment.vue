@@ -75,15 +75,18 @@
                     <p v-html="comment.text"
                        class="text-17 w-auto sm:w-auto sm:max-w-screen-sm overflow-hidden break-words"></p>
                     <div v-if="comment.image" class="flex justify-center relative"
-                         style="max-width: 40%; max-height: 400px">
-                        <img :src="'/media/' + comment.image_preview" class="rounded-lg mx-auto w-full"
-                             style="max-height: 400px" alt="">
-                        <ZoomableImage
-                            :preview="'/media/' + comment.image_preview"
-                            :then="route('im', [comment.image, 500])"
-                            class="rounded-lg absolute inset-x-0 w-full h-full object-scale-down"
-                            style="max-height: 400px"
-                        ></ZoomableImage>
+                         style="max-width: 50%;">
+                        <!--                        <lazy-media-->
+                        <!--                            :media="comment.image"-->
+                        <!--                            class="rounded-lg  inset-x-0 w-full h-full object-scale-down"-->
+                        <!--                            style="max-height: 400px"-->
+                        <!--                        />-->
+                        <fluid-lazy-media
+                            :media="comment.image"
+                            max-width="100%"
+                            max-height="200"
+                            rounded="lg"
+                        />
                     </div>
                 </main>
                 <footer class="flex items-center">
@@ -114,13 +117,12 @@
                 <ReplyInput
                     @sendReply="sendReply"
                     :commentIsCreated="commentIsCreated"
+                    :comment_id="comment.id"
                 ></ReplyInput>
             </div>
             <div v-if="showEditingInterface == comment.id" class="px-2 my-2">
                 <EditingInput
-                    :text="comment.text"
-                    :image="comment.image"
-                    :id="comment.id"
+                    :comment="comment"
                     @closeEditingInterface="
                         changeShowEditingInterfaceValue(null)
                     "
@@ -176,10 +178,12 @@ import { ref, inject, watch, onMounted, onUnmounted, nextTick } from "vue";
 import IconArrowUp from "../Icons/IconArrowUp.vue";
 import Reputation from "../Reputation.vue";
 import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
-import ZoomableImage from "../ZoomableImage.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
+import {store} from "@/Components/Comments/api.js";
 
 const limitComments = inject("limitComments");
 
@@ -297,39 +301,27 @@ const commentIsCreated = ref(false);
 
 const addCommentInObjectTree = inject("addCommentInObjectTree");
 
+const onStoreReply = (res) => {
+    console.log(res);
+    commentIsCreated.value = true;
+    showRepliesArray.value.unshift(props.comment.id);
+    scrollIntoComment.value = res.data.id;
+    setTimeout(() => {
+        commentIsCreated.value = false;
+    }, 20);
+    if (res.status == 200 || res.status == 201) {
+        // replies.value.unshift(res.data);
+        addCommentInObjectTree(res.data, props.branchParrentId);
+    }
+}
+
 const sendReply = (form) => {
-    const formData = new FormData();
-    formData.append("_method", "POST");
-    formData.append("comment_id", showReplyInterface.value);
-    formData.append("post_id", props.comment.post_id);
-    formData.append("text", form.content);
-    formData.append("hasImage", form.image?.hasImage);
-    formData.append("image", form.image?.image);
-    axios
-        .post(route("comment.create"), formData)
-        .catch((res) => {
-            if (res.response.status == 401) callModal("Auth");
-            console.log(res);
-        })
-        .then((res) => {
-            console.log(res);
-            commentIsCreated.value = true;
-            showRepliesArray.value.unshift(props.comment.id);
-            scrollIntoComment.value = res.data.id;
-            setTimeout(() => {
-                commentIsCreated.value = false;
-            }, 20);
-            if (res.status == 200 || res.status == 201) {
-                // replies.value.unshift(res.data);
-                addCommentInObjectTree(res.data, props.branchParrentId);
-            }
-        });
+    store(form, onStoreReply);
 };
 
 const updateComment = (value) => {
     props.comment.text = value.text;
     props.comment.image = value.image;
-    props.comment.image_preview = value.image_preview;
 };
 
 const remove = (id) => {
@@ -341,202 +333,3 @@ const remove = (id) => {
     })
 }
 </script>
-
-<!-- <script>
-
-
-export default {
-    inject: [
-        "showRepliesArray",
-        "changeShowReplyInterfaceValue",
-        "changeShowEditingInterfaceValue",
-        "showReplyInterface",
-        "showEditingInterface",
-        "callModal",
-        "scrollIntoComment",
-        "post",
-    ],
-    props: {
-        isReply: false,
-        comment: null,
-        type: null,
-        withoutReplies: false,
-        showRepliesByDefault: {
-            default: false,
-        },
-        countOfNeighbours: 0,
-        hoverAllValue: {
-            default: false,
-        },
-        closeAllReplies: false,
-    },
-    data() {
-        return {
-            isEdited: false,
-            enableEditing: false,
-            replies: comment.replies ?? [],
-            showReplies: this.showRepliesByDefault,
-            commentIsCreated: false,
-            openReplies: !this.showRepliesByDefault,
-        : this.closeAllReplies,
-            hoverBranches: this.hoverAllValue,
-            colorizeComment: false,
-            showLinkToParent: false,
-            isDeleted: this.comment.deleted_at != null,
-            completelyDeleted: false,
-        };
-    },
-    watch: {
-        scrollIntoComment() {
-            if (this.comment.id == this.scrollIntoComment) {
-                this.focusFunction();
-            }
-        },
-    },
-
-    methods: {
-        focusFunction() {
-            this.$refs["comment"].scrollIntoView({
-                block: "center",
-            });
-            const interval = setInterval(() => {
-                this.colorizeComment = true;
-            });
-            setTimeout(() => {
-                clearInterval(interval);
-                this.colorizeComment = false;
-            }, 500);
-        },
-        deleteComment() {
-            axios
-                .post(route("comment.delete"), {
-                    _method: "DELETE",
-                    id: this.comment.id,
-                })
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    if (res.status == 200) {
-                        if (res.data == null) {
-                            this.completelyDeleted = true;
-                        } else {
-                            this.isDeleted = true;
-                        }
-                    }
-                });
-        },
-        updateComment(value) {
-            this.comment.text = value.text;
-            this.comment.image = value.image;
-            this.comment.image_preview = value.image_preview;
-        },
-        hoverBranchesFunction() {
-            this.hoverBranches = !this.hoverBranches;
-        },
-        showRepliesFunction() {
-            this.showReplies = true;
-            this.showRepliesArray.unshift(this.comment.id);
-        },
-        closeReplies() {
-            this.showRepliesArray.splice(
-                this.showRepliesArray.findIndex((i) => i == this.comment.id),
-                1
-            );
-            this = true;
-            this.$refs["comment"].scrollIntoViewIfNeeded();
-            // const index = this.showRepliesArray.findIndex((i) => i == id);
-            // this.showRepliesArray.splice(index);
-
-            // this.comment?.replies.forEach((reply) => {
-            //     const index = this.showRepliesArray.findIndex(
-            //         (i) => i == reply.id
-            //     );
-            //     this.showRepliesArray.splice(index, 1);
-            // });
-
-            // this.showRepliesArray.splice(index, 1);
-            // this.openReplies = false;
-            // this.hoverBranches = false;
-            // this.$emit("disableHoverBranches");
-        },
-
-        sendReply(form) {
-            const formData = new FormData();
-            formData.append("_method", "POST");
-            formData.append("comment_id", this.showReplyInterface);
-            formData.append("post_id", this.comment.post_id);
-            formData.append("text", form.content);
-            formData.append("hasImage", form.image?.hasImage);
-            formData.append("image", form.image?.image);
-            axios
-                .post(route("comment.create"), formData)
-                .catch((res) => {
-                    if (res.response.status == 401) this.callModal("Auth");
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    this.commentIsCreated = true;
-                    this.showRepliesArray.unshift(this.comment.id);
-                    this.scrollIntoComment = res.data.id;
-                    setInterval(() => {
-                        this.commentIsCreated = false;
-                    }, 20);
-                    if (res.status == 200 || res.status == 201) {
-                        this.replies.unshift(res.data);
-                    }
-                });
-        },
-    },
-    mounted() {
-        if (this) {
-            const index = this.showRepliesArray.findIndex(
-                (i) => i == this.comment.comment_id
-            );
-
-            this.showRepliesArray.splice(index, 1);
-        }
-
-        if (this.comment.replies?.length == 1 && this.comment.level > 1) {
-            this.showRepliesArray.unshift(this.comment.id);
-        }
-        if (this.comment.id == this.scrollIntoComment) {
-            this.focusFunction();
-            setTimeout(() => {
-                this.focusFunction();
-            }, 50);
-        }
-    },
-    unmounted() {
-        this.$emit("disableHoverBranches");
-    },
-    emits: [
-        "showReplies",
-        "showReplyInterface",
-        "remove",
-        "showEditingInterface",
-        "sendReply",
-        "enableHoverBranches",
-        "disableHoverBranches",
-        "focusEmit",
-        "enableColorize",
-        "disableColorize",
-        "closeReplies",
-        "remove",
-    ],
-    components: {
-        UserTabletWithElementInside,
-        Dropdown,
-        Reputation,
-        CommentDropdown,
-        ReplyInput,
-        IconArrowUp,
-        EditingInput,
-        IconTrash,
-        LazyImage,
-        ZoomableImage,
-    },
-};
-</script> -->

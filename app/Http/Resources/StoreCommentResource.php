@@ -27,7 +27,6 @@ class StoreCommentResource extends JsonResource
             'timestamp' => $this->timestamp,
             'text' => $this->text,
             'image' => $this->image,
-            'image_preview' => $this->image_preview,
             'rep' => $this->rep,
         ];
     }

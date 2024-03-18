@@ -8,17 +8,14 @@ use App\Http\Requests\UploadFileRequest;
 use App\Http\Resources\NotificationResource;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use App\Services\ImageGeneratorService;
-use App\Services\ImageService;
+use App\Services\Media\ImageGeneratorService;
+use App\Services\Media\MediaService;
 use App\Services\NotificationService;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -123,32 +120,33 @@ class RegisteredUserController extends Controller
         return $user;
     }
 
-    public function uploadAvatar(UploadFileRequest $request, ImageService $service)
+    public function uploadAvatar(UploadFileRequest $request, MediaService $service)
     {
-        Http::post('89.111.174.6:81/api/image', [123]);
-//        $user = Auth::user();
-//
-//        if ($request->hasFile('image')) {
-//
-//            $filename = $service->uploadAndDelete($request->file('image'), $user->avatar);
-//            $user->avatar = $filename;
-//            $user->update();
-//
-//            return $filename;
-//        }
-//        abort(422);
+
+        $user = Auth::user();
+
+
+        if ($request->hasFile('image')) {
+
+            return json_encode($service->upload($request->file('image'), [
+                'object' => 'user',
+                'object_id' => $user->id,
+            ]));
+        }
+        abort(422);
     }
 
-    public function uploadBackgroundImage(UploadFileRequest $request, ImageService $service)
+    public function uploadCover(UploadFileRequest $request, MediaService $service)
     {
         $user = Auth::user();
 
-        if ($request->hasFile('image')) {
-            $filename = $service->uploadAndDelete($request->file('image'), $user->background_image);
-            $user->background_image = $filename;
-            $user->update();
 
-            return $filename;
+        if ($request->hasFile('image')) {
+
+            return json_encode($service->upload($request->file('image'), [
+                'object' => 'subsite',
+                'object_id' => $user->id,
+            ]));
         }
         abort(422);
     }

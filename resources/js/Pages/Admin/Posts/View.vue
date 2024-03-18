@@ -17,7 +17,7 @@
 <script setup>
 import AdminViewCard from "@/Components/Admin/AdminViewCard.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
-import Post from '@/Components/Post.vue';
+import Post from '@/Components/Post/Post.vue';
 import DeclineModal from "@/Components/Admin/DeclineModal.vue";
 import {ref} from "vue";
 

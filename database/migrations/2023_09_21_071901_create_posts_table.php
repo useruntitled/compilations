@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Post;
-use App\Services\ImageService;
+use App\Services\Media\MediaService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,8 +21,6 @@ return new class extends Migration
 
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
-
-            $table->string('image')->nullable();
 
             $table->timestamps();
             $table->timestamp('published_at')->nullable();
@@ -44,7 +42,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $service = new ImageService();
+        $service = new MediaService();
         $posts = Post::all();
         foreach ($posts as $p) {
             $service->delete($p->image);

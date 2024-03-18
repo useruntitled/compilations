@@ -12,13 +12,20 @@
                             style="width: 40px; height: 40px"
                             alt=""
                         /> -->
-                        <LazyImage
-                            :preview="`/media/${user.avatar_preview}`"
-                            :then="route('im', [user.avatar, 100])"
-                            class="rounded-full inline-block hover:brightness-110 object-cover border-2"
-                            style="width: 40px; height: 40px"
-                        >
-                        </LazyImage>
+                        <!--                        <LazyImage-->
+                        <!--                            :preview="`/media/${user.avatar_preview}`"-->
+                        <!--                            :then="route('im', [user.avatar, 100])"-->
+                        <!--                            class="rounded-full inline-block hover:brightness-110 object-cover border-2"-->
+                        <!--                            style="width: 40px; height: 40px"-->
+                        <!--                        >-->
+                        <!--                        </LazyImage>-->
+                        <lazy-media
+                            :media="user.avatar"
+                            rounded="full"
+                            class="inline-block hover:brightness-110 object-cover border-2"
+                            width="40"
+                            height="40"
+                        />
                         <div
                             class="absolute rounded-full duration-200 transition-all text-white stroke-2"
                             :class="'bg-' + iconColor"
@@ -55,6 +62,7 @@ import IconArrowForwardUp from "./Icons/IconArrowForwardUp.vue";
 import IconComments from "./Icons/IconComments.vue";
 import IconHeart from "./Icons/IconHeart.vue";
 import LazyImage from "./LazyImage.vue";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
 
 export default {
     props: {
@@ -79,6 +87,6 @@ export default {
             this.isVisible = true;
         }, 20);
     },
-    components: { IconArrowForwardUp, IconHeart, IconComments, LazyImage },
+    components: {LazyMedia, IconArrowForwardUp, IconHeart, IconComments, LazyImage},
 };
 </script>

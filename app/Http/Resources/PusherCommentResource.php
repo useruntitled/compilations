@@ -18,8 +18,7 @@ class PusherCommentResource extends JsonResource
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
-                'avatar' => $this->user->avatar,
-                'avatar_preview' => $this->user->avatar_preview,
+                'avatar' => MediaResource::make($this->user->avatar),
             ],
             'post' => [
                 'id' => $this->post->id,
@@ -28,8 +27,7 @@ class PusherCommentResource extends JsonResource
             ],
             'text' => $this->text,
             'id' => $this->id,
-            'image' => $this->image,
-            'image_preview' => $this->image_preview,
+            'image' => MediaResource::make($this->image),
         ];
     }
 }

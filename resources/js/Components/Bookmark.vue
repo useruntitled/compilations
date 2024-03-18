@@ -38,7 +38,9 @@ const countOfBookmarks = ref(props.count);
 const accept = () => {
     if (!page.props.auth.check) {
         callModal("auth");
+        return false;
     }
+    return true;
 };
 
 const toggleBookmark = () => {
@@ -46,7 +48,7 @@ const toggleBookmark = () => {
 };
 
 const setBookmark = () => {
-    accept();
+    if (!accept()) return false;
 
     toggleBookmark();
 

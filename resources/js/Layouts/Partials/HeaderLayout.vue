@@ -52,34 +52,14 @@
                                     <div
                                         class="flex items-center cursor-pointer"
                                     >
-                                        <LazyImage
-                                            :preview="
-                                                '/media/' +
-                                                page.props.auth.user
-                                                    .avatar_preview
-                                            "
-                                            :then="
-                                                route('im', [
-                                                    page.props.auth.user.avatar,
-                                                    100,
-                                                ])
-                                            "
-                                            class="w-[40px] h-[40px] rounded-full object-cover hover:brightness-[1.2] border-secondary border-1"
-                                        ></LazyImage>
-                                        <div class="ms-2">
-                                            <svg
-                                                v-if="$page.props.auth.user"
-                                                class="ms-0 -mr-0.5 h-4 w-4 inline-block text-slate-500"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd"
-                                                />
-                                            </svg>
+                                        <lazy-media
+                                            :media="page.props.auth.user.avatar"
+                                            width="40"
+                                            height="40"
+                                            rounded="full"
+                                        />
+                                        <div class="ms-2" v-if="$page.props.auth.user">
+                                            <icon-chewron-down class="w-4 h-4"/>
                                         </div>
                                     </div>
                                 </template>
@@ -106,6 +86,8 @@ import DropdownNotifications from "@/Components/Dropdowns/DropdownNotifications.
 import LazyImage from "@/Components/LazyImage.vue";
 import { usePage } from "@inertiajs/vue3";
 import Search from "@/Components/Search/Search.vue";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import IconChewronDown from "@/Components/Icons/IconChewronDown.vue";
 
 const callModal = inject("callModal");
 

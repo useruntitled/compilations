@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostUploadImageRequest;
-use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Film;
 use App\Models\Post;
-use App\Services\ImageService;
+use App\Services\Media\MediaService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -38,18 +34,10 @@ class PostController extends Controller
 
     public function index(int $id, ?string $slug)
     {
-//        $post = Cache::remember("post-$id", now()->addMinutes(5), function () use ($id, $slug) {
-//            return Post::with([
-//                'user' => ['roles'],
-//                'films' => ['genres'],
-//                ])
-//                ->withCount(['comments', 'bookmarks'])
-//                ->published()
-//                ->findOrFail($id);
-//        });
         $post = Post::with([
                 'user' => ['roles'],
                 'films' => ['genres'],
+            'image'
                 ])
                 ->withCount(['comments', 'bookmarks'])
                 ->published()
@@ -74,7 +62,7 @@ class PostController extends Controller
 
     public function get(int $id)
     {
-        $post = Post::with(['user' => ['roles'], 'films'])->findOrFail($id);
+        $post = Post::with(['user' => ['roles'], 'films', 'image'])->findOrFail($id);
         return $post;
     }
 
@@ -170,16 +158,17 @@ class PostController extends Controller
     }
 
 
-    public function uploadImage(UploadFileRequest $request, ImageService $service)
+    public function uploadImage(UploadFileRequest $request, MediaService $service)
     {
         $post = Post::findOrFail($request->id);
 
-        $filename = $service->uploadAndDelete($request->file('image'), $post->image);
-
-        $post->image = $filename;
-        $post->update();
-
-        return Response::json($filename, 200);
+        if ($request->hasFile('image')) {
+            return json_encode($service->upload($request->file('image'), [
+                'object' => 'post',
+                'object_id' => $post->id,
+            ]));
+        }
+        abort(422);
     }
 
     public function redirect($id)

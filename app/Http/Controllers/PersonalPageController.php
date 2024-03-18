@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostFeedResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -37,7 +38,7 @@ class PersonalPageController extends Controller
 
         return inertia('Profile/Index', [
             'section' => 1,
-            'user' => $user,
+            'user' => UserResource::make($user),
             'karma' => $karma,
             'posts' => $posts,
         ]);
@@ -61,7 +62,7 @@ class PersonalPageController extends Controller
 
     public function comments($user_id)
     {
-        $user = User::query()->findOrFail($user_id);
+        $user = User::query()->with('subsite')->findOrFail($user_id);
         $comments = $this->getComments($user_id, 1);
 
         return inertia('Profile/Comments', [
@@ -74,11 +75,10 @@ class PersonalPageController extends Controller
 
     public function getComments($user_id, $page)
     {
-        $comments = Comment::query()->where('user_id', $user_id)
+        return Comment::query()->with('image')->where('user_id', $user_id)
+            ->latest()
             ->skip(($page - 1) * $this->per_page)
             ->take($this->per_page)
             ->get();
-
-        return $comments;
     }
 }

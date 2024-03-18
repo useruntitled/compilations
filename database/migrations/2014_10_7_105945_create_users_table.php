@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Services\ImageService;
+use App\Services\Media\MediaService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,9 +22,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
-            $table->string('avatar')->nullable();
-            $table->string('background_image')->nullable();
-            $table->text('description')->nullable();
+
+//            $table->foreignId('media_id')->nullable()->default(null)->constrained('media');
 
             $table->string('provider')->nullable();
             $table->string('provider_user_id')->nullable();
@@ -42,7 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $service = new ImageService;
+        $service = new MediaService;
         $users = User::all();
         foreach ($users as $u) {
             $service->delete($u->avatar);

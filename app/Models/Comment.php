@@ -8,6 +8,7 @@ use App\Traits\HasReputation;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
@@ -20,12 +21,11 @@ class Comment extends Model
     protected $fillable = [
         'text', 'user_id',
         'post_id', 'comment_id',
-        'image', 'level',
+        'level',
     ];
 
     protected $appends = [
         'rep', 'timestamp',
-        'image_preview',
         'is_deleted',
         'is_active',
     ];
@@ -37,6 +37,11 @@ class Comment extends Model
     public function scopePublished($query)
     {
         return $query->whereNull('deleted_at');
+    }
+
+    public function image(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'media_to')->latest();
     }
 
     public function post()

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -19,7 +20,13 @@ use Spatie\Sitemap\Tags\Url;
 
 class Post extends Model implements Sitemapable
 {
-    use HasFactory, HasReputation, HasAuthor, Reportable, SoftDeletes, Declineable;
+    use
+        HasFactory,
+        HasReputation,
+        HasAuthor,
+        Reportable,
+        SoftDeletes,
+        Declineable;
 
     public function toSitemapTag(): Url
     {
@@ -32,13 +39,13 @@ class Post extends Model implements Sitemapable
     protected $fillable = [
         'user_id', 'title',
         'description',
-        'slug', 'image',
+        'slug',
         'views', 'visits',
         'published_at',
     ];
 
     protected $appends = [
-        'rep', 'timestamp', 'image_preview',
+        'rep', 'timestamp',
         'has_bookmark', 'is_active'
     ];
 
@@ -56,14 +63,9 @@ class Post extends Model implements Sitemapable
         return $query->whereNotNull('published_at')->whereNull('declined_at');
     }
 
-    protected function imagePreview(): Attribute
+    public function image(): MorphOne
     {
-        if ($this->image == null) {
-            return Attribute::get(fn () => null);
-        }
-        [$name, $ext] = explode('.', $this->image);
-
-        return Attribute::get(fn () => $name.'__preview'.".$ext");
+        return $this->morphOne(Media::class, 'media_to')->latest();
     }
 
     public function films(): BelongsToMany

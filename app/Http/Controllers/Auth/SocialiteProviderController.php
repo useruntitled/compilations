@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\ImageGeneratorService;
-use App\Services\ImageParserService;
-use App\Services\ImageService;
-use Illuminate\Http\Request;
+use App\Services\Media\ImageGeneratorService;
+use App\Services\Media\ImageParserService;
+use App\Services\Media\MediaUploader;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -21,7 +20,7 @@ class SocialiteProviderController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-    public function callback($provider, ImageParserService $avatarParser, ImageGeneratorService $avatarGenerator)
+    public function callback($provider, ImageParserService $avatarParser)
     {
         $socialiteUser = Socialite::driver($provider)->user();
 
@@ -36,22 +35,23 @@ class SocialiteProviderController extends Controller
         if(!$user) {
             $hasImage = true;
 
-            if($hasImage) {
-                $filename = $avatarParser->get($socialiteUser->getAvatar());
-            }
-
             $user = User::create([
                 'name' => $socialiteUser->getName(),
                 'email' => $socialiteUser->getEmail(),
                 'username' => $socialiteUser->getNickname(),
-                'avatar' => $hasImage ? $filename : null,
                 'provider' => $provider,
                 'provider_user_id' => $socialiteUser->getId(),
                 'password' => Hash::make(Str::random(20)),
                 'email_verified_at' => now(),
             ]);
-            if(!$hasImage) {
-                $user->avatar = $avatarGenerator->make();
+            if ($hasImage) {
+                $avatar = $avatarParser->get($socialiteUser->getAvatar());
+                MediaUploader::upload($avatar, [
+                    'object' => 'user',
+                    'object_id' => $user->id,
+                ]);
+            } else {
+                $user->generateAvatar();
             }
             $user->update();
         }

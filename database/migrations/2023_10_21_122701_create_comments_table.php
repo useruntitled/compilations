@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Comment;
-use App\Services\ImageService;
+use App\Services\Media\MediaService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,7 +24,6 @@ return new class extends Migration
 
             $table->longText('text');
 
-            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
 
@@ -40,7 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $service = new ImageService();
+        $service = new MediaService();
         $comments = Comment::all();
         foreach ($comments as $c) {
             $service->delete($c->image);

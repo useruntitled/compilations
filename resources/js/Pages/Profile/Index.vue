@@ -18,7 +18,7 @@
 import { ref } from "vue";
 import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
-import Post from "@/Components/Post.vue";
+import Post from "@/Components/Post/Post.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import axios from "axios";
 import MainLayout from "@/Layouts/MainLayout.vue";

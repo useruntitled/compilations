@@ -9,12 +9,21 @@
     <div class="xs:w-screen sm:max-w-screen-sm">
         <div class="bg-white rounded-xl mb-5 space-y-4 px-4 py-4 ">
             <ShortPost v-for="post in most_commented_posts" :post="post"></ShortPost>
-            <button class="font-medium text-17px flex items-center hover:opacity-80" @click="loadMostCommented">
-                <div class="font-medium">Показать ещё</div>
-                <div class="ms-2">
-                    <icon-chewron-down class="w-5 h-5"/>
+            <button
+                class="font-medium text-17px  hover:opacity-80"
+                @click="loadMostCommented"
+            >
+                <div v-if="!mostCommentedIsLoading" class="flex items-center">
+                    <div class="font-medium">Показать ещё</div>
+                    <div class="ms-2">
+                        <icon-chewron-down class="w-5 h-5"/>
+                    </div>
+                </div>
+                <div v-else>
+                    <animation-loader/>
                 </div>
             </button>
+
         </div>
     </div>
 
@@ -30,15 +39,16 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref } from "vue";
-import Post from "@/Components/Post.vue";
+import Post from "@/Components/Post/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import {router, usePage} from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import IconChewronDown from "@/Components/Icons/IconChewronDown.vue";
-import ShortPost from "@/Components/ShortPost.vue";
+import ShortPost from "@/Components/Post/ShortPost.vue";
 import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
+import AnimationLoader from "@/Components/Animations/AnimationLoader.vue";
 
 defineOptions({ layout: MainLayout });
 
@@ -49,16 +59,23 @@ const props = defineProps({
     close_auth_modal: false,
 });
 
+
+const mostCommentedIsLoading = ref(false);
+
 const mostCommentedPage = ref(2);
 
 const loadMostCommented = async () => {
-    await axios.get(route('posts.most-commented', [mostCommentedPage.value]))
-        .then((res) => {
-            res.data.forEach((post) => {
-                props.most_commented_posts.push(post);
+    if (!mostCommentedIsLoading.value) {
+        mostCommentedIsLoading.value = true;
+        await axios.get(route('posts.most-commented', [mostCommentedPage.value]))
+            .then((res) => {
+                res.data.forEach((post) => {
+                    props.most_commented_posts.push(post);
+                })
             })
-        })
-    mostCommentedPage.value++;
+        mostCommentedPage.value++;
+        mostCommentedIsLoading.value = false;
+    }
 }
 
 

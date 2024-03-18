@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Jobs\AddUserRoleToNewUserJob;
-use App\Models\Role;
+use App\Models\Subsite;
 use App\Models\User;
 
 class UserObserver
@@ -13,8 +13,10 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        // $user_role = Role::where('role','user')->first();
-        // $user->roles()->attach($user_role->id);
+        Subsite::create([
+            'user_id' => $user->id,
+        ]);
+
         dispatch(new AddUserRoleToNewUserJob($user));
     }
 

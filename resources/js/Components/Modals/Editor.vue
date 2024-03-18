@@ -36,13 +36,6 @@
                                         class="w-[80px] h-[80px] stroke-[1.2] cursor-pointer opacity-60"
                                     ></IconPhoto>
                                 </div>
-                                <!-- <PrimaryButton
-                                    @click="clickFilePond()"
-                                    textColor="gray-500"
-                                    class="bg-gray-100 px-5 py-3 hover:bg-orange-500 hover:text-white"
-                                >
-                                    Изображение
-                                </PrimaryButton> -->
                             </div>
                             <div
                                 v-if="post && (post.image || form.image)"
@@ -51,27 +44,16 @@
                                 <div
                                     class="flex text-center justify-center items-center"
                                 >
-                                    <AnimationLoader
-                                        v-if="imageIsLoading"
-                                        class="absolute w-10 h-10"
-                                    ></AnimationLoader>
-                                    <img
+                                    <uploadable-lazy-media
+                                        v-if="post.image || form.image"
+                                        rounded="xl"
+                                        class="cursor-pointer object-cover w-[100px] h-[100px]"
+                                        :media="post.image ?? form.image"
                                         @click="
                                             form.image = null;
                                             imageIsLoading = false;
                                             post.image = null;
                                         "
-                                        class="rounded-xl cursor-pointer object-cover w-full h-full"
-                                        :src="
-                                            !imageIsLoading
-                                                ? route('im', [
-                                                      post.image,
-                                                      '200',
-                                                  ])
-                                                : form.image
-                                        "
-                                        alt=""
-                                        style="width: 100px; height: 100px"
                                     />
                                 </div>
                             </div>
@@ -206,6 +188,8 @@ import IconDown from "../Icons/IconDown.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import IconCheck from "../Icons/IconCheck.vue";
 import pkg from 'lodash/function.js';
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import UploadableLazyMedia from "@/Components/Media/UploadableLazyMedia.vue";
 
 const {throttle} = pkg;
 

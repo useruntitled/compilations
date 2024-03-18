@@ -11,10 +11,12 @@ use App\Listeners\CommentDeletedListener;
 use App\Listeners\ReputationDeletedListener;
 use App\Listeners\ReputationPutListener;
 use App\Models\Comment;
+use App\Models\Media;
 use App\Models\Post;
 use App\Models\Reputation;
 use App\Models\User;
 use App\Observers\CommentObserver;
+use App\Observers\MediaObserver;
 use App\Observers\PostObserver;
 use App\Observers\ReputationObserver;
 use App\Observers\UserObserver;
@@ -61,6 +63,7 @@ class EventServiceProvider extends ServiceProvider
         Comment::class => [CommentObserver::class],
         // Reply::class => [ReplyObserver::class],
         Reputation::class => [ReputationObserver::class],
+        Media::class => [MediaObserver::class,]
     ];
 
     /**

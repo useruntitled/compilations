@@ -6,22 +6,13 @@
             class="my-2"
         >
             <div class="flex items-center">
-                <!-- <img
-                    :src="
-                        route('im', [page.props.auth.user.avatar, ['100x100']])
-                    "
-                    class="rounded-full inline-block"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                /> -->
-                <LazyImage
-                    :preview="`/media/${page.props.auth.user.avatar_preview}`"
-                    :then="route('im', [page.props.auth.user.avatar, [100]])"
-                    class="rounded-full inline-block border-2 object-cover border-bck border"
-                    alt=""
-                    style="width: 45px; height: 45px"
-                >
-                </LazyImage>
+                <lazy-media
+                    :media="page.props.auth.user.avatar"
+                    width="45"
+                    height="45"
+                    rounded="full"
+                    class="inline-block"
+                />
                 <span
                     class="whitespace-no-wrap overflow-hidden flex flex-col ms-2"
                 >
@@ -69,6 +60,7 @@ import IconPencil from "@/Components/Icons/IconPencil.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import { usePage } from "@inertiajs/vue3";
 import LazyImage from "@/Components/LazyImage.vue";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
 
 const page = usePage();
 </script>

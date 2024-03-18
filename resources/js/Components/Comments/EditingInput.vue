@@ -4,8 +4,7 @@
             v-focus
             @sendComment="saveComment"
             :commentIsCreated="commentIsUpdated"
-            :text="text"
-            :image="image"
+            :comment="comment"
         >
             <template #button>
                 <FlatPrimaryButton
@@ -25,6 +24,7 @@ import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import CommentInput from "./CommentInput.vue";
 import axios from "@/AxiosWrapper.js";
 import axiosInstance from "@/AxiosWrapper.js";
+import {update} from "@/Components/Comments/api.js";
 
 const vFocus = {
     mounted: (el) => el.click(),
@@ -35,86 +35,25 @@ const injectedCallMessage = inject("callMessage");
 axiosInstance.setCallbackFunction(injectedCallMessage);
 
 const props = defineProps({
-    commentIsCreated: false,
-    type: null,
-    id: null,
-    text: null,
-    image: null,
+    comment: null,
 });
 
 const setInputValuesToNull = inject("setInputValuesToNull");
 
 const commentIsUpdated = ref(false);
 
+const onSuccess = (res) => {
+    console.log(res);
+    if (res?.status === 200) {
+        props.commentIsUpdated = true;
+        setInputValuesToNull();
+        emit("updateCommentValue", res.data);
+    }
+}
+
 const saveComment = (form) => {
-    const formData = new FormData();
-    formData.append("_method", "PUT");
-    formData.append("id", props.id);
-    formData.append("text", form.content);
-    formData.append("hasImage", form.image?.hasImage);
-    formData.append("image", form.image?.image);
-    axios
-        .post(route("comment.update"), formData)
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            console.log(res);
-            if (res.status == 200) {
-                props.commentIsUpdated = true;
-                setInputValuesToNull();
-                emit("updateCommentValue", res.data);
-            }
-        });
+    update(form, onSuccess);
 };
 
 const emit = defineEmits(["updateCommentValue", "closeEditingInterface"]);
 </script>
-<!-- <script>
-
-
-export default {
-    inject: ["setInputValuesToNull"],
-    props: {
-        commentIsCreated: false,
-        type: null,
-        id: null,
-        text: null,
-        image: null,
-    },
-    data() {
-        return {
-            commentIsUpdated: false,
-        };
-    },
-    methods: {
-        saveComment(form) {
-            const formData = new FormData();
-            formData.append("_method", "PUT");
-            formData.append("id", this.id);
-            formData.append("text", form.content);
-            formData.append("hasImage", form.image?.hasImage);
-            formData.append("image", form.image?.image);
-            axios
-                .post(route("comment.update"), formData)
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    console.log(res);
-                    if (res.status == 200) {
-                        this.commentIsUpdated = true;
-                        this.setInputValuesToNull();
-                        this.$emit("updateCommentValue", res.data);
-                    }
-                });
-        },
-    },
-    emits: [
-        "updateCommentOrReply",
-        "closeEditingInterface",
-        "updateCommentValue",
-    ],
-    components: { CommentInput, PrimaryButton, FlatPrimaryButton },
-};
-</script> -->

@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FilmController;
-use App\Http\Controllers\ImageController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
@@ -19,9 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(ImageController::class)->group(function () {
+Route::controller(MediaController::class)->group(function () {
     Route::get('image/{filename}/{dimensions}', 'crop')->name('image.crop');
-    Route::get('im/{filename}/x/{scale}', 'index')->name('im');
+    Route::get('im/{filename?}/x/{scale?}', 'index')->name('im');
+    Route::post('media/upload/without-save', 'uploadWithoutSave')->name('media.upload.without-save');
 });
 
 Route::controller(FilmController::class)->group(function () {
@@ -31,7 +32,7 @@ Route::controller(FilmController::class)->group(function () {
 Route::controller(CommentController::class)->group(function () {
     Route::get('comment/{id}')->name('comment.get');
     Route::get('comments/{post_id}', 'getByPostId')->name('comments.get');
-    Route::post('comment', 'store')->name('comment.create')->middleware('auth');
+    Route::post('comment', 'store')->name('comment.store')->middleware('auth');
     Route::delete('comment', 'delete')->name('comment.delete')->middleware('auth');
     Route::put('comment', 'update')->name('comment.update')->middleware('auth');
 });
@@ -78,7 +79,7 @@ Route::controller(NotificationController::class)->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('user/avatar', [RegisteredUserController::class, 'uploadAvatar'])->name('user.upload.avatar');
-    Route::post('user/background-image', [RegisteredUserController::class, 'uploadBackgroundImage'])->name('user.upload.background.image');
+    Route::post('user/cover', [RegisteredUserController::class, 'uploadCover'])->name('user.upload.subsite.cover');
 });
 
 Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {

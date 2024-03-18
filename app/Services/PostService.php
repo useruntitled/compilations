@@ -52,14 +52,13 @@ class PostService
             ->skip(($page - 1) * config('post.per_page') * 2)
             ->take(config('post.per_page') * 2)
             ->get();
-        $this->countView($posts);
         return ShortPostFeedResource::collection($posts);
     }
 
     public function getDrafts(?int $page = 1)
     {
-        $drafts = Post::with('films.genres')
-            ->withCount('films')
+        $drafts = Post::with(['films.genres', 'image', 'user.avatar'])
+            ->withCount('films',)
             ->where('user_id', Auth::user()->id)
             ->whereNull('published_at')
             ->whereNull('declined_at')
@@ -72,7 +71,7 @@ class PostService
 
     public function getNew(?int $page = 1)
     {
-        $posts = Post::with(['user' => ['roles'], 'reputation', 'films' => ['genres']])->published()
+        $posts = Post::with(['user' => ['roles'], 'reputation', 'films' => ['genres'], 'image'])->published()
             ->withCount(['comments', 'bookmarks', 'films'])
             ->latest()
             ->skip(($page - 1) * $this->per_page)

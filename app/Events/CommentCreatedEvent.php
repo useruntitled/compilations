@@ -39,7 +39,6 @@ class CommentCreatedEvent implements ShouldBroadcast, ShouldQueue
 
     public function broadcastWith(): array
     {
-        // $this->comment->load(['post', 'user']);
         return [
             'data' => new PusherCommentResource($this->comment),
         ];

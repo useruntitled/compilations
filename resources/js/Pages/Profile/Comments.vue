@@ -2,24 +2,24 @@
     <InfiniteScrollContainer @load="handleLoadEvent()">
         <div v-for="comment in comments" class="my-5">
             <Link :href="route('comment.redirect', [comment.id])">
-                <div class="bg-white rounded-xl p-5 sm:px-10 xs:px-4">
+                <div class="bg-white rounded-xl py-3 sm:px-5 xs:px-4">
                     <header>
                         <UserTabletWithElementInside :user="comment.user">
                             <template #content>
-                                <div class="text-xs">
+                                <div class="text-13px text-secondary">
                                     {{ comment.timestamp }}
                                 </div>
                             </template>
                         </UserTabletWithElementInside>
                     </header>
-                    <main>
+                    <main class="my-4">
                         <p v-html="comment.text"></p>
                         <div v-if="comment.image">
-                            <LazyImage
-                                :preview="'/media/' + comment.image_preview"
-                                :then="route('im', [comment.image, 1000])"
-                                class="rounded-xl h-[200px]"
-                            ></LazyImage>
+                            <fluid-lazy-media
+                                :media="comment.image"
+                                max-height="200"
+                                rounded="xl"
+                            />
                         </div>
                     </main>
                 </div>
@@ -39,6 +39,8 @@ import LazyImage from "@/Components/LazyImage.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import axios from "axios";
 import MainLayout from "@/Layouts/MainLayout.vue";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
 
 defineOptions({ layout: [MainLayout, PageProfileLayout] });
 
