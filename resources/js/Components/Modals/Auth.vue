@@ -7,7 +7,7 @@
         "
         v-if="showModal"
     >
-        <div class="md:px-20  p-5 py-20">
+        <div class="md:px-20  sm:p-5 xs:px-2  py-20">
 <!--            <header class="text-center mx-auto w-full flex">-->
 <!--                <button-->
 <!--                    :class="{ 'bg-orange-400 text-white ': isLoginForm }"-->

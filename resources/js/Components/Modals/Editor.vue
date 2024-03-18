@@ -94,6 +94,7 @@
                                     @click="addFilm(film)"
                                 >
                                     {{ film.name_ru ?? film.name_en }}
+                                    <span class="text-secondary text-sm">{{ film.start_year ?? film.year }}</span>
                                 </button>
                             </section>
                         </div>
@@ -110,7 +111,8 @@
                                     class="font-medium"
                                     @click="removeFilm(film.id)"
                                 >
-                                    {{ film.name_ru ?? film.name_en }}
+                                    {{ film.name_ru ?? film.name_en }} <span
+                                    class="text-secondary text-sm">{{ film.start_year ?? film.year }}</span>
                                 </button>
                                 <div class="flex flex-col items-center">
                                     <button
