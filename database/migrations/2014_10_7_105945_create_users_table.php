@@ -41,12 +41,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $service = new MediaService;
-        $users = User::all();
-        foreach ($users as $u) {
-            $service->delete($u->avatar);
-            $service->delete($u->background_image);
-        }
+        $files = Storage::disk('media')->allFiles();
+        Storage::disk('media')->delete($files);
         Schema::dropIfExists('users');
     }
 };

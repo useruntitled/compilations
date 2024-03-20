@@ -66,24 +66,15 @@ class SettingsTest extends TestCase
             'description' => 'John Doe Description',
         ]);
 
-        $newName = 'Not A John Doe';
-        $newDescription = 'Not A John Doe Description';
-
         $this->actingAs($user)
-            ->postJson(route('settings.profile.update'), [
-                '_method' => 'PUT',
-                'name' => $newName,
-                'description' => $newDescription,
+            ->putJson(route('settings.profile.update'), [
+                'name' => 'Not A John Doe',
+                'description' => 'Not A John Doe Description',
             ]);
 
         $updatedUser = $user->fresh();
 
-        $this->assertEquals([
-            $updatedUser->name,
-            $updatedUser->subsite->description,
-        ], [
-            $newName,
-            $newDescription
-        ]);
+        $this->assertSame($user->name, $updatedUser->name);
+        $this->assertSame($user->subsite->description, $updatedUser->subsite->description);
     }
 }

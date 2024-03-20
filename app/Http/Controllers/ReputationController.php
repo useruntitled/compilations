@@ -23,7 +23,7 @@ class ReputationController extends Controller
         }
 
         // $this->returnReputationToReputation();
-        return $reputation->reputation_to->rep;
+        return $reputation->reputation_to->reputation;
     }
 
     public function patch($reputation, $request)

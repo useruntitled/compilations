@@ -39,11 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $service = new MediaService();
-        $comments = Comment::all();
-        foreach ($comments as $c) {
-            $service->delete($c->image);
-        }
         Schema::dropIfExists('comments');
     }
 };

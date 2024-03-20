@@ -16,7 +16,7 @@ class KarmaService
     public function __construct()
     {
         $this->KARMA_CONDITION_VALUE = config('karma.posts_creating_condition');
-        $this->creatorRole = Role::where('role', 'creator')->first();
+        $this->creatorRole = Role::where('name', Role::CREATOR)->first();
     }
 
     protected function attachCreatorRole(User $user)

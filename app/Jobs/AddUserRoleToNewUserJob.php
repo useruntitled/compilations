@@ -28,7 +28,7 @@ class AddUserRoleToNewUserJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $user_role = Role::where('role', 'user')->firstOrFail();
+        $user_role = Role::where('name', Role::USER)->firstOrFail();
         $this->user->roles()->attach($user_role->id);
         $this->user->save();
     }

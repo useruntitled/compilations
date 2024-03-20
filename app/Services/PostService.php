@@ -23,13 +23,13 @@ class PostService
     public function getPopular(?int $page = 1)
     {
         $posts = Post::with(['user' => ['roles'], 'films' => ['genres'],
-                'reputation' => function ($query) {
+            'reputationRelation' => function ($query) {
                     $query->where('action', 'up');
                 },
             ])
                 ->published()
-                ->withCount(['comments', 'bookmarks', 'reputation', 'films'])
-                ->orderByDesc('reputation_count')
+            ->withCount(['comments', 'bookmarks', 'reputationRelation', 'films'])
+            ->orderByDesc('reputation_relation_count')
                 ->orderByDesc('comments_count')
                 ->orderByDesc('bookmarks_count')
                 ->skip(($page - 1) * config('post.per_page'))
@@ -42,7 +42,7 @@ class PostService
     public function getMostCommented(?int $page = 1)
     {
         $posts = Post::with(['user' => ['roles'], 'films' => ['genres'],
-            'reputation' => function ($query) {
+            'reputationRelation' => function ($query) {
                 $query->where('action', 'up');
             },
         ])
@@ -71,7 +71,7 @@ class PostService
 
     public function getNew(?int $page = 1)
     {
-        $posts = Post::with(['user' => ['roles'], 'reputation', 'films' => ['genres'], 'image'])->published()
+        $posts = Post::with(['user' => ['roles'], 'reputationRelation', 'films' => ['genres'], 'image'])->published()
             ->withCount(['comments', 'bookmarks', 'films'])
             ->latest()
             ->skip(($page - 1) * $this->per_page)
@@ -90,7 +90,7 @@ class PostService
 
     public function getRandom(?int $page = 1, ?int $post_id)
     {
-        $posts = Post::with(['user' => ['roles'], 'films', 'reputation'])
+        $posts = Post::with(['user' => ['roles'], 'films', 'reputationRelation'])
                 ->published()
                 ->where('id','!=',$post_id)
                 ->withCount(['comments', 'bookmarks', 'films'])

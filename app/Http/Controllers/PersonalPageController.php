@@ -47,7 +47,7 @@ class PersonalPageController extends Controller
     public function getPosts($user_id, $page)
     {
         $posts = Post::query()->with([
-            'reputation',
+            'reputationRelation',
             'user' => ['roles'],
             'films' => ['genres'],
         ])->where('user_id', $user_id)

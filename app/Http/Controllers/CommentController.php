@@ -58,10 +58,7 @@ class CommentController extends Controller
         ]);
 
         if ($request->image != null) {
-            MediaUploader::toObject($request->input('image')['href'], [
-                'object' => 'comment',
-                'object_id' => $comment->id,
-            ]);
+            MediaUploader::toObject($request->input('image')['href'], $comment);
         }
 
         event(new CommentCreatedEvent($comment));
@@ -133,7 +130,7 @@ class CommentController extends Controller
     public function getByPostId($post_id)
     {
         $comments = Comment::where('post_id', $post_id)
-            ->with(['replies', 'user' => ['roles'], 'reputation', 'comment', 'image'])
+            ->with(['replies', 'user' => ['roles'], 'reputationRelation', 'comment', 'image'])
             ->latest()
             ->get();
 

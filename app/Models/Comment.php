@@ -26,9 +26,10 @@ class Comment extends Model
     ];
 
     protected $appends = [
-        'rep', 'timestamp',
+        'timestamp',
         'is_deleted',
         'is_active',
+        'reputation',
     ];
 
     protected $with = [

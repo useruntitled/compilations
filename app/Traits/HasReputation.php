@@ -15,23 +15,19 @@ trait HasReputation
         $this->classname = __CLASS__;
     }
 
-    public function reputation(): MorphMany
+    public function reputationRelation(): MorphMany
     {
-        return $this->morphMany(Reputation::class, 'reputation_to');
+        return $this->morphMany(Reputation::class, 'reputation_to', 'reputation_to_type', 'reputation_to_id');
     }
 
-    // public function getIsUserOwnReputationAttribute()
-    // {
-    //     return $this->reputation?->reputation_to_id == Auth::user()->id;
-    // }
 
-    public function getRepAttribute()
+    public function getReputationAttribute()
     {
-        $pluses = $this->reputation ?
-        $this->reputation->where('action', 'up')
+        $pluses = $this->reputationRelation ?
+            $this->reputationRelation->where('action', 'up')
             ->where('reputation_to_type', $this->classname)->count() : 0;
-        $minuses = $this->reputation ?
-        $this->reputation->where('action', 'down')
+        $minuses = $this->reputationRelation ?
+            $this->reputationRelation->where('action', 'down')
             ->where('reputation_to_type', $this->classname)->count() : 0;
 
         $user_action = Auth::user() ? $this->getUserActionReputation() : null;
@@ -47,7 +43,7 @@ trait HasReputation
 
     protected function getUserActionReputation()
     {
-        $rep = $this->reputation ? $this->reputation->where('user_id', Auth::user()->id)
+        $rep = $this->reputationRelation ? $this->reputationRelation->where('user_id', Auth::user()->id)
             ->where('reputation_to_type', $this->classname)->first() : null;
         if ($rep != null) {
             return $rep->action;

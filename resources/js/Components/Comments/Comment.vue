@@ -86,7 +86,7 @@
                 <footer class="flex items-center">
                     <Reputation
                         type="Comment"
-                        :reputation="comment.rep"
+                        :reputation="comment.reputation"
                     ></Reputation>
                     <button
                         class="ms-2 text-secondary text-sm"

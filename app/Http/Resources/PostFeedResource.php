@@ -24,7 +24,7 @@ class PostFeedResource extends JsonResource
             'description' => $this->description,
             'timestamp' => $this->timestamp,
             'user' => new CompressedUserResource($this->user),
-            'rep' => $this->rep,
+            'reputation' => $this->reputation,
             'films' => $films,
             'comments_count' => $this->comments_count,
             'films_count' => $this->films_count,

@@ -47,8 +47,9 @@
                 </div>
                 <div class="m-0  flex items-center">
             <span class="me-0"
-            ><Reputation type="Post" :reputation="post.rep"></Reputation
-            ></span>
+            >
+                <reputation type="Post" :reputation="post.reputation"/>
+            </span>
                     <span class="me-2 text-slate-700 font-[15px]"
                     ><LinkIcon
                         :text="post.comments_count"

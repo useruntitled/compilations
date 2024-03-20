@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\=Post>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
  */
 class PostFactory extends Factory
 {
@@ -18,9 +18,9 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
+            'title' => '123',
+            'slug' => '123',
             'user_id' => User::factory(),
-            'title' => fake()->words(20, true),
-            'description' => fake()->words(20, true),
         ];
     }
 }

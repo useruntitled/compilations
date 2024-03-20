@@ -2,12 +2,12 @@
     <!--    <div class="w-[45px] h-[45px] border-gray-100"></div>-->
     <div class="overflow-hidden" :style="[heightStyle]" ref="block">
         <div class="relative flex justify-center overflow-hidden" style="height: 100%">
-            <img class="absolute w-full h-full z-10 top-0" :src="media.base64_preview"
+            <img class="absolute w-full h-full z-[2] top-0" :src="media.base64_preview"
                  :class="[roundedClass, props.class, borderClass]"
                  alt=""
             >
 
-            <img v-if="! isVideo" class="absolute backdrop-blur-3xl object-contain top-0 bottom-0 mx-auto z-20"
+            <img v-if="! isVideo" class="absolute backdrop-blur-3xl object-contain top-0 bottom-0 mx-auto z-[4]"
                  @load="isLoaded = true" :src="src"
                  :class="[roundedClass, props.class, borderClass, showClass]"
                  :style="[heightStyle, widthStyle]"
@@ -16,7 +16,7 @@
                  loading="lazy"
             >
 
-            <video v-else class="absolute backdrop-blur-3xl object-contain top-0 bottom-0 mx-auto z-20"
+            <video v-else class="absolute backdrop-blur-3xl object-contain top-0 bottom-0 mx-auto z-[4]"
                    loop autoplay muted @loadeddata="isLoaded = true"
                    :class="[roundedClass, props.class, borderClass, showClass]"
                    :style="[heightStyle, widthStyle]"

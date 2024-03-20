@@ -27,7 +27,7 @@ class CommentResource extends JsonResource
             'text' => $this->text,
             'image' => $this->image,
             'image_preview' => $this->image_preview,
-            'rep' => $this->rep,
+            'reputation' => $this->reputation,
 
             'replies_count' => $this->replies->count(),
 

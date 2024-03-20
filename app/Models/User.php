@@ -4,12 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Casts\ReputationCast;
 use App\Services\KarmaService;
+use App\Traits\Adminable;
 use App\Traits\HasAvatar;
 use App\Traits\HasSubsite;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,14 +25,9 @@ class User extends Authenticatable implements  MustVerifyEmail
     use Notifiable;
     use HasSubsite;
     use HasAvatar;
+    use Adminable;
 
     const TABLE = 'users';
-
-//     const DEFAULT = 1;
-//
-//     const MODERATOR = 2;
-//
-//     const ADMIN = 3;
 
     /**
      * The attributes that are mass assignable.
@@ -89,21 +87,21 @@ class User extends Authenticatable implements  MustVerifyEmail
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->role == 'admin'));
+        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::ADMIN));
     }
 
     protected function isCreator(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->role == 'creator'));
+        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::CREATOR));
     }
 
     protected function isModer(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->role == 'moder'));
+        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::MODER));
     }
 
 
@@ -134,14 +132,14 @@ class User extends Authenticatable implements  MustVerifyEmail
         return $service->calculateUserKarma($this);
     }
 
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
     }
 
     public function posts(): HasMany
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class, 'user_id');
     }
 
     public function comments(): HasMany

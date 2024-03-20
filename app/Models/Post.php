@@ -41,17 +41,18 @@ class Post extends Model implements Sitemapable
         'description',
         'slug',
         'views', 'visits',
-        'published_at',
     ];
 
     protected $appends = [
-        'rep', 'timestamp',
-        'has_bookmark', 'is_active'
+        'timestamp',
+        'has_bookmark', 'is_active',
+        'reputation',
     ];
 
     protected $with = [
         'user',
     ];
+
 
     protected static function booted(): void
     {
@@ -90,14 +91,14 @@ class Post extends Model implements Sitemapable
 
     protected function hasBookmark(): Attribute
     {
-        $this->bookmarks ?? $this->bookmarks();
+            $this->bookmarks ?? $this->bookmarks();
 
         return Attribute::get(fn () => $this->bookmarks->contains('user_id', auth()->id()));
     }
 
     protected function timestamp(): Attribute
     {
-        return Attribute::get(fn () => (new Carbon($this->published_at))->diffForHumans());
+        return Attribute::get(fn() => $this->published_at->diffForHumans());
     }
 
     protected function isActive(): Attribute
