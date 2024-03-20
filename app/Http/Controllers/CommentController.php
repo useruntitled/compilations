@@ -52,7 +52,7 @@ class CommentController extends Controller
         $comment = Comment::create([
             'post_id' => $request->post_id,
             'comment_id' => $request->comment_id,
-            'text' => rtrim($request->text, '<div><br></div>'),
+            'text' => preg_replace('/(<div><br><\/div>\s*)+$/', '', $request->text),
             'level' => $level,
             'user_id' => Auth::user()->id,
         ]);
@@ -64,7 +64,6 @@ class CommentController extends Controller
             ]);
         }
 
-        $comment->load(['reputation']);
         event(new CommentCreatedEvent($comment));
         return StoreCommentResource::make($comment);
     }

@@ -41,7 +41,7 @@ const page = usePage();
 
 const form = reactive({
     username: page.props.auth.user.name,
-    description: page.props.auth.user.description,
+    description: page.props.auth.user.subsite?.description,
 });
 
 const isUpdated = ref(false);

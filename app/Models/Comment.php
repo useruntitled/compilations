@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Media\MediaService;
 use App\Traits\Declineable;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
@@ -119,5 +120,4 @@ class Comment extends Model
 
         return Attribute::get(fn () => $name.'__preview'.".$ext");
     }
-
 }

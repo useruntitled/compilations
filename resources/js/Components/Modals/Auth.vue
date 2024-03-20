@@ -7,49 +7,7 @@
         "
         v-if="showModal"
     >
-        <div class="md:px-20  sm:p-5 xs:px-2  py-20">
-<!--            <header class="text-center mx-auto w-full flex">-->
-<!--                <button-->
-<!--                    :class="{ 'bg-orange-400 text-white ': isLoginForm }"-->
-<!--                    @click="-->
-<!--                        currentForm = 'LoginForm';-->
-<!--                        errors = {};-->
-<!--                    "-->
-<!--                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"-->
-<!--                >-->
-<!--                    Вход-->
-<!--                </button>-->
-<!--                <button-->
-<!--                    :class="{ 'bg-orange-400 text-white ': isRegisterForm }"-->
-<!--                    @click="-->
-<!--                        currentForm = 'RegisterForm';-->
-<!--                        errors = {};-->
-<!--                    "-->
-<!--                    class="mx-2 ms-0 px-4 py-2 rounded-lg text-black font-medium hover:bg-orange-400 hover:text-white w-full"-->
-<!--                >-->
-<!--                    Регистрация-->
-<!--                </button>-->
-<!--            </header>-->
-<!--            <div>-->
-<!--                <div-->
-<!--                    v-if="Object.keys(errors).length"-->
-<!--                    class="bg-red-200 rounded px-2 py-3 my-2"-->
-<!--                >-->
-<!--                    <div-->
-<!--                        v-for="error in Object.keys(errors)"-->
-<!--                        class="text-sm text-slate-900"-->
-<!--                    >-->
-<!--                        {{ errors[error][0] }}-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <main>-->
-<!--                <component-->
-<!--                    @register="register"-->
-<!--                    @login="login"-->
-<!--                    :is="forms[currentForm]"-->
-<!--                ></component>-->
-<!--            </main>-->
+        <div class="md:px-20  sm:px-5 sp:py-5 xs:px-2  py-20">
             <section class="w-full space-y-10">
                 <button class="w-full justify-center bg-[rgb(24,_24,_27)] rounded-2xl px-10 py-2 space-x-2 flex items-center" @click="openAuthWindow('yandex')">
                     <span>

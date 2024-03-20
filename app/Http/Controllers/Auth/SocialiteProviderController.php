@@ -24,13 +24,10 @@ class SocialiteProviderController extends Controller
     {
         $socialiteUser = Socialite::driver($provider)->user();
 
-
         $user = User::where([
             'provider' => $provider,
             'provider_user_id' => $socialiteUser->getId(),
         ])->first();
-
-
 
         if(!$user) {
             $hasImage = true;
@@ -45,13 +42,10 @@ class SocialiteProviderController extends Controller
                 'email_verified_at' => now(),
             ]);
             if ($hasImage) {
-                $avatar = $avatarParser->get($socialiteUser->getAvatar());
-                MediaUploader::upload($avatar, [
-                    'object' => 'user',
-                    'object_id' => $user->id,
-                ]);
+                $avatar = $avatarParser->make($socialiteUser->getAvatar());
+                MediaUploader::upload($avatar, $user);
             } else {
-                $user->generateAvatar();
+                $user->makeAvatar();
             }
             $user->update();
         }

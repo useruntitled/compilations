@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        $admin->generateAvatar();
+        $admin->makeAvatar();
 
 
 //        $admin->avatar()->attach();

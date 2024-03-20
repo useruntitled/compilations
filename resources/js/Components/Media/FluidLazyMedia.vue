@@ -1,28 +1,28 @@
 <template>
     <!--    <div class="w-[45px] h-[45px] border-gray-100"></div>-->
-    <div class="relative" :style="[widthStyle, heightStyle]">
-        <div class="flex justify-center w-full">
-            <div class="absolute w-full">
-                <div v-if="! isVideo">
-                    <img class="object-scale-down w-full" @load="isLoaded = true" :src="src"
-                         :class="[roundedClass, props.class, borderClass, showClass]"
-                         :style="[widthStyle, heightStyle]"
-                         alt="">
-                </div>
-                <div v-else>
-                    <video class="object-scale-down w-full" loop autoplay muted @loadeddata="isLoaded = true"
-                           :class="[roundedClass, props.class, borderClass, showClass]"
-                           :style="[widthStyle, heightStyle]"
-                    >
-                        <source :src="media.href" type="video/mp4">
-                    </video>
-
-                </div>
-            </div>
-            <img class="w-full" :src="media.base64_preview"
+    <div class="overflow-hidden" :style="[heightStyle]" ref="block">
+        <div class="relative flex justify-center overflow-hidden" style="height: 100%">
+            <img class="absolute w-full h-full z-10 top-0" :src="media.base64_preview"
                  :class="[roundedClass, props.class, borderClass]"
-                 :style="[heightStyle]"
-                 alt="">
+                 alt=""
+            >
+
+            <img v-if="! isVideo" class="absolute backdrop-blur-3xl object-contain top-0 bottom-0 mx-auto z-20"
+                 @load="isLoaded = true" :src="src"
+                 :class="[roundedClass, props.class, borderClass, showClass]"
+                 :style="[heightStyle, widthStyle]"
+                 :type="`image/${media.format}`"
+                 alt=""
+                 loading="lazy"
+            >
+
+            <video v-else class="absolute backdrop-blur-3xl object-contain top-0 bottom-0 mx-auto z-20"
+                   loop autoplay muted @loadeddata="isLoaded = true"
+                   :class="[roundedClass, props.class, borderClass, showClass]"
+                   :style="[heightStyle, widthStyle]"
+            >
+                <source :src="media.href" type="video/mp4">
+            </video>
         </div>
     </div>
 </template>
@@ -38,6 +38,12 @@ const props = defineProps({
     maxWidth: null,
 });
 
+const block = ref(null);
+
+const ratio = computed(() => {
+    return props.media.width / props.media.height;
+})
+
 const showClass = computed(() => {
     if (!isLoaded.value) return 'hidden';
 });
@@ -46,28 +52,47 @@ const roundedClass = computed(() => {
 });
 
 const borderClass = computed(() => {
-    return `border-[${props.border}px] border-gray-100`;
+    return `border-[${props.border ?? 0}px] border-gray-100`;
 });
 
+
+const getRatio = (w, h) => {
+    return Math.abs(w / h);
+}
+
+const gwd = (w1, w2) => {
+    if (w1 > w2) return w1 / w2;
+    return w2 / w1;
+}
+
 const widthStyle = computed(() => {
-    if (props.maxWidth != null) {
-        if (props.media.width <= props.maxWidth) {
-            return `width: ${props.media.width}px`;
-        }
-        return `width: ${props.maxWidth}`;
-    }
-    return `width: none`;
+
+    return "width: auto";
 });
 
 const heightStyle = computed(() => {
-    if (props.maxHeight != null) {
+    if (props.maxHeight != null && block.value) {
         if (props.media.height <= props.maxHeight) {
+            if (props.media.width < block.value.clientWidth) {
+                if ((props.media.height * (Math.abs(block.value.clientWidth / props.media.width))) <= props.maxHeight) {
+                    return `height: ${props.media.height * (Math.abs(block.value.clientWidth / props.media.width))}px`;
+                }
+                return `height: ${props.media.height / (Math.abs(block.value.clientWidth / props.media.width))}px`;
+            }
             return `height: ${props.media.height}px`;
         }
-        return `height: ${props.maxHeight}px`;
+        if (props.media.width <= block.value.clientWidth) {
+            return `height: ${props.media.height / (Math.abs(props.media.height / props.maxHeight))}px`;
+
+        }
+        if ((props.media.height / (Math.abs(props.media.width / block.value.clientWidth))) <= props.maxHeight) {
+            return `height: ${props.media.height / (Math.abs(props.media.width / block.value.clientWidth))}px`;
+        }
+        return `height: ${props.media.height / (Math.abs(props.media.height / props.maxHeight))}px`;
     }
-    return `height: none`;
+    return "height: auto";
 });
+
 
 const src = computed(() => {
     return isLoaded.value ? props.media.href : props.media.base64_preview;

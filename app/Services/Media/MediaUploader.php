@@ -19,13 +19,13 @@ class MediaUploader
 
         $array = (array)$data->except('file');
 
-        $model = $object['object'];
+        $model = get_class($object);
 
         Media::create([
             ...$array,
-            'user_id' => Auth::id() ?? $object['object_id'],
+            'user_id' => Auth::id() ?? $object->id,
             'media_to_type' => Relation::getMorphedModel($model),
-            'media_to_id' => $object['object_id'],
+            'media_to_id' => $object->id,
         ]);
     }
 

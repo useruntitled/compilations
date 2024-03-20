@@ -163,10 +163,7 @@ class PostController extends Controller
         $post = Post::findOrFail($request->id);
 
         if ($request->hasFile('image')) {
-            return json_encode($service->upload($request->file('image'), [
-                'object' => 'post',
-                'object_id' => $post->id,
-            ]));
+            return json_encode($service->upload($request->file('image'), $post));
         }
         abort(422);
     }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reputations', function (Blueprint $table) {
             $table->id();
 
-            $table->set('action', ['up', 'down']);
+            $table->enum('action', ['up', 'down']);
 
             $table->morphs('reputation_to');
 

@@ -8,6 +8,11 @@
             <hr>
             <p v-html="comment.text">
             </p>
+            <fluid-lazy-media
+                v-if="comment.image"
+                :media="comment.image"
+                :max-height="200"
+            />
         </template>
         <template #footer>
             <button @click="showModal = true">Удалить комментарий</button>
@@ -22,6 +27,7 @@ import AdminViewCard from "@/Components/Admin/AdminViewCard.vue";
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import DeclineModal from "@/Components/Admin/DeclineModal.vue";
 import {ref} from "vue";
+import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
 
 defineOptions({
     layout: PanelLayout,

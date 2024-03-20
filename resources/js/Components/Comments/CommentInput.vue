@@ -17,6 +17,7 @@
             class="focus:outline-none text-17px hover:cursor-text"
             :class="placeholderClass"
             @paste.prevent="handlePaste($event)"
+            @keydown.exact.enter="handleSend"
             @drop.prevent="handlePaste($event)"
             @input="handleInput()"
             v-html="comment?.text"

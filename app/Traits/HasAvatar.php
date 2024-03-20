@@ -14,13 +14,8 @@ trait HasAvatar
         return $this->morphOne(Media::class, 'media_to')->latest();
     }
 
-    public function generateAvatar(): void
+    public function makeAvatar(): void
     {
-        $image = ImageGeneratorService::make();
-
-        MediaUploader::upload($image, [
-            'object' => 'user',
-            'object_id' => $this->id,
-        ]);
+        MediaUploader::upload(ImageGeneratorService::make(), $this);
     }
 }

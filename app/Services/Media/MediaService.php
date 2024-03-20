@@ -16,7 +16,7 @@ class MediaService
         $this->handler = $handler;
     }
 
-    public function get(string $filename, ?int $scale): \Illuminate\Http\Response
+    public function get(string $filename, ?int $scale)
     {
         $result = Cache::remember("image:$filename", now()->addDays(7), function () use ($filename) {
             $media = Media::findOrFail($filename);
@@ -24,12 +24,14 @@ class MediaService
             $type = $media->format == 'mp4' ? 'video' : 'image';
 
             return response(file_get_contents(media_path($filename . '.' . $media->format)))
-                ->header('Content-Type', "$type/$media->format");
+                ->header('Content-Type', "$type/$media->format")
+                ->header('Content-Disposition', 'inline')
+                ->header('X-Content-Type-Options', 'nosniff');
         });
         return $result;
     }
 
-    public function upload(UploadedFile $file, array $object)
+    public function upload(UploadedFile $file, $object)
     {
         $handledData = $this->handler->handle($file);
 
@@ -44,7 +46,7 @@ class MediaService
         return $handledData;
     }
 
-    public function delete($media)
+    public static function delete($media)
     {
         Storage::disk('media')->delete($media->id);
         $media->delete();

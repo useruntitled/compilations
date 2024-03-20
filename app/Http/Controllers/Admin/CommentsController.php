@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Report;
+use App\Services\Media\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,8 @@ class CommentsController extends Controller
 {
     public function index(Request $request)
     {
-        $comments = Comment::latest()
+        $comments = Comment::with(['image'])
+            ->latest()
             ->published()
             ->paginate(config('admin.per_page'));
 
@@ -23,7 +25,7 @@ class CommentsController extends Controller
 
     public function view($id)
     {
-        $comment = Comment::with('declinedBy')->findOrFail($id);
+        $comment = Comment::with(['declinedBy', 'image'])->findOrFail($id);
         $reports_count = Report::where('report_to_id', '=', $id)->where('report_to_type', '=', 'App\\Models\\Comment')->get()->count();
 
 
@@ -37,6 +39,10 @@ class CommentsController extends Controller
     {
         $comment = Comment::findOrFail($request->id);
         $comment->text = Comment::DECLINED_TEXT;
+        if ($comment->image) {
+            MediaService::delete($comment->image);
+            $comment->image()->delete();
+        }
         $comment->declined_by = Auth::id();
         $comment->declined_reason = $request->reason;
         $comment->declined_at = now();

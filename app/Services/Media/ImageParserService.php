@@ -10,7 +10,7 @@ use Intervention\Image\ImageManager;
 
 class ImageParserService
 {
-    public function get(string $uri)
+    public function make(string $uri)
     {
         $im = file_get_contents($uri);
         $hashName = Str::uuid();

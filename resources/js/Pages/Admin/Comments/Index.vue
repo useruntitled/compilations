@@ -5,6 +5,11 @@
         </template>
         <template #title>
             {{ comment.text }}
+            <fluid-lazy-media
+                v-if="comment.image"
+                :media="comment.image"
+                :max-height="50"
+            />
         </template>
         <template #content>
             {{ comment.is_active ? 'Опубликован' : 'Не опубликован' }}
@@ -22,6 +27,7 @@
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminRow from "@/Components/Admin/AdminRow.vue";
 import AdminPagination from "@/Components/Admin/AdminPagination.vue";
+import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
 
 defineOptions({
     layout: PanelLayout

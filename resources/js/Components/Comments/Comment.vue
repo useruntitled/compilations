@@ -74,17 +74,11 @@
                 <main>
                     <p v-html="comment.text"
                        class="text-17 w-auto sm:w-auto sm:max-w-screen-sm overflow-hidden break-words"></p>
-                    <div v-if="comment.image" class="flex justify-center relative"
-                         style="max-width: 50%;">
-                        <!--                        <lazy-media-->
-                        <!--                            :media="comment.image"-->
-                        <!--                            class="rounded-lg  inset-x-0 w-full h-full object-scale-down"-->
-                        <!--                            style="max-height: 400px"-->
-                        <!--                        />-->
+                    <div style="max-width: 50%">
                         <fluid-lazy-media
+                            v-if="comment.image"
                             :media="comment.image"
-                            max-width="100%"
-                            max-height="200"
+                            :max-height="200"
                             rounded="lg"
                         />
                     </div>
@@ -220,6 +214,7 @@ const props = defineProps({
         required: true,
     },
 });
+
 
 const commentRef = ref(false);
 const replies = ref(props.comment.replies ?? []);
