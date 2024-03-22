@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class MediaData
+class MediaData extends DTO
 {
     public $id;
     public $href;
@@ -23,11 +23,5 @@ class MediaData
         $this->base64_preview = $data['base64_preview'];
         $this->duration = $data['duration'];
         $this->file = $data['file'] ?? null;
-    }
-
-    public function except($attribute)
-    {
-        unset($this->$attribute);
-        return $this;
     }
 }

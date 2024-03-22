@@ -20,7 +20,7 @@ class Authenticate
     public function handle($request, Closure $next)
     {
         if (! $this->auth::check() ){
-            return redirect()->back();
+            abort(403);
         }
 
         if(Auth::user()->isBanned) {

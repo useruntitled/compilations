@@ -73,7 +73,7 @@ class PostService
     {
         $posts = Post::with(['user' => ['roles'], 'reputationRelation', 'films' => ['genres'], 'image'])->published()
             ->withCount(['comments', 'bookmarks', 'films'])
-            ->latest()
+            ->latest('published_at')
             ->skip(($page - 1) * $this->per_page)
             ->take($this->per_page)
             ->get();

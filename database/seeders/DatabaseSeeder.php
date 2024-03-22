@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 
         if (!App::environment('production')) {
             $this->call(UserSeeder::class);
-            Post::factory()->create();
+            $this->call(CommentSeeder::class);
         }
     }
 }

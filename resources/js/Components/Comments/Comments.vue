@@ -133,7 +133,7 @@ const getParam = (param) => {
 };
 
 const sortByReputationOverall = (a, b) => {
-    if (b.rep.overall > a.rep.overall) return 1;
+    if (b.reputation.overall > a.reputation.overall) return 1;
     return -1;
 };
 

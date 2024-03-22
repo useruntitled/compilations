@@ -422,7 +422,7 @@ const createPost = async () => {
     console.log("creating post");
     isUpdating.value = true;
     await axios
-        .post(route("post.create"), {
+        .post(route("post.store"), {
             title: form.title,
             description: form.description,
         })

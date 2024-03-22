@@ -13,6 +13,6 @@ class ActiveScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('active', 1);
+        $builder->where('published_at', '!=', null);
     }
 }

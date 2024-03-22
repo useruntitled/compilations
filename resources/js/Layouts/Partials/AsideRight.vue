@@ -17,7 +17,7 @@
                         <Link :href="route('profile', [comment.user.id])">
                             <lazy-media
                                 :media="comment.user.avatar"
-                                class="rounded-full inline-block me-2 object-cover border-2"
+                                class="rounded-full me-2 object-cover border-2"
                                 width="36"
                                 height="36"
                             />
@@ -43,6 +43,7 @@
                                         comment.post.id,
                                     ])
                                 "
+                                class="max-w-[200px]"
                             >
                                 <p
                                     class="text-sm font-medium overflow-hidden text-ellipsis"

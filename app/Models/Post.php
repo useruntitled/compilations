@@ -53,15 +53,19 @@ class Post extends Model implements Sitemapable
         'user',
     ];
 
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
 
-    protected static function booted(): void
-    {
-        static::addGlobalScope(new ActiveScope);
-    }
 
     public function scopePublished($query)
     {
         return $query->whereNotNull('published_at')->whereNull('declined_at');
+    }
+
+    public function scopeIsDraft($query)
+    {
+        return $query->whereNull('published_at')->whereNull('declined_at');
     }
 
     public function image(): MorphOne
@@ -98,7 +102,7 @@ class Post extends Model implements Sitemapable
 
     protected function timestamp(): Attribute
     {
-        return Attribute::get(fn() => $this->published_at->diffForHumans());
+        return Attribute::get(fn() => $this->published_at?->diffForHumans());
     }
 
     protected function isActive(): Attribute

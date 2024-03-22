@@ -12,7 +12,6 @@ use App\Http\Controllers\ReputationController;
 use App\Http\Controllers\SidebarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SettingsController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -38,7 +37,7 @@ Route::controller(CommentController::class)->group(function () {
 });
 
 Route::controller(PostController::class)->group(function () {
-    Route::post('post', 'store')->name('post.create')->middleware(['auth', 'creator']);
+    Route::post('post', 'store')->name('post.store')->middleware(['auth', 'creator']);
     Route::delete('post','delete')->name('post.delete')->middleware(['auth', 'creator']);
     Route::put('post', 'update')->name('post.update')->middleware(['auth']);
     Route::get('post/{id}', 'get')->name('post.get')->middleware(['auth']);

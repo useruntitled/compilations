@@ -23,6 +23,9 @@ return new class extends Migration
             $table->longText('description')->nullable();
 
             $table->timestamps();
+
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
+
             $table->timestamp('published_at')->nullable();
 
             $table->timestamp('declined_at')->nullable();

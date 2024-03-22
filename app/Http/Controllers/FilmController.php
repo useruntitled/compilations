@@ -21,30 +21,27 @@ class FilmController extends Controller
 
     protected function getFilm(int $id)
     {
-        $json = $this->parser->getFilm($id);
-        if($json == null) abort(404);
-        return $json;
+        $filmData = $this->parser->getFilm($id);
+        if ($filmData == null) abort(404);
+        return $filmData;
     }
 
     public function refresh(Request $request)
     {
-        $json = $this->getFilm($request->id);
+        $filmData = $this->getFilm($request->id);
         $film = Film::find($request->id);
-        $filmData = new FilmData($json);
-        $film->update((array) $filmData);
+        $film->update((array)$filmData->except('genres'));
 
         return Response::json($film, 200);
     }
 
-    public function create(int $id): Film
+    public function store(int $id): Film
     {
-        $json = $this->getFilm($id);
+        $filmData = $this->getFilm($id);;
 
-        $filmData = new FilmData($json);
+        $film = Film::create((array)$filmData->except('genres'));
 
-        $film = Film::create((array) $filmData);
-
-        $genres = collect($json->genres)->map(function ($genre) {
+        $genres = collect($filmData->genres)->map(function ($genre) {
             return Genre::firstOrCreate([
                 'name' => $genre->name,
                 'slug' => Str::slug($genre->name),
@@ -63,7 +60,7 @@ class FilmController extends Controller
             return Response::json($film, 409);
         }
 
-        return $this->create($request->id);
+        return $this->store($request->id);
     }
 
     public function search($query)
@@ -91,7 +88,7 @@ class FilmController extends Controller
     {
         $films = Film::where('id', 'LIKE', "$id%")->limit(5)->get();
         if ($films->count() == 0) {
-            return Response::json([$this->create($id)], 200);
+            return Response::json([$this->store($id)], 200);
         }
 
         return Response::json($films, 200);

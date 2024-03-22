@@ -8,6 +8,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\StoreCommentResource;
 use App\Models\Comment;
 use App\Models\Media;
+use App\Policies\CommentPolicy;
 use App\Services\Media\MediaService;
 use App\Services\Media\MediaUploader;
 use App\Services\NotificationService;
@@ -65,17 +66,19 @@ class CommentController extends Controller
         return StoreCommentResource::make($comment);
     }
 
-    public function delete(Request $request, MediaService $service)
+    public function delete(Request $request, MediaService $media)
     {
         $request->validate([
             'id' => 'required',
         ]);
 
-        $comment = Comment::find($request->id);
+        $comment = Comment::findOrFail($request->id);
+
+        $this->authorize(CommentPolicy::DELETE, $comment);
 
         $isForceDeleted = 0;
 
-        if ($comment->image) $service->delete($comment->image);
+        if ($comment->image) $media->delete($comment->image);
 
         if ($comment->replies->count() == 0) {
             $isForceDeleted = 1;
@@ -89,7 +92,7 @@ class CommentController extends Controller
         $comment->delete();
 
 
-        $comment->text = 'Комментарий удалён';
+        $comment->text = Comment::DELETED_TEXT;
 
         $comment->update();
 
@@ -109,22 +112,21 @@ class CommentController extends Controller
 
         $comment = Comment::find($validated['id']);
 
+        $this->authorize(CommentPolicy::UPDATE, $comment);
+
         if($comment->is_deleted) abort(422);
 
         if ($request->image != null) {
-            MediaUploader::toObject($request->input('image')['href'], [
-                'object' => 'comment',
-                'object_id' => $comment->id,
-            ]);
+            MediaUploader::toObject($request->input('image')['href'], $comment);
         } else if ($comment->image) {
             $service->delete($comment->image);
             $comment->image()->delete();
         }
 
-        $comment->text = rtrim($request->text, '<div><br></div>');
+        $comment->text = preg_replace('/(<div><br><\/div>\s*)+$/', '', $request->text);
         $comment->update();
 
-        return $comment->only(['image', 'image_preview', 'text']);
+        return $comment->only(['image', 'text']);
     }
 
     public function getByPostId($post_id)

@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 trait HasReputation
 {
-    protected $classname;
-
-    public function __construct()
-    {
-        $this->classname = __CLASS__;
-    }
 
     public function reputationRelation(): MorphMany
     {
@@ -25,10 +19,10 @@ trait HasReputation
     {
         $pluses = $this->reputationRelation ?
             $this->reputationRelation->where('action', 'up')
-            ->where('reputation_to_type', $this->classname)->count() : 0;
+                ->where('reputation_to_type', __CLASS__)->count() : 0;
         $minuses = $this->reputationRelation ?
             $this->reputationRelation->where('action', 'down')
-            ->where('reputation_to_type', $this->classname)->count() : 0;
+                ->where('reputation_to_type', __CLASS__)->count() : 0;
 
         $user_action = Auth::user() ? $this->getUserActionReputation() : null;
 
@@ -44,7 +38,7 @@ trait HasReputation
     protected function getUserActionReputation()
     {
         $rep = $this->reputationRelation ? $this->reputationRelation->where('user_id', Auth::user()->id)
-            ->where('reputation_to_type', $this->classname)->first() : null;
+            ->where('reputation_to_type', __CLASS__)->first() : null;
         if ($rep != null) {
             return $rep->action;
         }

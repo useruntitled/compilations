@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Film;
 use App\Models\Post;
+use App\Policies\PostPolicy;
 use App\Services\Media\MediaService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
@@ -79,14 +80,17 @@ class PostController extends Controller
     public function delete(Request $request)
     {
         $post = Post::findOrFail($request->id);
+        $this->authorize(PostPolicy::DELETE, $post);
+
         $post->forceDelete();
-        return 204;
+        return response('', 200);
     }
 
     public function update(Request $request)
     {
         $post = Post::with('films')->findOrFail($request->id);
 
+        $this->authorize(PostPolicy::UPDATE, $post);
 
         $films = $request->films;
 
@@ -121,6 +125,7 @@ class PostController extends Controller
     public function publish(Request $request)
     {
         $post = Post::find($request->id);
+        $this->authorize(PostPolicy::PUBLISH, $post);
 
         if (! $post->isActive) {
             if($post->title != null && $post->films()->count() > 0) {

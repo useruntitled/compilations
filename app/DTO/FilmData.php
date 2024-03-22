@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class FilmData
+class FilmData extends DTO
 {
     public $id;
     public $type;
@@ -18,6 +18,7 @@ class FilmData
     public $country;
     public $start_year;
     public $year;
+    public $genres;
 
     public function __construct($data)
     {
@@ -35,5 +36,6 @@ class FilmData
         $this->country = data_get($data, 'countries.0.name');
         $this->start_year = data_get($data, 'releaseYears.0.start');
         $this->year = $data->year ?? null;
+        $this->genres = $data->genres;
     }
 }

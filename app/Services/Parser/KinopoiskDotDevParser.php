@@ -2,6 +2,9 @@
 
 namespace App\Services\Parser;
 
+use App\DTO\FilmData;
+use Illuminate\Support\Facades\Http;
+
 class KinopoiskDotDevParser implements ParserInterface
 {
     protected $token;
@@ -13,24 +16,18 @@ class KinopoiskDotDevParser implements ParserInterface
 
     public function getFilm(int $id)
     {
-        $ch = curl_init();
-        $url = 'https://api.kinopoisk.dev/v1.3/movie/'.$id;
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'X-API-KEY: '.$this->token,
-            'Content-Type: application/json',
-        ]);
+        $response = Http::withHeaders([
+            'X-API-KEY' => $this->token,
+            'Content-Type' => 'application/json',
+        ])->get("https://api.kinopoisk.dev/v1.3/movie/$id");
 
-        $response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Curl error: '.curl_error($ch);
+        if ($response->failed()) {
+            abort($response->status());
         }
-        curl_close($ch);
 
         $json = json_decode($response);
         if (!isset($json->statusCode) || $json->statusCode != 404) {
-            return $json;
+            return new FilmData($json);
         }
 
         return null;

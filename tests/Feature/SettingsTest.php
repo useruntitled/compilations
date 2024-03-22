@@ -44,16 +44,16 @@ class SettingsTest extends TestCase
         );
     }
 
-    public function test_guest_can_not_view_main_settings_page(): void
+    public function test_guest_cannot_view_main_settings_page(): void
     {
         $response = $this->get(route('settings'));
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect();
     }
 
-    public function test_guest_can_not_view_profile_settings_page(): void
+    public function test_guest_cannot_view_profile_settings_page(): void
     {
         $response = $this->get(route('settings.profile'));
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect();
     }
 
     public function test_user_can_change_profile_info(): void

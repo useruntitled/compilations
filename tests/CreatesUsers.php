@@ -9,13 +9,14 @@ trait CreatesUsers
     protected function loginAs(User $user)
     {
         $this->actingAs($user);
+        return $this;
     }
 
-    protected function login(User $user)
+    protected function login()
     {
         $user = $this->createUser();
         $this->loginAs($user);
-        return $user;
+        return $this;
     }
 
     protected function createUser()
