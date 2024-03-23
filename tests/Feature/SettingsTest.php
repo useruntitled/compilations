@@ -14,10 +14,6 @@ class SettingsTest extends TestCase
 
     protected $seed = true;
 
-    /**
-     * A basic feature test example.
-     */
-
     public function test_settings_page_is_displayed(): void
     {
         $user = User::factory()->create();

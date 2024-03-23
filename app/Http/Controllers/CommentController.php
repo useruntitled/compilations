@@ -59,7 +59,7 @@ class CommentController extends Controller
         ]);
 
         if ($request->image != null) {
-            MediaUploader::toObject($request->input('image')['href'], $comment);
+            MediaUploader::toEloquent($request->input('image')['href'], $comment);
         }
 
         event(new CommentCreatedEvent($comment));
@@ -103,27 +103,25 @@ class CommentController extends Controller
 
     }
 
-    public function update(StoreCommentRequest $request, MediaService $service)
+    public function update(StoreCommentRequest $request, MediaService $media)
     {
         $validated = $request->validate([
             'text' => 'min:0|max:2000',
             'id' => 'required',
         ]);
 
-        $comment = Comment::find($validated['id']);
+        $comment = Comment::published()->findOrFail($request->id);
 
         $this->authorize(CommentPolicy::UPDATE, $comment);
 
-        if($comment->is_deleted) abort(422);
 
         if ($request->image != null) {
-            MediaUploader::toObject($request->input('image')['href'], $comment);
+            MediaUploader::toEloquent($request->input('image')['href'], $comment);
         } else if ($comment->image) {
-            $service->delete($comment->image);
-            $comment->image()->delete();
+            $media->delete($comment->image);
         }
 
-        $comment->text = preg_replace('/(<div><br><\/div>\s*)+$/', '', $request->text);
+        $comment->text = rtrimbr($request->text);
         $comment->update();
 
         return $comment->only(['image', 'text']);

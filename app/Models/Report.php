@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Report extends Model
 {
+    const SPAM = 'spam';
+    const RUDE = 'rude';
+    const VIOLENCE = 'violence';
+    const ILLEGAL = 'illegal';
+    const OTHER = 'other';
+    const LIE = 'lie';
+
     protected $fillable = [
         'report_to_type',
         'message',

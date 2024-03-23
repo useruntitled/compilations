@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\Film;
 use App\Models\Media;
 use App\Models\Post;
 use App\Models\Subsite;
@@ -33,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\Comment' => Comment::class,
             'comment' => Comment::class,
             'App\Models\Media' => Media::class,
+            'App\Models\Film' => Film::class,
+            'film' => Film::class,
         ]);
     }
 

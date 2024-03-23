@@ -72,7 +72,8 @@ class CommentTest extends TestCase
             ->loginAs($comment->user)
             ->deleteJson(route('comment.delete'), [
                 'id' => $comment->id,
-            ]);
+            ])->assertStatus(200);
+
         $comment->refresh();
         $this->assertTrue($comment->trashed());
     }

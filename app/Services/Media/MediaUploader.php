@@ -14,26 +14,28 @@ use Illuminate\Support\Facades\Storage;
 class MediaUploader
 {
 
-    public static function upload(MediaData $data, $object): void
+    public static function upload(MediaData $data, $eloquent): void
     {
 
         $array = (array)$data->except('file');
 
-        $model = get_class($object);
+        $model = get_class($eloquent);
+
+        $user_id = $eloquent->user?->id != null ? $eloquent->user->id : (Auth::id() != null ? Auth::id() : $eloquent->id);
 
         Media::create([
             ...$array,
-            'user_id' => Auth::id() ?? $object->id,
+            'user_id' => $user_id,
             'media_to_type' => Relation::getMorphedModel($model),
-            'media_to_id' => $object->id,
+            'media_to_id' => $eloquent->id,
         ]);
     }
 
-    public static function toObject($href, array $object)
+    public static function toEloquent($href, $eloquent)
     {
         $media = Media::where('href', '=', $href)->firstOrFail();
-        $media->media_to_type = Relation::getMorphedModel($object['object']);
-        $media->media_to_id = $object['object_id'];
+        $media->media_to_type = Relation::getMorphedModel(get_class($eloquent));
+        $media->media_to_id = $eloquent->id;
         $media->save();
     }
 

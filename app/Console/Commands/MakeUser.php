@@ -38,8 +38,9 @@ class MakeUser extends Command
             'email_verified_at' => now(),
             'password' => $password, // password
             'remember_token' => Str::random(10),
-            'avatar' => (new ImageGeneratorService())->make(),
         ]);
+        $user->makeAvatar();
+
         $this->info('Email: ' . $user->email);
         $this->info('Password: ' . $password);
     }

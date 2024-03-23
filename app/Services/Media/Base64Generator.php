@@ -18,10 +18,17 @@ class Base64Generator
             }
             return 'data:image/' . $format . ';base64,' . base64_encode($file);
         }
-        $color = $file->pickColor(0, 0, 0)->toHex();
-        $file = ImageManager::imagick()
-            ->create(5, 5)
-            ->fill($color)
+//        $color = $file->pickColor(0, 0, 0)->toHex();
+
+//        $file = ImageManager::imagick()
+//            ->create(5, 5)
+//            ->fill($color)
+//            ->blur(3)
+//            ->encode(new JpegEncoder());
+
+        $file = $file
+            ->removeAnimation('50%')
+            ->scaleDown(5)
             ->blur(3)
             ->encode(new JpegEncoder());
         return 'data:image/' . 'jpeg' . ';base64,' . base64_encode($file);

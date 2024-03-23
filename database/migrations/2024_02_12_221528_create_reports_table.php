@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
 
-            $table->string('message');
+            $table->enum('message', ['spam', 'rude', 'violence', 'illegal', 'other', 'lie']);
+
             $table->morphs('report_to');
 
             $table->boolean('active')->nullable()->default(false);

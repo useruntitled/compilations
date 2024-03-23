@@ -5,6 +5,8 @@ namespace Database\Factories;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\Media\ImageGeneratorService;
+use App\Services\Media\MediaUploader;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,5 +28,18 @@ class CommentFactory extends Factory
             'level' => 0,
             'text' => fake()->words(mt_rand(1, 20), true),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterMaking(function (Comment $comment) {
+
+        })->afterCreating(function (Comment $comment) {
+            $has = (bool)mt_rand(0, 1);
+            if ($has) {
+                $image = ImageGeneratorService::make(mt_rand(10, 2000), mt_rand(10, 2000));
+                MediaUploader::upload($image, $comment);
+            }
+        });
     }
 }

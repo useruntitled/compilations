@@ -65,6 +65,6 @@ const src = computed(() => {
 const isLoaded = ref(false);
 
 const isVideo = computed(() => {
-    return props.media.format === 'mp4';
+    return props.media?.format === 'mp4';
 });
 </script>

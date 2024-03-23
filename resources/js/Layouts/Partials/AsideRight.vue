@@ -56,11 +56,11 @@
                     </div>
                     <Link :href="prepareHref(comment)">
                         <p
-                            class="text-base overflow-hidden text-ellipsis hover:opacity-70 cursor-pointer"
+                            class="text-base overflow-hidden text-ellipsis  cursor-pointer"
                             style="max-height: 100px"
                             v-html="comment.text"
                         ></p>
-                        <div v-if="comment.image" class="text-center mt-2">
+                        <div v-if="comment.image" class="text-center mt-2 hover:opacity-70">
                             <!--                            <lazy-media-->
                             <!--                                :media="comment.image"-->
                             <!--                                class="rounded-lg mx-auto object-scale-down w-full h-full hover:opacity-80"-->
@@ -71,7 +71,6 @@
                                 :media="comment.image"
                                 max-height="200"
                                 rounded="lg"
-                                class="hover:opacity-80"
                             />
                         </div>
                     </Link>

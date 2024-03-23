@@ -18,10 +18,10 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         $userIds = array_flip(DB::table('users')->pluck('id')->toArray());
-        $postIds = array_flip(DB::table('posts')->pluck('id')->toArray());
+        $postIds = array_flip(Post::published()->get()->pluck('id')->toArray());
 
         $comments = Comment::factory()
-            ->count(count($postIds) * 4)
+            ->count(count($postIds))
             ->state(new Sequence(fn() => [
                 'user_id' => array_rand($userIds),
                 'post_id' => array_rand($postIds),
@@ -30,7 +30,7 @@ class CommentSeeder extends Seeder
 
         foreach ($comments as $comment) {
             Comment::factory()
-                ->count(mt_rand(0, 5))
+                ->count(mt_rand(0, 2))
                 ->state(new Sequence(fn() => [
                     'user_id' => array_rand($userIds),
                     'post_id' => $comment->post->id,
@@ -43,7 +43,7 @@ class CommentSeeder extends Seeder
         $replies = Comment::where('level', '=', 1)->get();
         foreach ($replies as $reply) {
             Comment::factory()
-                ->count(mt_rand(0, 2))
+                ->count(mt_rand(0, 1))
                 ->state(new Sequence(fn() => [
                     'user_id' => array_rand($userIds),
                     'post_id' => $reply->post->id,

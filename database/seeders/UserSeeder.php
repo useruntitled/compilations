@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Film;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -17,7 +18,9 @@ class UserSeeder extends Seeder
     {
         $users = User::factory()
             ->count(20)
-            ->has(Post::factory()->count(2))
+            ->has(Post::factory()
+                ->has(Film::factory()->count(mt_rand(2, 20)))
+                ->count(2))
             ->has(Post::factory()->state(new Sequence(['published_at' => null])))
             ->create();
         foreach ($users as $user) $user->makeAvatar();

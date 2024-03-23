@@ -11,18 +11,20 @@ use Intervention\Image\ImageManager;
 
 class ImageGeneratorService
 {
-    public static function make()
+    public static function make($width = null, $height = null)
     {
         $hashName = Str::uuid();
+
+        if ($width == null) $width = config('image.default_dimensions');
+        if ($height == null) $height = config('image.default_dimensions');
 
         $randomColor = fake()->hexColor();
 
         $notEncodedImage = ImageManager::imagick()
-            ->create(config('image.default_dimensions'), config('image.default_dimensions'))
+            ->create($width, $height)
             ->fill($randomColor);
 
 
-        $scaled_down = $notEncodedImage->scaleDown(5)->blur(3)->toJpeg();
         $encodedImage = $notEncodedImage->toJpeg();
 
         Storage::disk('media')->put($hashName . '.jpeg', $encodedImage);

@@ -38,7 +38,7 @@ class Comment extends Model
 
     public function scopePublished($query)
     {
-        return $query->whereNull('deleted_at');
+        return $query->whereNull('deleted_at')->whereNull('declined_at');
     }
 
     public function image(): MorphOne
@@ -110,15 +110,5 @@ class Comment extends Model
     protected function authorOfPost(): Attribute
     {
         return Attribute::get(fn () => $this->post->user->id == $this->user->id);
-    }
-
-    protected function imagePreview(): Attribute
-    {
-        if ($this->image == null) {
-            return Attribute::get(fn () => null);
-        }
-        [$name, $ext] = explode('.', $this->image);
-
-        return Attribute::get(fn () => $name.'__preview'.".$ext");
     }
 }
