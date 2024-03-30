@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CompressedUserResource;
+use App\Http\Resources\ShortPostFeedResource;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
@@ -15,11 +16,11 @@ class SearchController extends Controller
 
     public function search(string $query)
     {
-        $posts = Post::where('title', 'like',"%$query%")->published()->take(5)->get();
+        $posts = Post::where('title', 'like', "%$query%")->take(5)->get();
         $users = User::where('name', 'like', "%$query%")->take(5)->get();
         return response()->json([
-           'posts' => $posts,
-           'users' => $users,
+            'posts' => ShortPostFeedResource::collection($posts),
+            'users' => CompressedUserResource::collection($users),
         ]);
     }
 }

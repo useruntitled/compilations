@@ -15,4 +15,9 @@ class DTO
 
         return $objectVars;
     }
+
+    public function toJson()
+    {
+        return json_encode(get_object_vars($this));
+    }
 }

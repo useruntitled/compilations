@@ -14,6 +14,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    color: {
+        type: String,
+        default: 'white',
+    }
 });
 
 const emit = defineEmits(["close"]);
@@ -60,6 +64,10 @@ const maxWidthClass = computed(() => {
         "2xl": "sm:max-w-2xl",
     }[props.maxWidth];
 });
+
+const bgColorClass = computed(() => {
+    return `bg-${props.color}`;
+})
 </script>
 
 <template>
@@ -97,8 +105,8 @@ const maxWidthClass = computed(() => {
                 >
                     <div
                         v-show="show"
-                        class="mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
-                        :class="maxWidthClass"
+                        class="mb-6 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
+                        :class="[maxWidthClass, bgColorClass]"
                     >
                         <slot v-if="show" />
                     </div>

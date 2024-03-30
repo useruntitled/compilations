@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Events\NotificationModified;
 use App\Models\User;
 use App\Notifications\CommentUpNotification;
+use App\Notifications\CommentWasDeclinedNotification;
 use App\Notifications\PostUpNotification;
 use App\Notifications\PostWasCommentedNotification;
+use App\Notifications\PostWasDeclinedNotification;
 use App\Notifications\ReplyNotification;
 use Illuminate\Support\Facades\Notification;
 
@@ -55,6 +57,16 @@ class NotificationService
         if (! $reputation->repToUserIsOwner && $reputation->isUp) {
             $this->sendAndCallEvent($reputation->reputationToUser, CommentUpNotification::class, $reputation);
         }
+    }
+
+    public function sendCommentWasDeclinedNotification($comment)
+    {
+        $this->sendAndCallEvent($comment->user, CommentWasDeclinedNotification::class, $comment);
+    }
+
+    public function sendPostWasDeclinedNotification($post)
+    {
+        $this->sendAndCallEvent($post->user, PostWasDeclinedNotification::class, $post);
     }
 
     public function deleteByParam($notifiable_id, $param_name, $param_content)

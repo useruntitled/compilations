@@ -17,7 +17,7 @@
                         <Link :href="route('profile', [comment.user.id])">
                             <lazy-media
                                 :media="comment.user.avatar"
-                                class="rounded-full me-2 object-cover border-2"
+                                class="rounded-full me-2 object-cover border-2 hover:opacity-80"
                                 width="36"
                                 height="36"
                             />
@@ -46,7 +46,7 @@
                                 class="max-w-[200px]"
                             >
                                 <p
-                                    class="text-sm font-medium overflow-hidden text-ellipsis"
+                                    class="text-sm font-medium overflow-hidden text-ellipsis hover:opacity-70"
                                     style="max-height: 19px"
                                 >
                                     {{ comment.post.title }}
@@ -56,7 +56,7 @@
                     </div>
                     <Link :href="prepareHref(comment)">
                         <p
-                            class="text-base overflow-hidden text-ellipsis  cursor-pointer"
+                            class="text-base overflow-hidden text-ellipsis  cursor-pointer hover:opacity-70"
                             style="max-height: 100px"
                             v-html="comment.text"
                         ></p>

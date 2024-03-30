@@ -38,11 +38,11 @@ class RegisteredUserController extends Controller
 
     public function uploadAvatar(UploadFileRequest $request, MediaService $media)
     {
-        return response()->json($media->upload($request->file('image'), Auth::user()));
+        return $media->upload($request->file('image'), Auth::user())->toJson();
     }
 
     public function uploadCover(UploadFileRequest $request, MediaService $media)
     {
-        return response()->json($media->upload($request->file('image'), Auth::user()->subsite));
+        return $media->upload($request->file('image'), Auth::user()->subsite)->toJson();
     }
 }

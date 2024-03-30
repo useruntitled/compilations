@@ -29,7 +29,7 @@
             :href="route('panel.index')"
             class="my-4 text-17px"
         >
-            <IconPanel class="me-2 inline-block stroke-[2]"></IconPanel>
+            <IconPanel class="me-2 inline-block stroke-[2] w-6 h-6"></IconPanel>
             Администрировать
         </DropdownLink>
 

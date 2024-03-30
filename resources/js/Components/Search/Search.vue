@@ -30,11 +30,18 @@
                                 <Link :href="route('profile', [user.id])">
                                     <div class="flex items-center space-x-2">
                                         <div>
-                                            <lazy-image
-                                                :preview="'/media/' + user.avatar_preview"
-                                                :then="route('im', [user.avatar, 100])"
-                                                class="w-10 h-10 rounded-full border-2"
-                                            ></lazy-image>
+                                            <!--                                            <lazy-image-->
+                                            <!--                                                :preview="'/media/' + user.avatar_preview"-->
+                                            <!--                                                :then="route('im', [user.avatar, 100])"-->
+                                            <!--                                                class="w-10 h-10 rounded-full border-2"-->
+                                            <!--                                            ></lazy-image>-->
+                                            <lazy-media
+                                                :media="user.avatar"
+                                                width="30"
+                                                height="30"
+                                                rounded="full"
+                                                border="gray"
+                                            />
                                         </div>
                                         <div>
                                             {{ user.name }}
@@ -59,6 +66,7 @@ import pkg from 'lodash/function.js';
 
 const {throttle} = pkg;
 import LazyImage from "@/Components/LazyImage.vue";
+import LazyMedia from "@/Components/Media/LazyMedia.vue";
 
 const props = defineProps({
     class: null,

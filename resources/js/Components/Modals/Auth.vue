@@ -16,7 +16,7 @@
                     <span class="text-white font-semibold">Войти с Яндекс ID</span>
                 </button>
                 <button @click="openAuthWindow('vkontakte')"
-                        class="w-full space-x-2 justify-center border-2 bg-[#0077ff] rounded-2xl px-10 py-2 flex items-center">
+                        class="w-full space-x-2 justify-center bg-[#0077ff] rounded-2xl px-10 py-2 flex items-center">
                     <span>
                         <icon-vkontakte class="w-7 h-7"></icon-vkontakte>
                     </span>

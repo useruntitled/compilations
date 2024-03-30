@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use App\Traits\HasAuthor;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Reputation extends Model
 {
     use HasAuthor;
+    use HasFactory;
 
     protected $guarded = [];
 
-    // get the parent model
     public function reputation_to(): MorphTo
     {
         return $this->morphTo();

@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Comment;
 use App\Models\Post;
-use Database\Factories\CommentFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +16,7 @@ class CommentSeeder extends Seeder
     public function run(): void
     {
         $userIds = array_flip(DB::table('users')->pluck('id')->toArray());
-        $postIds = array_flip(Post::published()->get()->pluck('id')->toArray());
+        $postIds = array_flip(Post::all()->pluck('id')->toArray());
 
         $comments = Comment::factory()
             ->count(count($postIds))

@@ -12,11 +12,12 @@ class CommentTest extends TestCase
 {
     use RefreshDatabase;
 
+
     protected $seed = true;
 
     public function test_guest_cannot_store_comment(): void
     {
-        $post = Post::published()->first();
+        $post = Post::first();
         $this->postJson(route('comment.store'), [
             'post_id' => $post->id,
             'text' => 'Some text',
@@ -45,7 +46,7 @@ class CommentTest extends TestCase
         $this
             ->login()
             ->postJson(route('comment.store'), [
-                'post_id' => Post::published()->first()->id,
+                'post_id' => Post::first()->id,
                 'text' => 'Some text',
             ])->assertJson([
                 'text' => 'Some text',

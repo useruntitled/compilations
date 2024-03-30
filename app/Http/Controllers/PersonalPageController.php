@@ -51,7 +51,6 @@ class PersonalPageController extends Controller
             'user' => ['roles'],
             'films' => ['genres'],
         ])->where('user_id', $user_id)
-            ->published()
             ->latest()
             ->withCount('comments', 'films')
             ->skip(($page - 1) * $this->per_page)

@@ -24,6 +24,8 @@ export default {
                 'field': '#F5F5F5',
                 'shit': '#4f3d36',
                 'primary2': '#0066FF',
+                'panelsemiprimary': '#171923',
+                'panelbck': '#1a1c26',
             },
             fontSize:{
                 '13px': ['13px','18px'],

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\ActiveScope;
+use App\Models\Scopes\PublishedScope;
 use App\Traits\Declineable;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
 use App\Traits\Reportable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,13 +21,17 @@ use Spatie\Sitemap\Tags\Url;
 
 class Post extends Model implements Sitemapable
 {
-    use
-        HasFactory,
-        HasReputation,
-        HasAuthor,
-        Reportable,
-        SoftDeletes,
-        Declineable;
+    use HasFactory;
+    use HasReputation;
+    use HasAuthor;
+    use Reportable;
+    use SoftDeletes;
+    use Declineable;
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new PublishedScope);
+    }
 
     public function toSitemapTag(): Url
     {
@@ -57,15 +62,16 @@ class Post extends Model implements Sitemapable
         'published_at' => 'datetime',
     ];
 
-
-    public function scopePublished($query)
+    public function scopeDrafted(Builder $builder): void
     {
-        return $query->whereNotNull('published_at')->whereNull('declined_at');
+        $builder->withoutGlobalScope(PublishedScope::class)
+            ->whereNull('published_at')
+            ->whereNull('declined_at');
     }
 
-    public function scopeIsDraft($query)
+    public function scopeMayBeUnpublished(Builder $builder): void
     {
-        return $query->whereNull('published_at')->whereNull('declined_at');
+        $builder->withoutGlobalScope(PublishedScope::class);
     }
 
     public function image(): MorphOne
@@ -75,7 +81,7 @@ class Post extends Model implements Sitemapable
 
     public function films(): BelongsToMany
     {
-        return $this->belongsToMany(Film::class)->orderByPivot('id', 'asc');
+        return $this->belongsToMany(Film::class)->orderByPivot('id');
     }
 
     public function tags(): BelongsToMany

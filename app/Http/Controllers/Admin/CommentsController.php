@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\CommentDeclinedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeclineRequest;
 use App\Models\Comment;
 use App\Models\Report;
-use App\Services\Media\MediaService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
@@ -15,18 +15,28 @@ class CommentsController extends Controller
     {
         $comments = Comment::with(['image'])
             ->latest()
-            ->published()
-            ->paginate(config('admin.per_page'));
+            ->withTrashed()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('text', 'like', "%$search%")
+                    ->orWhere('id', 'like', "%$search%");
+            })
+            ->paginate(config('admin.per_page'))
+            ->withQueryString();
 
         return inertia('Admin/Comments/Index', [
-            'comments' => $comments,
+            'list' => $comments,
         ]);
     }
 
     public function view($id)
     {
-        $comment = Comment::with(['declinedBy', 'image'])->findOrFail($id);
-        $reports_count = Report::where('report_to_id', '=', $id)->where('report_to_type', '=', 'App\\Models\\Comment')->get()->count();
+        $comment = Comment::withTrashed()
+            ->with(['declinedBy', 'image'])
+            ->findOrFail($id);
+        $reports_count = Report::where('report_to_id', $id)
+            ->where('report_to_type', 'App\\Models\\Comment')
+            ->get()
+            ->count();
 
 
         return inertia('Admin/Comments/View', [
@@ -35,18 +45,19 @@ class CommentsController extends Controller
         ]);
     }
 
-    public function decline(Request $request)
+    public function decline(DeclineRequest $request)
     {
         $comment = Comment::findOrFail($request->id);
         $comment->text = Comment::DECLINED_TEXT;
-        if ($comment->image) {
-            MediaService::delete($comment->image);
-            $comment->image()->delete();
-        }
-        $comment->declined_by = Auth::id();
-        $comment->declined_reason = $request->reason;
-        $comment->declined_at = now();
-        $comment->deleted_at = now();
+
+        $comment->image()->delete();
+
+        $comment->decline($request->reason);
+
+        $comment->delete();
+
         $comment->save();
+
+        event(new CommentDeclinedEvent($comment));
     }
 }

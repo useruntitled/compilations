@@ -20,27 +20,36 @@ class AdminController extends Controller
         ]);
     }
 
-    public function admins()
+    public function admins(Request $request)
     {
-        $admins = User::all();
-        $admins = $admins->filter(function ($user) {
-            return $user->roles()->where('role', 'admin')->exists();
-        });
+        $admins = User::Admin()
+            ->latest()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%$search%")
+                    ->orWhere('id', 'like', "%$search%");
+            })
+            ->paginate(config('admin.per_page'))
+            ->withQueryString();;
 
         return inertia('Admin/Admins/Index', [
-            'admins' => $admins,
+            'list' => $admins,
+            'search' => $request->search,
         ]);
     }
 
-    public function moders()
+    public function moders(Request $request)
     {
-        $moders = User::all();
-        $moders = $moders->filter(function ($user) {
-            return $user->roles()->where('role', 'moder')->exists();
-        });
+        $admins = User::Moder()
+            ->latest()
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%$search%");
+            })
+            ->paginate(config('admin.per_page'))
+            ->withQueryString();;
 
-        return inertia('Admin/Moders/Index', [
-            'admins' => $moders,
+        return inertia('Admin/Admins/Index', [
+            'list' => $admins,
+            'search' => $request->search,
         ]);
     }
 

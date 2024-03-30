@@ -1,30 +1,32 @@
 <template>
-
-    <admin-row v-for="admin in admins" :key="admin.id">
-        <template #id>
-            {{ admin.id }}
-        </template>
-        <template #title>
-            {{ admin.name }}
-        </template>
-        <template #timestamp>
-            {{ admin.created_at }}
-        </template>
-        <template #buttons>
-            <Link :href="route('panel.view.user', [admin.id])">Рассмотреть</Link>
-        </template>
-    </admin-row>
+    <admin-table>
+        <admin-row v-for="admin in list.data" :key="admin.id">
+            <template #id>
+                {{ admin.id }}
+            </template>
+            <template #title>
+                {{ admin.name }}
+            </template>
+            <template #date>
+                {{ admin.created_at }}
+            </template>
+            <template #action>
+                <Link :href="route('panel.view.user', [admin.id])">Рассмотреть</Link>
+            </template>
+        </admin-row>
+    </admin-table>
 </template>
 <script setup>
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminRow from "@/Components/Admin/AdminRow.vue";
-import AdminPagination from "@/Components/Admin/AdminPagination.vue";
+import PanelListLayout from "@/Layouts/PanelListLayout.vue";
+import AdminTable from "@/Components/Admin/AdminTable.vue";
 
 defineOptions({
-    layout: PanelLayout
+    layout: [PanelLayout, PanelListLayout]
 })
 
 const props = defineProps({
-    admins: null,
+    list: null,
 })
 </script>

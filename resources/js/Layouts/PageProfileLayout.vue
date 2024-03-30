@@ -44,7 +44,7 @@
                 </div>
                 <p class="text-xl font-medium">{{ user.name }}</p>
                 <p class="text-sm" v-html="user.subsite?.description"></p>
-                <KarmaCountWithEmoji :karma="karma"></KarmaCountWithEmoji>
+                <karma-count-with-emoji :karma="karma"></karma-count-with-emoji>
 
                 <div class="flex items-center mt-4">
                     <Link

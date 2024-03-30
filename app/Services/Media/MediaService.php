@@ -31,7 +31,7 @@ class MediaService
         return $result;
     }
 
-    public function upload(UploadedFile $file, $object)
+    public function upload(UploadedFile $file, $eloquent)
     {
         $handledData = $this->handler->handle($file);
 
@@ -41,7 +41,7 @@ class MediaService
             MediaUploader::save($handledData->file->getPathName(), $handledData->id, 'gif', file_get_contents($handledData->file));
         }
 
-        MediaUploader::upload($handledData, $object);
+        MediaUploader::upload($handledData, $eloquent);
 
         return $handledData;
     }

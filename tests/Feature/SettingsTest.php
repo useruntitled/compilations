@@ -12,8 +12,6 @@ class SettingsTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected $seed = true;
-
     public function test_settings_page_is_displayed(): void
     {
         $user = User::factory()->create();

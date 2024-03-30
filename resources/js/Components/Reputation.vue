@@ -89,7 +89,7 @@ const setDown = async () => {
         current_action.value = null;
     }
 
-    await sendAction("down");
+    sendAction("down");
 };
 
 const sendAction = async (action) => {
@@ -104,11 +104,6 @@ const sendAction = async (action) => {
             if (res.response.status == 401) callModal("Auth");
         })
         .then((res) => {
-            if (res.status == 200 || res.status == 201) {
-                up.value = res.data.up;
-                down.value = res.data.down;
-                current_action.value = res.data.action;
-            }
             console.log(res);
         });
 };

@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 use App\Events\CommentCreatedEvent;
+use App\Events\CommentDeclinedEvent;
 use App\Events\CommentDeletedEvent;
+use App\Events\PostDeclinedEvent;
 use App\Events\ReputationDeletedEvent;
 use App\Events\ReputationPutEvent;
 use App\Listeners\CommentCreatedListener;
+use App\Listeners\CommentDeclinedListener;
 use App\Listeners\CommentDeletedListener;
+use App\Listeners\PostDeclinedListener;
 use App\Listeners\ReputationDeletedListener;
 use App\Listeners\ReputationPutListener;
 use App\Models\Comment;
@@ -47,6 +51,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommentDeletedEvent::class => [
             CommentDeletedListener::class,
+        ],
+        CommentDeclinedEvent::class => [
+            CommentDeclinedListener::class,
+        ],
+        PostDeclinedEvent::class => [
+            PostDeclinedListener::class,
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             // ... other providers

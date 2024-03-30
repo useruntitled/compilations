@@ -17,12 +17,20 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $users = User::factory()
-            ->count(20)
+            ->count(2)
             ->has(Post::factory()
                 ->has(Film::factory()->count(mt_rand(2, 20)))
                 ->count(2))
             ->has(Post::factory()->state(new Sequence(['published_at' => null])))
             ->create();
         foreach ($users as $user) $user->makeAvatar();
+
+        $bannedUser = User::factory()
+            ->state([
+                'banned_at' => now(),
+                'banned_by' => array_rand(array_flip($users->pluck('id')->toArray())),
+            ])
+            ->create();
+        $bannedUser->makeAvatar();
     }
 }

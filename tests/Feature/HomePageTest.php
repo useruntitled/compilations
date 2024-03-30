@@ -11,9 +11,6 @@ class HomePageTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic feature test example.
-     */
     public function test_home_page_is_displayed(): void
     {
         $response = $this->get(route('home'));

@@ -54,12 +54,12 @@ class Comment extends Model
     public function replies()
     {
         // return $this->hasMany(Comment::class)->with('replies');
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->withTrashed();
     }
 
     public function comment()
     {
-        return $this->belongsTo(Comment::class);
+        return $this->belongsTo(Comment::class)->withTrashed();
     }
 
     protected function timestamp(): Attribute

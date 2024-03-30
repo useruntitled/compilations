@@ -26,7 +26,7 @@ class CommentFactory extends Factory
             'post_id' => $attributes['post_id'] ?? Post::factory(),
             'comment_id' => $attributes['comment_id'] ?? null,
             'level' => 0,
-            'text' => fake()->words(mt_rand(1, 20), true),
+            'text' => fake()->words(mt_rand(1, 200), true),
         ];
     }
 

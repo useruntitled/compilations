@@ -65,7 +65,7 @@ class PostTest extends TestCase
             'id' => $post['id'],
         ]);
 
-        $post = Post::withCount('films')->published()->findOrFail($post['id']);
+        $post = Post::withCount('films')->findOrFail($post['id']);
         $this->assertSame($post->title, $title);
         $this->assertSame($post->description, $description);
         $this->assertSame($post->films_count, 1);
@@ -102,7 +102,7 @@ class PostTest extends TestCase
             'title' => 'Draft',
         ])->json();
 
-        $draft = Post::find($draft['id']);
+        $draft = Post::drafted()->find($draft['id']);
 
         $this->assertNull($draft->published_at);
 
@@ -163,7 +163,7 @@ class PostTest extends TestCase
 
     public function test_guest_cannot_publish_draft(): void
     {
-        $draft = Post::isDraft()->first();
+        $draft = Post::drafted()->first();
         $this->postJson(route('post.publish'), [
             'id' => $draft->id,
         ])->assertRedirect();
@@ -190,7 +190,7 @@ class PostTest extends TestCase
 
     public function test_user_cannot_publish_other_user_draft(): void
     {
-        $post = Post::isDraft()->first();
+        $post = Post::drafted()->first();
         $this->login()
             ->postJson(route('post.publish'), [
                 'id' => $post->id,

@@ -21,7 +21,7 @@ Route::middleware('moderOrAdmin')->group(function() {
     Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
         Route::get('panel/users', 'index')->name('panel.users');
         Route::get('panel/view/user/{id}', 'view')->name('panel.view.user');
-        Route::put('panel/ban/user', 'ban')->name('panel.ban.user');
+        Route::put('panel/toggle/ban', 'toggleBan')->name('panel.toggle.ban');
     });
 
     Route::controller(\App\Http\Controllers\Admin\ReportController::class)->group(function () {

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -16,16 +14,22 @@ class UsersController extends Controller
 
         $users = User::with('roles')
             ->latest()
-            ->paginate(config('admin.per_page'));
+            ->when($request->input('search'), function ($query, $search) {
+                $query->where('name', 'like', "%$search%")
+                    ->orWhere('id', 'like', "%$search%");
+            })
+            ->paginate(config('admin.per_page'))
+            ->withQueryString();
 
         return inertia('Admin/Users/Index', [
-            'users' => $users,
+            'list' => $users,
+            'search' => $request->search,
         ]);
     }
 
     public function view($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('bannedByUser')->findOrFail($id);
         return inertia('Admin/Users/View', [
             'user' => $user,
         ]);
@@ -34,23 +38,21 @@ class UsersController extends Controller
     public function toggleModer(Request $request)
     {
         $user = User::findOrFail($request->id);
-        $moder_role = Role::where('role', '=', 'moder')->firstOrFail();
-        if (!$user->roles()->exists($moder_role->id)) {
-            $user->roles()->attach($moder_role);
-            $user->save();
 
+        if (!$user->isModer) {
+            $user->toModer();
         } else {
-            $user->roles()->detach($moder_role->id);
-            $user->save();
+            $user->unModer();
         }
     }
 
-    public function ban(Request $request)
+    public function toggleBan(Request $request)
     {
-        $user = User::find($request->id);
-        $user->banned_at = now();
-        $user->banned_by = Auth::id();
-        $user->banned_reason = $request->reason;
-        $user->update();
+        $user = User::findOrFail($request->id);
+        if ($user->isBanned) {
+            $user->unBan();
+        } else {
+            $user->ban($request->reason);
+        }
     }
 }

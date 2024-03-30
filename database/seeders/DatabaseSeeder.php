@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         if (!App::environment('production')) {
             $this->call(UserSeeder::class);
             $this->call(CommentSeeder::class);
+            $this->call(ReputationSeeder::class);
         }
     }
 }

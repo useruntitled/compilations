@@ -7,8 +7,10 @@ namespace App\Models;
 use App\Casts\ReputationCast;
 use App\Services\KarmaService;
 use App\Traits\Adminable;
+use App\Traits\Banable;
 use App\Traits\HasAvatar;
 use App\Traits\HasSubsite;
+use App\Traits\Roleable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,7 +27,8 @@ class User extends Authenticatable implements  MustVerifyEmail
     use Notifiable;
     use HasSubsite;
     use HasAvatar;
-    use Adminable;
+    use Roleable;
+    use Banable;
 
     const TABLE = 'users';
 
@@ -40,7 +43,7 @@ class User extends Authenticatable implements  MustVerifyEmail
     ];
 
     protected $with = [
-        'avatar'
+        'avatar',
     ];
 
     protected $fillable = [
@@ -62,6 +65,8 @@ class User extends Authenticatable implements  MustVerifyEmail
         'remember_token',
         'provider',
         'provider_user_id',
+        'banned_by_user',
+        'banned_by',
     ];
 
     /**
@@ -71,17 +76,11 @@ class User extends Authenticatable implements  MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'created_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'bool',
         'is_creator' => 'bool',
     ];
-
-    protected function isBanned(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => $this->banned_at != null
-        );
-    }
 
     protected function isAdmin(): Attribute
     {

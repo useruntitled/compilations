@@ -4,24 +4,25 @@
             Жалобы
         </p>
 
-        <admin-row v-for="report in reports.data">
-            <template #id>
-                {{ report.id }}
-            </template>
-            <template #timestamp>
-                {{ report.created_at }}
-            </template>
-            <template #title>
-                {{ models[report.report_to_type] }}
-            </template>
-            <template #content>
-                {{ types[report.message] }}
-            </template>
-            <template #buttons>
-                <Link :href="route('panel.report.view', [report.id])">Посмотреть</Link>
-                <button>Удалить</button>
-            </template>
-        </admin-row>
+        <admin-table>
+            <admin-row v-for="report in reports.data">
+                <template #id>
+                    {{ report.id }}
+                </template>
+                <template #date>
+                    {{ report.created_at }}
+                </template>
+                <template #title>
+                    {{ models[report.report_to_type] }}
+                </template>
+                <template #content>
+                    {{ types[report.message] }}
+                </template>
+                <template #action>
+                    <Link :href="route('panel.report.view', [report.id])">Посмотреть</Link>
+                </template>
+            </admin-row>
+        </admin-table>
         <admin-pagination :links="reports.links" :last_page="reports.last_page"></admin-pagination>
     </main>
 </template>
@@ -29,6 +30,7 @@
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminRow from "@/Components/Admin/AdminRow.vue";
 import AdminPagination from "@/Components/Admin/AdminPagination.vue";
+import AdminTable from "@/Components/Admin/AdminTable.vue";
 
 defineOptions({
     layout: PanelLayout,

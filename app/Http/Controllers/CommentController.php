@@ -2,35 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Comment\DeleteComment;
+use App\Actions\Comment\StoreComment;
+use App\Actions\Comment\UpdateComment;
 use App\Events\CommentCreatedEvent;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\StoreCommentResource;
 use App\Models\Comment;
-use App\Models\Media;
 use App\Policies\CommentPolicy;
-use App\Services\Media\MediaService;
-use App\Services\Media\MediaUploader;
-use App\Services\NotificationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    protected MediaService $service;
-
-    public function __construct(MediaService $service)
-    {
-        $this->service = $service;
-    }
-
-    public function index($id, NotificationService $service)
+    public function index($id)
     {
         $comment = Comment::with('post')->find($id);
-        if($comment == null) {
-            $service->deleteByObjectId(Auth::id(),$id);
-            abort(404);
-        };
 
         return redirect()
             ->route('post', [
@@ -42,87 +29,32 @@ class CommentController extends Controller
 
     public function store(StoreCommentRequest $request)
     {
-        if ($request->comment_id) {
-            $comment = Comment::find($request->comment_id);
-
-            $level = $comment->level + 1;
-        } else {
-            $level = 0;
-        }
-
-        $comment = Comment::create([
-            'post_id' => $request->post_id,
-            'comment_id' => $request->comment_id,
-            'text' => preg_replace('/(<div><br><\/div>\s*)+$/', '', $request->text),
-            'level' => $level,
-            'user_id' => Auth::user()->id,
-        ]);
-
-        if ($request->image != null) {
-            MediaUploader::toEloquent($request->input('image')['href'], $comment);
-        }
+        $comment = StoreComment::fromRequest($request);
 
         event(new CommentCreatedEvent($comment));
+
         return StoreCommentResource::make($comment);
     }
 
-    public function delete(Request $request, MediaService $media)
+    public function delete(Request $request)
     {
-        $request->validate([
-            'id' => 'required',
-        ]);
-
         $comment = Comment::findOrFail($request->id);
 
         $this->authorize(CommentPolicy::DELETE, $comment);
 
-        $isForceDeleted = 0;
+        $data = DeleteComment::fromRequest($comment, $request);
 
-        if ($comment->image) $media->delete($comment->image);
-
-        if ($comment->replies->count() == 0) {
-            $isForceDeleted = 1;
-            $comment->forceDelete();
-            return response()->json([
-                'is_force_deleted' => $isForceDeleted,
-                'data' => $comment->only(['id', 'text']),
-            ]);
-        }
-
-        $comment->delete();
-
-
-        $comment->text = Comment::DELETED_TEXT;
-
-        $comment->update();
-
-        return response()->json([
-            'is_force_deleted' => $isForceDeleted,
-            'data' => $comment->only(['id', 'text', 'image', 'image_preview']),
-        ]);
+        return response()->json($data);
 
     }
 
-    public function update(StoreCommentRequest $request, MediaService $media)
+    public function update(StoreCommentRequest $request)
     {
-        $validated = $request->validate([
-            'text' => 'min:0|max:2000',
-            'id' => 'required',
-        ]);
-
         $comment = Comment::published()->findOrFail($request->id);
 
         $this->authorize(CommentPolicy::UPDATE, $comment);
 
-
-        if ($request->image != null) {
-            MediaUploader::toEloquent($request->input('image')['href'], $comment);
-        } else if ($comment->image) {
-            $media->delete($comment->image);
-        }
-
-        $comment->text = rtrimbr($request->text);
-        $comment->update();
+        $comment = UpdateComment::fromRequest($comment, $request);
 
         return $comment->only(['image', 'text']);
     }
@@ -130,6 +62,7 @@ class CommentController extends Controller
     public function getByPostId($post_id)
     {
         $comments = Comment::where('post_id', $post_id)
+            ->withTrashed()
             ->with(['replies', 'user' => ['roles'], 'reputationRelation', 'comment', 'image'])
             ->latest()
             ->get();

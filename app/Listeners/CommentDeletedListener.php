@@ -31,7 +31,6 @@ class CommentDeletedListener implements ShouldQueue
         $this->deletePostWasCommentedNotification($comment);
         $this->deleteReplyNotification($comment);
 
-        // Transaction or something needed here
         $this->destroyDeletedParrent($comment);
     }
 

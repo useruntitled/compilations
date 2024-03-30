@@ -1,31 +1,46 @@
 <template>
-
-    <admin-row v-for="user in users.data" :key="user.id">
-        <template #id>
-            {{ user.id }}
-        </template>
-        <template #title>
-            {{ user.name }}
-        </template>
-        <template #timestamp>
-            {{ user.created_at }}
-        </template>
-        <template #buttons>
-            <Link :href="route('panel.view.user', [user.id])">Рассмотреть</Link>
-        </template>
-    </admin-row>
-    <admin-pagination :links="users.links" :last_page="users.last_page"></admin-pagination>
+    <admin-table>
+        <admin-row v-for="user in list.data" :key="user.id">
+            <template #id>
+                {{ user.id }}
+            </template>
+            <template #title>
+                {{ user.name }}
+            </template>
+            <template #status>
+                <p class="text-red-500" v-if="user.is_banned">Заблокирован</p>
+                <p v-else>Активен</p>
+            </template>
+            <template #date>
+                {{ user.created_at }}
+            </template>
+            <template #action>
+                <Link :href="route('panel.view.user', [user.id])">Рассмотреть</Link>
+            </template>
+        </admin-row>
+    </admin-table>
 </template>
 <script setup>
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminRow from "@/Components/Admin/AdminRow.vue";
 import AdminPagination from "@/Components/Admin/AdminPagination.vue";
-
-defineOptions({
-    layout: PanelLayout
-})
+import AdminSearchInertiaInput from "@/Components/Admin/AdminSearchInertiaInput.vue";
+import {usePage} from "@inertiajs/vue3";
+import PanelListLayout from "@/Layouts/PanelListLayout.vue";
+import AdminTable from "@/Components/Admin/AdminTable.vue";
 
 const props = defineProps({
-    users: null,
+    list: null,
+    search: null,
+});
+
+
+const page = usePage();
+
+
+defineOptions({
+    layout: [PanelLayout, PanelListLayout]
 })
+
+
 </script>

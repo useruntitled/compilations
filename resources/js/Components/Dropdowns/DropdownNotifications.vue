@@ -74,6 +74,8 @@ import ReplyNotification from "../Notifications/ReplyNotification.vue";
 import PostUpNotification from "../Notifications/PostUpNotification.vue";
 import CommentUpNotification from "../Notifications/CommentUpNotification.vue";
 import { usePage } from "@inertiajs/vue3";
+import PostWasDeclinedNotification from "@/Components/Notifications/PostWasDeclinedNotification.vue";
+import CommentWasDeclinedNotification from "@/Components/Notifications/CommentWasDeclinedNotification.vue";
 
 const page = usePage();
 
@@ -83,6 +85,8 @@ const notificationsList = {
     "App\\Notifications\\ReplyNotification": ReplyNotification,
     "App\\Notifications\\PostUpNotification": PostUpNotification,
     "App\\Notifications\\CommentUpNotification": CommentUpNotification,
+    "App\\Notifications\\PostWasDeclinedNotification": PostWasDeclinedNotification,
+    "App\\Notifications\\CommentWasDeclinedNotification": CommentWasDeclinedNotification,
 };
 
 const unreadNotificationsCount = ref(

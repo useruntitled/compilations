@@ -79,8 +79,7 @@ class FilmController extends Controller
         foreach ($films_en as $film) {
             $films->push($film);
         }
-
-        return Response::json($films, 200);
+        return response()->json($films);
     }
 
     protected function searchById(int $id)
@@ -91,7 +90,7 @@ class FilmController extends Controller
             return Response::json([$this->store($id)], 200);
         }
 
-        return Response::json($films, 200);
+        return response()->json($films);
     }
 
 }

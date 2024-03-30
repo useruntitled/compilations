@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bg-panelsemiprimary p-5 max-w-5xl">
         <header class="border-b-2 pb-2 flex justify-between font-semibold text-lg">
             <div>
                 {{ props.title }} #{{ props.object.id }}
@@ -18,11 +18,11 @@
             </p>
         </section>
         <main class="border-b-2 py-2">
-            <slot name="description"></slot>
+            <slot name="description"/>
         </main>
 
         <footer class="flex justify-between space-x-4 font-semibold">
-            <slot name="footer"></slot>
+            <slot name="footer"/>
         </footer>
     </div>
 </template>
@@ -32,3 +32,8 @@ const props = defineProps({
     title: null,
 })
 </script>
+<style scoped>
+* {
+    color: rgb(181 181 189);
+}
+</style>
