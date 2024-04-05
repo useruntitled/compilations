@@ -1,5 +1,5 @@
 <template>
-    <!--    <div class="bg-panelbck bg-panelsemiprimary ring-gray-100"></div>-->
+    <!--    <div class="bg-panelbck bg-panelsemiprimary bg-white ring-gray-100"></div>-->
     <input
         :type="type"
         class="rounded-xl w-full font-medium p-3 px-4
@@ -30,6 +30,10 @@ const props = defineProps({
         type: String,
         default: "gray-100",
     },
+    bgActiveColor: {
+        type: String,
+        default: "white",
+    },
     primaryColor: {
         type: String,
         default: 'orange-500',
@@ -45,11 +49,11 @@ const bgColorClass = computed(() => {
 })
 
 const focusColorClass = computed(() => {
-    return `focus:${props.bgColor}`;
+    return `focus:bg-${props.bgActiveColor}`;
 });
 
 const hoverColorClass = computed(() => {
-    return `hover:${props.bgColor}`;
+    return `hover:bg-${props.bgActiveColor}`;
 });
 
 const borderColorClass = computed(() => {
