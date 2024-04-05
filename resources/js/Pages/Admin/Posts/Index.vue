@@ -1,7 +1,6 @@
 <template>
-
     <admin-table>
-        <admin-row v-for="post in list.data" :key="post.id">
+        <admin-row v-for="post in list.data" :key="post.id" :enabled-filter="props.filter" filter="published">
             <template #id>
                 {{ post.id }}
             </template>
@@ -15,7 +14,9 @@
                 {{ post.timestamp }}
             </template>
             <template #action>
-                <Link :href="route('panel.view.post', [post.id])">Рассмотреть</Link>
+                <Link :href="route('panel.view.post', [post.id])">
+                    Рассмотреть
+                </Link>
             </template>
         </admin-row>
     </admin-table>
@@ -33,5 +34,6 @@ defineOptions({
 
 const props = defineProps({
     list: null,
+    filter: null,
 })
 </script>

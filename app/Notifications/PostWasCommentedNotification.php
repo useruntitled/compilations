@@ -27,7 +27,6 @@ class PostWasCommentedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'notification_type' => 'post.was.commented',
             'id' => $this->comment->id,
             'post' => $this->comment->post,
             'object_id' => $this->comment->post->id,

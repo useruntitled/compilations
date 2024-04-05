@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Services\KarmaService;
 use Illuminate\Support\Facades\Auth;
 
-class PersonalPageController extends Controller
+class  PersonalPageController extends Controller
 {
     protected $service;
 
@@ -30,7 +30,7 @@ class PersonalPageController extends Controller
             $user_id = Auth::id();
         }
 
-        $user = User::query()->findOrFail($user_id);
+        $user = User::findOrFail($user_id);
 
         $karma = $this->service->calculateUserKarma($user);
 

@@ -62,38 +62,3 @@ const handleLoadEvent = async () => {
     }
 };
 </script>
-<!-- <script>
-import Pagination from "@/Components/Pagination.vue";
-import { Link } from "@inertiajs/vue3";
-import Post from "@/Components/Post.vue";
-import Base from "../shared/base.vue";
-import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
-import Comment from "@/Components/Comments/Comment.vue";
-import EmptyFeed from "@/Components/EmptyFeed.vue";
-
-export default {
-    layout: [Base, PageProfileLayout],
-    props: {
-        user: null,
-        karma: null,
-        posts: null,
-        comments: null,
-        replies: null,
-        section: null,
-    },
-    data() {
-        return {
-            selectedSection: parseInt(this.section) ?? 1,
-        };
-    },
-    methods: {},
-    components: {
-        Link,
-        Pagination,
-        Post,
-        PageProfileLayout,
-        Comment,
-        EmptyFeed,
-    },
-};
-</script> -->

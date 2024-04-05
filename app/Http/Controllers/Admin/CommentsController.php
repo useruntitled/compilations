@@ -7,10 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\DeclineRequest;
 use App\Models\Comment;
 use App\Models\Report;
+use App\Traits\UsesFilters;
 use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
+    use UsesFilters;
+
     public function index(Request $request)
     {
         $comments = Comment::with(['image'])
@@ -19,7 +22,9 @@ class CommentsController extends Controller
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('text', 'like', "%$search%")
                     ->orWhere('id', 'like', "%$search%");
-            })
+            });
+
+        $comments = $this->setFilter($comments)
             ->paginate(config('admin.per_page'))
             ->withQueryString();
 

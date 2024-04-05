@@ -6,19 +6,6 @@
             >
                 <div class="flex items-end justify-start">
                     <div class="flex items-end justify-end">
-                        <!-- <img
-                            class="rounded-full inline-block hover:brightness-110"
-                            :src="route('im', [user.avatar, '100'])"
-                            style="width: 40px; height: 40px"
-                            alt=""
-                        /> -->
-                        <!--                        <LazyImage-->
-                        <!--                            :preview="`/media/${user.avatar_preview}`"-->
-                        <!--                            :then="route('im', [user.avatar, 100])"-->
-                        <!--                            class="rounded-full inline-block hover:brightness-110 object-cover border-2"-->
-                        <!--                            style="width: 40px; height: 40px"-->
-                        <!--                        >-->
-                        <!--                        </LazyImage>-->
                         <lazy-media
                             :media="user.avatar"
                             rounded="full"

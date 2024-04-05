@@ -21,10 +21,6 @@ class MediaController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Show image.
-     * Global storage path.
-     */
     public function index($filename, $scale = null)
     {
         return $this->service->get($filename, $scale);

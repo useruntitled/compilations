@@ -7,10 +7,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PersonalPageController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\TagController;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('banned', function () {
     return inertia('Banned');
@@ -46,19 +44,10 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('drafts', [PostController::class, 'drafts'])->name('drafts');
 });
 
-Route::controller(TagController::class)->group(function () {
-    Route::post('tag-post', 'attach')->name('tag.attach.post')->middleware('auth');
-    Route::delete('tag-post', 'detach')->name('tag.detach.post');
-    Route::get('tag/{slug}', 'index')->name('tag');
-});
 
 Route::controller(CommentController::class)->group(function () {
     Route::get('comment/{id}', 'index')->name('comment.redirect');
@@ -87,9 +76,6 @@ Route::middleware('auth')->group(function () {
 Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
    Route::get('search', 'index')->name('search');
 });
-
-
-
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

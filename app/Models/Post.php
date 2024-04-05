@@ -74,6 +74,16 @@ class Post extends Model implements Sitemapable
         $builder->withoutGlobalScope(PublishedScope::class);
     }
 
+    public function scopePublished(Builder $builder): void
+    {
+        $builder->whereNotNull('published_at')->whereNull('declined_at');
+    }
+
+    public function scopeDeclined(Builder $builder): void
+    {
+        $builder->whereNotNull('declined_at');
+    }
+
     public function image(): MorphOne
     {
         return $this->morphOne(Media::class, 'media_to')->latest();

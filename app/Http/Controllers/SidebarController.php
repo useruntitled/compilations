@@ -11,8 +11,6 @@ class SidebarController extends Controller
 
         $comments = Comment::with(['user' => ['roles'], 'post', 'image'])->latest()->limit(20)->get();
 
-        // $comments = CommentResource::collection(Comment::query()->orderBy('created_at','desc')->limit(20)->get());
-
         $comments = $comments->filter(fn ($c) => ! $c->trashed());
 
         return $comments;

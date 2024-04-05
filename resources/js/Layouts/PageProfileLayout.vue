@@ -88,17 +88,11 @@
 </template>
 <script setup>
 import {ref, watch, computed, onMounted, inject} from "vue";
-import IconPhoto from "@/Components/Icons/IconPhoto.vue";
-import ZoomableImage from "@/Components/ZoomableImage.vue";
 import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
-import LazyImage from "@/Components/LazyImage.vue";
-import { nextTick } from "vue";
 import axios from "@/AxiosWrapper.js";
 import axiosInstance from "@/AxiosWrapper.js";
-import LazyMedia from "@/Components/Media/LazyMedia.vue";
-import AnimationLoader from "@/Components/Animations/AnimationLoader.vue";
 import SubsiteCover from "@/Components/Media/SubsiteCover.vue";
 import UploadableLazyMedia from "@/Components/Media/UploadableLazyMedia.vue";
 

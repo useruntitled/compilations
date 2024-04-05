@@ -6,6 +6,7 @@ use App\Services\Media\MediaService;
 use App\Traits\Declineable;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,11 @@ class Comment extends Model
     public function scopePublished($query)
     {
         return $query->whereNull('deleted_at')->whereNull('declined_at');
+    }
+
+    public function scopeDeclined(Builder $builder): void
+    {
+        $builder->whereNotNull('declined_at');
     }
 
     public function image(): MorphOne

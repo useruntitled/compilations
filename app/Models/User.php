@@ -12,6 +12,7 @@ use App\Traits\HasAvatar;
 use App\Traits\HasSubsite;
 use App\Traits\Roleable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -101,6 +102,16 @@ class User extends Authenticatable implements  MustVerifyEmail
         $this->roles ?? $this->roles();
 
         return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::MODER));
+    }
+
+    public function scopePublished(Builder $builder): void
+    {
+        $builder->whereNull('banned_at');
+    }
+
+    public function scopeDeclined(Builder $builder): void
+    {
+        $builder->whereNotNull('banned_at');
     }
 
 

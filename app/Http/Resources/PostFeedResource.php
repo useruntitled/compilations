@@ -27,6 +27,8 @@ class PostFeedResource extends JsonResource
             'reputation' => $this->reputation,
             'films' => $films,
             'comments_count' => $this->comments_count,
+            'bookmarks_count' => $this->bookmarks_count,
+            'has_bookmark' => $this->hasBookmark,
             'films_count' => $this->films_count,
             'views' => $this->views,
             'visits' => $this->visits,
