@@ -1,8 +1,6 @@
 <script setup>
-import GuestLayout from "@/Layouts/GuestLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import IconUser from "@/Components/Icons/IconUser.vue";
@@ -24,7 +22,6 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
         <Head title="Зарегистрироваться" />
 
         <form @submit.prevent="submit">
@@ -132,5 +129,4 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
 </template>
