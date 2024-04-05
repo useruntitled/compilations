@@ -75,10 +75,7 @@
 <script setup>
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminViewCard from "@/Components/Admin/AdminViewCard.vue";
-import UserTablet from "@/Components/UserTablet.vue";
 import {router, usePage} from "@inertiajs/vue3";
-import {computed} from "vue";
-import Message from "@/Components/Message.vue";
 
 defineOptions({
     layout: PanelLayout,
