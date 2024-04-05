@@ -30,7 +30,6 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
         <Head title="Войти" />
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -102,5 +101,4 @@ const submit = () => {
                 </Link>
             </div>
         </form>
-    </GuestLayout>
 </template>
