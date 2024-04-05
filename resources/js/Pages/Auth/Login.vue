@@ -38,7 +38,7 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Эл. почта" />
 
-                <TextInput
+                <input
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
@@ -54,7 +54,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Пароль" />
 
-                <TextInput
+                <input
                     id="password"
                     type="password"
                     class="mt-1 block w-full"

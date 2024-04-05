@@ -1,7 +1,7 @@
 <script setup>
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 import IconUser from "@/Components/Icons/IconUser.vue";
 import IconMail from "@/Components/Icons/IconMail.vue";
@@ -32,7 +32,7 @@ const submit = () => {
                     <IconUser
                         class="absolute pl-2 fill-slate-400 stroke-slate-400"
                     ></IconUser>
-                    <TextInput
+                    <input
                         id="name"
                         type="text"
                         class="mt-1 pl-10 block w-full"
@@ -53,7 +53,7 @@ const submit = () => {
                     <IconMail
                         class="absolute pl-2 fill-slate-400 stroke-white"
                     ></IconMail>
-                    <TextInput
+                    <input
                         id="email"
                         type="email"
                         class="mt-1 pl-10 block w-full"
@@ -73,7 +73,7 @@ const submit = () => {
                     <IconShieldDanger
                         class="absolute pl-2 fill-slate-400 stroke-white stroke-2"
                     ></IconShieldDanger>
-                    <TextInput
+                    <input
                         id="password"
                         type="password"
                         class="mt-1 pl-10 block w-full"
@@ -96,7 +96,7 @@ const submit = () => {
                     <IconShieldDanger
                         class="absolute pl-2 fill-slate-400 stroke-white stroke-2"
                     ></IconShieldDanger>
-                    <TextInput
+                    <input
                         id="password_confirmation"
                         type="password"
                         class="mt-1 pl-10 block w-full"
@@ -120,13 +120,13 @@ const submit = () => {
                     Уже зарегистрированы?
                 </Link>
 
-                <PrimaryButton
+                <primary-button
                     class="ml-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
                     Зарегистрироваться
-                </PrimaryButton>
+                </primary-button>
             </div>
         </form>
 </template>
