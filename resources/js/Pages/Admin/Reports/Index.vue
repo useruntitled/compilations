@@ -18,8 +18,8 @@
                 </template>
                 <template #action>
                     <Link :href="route('panel.report.view', [report.id])"
-                        >Посмотреть</Link
-                    >
+                        >Посмотреть
+                    </Link>
                 </template>
             </admin-row>
         </admin-table>

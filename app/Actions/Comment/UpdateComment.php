@@ -11,7 +11,7 @@ class UpdateComment
     {
         if ($request->image != null) {
             MediaUploader::toEloquent($request->input('image')['href'], $comment);
-        } else if ($comment->image) {
+        } elseif ($comment->image) {
             MediaService::delete($comment->image);
         }
 

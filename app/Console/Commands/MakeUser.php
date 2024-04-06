@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
-use App\Services\Media\ImageGeneratorService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 

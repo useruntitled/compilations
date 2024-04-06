@@ -3,10 +3,8 @@
 namespace App\Services\Media;
 
 use App\DTO\MediaData;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\ImageManager;
 
 class ImageGeneratorService
@@ -15,8 +13,12 @@ class ImageGeneratorService
     {
         $hashName = Str::uuid();
 
-        if ($width == null) $width = config('image.default_dimensions');
-        if ($height == null) $height = config('image.default_dimensions');
+        if ($width == null) {
+            $width = config('image.default_dimensions');
+        }
+        if ($height == null) {
+            $height = config('image.default_dimensions');
+        }
 
         $randomColor = fake()->hexColor();
 
@@ -24,11 +26,9 @@ class ImageGeneratorService
             ->create($width, $height)
             ->fill($randomColor);
 
-
         $encodedImage = $notEncodedImage->toJpeg();
 
         Storage::disk('media')->put($hashName . '.jpeg', $encodedImage);
-
 
         $path = media_path($hashName . '.jpeg');
 

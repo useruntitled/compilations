@@ -35,9 +35,12 @@ class HandleInertiaRequests extends Middleware
 
         $access_level = 0;
 
-        if($user) {
-            if($user->isAdmin) $access_level = 2;
-            else if($user->isModer) $access_level = 1;
+        if ($user) {
+            if ($user->isAdmin) {
+                $access_level = 2;
+            } elseif ($user->isModer) {
+                $access_level = 1;
+            }
         }
 
         return [

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewReputationRequest;
 use App\Models\Reputation;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 
 class ReputationController extends Controller
@@ -11,7 +12,7 @@ class ReputationController extends Controller
     public function index(NewReputationRequest $request)
     {
         $request['reputation_to_type'] = str_contains($request->reputation_to_type, 'App\\Models\\') ?
-        $request->reputation_to_type : 'App\\Models\\'.$request->reputation_to_type;
+            $request->reputation_to_type : Relation::getMorphedModel($request->reputation_to_type);
 
         $reputation = Reputation::where('reputation_to_type', $request->reputation_to_type)
             ->where('reputation_to_id', $request->reputation_to_id)
@@ -22,7 +23,6 @@ class ReputationController extends Controller
             $reputation = $this->store($request);
         }
 
-        // $this->returnReputationToReputation();
         return $reputation->reputation_to->reputation;
     }
 

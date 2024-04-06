@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\Media\ImageGeneratorService;
 use App\Services\Media\ImageParserService;
 use App\Services\Media\MediaUploader;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +28,7 @@ class SocialiteProviderController extends Controller
             'provider_user_id' => $socialiteUser->getId(),
         ])->first();
 
-        if(!$user) {
+        if (!$user) {
             $hasImage = true;
 
             $user = User::create([
@@ -55,6 +54,7 @@ class SocialiteProviderController extends Controller
         $close_window_token = Str::random(10);
 
         Inertia::share('close_window_token', $close_window_token);
+
         return inertia('Home/Index', [
             'close_window_token' => $close_window_token,
         ]);

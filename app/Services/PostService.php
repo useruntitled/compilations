@@ -35,11 +35,12 @@ class PostService
 
     public function getMostCommented(?int $page = 1)
     {
-        $posts = Post::withCount(['comments',])
+        $posts = Post::withCount(['comments'])
             ->orderByDesc('comments_count')
             ->skip(($page - 1) * config('post.per_page') * 2)
             ->take(config('post.per_page') * 2)
             ->get();
+
         return ShortPostFeedResource::collection($posts);
     }
 
@@ -47,12 +48,13 @@ class PostService
     {
         $drafts = Post::with(['films.genres', 'image', 'user.avatar'])
             ->drafted()
-            ->withCount('films',)
+            ->withCount('films')
             ->where('user_id', Auth::user()->id)
             ->skip($this->per_page * ($page - 1))
             ->take($this->per_page)
             ->latest()
             ->get();
+
         return $drafts;
     }
 
@@ -66,19 +68,21 @@ class PostService
             ->get();
 
         $this->countView($posts);
+
         return PostFeedResource::collection($posts);
     }
 
-    public function getRandom(?int $page = 1, ?int $post_id)
+    public function getRandom(?int $page, ?int $post_id)
     {
         $posts = Post::with(['user' => ['roles'], 'films', 'reputationRelation'])
-                ->where('id','!=',$post_id)
-                ->withCount(['comments', 'bookmarks', 'films'])
-                ->inRandomOrder()
-                ->skip(($page - 1) * $this->per_page)
-                ->take($this->per_page)
-                ->get();
+            ->where('id', '!=', $post_id)
+            ->withCount(['comments', 'bookmarks', 'films'])
+            ->inRandomOrder()
+            ->skip(($page - 1) * $this->per_page)
+            ->take($this->per_page)
+            ->get();
         $this->countView($posts);
+
         return PostFeedResource::collection($posts);
     }
 

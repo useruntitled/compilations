@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PostFeedResource;
-use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use App\Models\Comment;
 use App\Models\Post;
@@ -11,7 +10,7 @@ use App\Models\User;
 use App\Services\KarmaService;
 use Illuminate\Support\Facades\Auth;
 
-class  PersonalPageController extends Controller
+class PersonalPageController extends Controller
 {
     protected $service;
 
@@ -25,8 +24,10 @@ class  PersonalPageController extends Controller
 
     public function index(?int $user_id = null)
     {
-        if($user_id == null) {
-            if(!Auth::check()) abort(403);
+        if ($user_id == null) {
+            if (!Auth::check()) {
+                abort(403);
+            }
             $user_id = Auth::id();
         }
 
@@ -56,6 +57,7 @@ class  PersonalPageController extends Controller
             ->skip(($page - 1) * $this->per_page)
             ->take($this->per_page)
             ->get();
+
         return PostFeedResource::collection($posts);
     }
 

@@ -5,19 +5,33 @@ namespace App\DTO;
 class FilmData extends DTO
 {
     public $id;
+
     public $type;
+
     public $serial;
+
     public $name_en;
+
     public $name_ru;
+
     public $poster_url;
+
     public $poster_url_preview;
+
     public $logo_url;
+
     public $slogan;
+
     public $description;
+
     public $short_description;
+
     public $country;
+
     public $start_year;
+
     public $year;
+
     public $genres;
 
     public function __construct($data)

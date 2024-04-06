@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Film;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
@@ -23,7 +22,9 @@ class UserSeeder extends Seeder
                 ->count(2))
             ->has(Post::factory()->state(new Sequence(['published_at' => null])))
             ->create();
-        foreach ($users as $user) $user->makeAvatar();
+        foreach ($users as $user) {
+            $user->makeAvatar();
+        }
 
         $bannedUser = User::factory()
             ->state([

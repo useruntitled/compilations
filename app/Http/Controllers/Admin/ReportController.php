@@ -10,6 +10,7 @@ class ReportController extends Controller
     public function index($id)
     {
         $report = Report::findOrFail($id);
+
         return inertia('Admin/Reports/View', [
             'report' => $report,
         ]);

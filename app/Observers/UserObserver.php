@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Actions\AddSubsiteAction;
 use App\Jobs\AddUserRoleToNewUserJob;
-use App\Models\Subsite;
 use App\Models\User;
 
 class UserObserver

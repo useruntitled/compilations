@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 trait HasReputation
 {
-
     public function reputationRelation(): MorphMany
     {
         return $this->morphMany(Reputation::class, 'reputation_to', 'reputation_to_type', 'reputation_to_id');
     }
-
 
     public function getReputationAttribute()
     {

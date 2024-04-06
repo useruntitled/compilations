@@ -5,13 +5,11 @@ namespace Tests\Feature;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CommentTest extends TestCase
 {
     use RefreshDatabase;
-
 
     protected $seed = true;
 
@@ -37,7 +35,7 @@ class CommentTest extends TestCase
     {
         $comment = Comment::published()->first();
         $this->postJson(route('comment.delete'), [
-            'id' => $comment->id
+            'id' => $comment->id,
         ])->assertRedirect();
     }
 

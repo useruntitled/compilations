@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\Media\MediaService;
 use App\Traits\Declineable;
 use App\Traits\HasAuthor;
 use App\Traits\HasReputation;
@@ -15,9 +14,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use HasAuthor, HasFactory, HasReputation, SoftDeletes, Declineable;
+    use Declineable, HasAuthor, HasFactory, HasReputation, SoftDeletes;
 
     const DELETED_TEXT = 'Комментарий удалён';
+
     const DECLINED_TEXT = 'Комментарий удалён модератором';
 
     protected $fillable = [

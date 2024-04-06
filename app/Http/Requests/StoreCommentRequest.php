@@ -3,8 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
-use Closure;
+
 class StoreCommentRequest extends FormRequest
 {
     /**
@@ -35,6 +34,7 @@ class StoreCommentRequest extends FormRequest
             ],
         ];
     }
+
     protected function validateImageType($attribute, $value, $fail)
     {
         if (!in_array($value->getClientOriginalExtension(), ['jpeg', 'jpg', 'png', 'webp'])) {
@@ -42,4 +42,3 @@ class StoreCommentRequest extends FormRequest
         }
     }
 }
-

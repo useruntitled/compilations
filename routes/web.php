@@ -48,7 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::get('drafts', [PostController::class, 'drafts'])->name('drafts');
 });
 
-
 Route::controller(CommentController::class)->group(function () {
     Route::get('comment/{id}', 'index')->name('comment.redirect');
 });
@@ -74,7 +73,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
-   Route::get('search', 'index')->name('search');
+    Route::get('search', 'index')->name('search');
 });
 
 require __DIR__.'/auth.php';

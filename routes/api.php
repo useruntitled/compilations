@@ -13,7 +13,6 @@ use App\Http\Controllers\SidebarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -38,7 +37,7 @@ Route::controller(CommentController::class)->group(function () {
 
 Route::controller(PostController::class)->group(function () {
     Route::post('post', 'store')->name('post.store')->middleware(['auth', 'creator']);
-    Route::delete('post','delete')->name('post.delete')->middleware(['auth', 'creator']);
+    Route::delete('post', 'delete')->name('post.delete')->middleware(['auth', 'creator']);
     Route::put('post', 'update')->name('post.update')->middleware(['auth']);
     Route::get('post/{id}', 'get')->name('post.get')->middleware(['auth']);
     Route::get('posts/popular/page/{page?}', 'getPopular')->name('posts.popular');
@@ -82,9 +81,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(\App\Http\Controllers\SearchController::class)->group(function () {
-   Route::get('search/{query}','search')->name('search.query');
+    Route::get('search/{query}', 'search')->name('search.query');
 });
 
 Route::controller(\App\Http\Controllers\ReportController::class)->group(function () {
-   Route::post('report/store', 'store')->name('report.store');
+    Route::post('report/store', 'store')->name('report.store');
 });

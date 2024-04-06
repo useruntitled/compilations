@@ -16,6 +16,7 @@ class PostFeedResource extends JsonResource
     {
 
         $films = $this->films->take(2);
+
         return [
             'id' => $this->id,
             'slug' => $this->slug,

@@ -16,6 +16,7 @@ class StoreCommentResource extends JsonResource
     public function toArray(Request $request): array
     {
         $user = Auth::user();
+
         return [
             'id' => $this->id,
             'comment_id' => $this->comment?->id,

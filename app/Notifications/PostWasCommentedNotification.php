@@ -5,7 +5,6 @@ namespace App\Notifications;
 use App\Http\Resources\UserResource;
 use App\Models\Comment;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class PostWasCommentedNotification extends Notification

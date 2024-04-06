@@ -3,17 +3,13 @@
 namespace App\Services\Media;
 
 use App\DTO\MediaData;
-use App\Models\Comment;
 use App\Models\Media;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
 class MediaUploader
 {
-
     public static function upload(MediaData $data, $eloquent): void
     {
 

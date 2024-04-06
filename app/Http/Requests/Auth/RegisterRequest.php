@@ -24,9 +24,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => function($attribute, $value, $fail) {
+            'email' => function ($attribute, $value, $fail) {
                 $user = User::where('email', $value)->first();
-                if($user &&  $user->hasVerifiedEmail()) {
+                if ($user && $user->hasVerifiedEmail()) {
                     $fail('Почта уже используется');
                 }
             },

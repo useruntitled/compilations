@@ -6,9 +6,6 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Reputation;
 use App\Models\User;
-use Database\Factories\ReputationFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Seeder;
 
@@ -47,7 +44,6 @@ class ReputationSeeder extends Seeder
                 ])
                 ->create();
         }
-
 
     }
 }

@@ -73,7 +73,7 @@ class EventServiceProvider extends ServiceProvider
         Comment::class => [CommentObserver::class],
         // Reply::class => [ReplyObserver::class],
         Reputation::class => [ReputationObserver::class],
-        Media::class => [MediaObserver::class,]
+        Media::class => [MediaObserver::class],
     ];
 
     /**

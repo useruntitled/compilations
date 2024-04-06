@@ -28,6 +28,7 @@ class MediaService
                 ->header('Content-Disposition', 'inline')
                 ->header('X-Content-Type-Options', 'nosniff');
         });
+
         return $result;
     }
 

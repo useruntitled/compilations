@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Http\Resources\UserResource;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ReplyNotification extends Notification
@@ -13,12 +12,10 @@ class ReplyNotification extends Notification
 
     public $comment;
 
-
     public function __construct($comment)
     {
         $this->comment = $comment;
     }
-
 
     public function via(object $notifiable): array
     {

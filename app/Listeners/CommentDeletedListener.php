@@ -48,17 +48,17 @@ class CommentDeletedListener implements ShouldQueue
 
     protected function destroyDeletedParrent($comment): void
     {
-        if($comment->comment_id !== null) {
+        if ($comment->comment_id !== null) {
             $parent = Comment::withoutGlobalScope(SoftDeletingScope::class)
                 ->withCount('replies')
                 ->findOrFail($comment->comment_id);
-            if($parent->is_deleted && $parent->replies_count == 0) {
+            if ($parent->is_deleted && $parent->replies_count == 0) {
                 $parent->forceDelete();
                 event(new CommentDeletedEvent($parent));
             }
         }
-//        if ($comment->comment?->isDeleted && $comment->comment?->noReplies) {
-//            $comment->comment->forceDelete();
-//        }
+        //        if ($comment->comment?->isDeleted && $comment->comment?->noReplies) {
+        //            $comment->comment->forceDelete();
+        //        }
     }
 }

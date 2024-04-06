@@ -22,7 +22,7 @@ class NotificationController extends Controller
 
         return NotificationResource::collection($notifications);
     }
-    
+
     public function read()
     {
         Auth::user()->unreadNotifications->markAsRead();

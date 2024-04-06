@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Http\Resources\UserResource;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class CommentUpNotification extends Notification

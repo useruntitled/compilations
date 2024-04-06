@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\PostDeclinedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\Report;
 use App\Traits\UsesFilters;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -43,6 +41,7 @@ class PostsController extends Controller
             )
             ->get()
             ->count();
+
         return inertia('Admin/Posts/View', [
             'post' => $post,
             'reports_count' => $reports_count,

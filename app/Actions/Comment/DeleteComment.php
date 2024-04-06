@@ -15,6 +15,7 @@ class DeleteComment
         if ($comment->replies->count() == 0) {
             $isForceDeleted = 1;
             $comment->forceDelete();
+
             return [
                 'is_force_deleted' => $isForceDeleted,
                 'data' => $comment->only(['id', 'text']),

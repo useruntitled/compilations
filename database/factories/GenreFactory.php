@@ -18,6 +18,7 @@ class GenreFactory extends Factory
     public function definition(): array
     {
         $name = fake()->words(mt_rand(1, 5), true);
+
         return [
             'name' => $name,
             'slug' => Str::slug($name),

@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use App\Services\NotificationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class CommentDeclinedListener implements ShouldQueue
 {

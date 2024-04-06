@@ -12,7 +12,7 @@ class BookmarkController extends Controller
     {
         $bookmarks = Bookmark::with([
             'post.user',
-            'post.films.genres'
+            'post.films.genres',
         ])
             ->where('user_id', Auth::id())
             ->get();

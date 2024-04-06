@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Subsite extends Model
 {
-    use HasFactory, HasAuthor;
+    use HasAuthor, HasFactory;
 
     protected $fillable = [
         'description',

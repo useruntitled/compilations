@@ -43,7 +43,6 @@ class CommentsController extends Controller
             ->get()
             ->count();
 
-
         return inertia('Admin/Comments/View', [
             'comment' => $comment,
             'reports_count' => $reports_count,

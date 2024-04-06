@@ -5,12 +5,19 @@ namespace App\DTO;
 class MediaData extends DTO
 {
     public $id;
+
     public $href;
+
     public $format;
+
     public $width;
+
     public $height;
+
     public $base64_preview;
+
     public $duration;
+
     public $file;
 
     public function __construct($data)

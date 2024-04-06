@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Post;
-use App\Services\Media\MediaService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -32,8 +30,6 @@ return new class extends Migration
             $table->unsignedBigInteger('declined_by')->unsigned()->nullable();
             $table->foreign('declined_by')->references('id')->on('users')->onDelete('CASCADE');
             $table->text('declined_reason')->nullable();
-
-
 
             $table->bigInteger('views')->nullable()->default(0);
             $table->bigInteger('visits')->nullable()->default(0);

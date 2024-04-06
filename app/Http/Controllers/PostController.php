@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-
     protected PostService $service;
 
     public function __construct(PostService $service)
@@ -25,6 +24,7 @@ class PostController extends Controller
     public function drafts()
     {
         $drafts = $this->service->getDrafts();
+
         return inertia('Auth/Drafts', [
             'drafts' => $drafts,
         ]);
@@ -35,7 +35,7 @@ class PostController extends Controller
         $post = Post::with([
             'user' => ['roles'],
             'films' => ['genres'],
-            'image'
+            'image',
         ])->withCount(['comments', 'bookmarks'])
             ->findOrFail($id);
 
@@ -50,11 +50,11 @@ class PostController extends Controller
     {
         $posts = $this->getNew(1);
         $this->service->countView($posts);
+
         return inertia('Home/New', [
             'posts' => $posts,
         ]);
     }
-
 
     public function get(int $id)
     {
@@ -112,12 +112,14 @@ class PostController extends Controller
     public function uploadImage(UploadFileRequest $request, MediaService $service)
     {
         $post = Post::mayBeUnpublished()->findOrFail($request->id);
+
         return $service->upload($request->file('image'), $post)->toJson();
     }
 
     public function redirect($id)
     {
         $slug = Post::mayBeUnpublished()->findOrFail($id)->slug;
+
         return redirect()->route('post', [$id, $slug]);
     }
 

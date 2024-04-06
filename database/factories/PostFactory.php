@@ -6,7 +6,6 @@ use App\Models\Post;
 use App\Models\User;
 use App\Services\Media\ImageGeneratorService;
 use App\Services\Media\MediaUploader;
-use Closure;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -23,6 +22,7 @@ class PostFactory extends Factory
     public function definition(): array
     {
         $title = fake()->words(mt_rand(2, 20), true);
+
         return [
             'title' => $title,
             'slug' => Str::slug($title),

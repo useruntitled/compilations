@@ -13,6 +13,7 @@
 import Post from "@/Components/Post/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
+
 defineOptions({
     layout: MainLayout,
 });

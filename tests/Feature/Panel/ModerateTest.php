@@ -5,7 +5,6 @@ namespace Tests\Feature\Panel;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ModerateTest extends TestCase

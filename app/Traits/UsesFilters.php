@@ -11,6 +11,7 @@ trait UsesFilters
         if ($filter != null) {
             return $builder->$filter();
         }
+
         return $builder;
     }
 }

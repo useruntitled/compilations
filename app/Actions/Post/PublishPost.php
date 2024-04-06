@@ -8,7 +8,9 @@ class PublishPost
     {
         if (!$post->isActive) {
             if ($post->title != null && $post->films()->count() > 0) {
-                if (!$post->published_at) $post->published_at = now();
+                if (!$post->published_at) {
+                    $post->published_at = now();
+                }
                 $post->save();
             } else {
                 abort(422);

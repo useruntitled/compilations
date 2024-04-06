@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\FilmData;
 use App\Models\Film;
 use App\Models\Genre;
 use App\Services\Parser\ParserInterface;
@@ -22,7 +21,10 @@ class FilmController extends Controller
     protected function getFilm(int $id)
     {
         $filmData = $this->parser->getFilm($id);
-        if ($filmData == null) abort(404);
+        if ($filmData == null) {
+            abort(404);
+        }
+
         return $filmData;
     }
 
@@ -37,7 +39,7 @@ class FilmController extends Controller
 
     public function store(int $id): Film
     {
-        $filmData = $this->getFilm($id);;
+        $filmData = $this->getFilm($id);
 
         $film = Film::create((array)$filmData->except('genres'));
 
@@ -79,11 +81,11 @@ class FilmController extends Controller
         foreach ($films_en as $film) {
             $films->push($film);
         }
+
         return response()->json($films);
     }
 
     protected function searchById(int $id)
-
     {
         $films = Film::where('id', 'LIKE', "$id%")->limit(5)->get();
         if ($films->count() == 0) {
@@ -92,5 +94,4 @@ class FilmController extends Controller
 
         return response()->json($films);
     }
-
 }

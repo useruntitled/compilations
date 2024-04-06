@@ -18,6 +18,7 @@ class SearchController extends Controller
     {
         $posts = Post::where('title', 'like', "%$query%")->take(5)->get();
         $users = User::where('name', 'like', "%$query%")->take(5)->get();
+
         return response()->json([
             'posts' => ShortPostFeedResource::collection($posts),
             'users' => CompressedUserResource::collection($users),

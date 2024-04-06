@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Report extends Model
 {
     const SPAM = 'spam';
+
     const RUDE = 'rude';
+
     const VIOLENCE = 'violence';
+
     const ILLEGAL = 'illegal';
+
     const OTHER = 'other';
+
     const LIE = 'lie';
 
     protected $fillable = [
@@ -21,7 +26,7 @@ class Report extends Model
     ];
 
     protected $with = [
-      'report_to',
+        'report_to',
     ];
 
     public function report_to(): MorphTo
@@ -33,5 +38,4 @@ class Report extends Model
     {
         return $date->diffForHumans();
     }
-
 }

@@ -27,7 +27,7 @@ class PostCountVisitJob implements ShouldQueue
      */
     public function handle(): void
     {
-       $this->post->visits = $this->post->visits + 1;
-       $this->post->update();
+        $this->post->visits = $this->post->visits + 1;
+        $this->post->update();
     }
 }

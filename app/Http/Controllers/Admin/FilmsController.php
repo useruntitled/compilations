@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DTO\FilmData;
 use App\Http\Controllers\Controller;
 use App\Models\Film;
 use App\Models\Report;
@@ -21,6 +20,7 @@ class FilmsController extends Controller
             })
             ->paginate(config('admin.per_page'))
             ->withQueryString();
+
         return inertia('Admin/Films/Index', [
             'list' => $films,
             'search' => $request->search,
@@ -34,7 +34,6 @@ class FilmsController extends Controller
             ->where('report_to_type', '=', 'App\\Models\\Film')
             ->get()
             ->count();
-
 
         return inertia('Admin/Films/Edit', [
             'film' => $film,

@@ -19,6 +19,7 @@ import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import Post from "@/Components/Post/Post.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
+
 defineOptions({ layout: MainLayout });
 
 const props = defineProps({

@@ -13,7 +13,7 @@ class SidebarController extends Controller
             ->with([
                 'user' => ['roles'],
                 'post',
-                'image'
+                'image',
             ])
             ->latest()
             ->limit(20)

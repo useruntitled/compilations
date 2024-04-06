@@ -35,6 +35,7 @@ class UsersController extends Controller
     public function view($id)
     {
         $user = User::with('bannedByUser')->findOrFail($id);
+
         return inertia('Admin/Users/View', [
             'user' => $user,
         ]);

@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class PostUploadImageRequest extends FormRequest
 {
@@ -27,7 +27,7 @@ class PostUploadImageRequest extends FormRequest
             'image' => [
                 'required',
                 File::image()
-                ->dimensions(Rule::dimensions()->maxWidth(4000)->maxHeight(4000)),
+                    ->dimensions(Rule::dimensions()->maxWidth(4000)->maxHeight(4000)),
             ],
             'id' => 'exists:App\Models\Post,id',
         ];

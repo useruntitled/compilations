@@ -9,6 +9,7 @@ trait CreatesUsers
     protected function loginAs(User $user)
     {
         $this->actingAs($user);
+
         return $this;
     }
 
@@ -17,6 +18,7 @@ trait CreatesUsers
         $user = $this->createUser();
         $user->toAdmin();
         $this->loginAs($user);
+
         return $this;
     }
 
@@ -25,6 +27,7 @@ trait CreatesUsers
         $user = $this->createUser();
         $user->toModer();
         $this->loginAs($user);
+
         return $this;
     }
 
@@ -33,6 +36,7 @@ trait CreatesUsers
         $user = $this->createUser();
         $user->ban('Some ban reason');
         $this->loginAs($user);
+
         return $this;
     }
 
@@ -40,6 +44,7 @@ trait CreatesUsers
     {
         $user = $this->createUser();
         $this->loginAs($user);
+
         return $this;
     }
 

@@ -29,6 +29,7 @@ class UpdatePost
             'slug' => Str::slug($request->title),
         ]);
         $post->save();
+
         return $post;
     }
 }

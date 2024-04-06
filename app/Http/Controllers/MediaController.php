@@ -6,11 +6,8 @@ use App\Models\Media;
 use App\Services\Media\MediaHandler;
 use App\Services\Media\MediaService;
 use App\Services\Media\MediaUploader;
-use App\Services\TelegramNotifier;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class MediaController extends Controller
 {
@@ -28,7 +25,9 @@ class MediaController extends Controller
 
     public function uploadWithoutSave(Request $request, MediaHandler $handler)
     {
-        if (!$request->hasFile('image')) abort(422);
+        if (!$request->hasFile('image')) {
+            abort(422);
+        }
         $handledData = $handler->handle($request->file('image'));
         $format = $handledData->format == 'mp4' ? 'gif' : $handledData->format;
 
@@ -37,6 +36,7 @@ class MediaController extends Controller
             ...(array)$handledData->except('file'),
             'user_id' => Auth::id(),
         ]);
+
         return response()->json($model);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use App\Services\PostService;
 use Request;
 
@@ -12,7 +11,6 @@ class HomeController extends Controller
     {
         $posts = $service->getPopular(1);
         $mostCommentedPosts = $service->getMostCommented();
-
 
         return inertia('Home/Index', [
             'posts' => $posts,

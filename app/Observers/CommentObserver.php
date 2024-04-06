@@ -13,7 +13,7 @@ class CommentObserver
      */
     public function created(Comment $comment): void
     {
-//        event(new CommentCreatedEvent($comment));
+        //        event(new CommentCreatedEvent($comment));
 
         // media problem
     }

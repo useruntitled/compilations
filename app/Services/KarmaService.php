@@ -68,7 +68,7 @@ class KarmaService
         // $reps = Reputation::with(['reputation_to.user','user'])->where('user_id','!=',$user->id)->get()
         // ->reject(fn($rep) => $rep->reputation_to->user->id != $user->id);
 
-        $reputation = Cache::remember("karma-$user->id", now()->addMinutes(5), function() use ($user) {
+        $reputation = Cache::remember("karma-$user->id", now()->addMinutes(5), function () use ($user) {
             $reps = Reputation::with(['reputation_to' => ['user'], 'user'])->where('user_id', '!=', $user->id)->get()
                 ->filter(fn ($r) => $r->reputation_to?->user->id == $user->id);
             $reputation = $reps->sum(fn ($rep) => $rep->action == 'up');
@@ -78,7 +78,6 @@ class KarmaService
         });
 
         return $reputation;
-
 
     }
 }

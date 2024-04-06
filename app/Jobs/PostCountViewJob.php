@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Post;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -28,7 +27,7 @@ class PostCountViewJob implements ShouldQueue
      */
     public function handle(): void
     {
-        foreach($this->posts as $post) {
+        foreach ($this->posts as $post) {
             $post->views = $post->views + 1;
             $post->update();
         }

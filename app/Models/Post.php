@@ -21,12 +21,12 @@ use Spatie\Sitemap\Tags\Url;
 
 class Post extends Model implements Sitemapable
 {
+    use Declineable;
+    use HasAuthor;
     use HasFactory;
     use HasReputation;
-    use HasAuthor;
     use Reportable;
     use SoftDeletes;
-    use Declineable;
 
     protected static function booted(): void
     {

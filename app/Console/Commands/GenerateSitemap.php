@@ -6,9 +6,7 @@ use App\Models\Post;
 use App\Services\TelegramNotifier;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use mysql_xdevapi\Exception;
 use Spatie\Sitemap\Sitemap;
-use Spatie\Sitemap\SitemapGenerator;
 use Spatie\Sitemap\Tags\Url;
 
 class GenerateSitemap extends Command

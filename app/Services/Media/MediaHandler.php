@@ -2,7 +2,6 @@
 
 namespace App\Services\Media;
 
-
 use App\DTO\MediaData;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -12,6 +11,7 @@ use Intervention\Image\Interfaces\ImageInterface;
 class MediaHandler
 {
     protected Base64Generator $base64Generator;
+
     protected ConverterService $converter;
 
     public function __construct(Base64Generator $base64Generator)
@@ -23,10 +23,11 @@ class MediaHandler
     {
         $uuid = Str::uuid();
 
-        if ($uploadedFile == null) abort(422);
+        if ($uploadedFile == null) {
+            abort(422);
+        }
 
         $file = ImageManager::imagick()->read($uploadedFile->getPathname());
-
 
         $name = $uuid . '.' . $this->getFormat($uploadedFile->hashName());
 
@@ -39,11 +40,10 @@ class MediaHandler
             'base64_preview' => $this->base64Generator->make($file, $this->getFormat($name)),
         ]);
 
-
         $data->file = $uploadedFile;
 
         if (!$this->isGif($name)) {
-//            Storage::disk('media')->put($name, file_get_contents($uploadedFile));
+            //            Storage::disk('media')->put($name, file_get_contents($uploadedFile));
 
             return $data;
         }

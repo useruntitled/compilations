@@ -1,10 +1,9 @@
 <?php
 
-Route::middleware('moderOrAdmin')->group(function() {
+Route::middleware('moderOrAdmin')->group(function () {
     Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
-       Route::get('panel', 'index')->name('panel.index');
+        Route::get('panel', 'index')->name('panel.index');
     });
-
 
     Route::controller(\App\Http\Controllers\Admin\FilmsController::class)->group(function () {
         Route::get('panel/films', 'index')->name('panel.films');
@@ -32,14 +31,14 @@ Route::middleware('moderOrAdmin')->group(function() {
         Route::get('panel/comments', 'index')->name('panel.comments');
         Route::get('panel/view/comment/{id}', 'view')->name('panel.view.comment');
         Route::put('panel/decline/comment', 'decline')->name('panel.decline.comment');
-   });
+    });
 });
 
-Route::middleware('admin')->group(function() {
+Route::middleware('admin')->group(function () {
     Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
-      Route::get('panel/admins', 'admins')->name('panel.admins');
-      Route::get('panel/moders', 'moders')->name('panel.moders');
-   });
+        Route::get('panel/admins', 'admins')->name('panel.admins');
+        Route::get('panel/moders', 'moders')->name('panel.moders');
+    });
 
     Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
         Route::put('panel/toggle/moder', 'toggleModer')->name('panel.user.toggle.moder');
