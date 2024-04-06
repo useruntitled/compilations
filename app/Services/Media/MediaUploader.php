@@ -13,7 +13,7 @@ class MediaUploader
     public static function upload(MediaData $data, $eloquent): void
     {
 
-        $array = (array)$data->except('file');
+        $array = (array) $data->except('file');
 
         $model = get_class($eloquent);
 
@@ -40,7 +40,7 @@ class MediaUploader
         if ($format == 'gif') {
             ConverterService::gifToMp4($path, $name);
         } else {
-            Storage::disk('media')->put($name . '.' . $format, $file);
+            Storage::disk('media')->put($name.'.'.$format, $file);
         }
     }
 }

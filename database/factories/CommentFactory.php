@@ -35,7 +35,7 @@ class CommentFactory extends Factory
         return $this->afterMaking(function (Comment $comment) {
 
         })->afterCreating(function (Comment $comment) {
-            $has = (bool)mt_rand(0, 1);
+            $has = (bool) mt_rand(0, 1);
             if ($has) {
                 $image = ImageGeneratorService::make(mt_rand(10, 2000), mt_rand(10, 2000));
                 MediaUploader::upload($image, $comment);

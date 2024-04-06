@@ -20,7 +20,7 @@ class ImageParserService
 
         $encodedImage = $notEncodedImage->encode(new JpegEncoder);
 
-        Storage::disk('media')->put($hashName . '.jpeg', $encodedImage);
+        Storage::disk('media')->put($hashName.'.jpeg', $encodedImage);
 
         $data = new MediaData([
             'id' => $hashName,

@@ -85,21 +85,21 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::ADMIN));
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == Role::ADMIN));
     }
 
     protected function isCreator(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::CREATOR));
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == Role::CREATOR));
     }
 
     protected function isModer(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn() => $this->roles->contains(fn($r) => $r->name == Role::MODER));
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == Role::MODER));
     }
 
     public function scopePublished(Builder $builder): void

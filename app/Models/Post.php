@@ -111,18 +111,18 @@ class Post extends Model implements Sitemapable
 
     protected function hasBookmark(): Attribute
     {
-            $this->bookmarks ?? $this->bookmarks();
+        $this->bookmarks ?? $this->bookmarks();
 
         return Attribute::get(fn () => $this->bookmarks->contains('user_id', auth()->id()));
     }
 
     protected function timestamp(): Attribute
     {
-        return Attribute::get(fn() => $this->published_at?->diffForHumans());
+        return Attribute::get(fn () => $this->published_at?->diffForHumans());
     }
 
     protected function isActive(): Attribute
     {
-        return Attribute::get(fn() => $this->published_at != null && $this->declined_at == null);
+        return Attribute::get(fn () => $this->published_at != null && $this->declined_at == null);
     }
 }

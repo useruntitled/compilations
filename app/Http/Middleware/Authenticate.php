@@ -19,7 +19,7 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        if (!$this->auth::check()) {
+        if (! $this->auth::check()) {
             abort(403);
         }
 

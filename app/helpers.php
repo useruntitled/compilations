@@ -7,7 +7,7 @@ if (! function_exists('media_path')) {
     }
 }
 
-if (!function_exists('rtrimbr')) {
+if (! function_exists('rtrimbr')) {
     function rtrimbr($text)
     {
         return preg_replace('/(<div><br><\/div>\s*)+$/', '', $text);

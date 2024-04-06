@@ -37,7 +37,7 @@ class StoreCommentRequest extends FormRequest
 
     protected function validateImageType($attribute, $value, $fail)
     {
-        if (!in_array($value->getClientOriginalExtension(), ['jpeg', 'jpg', 'png', 'webp'])) {
+        if (! in_array($value->getClientOriginalExtension(), ['jpeg', 'jpg', 'png', 'webp'])) {
             $fail("The $attribute must be a file of type: jpeg, jpg, png, webp.");
         }
     }

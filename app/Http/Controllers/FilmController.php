@@ -32,7 +32,7 @@ class FilmController extends Controller
     {
         $filmData = $this->getFilm($request->id);
         $film = Film::find($request->id);
-        $film->update((array)$filmData->except('genres'));
+        $film->update((array) $filmData->except('genres'));
 
         return Response::json($film, 200);
     }
@@ -41,7 +41,7 @@ class FilmController extends Controller
     {
         $filmData = $this->getFilm($id);
 
-        $film = Film::create((array)$filmData->except('genres'));
+        $film = Film::create((array) $filmData->except('genres'));
 
         $genres = collect($filmData->genres)->map(function ($genre) {
             return Genre::firstOrCreate([

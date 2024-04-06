@@ -16,7 +16,7 @@ class ProfileTest extends TestCase
         $this
             ->login()
             ->get('/profile')
-            ->assertInertia(fn(AssertableInertia $inertia) => $inertia
+            ->assertInertia(fn (AssertableInertia $inertia) => $inertia
                 ->component('Profile/Index')
             );
     }

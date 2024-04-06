@@ -23,7 +23,7 @@ class MediaService
 
             $type = $media->format == 'mp4' ? 'video' : 'image';
 
-            return response(file_get_contents(media_path($filename . '.' . $media->format)))
+            return response(file_get_contents(media_path($filename.'.'.$media->format)))
                 ->header('Content-Type', "$type/$media->format")
                 ->header('Content-Disposition', 'inline')
                 ->header('X-Content-Type-Options', 'nosniff');

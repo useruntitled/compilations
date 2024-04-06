@@ -17,7 +17,7 @@ class Base64Generator
                 $file = $file->scaleDown(5, 5)->blur(3)->toJpeg();
             }
 
-            return 'data:image/' . $format . ';base64,' . base64_encode($file);
+            return 'data:image/'.$format.';base64,'.base64_encode($file);
         }
         //        $color = $file->pickColor(0, 0, 0)->toHex();
 
@@ -33,6 +33,6 @@ class Base64Generator
             ->blur(3)
             ->encode(new JpegEncoder());
 
-        return 'data:image/' . 'jpeg' . ';base64,' . base64_encode($file);
+        return 'data:image/'.'jpeg'.';base64,'.base64_encode($file);
     }
 }

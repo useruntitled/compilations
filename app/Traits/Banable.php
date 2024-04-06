@@ -12,7 +12,7 @@ trait Banable
     protected function isBanned(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->banned_at != null
+            get: fn () => $this->banned_at != null
         );
     }
 

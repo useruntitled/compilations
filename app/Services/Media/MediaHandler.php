@@ -29,7 +29,7 @@ class MediaHandler
 
         $file = ImageManager::imagick()->read($uploadedFile->getPathname());
 
-        $name = $uuid . '.' . $this->getFormat($uploadedFile->hashName());
+        $name = $uuid.'.'.$this->getFormat($uploadedFile->hashName());
 
         $data = new MediaData([
             'id' => $uuid,
@@ -42,7 +42,7 @@ class MediaHandler
 
         $data->file = $uploadedFile;
 
-        if (!$this->isGif($name)) {
+        if (! $this->isGif($name)) {
             //            Storage::disk('media')->put($name, file_get_contents($uploadedFile));
 
             return $data;

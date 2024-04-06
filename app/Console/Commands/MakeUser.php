@@ -40,7 +40,7 @@ class MakeUser extends Command
         ]);
         $user->makeAvatar();
 
-        $this->info('Email: ' . $user->email);
-        $this->info('Password: ' . $password);
+        $this->info('Email: '.$user->email);
+        $this->info('Password: '.$password);
     }
 }

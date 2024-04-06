@@ -25,7 +25,7 @@ class MediaController extends Controller
 
     public function uploadWithoutSave(Request $request, MediaHandler $handler)
     {
-        if (!$request->hasFile('image')) {
+        if (! $request->hasFile('image')) {
             abort(422);
         }
         $handledData = $handler->handle($request->file('image'));
@@ -33,7 +33,7 @@ class MediaController extends Controller
 
         MediaUploader::save($handledData->file->getPathName(), $handledData->id, $format, file_get_contents($handledData->file));
         $model = Media::create([
-            ...(array)$handledData->except('file'),
+            ...(array) $handledData->except('file'),
             'user_id' => Auth::id(),
         ]);
 

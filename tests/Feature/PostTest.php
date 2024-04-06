@@ -27,7 +27,7 @@ class PostTest extends TestCase
                 'slug' => $post->slug,
             ]));
 
-        $response->assertInertia(fn(AssertableInertia $inertia) => $inertia
+        $response->assertInertia(fn (AssertableInertia $inertia) => $inertia
             ->component('post')
         );
     }
@@ -130,7 +130,7 @@ class PostTest extends TestCase
             ->login()
             ->get(route('drafts'));
 
-        $response->assertInertia(fn(AssertableInertia $inertia) => $inertia
+        $response->assertInertia(fn (AssertableInertia $inertia) => $inertia
             ->component('Auth/Drafts')
         );
     }

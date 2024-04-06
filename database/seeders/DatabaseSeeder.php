@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RoleSeeder::class);
 
-        if (!App::environment('production')) {
+        if (! App::environment('production')) {
             $this->call(UserSeeder::class);
             $this->call(CommentSeeder::class);
             $this->call(ReputationSeeder::class);

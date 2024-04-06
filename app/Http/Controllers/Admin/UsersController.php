@@ -45,7 +45,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($request->id);
 
-        if (!$user->isModer) {
+        if (! $user->isModer) {
             $user->toModer();
         } else {
             $user->unModer();
