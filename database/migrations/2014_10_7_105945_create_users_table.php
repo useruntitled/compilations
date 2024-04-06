@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\User;
-use App\Services\Media\MediaService;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,7 +21,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->rememberToken();
 
-//            $table->foreignId('media_id')->nullable()->default(null)->constrained('media');
+            //            $table->foreignId('media_id')->nullable()->default(null)->constrained('media');
 
             $table->string('provider')->nullable();
             $table->string('provider_user_id')->nullable();
