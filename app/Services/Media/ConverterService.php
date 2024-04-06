@@ -23,6 +23,6 @@ class ConverterService
         $format->setAdditionalParameters(['-profile:v', 'baseline', '-pix_fmt', 'yuv420p', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2']);
 
         $video
-            ->save($format, media_path($name . '.mp4'));
+            ->save($format, media_path($name.'.mp4'));
     }
 }

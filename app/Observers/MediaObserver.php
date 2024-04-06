@@ -16,7 +16,7 @@ class MediaObserver
             ->get();
         if ($previousMedia->count() > 1) {
             $previousMedia = $previousMedia->first();
-            if (Storage::disk('media')->delete($previousMedia->id . '.' . $previousMedia->format)) {
+            if (Storage::disk('media')->delete($previousMedia->id.'.'.$previousMedia->format)) {
                 $previousMedia->delete();
             }
         }

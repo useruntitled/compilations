@@ -25,7 +25,7 @@ class PersonalPageController extends Controller
     public function index(?int $user_id = null)
     {
         if ($user_id == null) {
-            if (!Auth::check()) {
+            if (! Auth::check()) {
                 abort(403);
             }
             $user_id = Auth::id();

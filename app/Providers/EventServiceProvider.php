@@ -62,7 +62,7 @@ class EventServiceProvider extends ServiceProvider
             // ... other providers
             \SocialiteProviders\Yandex\YandexExtendSocialite::class.'@handle',
             \SocialiteProviders\Google\GoogleExtendSocialite::class.'@handle',
-            \SocialiteProviders\VKontakte\VKontakteExtendSocialite::class . '@handle',
+            \SocialiteProviders\VKontakte\VKontakteExtendSocialite::class.'@handle',
         ],
 
     ];

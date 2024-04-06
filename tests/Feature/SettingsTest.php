@@ -19,7 +19,7 @@ class SettingsTest extends TestCase
             ->actingAs($user)
             ->get(route('settings'));
 
-        $response->assertInertia(fn(AssertableInertia $inertia) => $inertia
+        $response->assertInertia(fn (AssertableInertia $inertia) => $inertia
             ->component('Auth/Settings/Index')
         );
     }
@@ -32,7 +32,7 @@ class SettingsTest extends TestCase
             ->actingAs($user)
             ->get(route('settings.profile'));
 
-        $response->assertInertia(fn(AssertableInertia $inertia) => $inertia
+        $response->assertInertia(fn (AssertableInertia $inertia) => $inertia
             ->component('Auth/Settings/Profile')
         );
     }

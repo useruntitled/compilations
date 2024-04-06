@@ -42,7 +42,7 @@ class MakeAdmin extends Command
 
         $user->toAdmin();
 
-        $this->info('Email: ' . $user->email);
-        $this->info('Password: ' . $password);
+        $this->info('Email: '.$user->email);
+        $this->info('Password: '.$password);
     }
 }

@@ -28,7 +28,7 @@ class SocialiteProviderController extends Controller
             'provider_user_id' => $socialiteUser->getId(),
         ])->first();
 
-        if (!$user) {
+        if (! $user) {
             $hasImage = true;
 
             $user = User::create([

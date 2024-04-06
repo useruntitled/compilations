@@ -80,7 +80,7 @@ class Comment extends Model
 
     protected function isActive(): Attribute
     {
-        return Attribute::get(fn() => $this->deleted_at == null && $this->declined_at == null);
+        return Attribute::get(fn () => $this->deleted_at == null && $this->declined_at == null);
     }
 
     protected function isReply(): Attribute
