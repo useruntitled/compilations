@@ -8,7 +8,7 @@
         >
             <div class="flex items-center">
                 <div class="me-4 opacity-80">
-                    <IconLogin class="w-6 h-6 stroke-[0.1]"></IconLogin>
+                    <IconLogin class="w-6 h-6 stroke-[0.1]" />
                 </div>
                 <div class="flex flex-col">
                     <p class="font-[400]">Профиль</p>
@@ -19,7 +19,7 @@
         <div class="block hover:bg-zinc-100 p-6 rounded-xl">
             <div class="flex items-center">
                 <div class="me-4 opacity-80">
-                    <IconTooth class="w-6 h-6"></IconTooth>
+                    <IconTooth class="w-6 h-6" />
                 </div>
                 <div class="flex flex-col">
                     <p class="font-[400]">Основные</p>
@@ -32,7 +32,7 @@
         <div class="block hover:bg-zinc-100 p-6 rounded-xl">
             <div class="flex items-center">
                 <div class="me-4 opacity-80">
-                    <IconBell class="text-black w-6 h-6 stroke-[0.1]"></IconBell>
+                    <IconBell class="text-black w-6 h-6 stroke-[0.1]" />
                 </div>
                 <div class="flex flex-col">
                     <p class="font-[400]">Уведомления</p>

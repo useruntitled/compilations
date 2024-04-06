@@ -11,15 +11,13 @@
                 v-if="pages[page.component] != 'Настройки'"
                 class="hover:bg-zinc-100 rounded-full me-2"
             >
-                <IconArrowLeft
-                    class="w-8 h-8 inline-block stroke-[1.4px]"
-                ></IconArrowLeft>
+                <IconArrowLeft class="w-8 h-8 inline-block stroke-[1.4px]" />
             </Link>
             <span>{{ pages[page.component] }}</span>
         </header>
         <hr />
         <main class="py-5 xs:w-screen md:w-auto">
-            <slot></slot>
+            <slot />
         </main>
     </div>
 </template>

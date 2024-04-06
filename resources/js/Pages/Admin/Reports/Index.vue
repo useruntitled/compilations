@@ -1,8 +1,6 @@
 <template>
     <main>
-        <p class="font-semibold mb-5 text-lgg">
-            Жалобы
-        </p>
+        <p class="font-semibold mb-5 text-lgg">Жалобы</p>
 
         <admin-table>
             <admin-row v-for="report in reports.data">
@@ -19,11 +17,16 @@
                     {{ types[report.message] }}
                 </template>
                 <template #action>
-                    <Link :href="route('panel.report.view', [report.id])">Посмотреть</Link>
+                    <Link :href="route('panel.report.view', [report.id])"
+                        >Посмотреть</Link
+                    >
                 </template>
             </admin-row>
         </admin-table>
-        <admin-pagination :links="reports.links" :last_page="reports.last_page"></admin-pagination>
+        <AdminPagination
+            :links="reports.links"
+            :last_page="reports.last_page"
+        />
     </main>
 </template>
 <script setup>
@@ -34,24 +37,24 @@ import AdminTable from "@/Components/Admin/AdminTable.vue";
 
 defineOptions({
     layout: PanelLayout,
-})
+});
 
 const models = {
-    'App\\Models\\Post': 'Подборка',
-    'App\\Models\\Comment': 'Комментарий',
-    'App\\Models\\Film': 'Фильм',
-}
+    "App\\Models\\Post": "Подборка",
+    "App\\Models\\Comment": "Комментарий",
+    "App\\Models\\Film": "Фильм",
+};
 
 const types = {
-    'rude': 'Оскорбление',
-    'lie': 'Несоответствие',
-    'other': 'Прочее',
-    'spam': 'Спам',
-    'violence': 'Насилие',
-    'illegal': 'Нарушение закона',
-}
+    rude: "Оскорбление",
+    lie: "Несоответствие",
+    other: "Прочее",
+    spam: "Спам",
+    violence: "Насилие",
+    illegal: "Нарушение закона",
+};
 
 const props = defineProps({
     reports: null,
-})
+});
 </script>

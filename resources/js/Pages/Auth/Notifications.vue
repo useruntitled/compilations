@@ -5,18 +5,18 @@
         </header>
         <hr />
         <main class="px-5 py-5">
-            <InfiniteScrollContainer @load="handleLoadEvent()">
+            <infinite-scroll-container @load="handleLoadEvent()">
                 <div v-for="n in notifications">
                     <component
                         :notification="n"
                         :is="components[n.type]"
                     ></component>
                 </div>
-            </InfiniteScrollContainer>
+            </infinite-scroll-container>
         </main>
     </div>
     <div v-if="!notifications.length" class="mt-20">
-        <EmptyFeed></EmptyFeed>
+        <EmptyFeed />
     </div>
 </template>
 <script setup>

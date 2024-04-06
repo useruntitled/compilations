@@ -1,16 +1,16 @@
 <template>
-    <InfiniteScrollContainer @load="handleLoadEvent()">
+    <infinite-scroll-container @load="handleLoadEvent()">
         <div v-for="comment in comments" class="my-5">
             <Link :href="route('comment.redirect', [comment.id])">
                 <div class="bg-white rounded-xl py-3 sm:px-5 xs:px-2">
                     <header>
-                        <UserTabletWithElementInside :user="comment.user">
+                        <user-tablet-with-element-inside :user="comment.user">
                             <template #content>
                                 <div class="text-13px text-secondary">
                                     {{ comment.timestamp }}
                                 </div>
                             </template>
-                        </UserTabletWithElementInside>
+                        </user-tablet-with-element-inside>
                     </header>
                     <main class="my-4">
                         <p v-html="comment.text"></p>
@@ -25,9 +25,9 @@
                 </div>
             </Link>
         </div>
-    </InfiniteScrollContainer>
+    </infinite-scroll-container>
     <div class="mt-20" v-if="!comments.length">
-        <EmptyFeed></EmptyFeed>
+        <EmptyFeed />
     </div>
 </template>
 <script setup>

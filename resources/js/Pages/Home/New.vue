@@ -3,14 +3,14 @@
         <title>Последние подборки</title>
     </Head>
 
-    <mobile-header-nav/>
-    <InfiniteScrollContainer @load="handleLoadEvent()">
+    <mobile-header-nav />
+    <infinite-scroll-container @load="handleLoadEvent()">
         <div v-for="post in posts">
             <Post :post="post"></Post>
         </div>
-    </InfiniteScrollContainer>
+    </infinite-scroll-container>
     <div v-if="posts.length == 0 && !isLoading" class="mt-20 mb-20">
-        <EmptyFeed></EmptyFeed>
+        <EmptyFeed />
     </div>
 </template>
 <script setup>
@@ -22,7 +22,7 @@ import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
 
-defineOptions({ layout: MainLayout});
+defineOptions({ layout: MainLayout });
 
 const props = defineProps({
     posts: null,

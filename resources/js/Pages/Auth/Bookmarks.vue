@@ -2,14 +2,14 @@
     <Head>
         <title>Закладки</title>
     </Head>
-    <mobile-header-nav/>
+    <mobile-header-nav />
 
-    <InfiniteScrollContainer @load="handleLoadEvent">
-        <Post v-for="post in posts" :post="post"></Post>
-    </InfiniteScrollContainer>
+    <infinite-scroll-container @load="handleLoadEvent">
+        <Post v-for="post in posts" :post="post" />
+    </infinite-scroll-container>
 
     <div v-if="!posts.length" class="mt-20">
-        <EmptyFeed></EmptyFeed>
+        <EmptyFeed />
     </div>
 </template>
 <script setup>

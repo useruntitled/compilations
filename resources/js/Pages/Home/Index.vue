@@ -1,39 +1,41 @@
 <template>
     <Head>
         <title>Подборки фильмов от сообщества</title>
-        <meta name="description" content="Films Compilations By Community. Здесь делают подборки фильмов.">
+        <meta
+            name="description"
+            content="Films Compilations By Community. Здесь делают подборки фильмов."
+        />
     </Head>
 
-    <mobile-header-nav/>
+    <mobile-header-nav />
 
     <div class="xs:w-screen sm:max-w-screen-sm">
-        <div class="bg-white rounded-xl mb-5 space-y-4 px-4 py-4 ">
-            <ShortPost v-for="post in most_commented_posts" :post="post"></ShortPost>
+        <div class="bg-white rounded-xl mb-5 space-y-4 px-4 py-4">
+            <ShortPost v-for="post in most_commented_posts" :post="post" />
             <button
-                class="font-medium text-17px  hover:opacity-80"
+                class="font-medium text-17px hover:opacity-80"
                 @click="loadMostCommented"
             >
                 <div v-if="!mostCommentedIsLoading" class="flex items-center">
                     <div class="font-medium">Показать ещё</div>
                     <div class="ms-2">
-                        <icon-chewron-down class="w-5 h-5"/>
+                        <icon-chewron-down class="w-5 h-5" />
                     </div>
                 </div>
                 <div v-else>
-                    <animation-loader/>
+                    <animation-loader />
                 </div>
             </button>
-
         </div>
     </div>
 
-    <InfiniteScrollContainer @load="handleLoadEvent()">
+    <infinite-scroll-container @load="handleLoadEvent()">
         <div v-for="post in posts">
             <Post :post="post"></Post>
         </div>
-    </InfiniteScrollContainer>
+    </infinite-scroll-container>
     <div v-if="posts?.length == 0 && !isLoading" class="mt-20 mb-20">
-        <EmptyFeed></EmptyFeed>
+        <EmptyFeed />
     </div>
 </template>
 <script setup>
@@ -42,7 +44,7 @@ import { onMounted, ref } from "vue";
 import Post from "@/Components/Post/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
-import {router, usePage} from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import IconChewronDown from "@/Components/Icons/IconChewronDown.vue";
@@ -59,7 +61,6 @@ const props = defineProps({
     close_auth_modal: false,
 });
 
-
 const mostCommentedIsLoading = ref(false);
 
 const mostCommentedPage = ref(2);
@@ -67,32 +68,35 @@ const mostCommentedPage = ref(2);
 const loadMostCommented = async () => {
     if (!mostCommentedIsLoading.value) {
         mostCommentedIsLoading.value = true;
-        await axios.get(route('posts.most-commented', [mostCommentedPage.value]))
+        await axios
+            .get(route("posts.most-commented", [mostCommentedPage.value]))
             .then((res) => {
                 res.data.forEach((post) => {
                     props.most_commented_posts.push(post);
-                })
-            })
+                });
+            });
         mostCommentedPage.value++;
         mostCommentedIsLoading.value = false;
     }
-}
-
+};
 
 const page = usePage();
 
 onMounted(() => {
     console.log(page);
-    if(page.props?.close_window_token == props.close_window_token && props.close_window_token != null) {
-        window.opener.postMessage('auth.window.closed', "*");
+    if (
+        page.props?.close_window_token == props.close_window_token &&
+        props.close_window_token != null
+    ) {
+        window.opener.postMessage("auth.window.closed", "*");
         window.close();
     }
-    if(props.close_auth_modal) {
-        const channel = new BroadcastChannel('auth.modal');
-        channel.postMessage('close');
+    if (props.close_auth_modal) {
+        const channel = new BroadcastChannel("auth.modal");
+        channel.postMessage("close");
         window.close();
     }
-})
+});
 
 const posts = ref(props.posts);
 

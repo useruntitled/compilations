@@ -36,9 +36,8 @@ class PostController extends Controller
             'user' => ['roles'],
             'films' => ['genres'],
             'image'
-                ])
-                ->withCount(['comments', 'bookmarks'])
-                ->findOrFail($id);
+        ])->withCount(['comments', 'bookmarks'])
+            ->findOrFail($id);
 
         $this->service->countVisit($post);
 
@@ -119,7 +118,7 @@ class PostController extends Controller
     public function redirect($id)
     {
         $slug = Post::mayBeUnpublished()->findOrFail($id)->slug;
-        return redirect()->route('post',[$id, $slug]);
+        return redirect()->route('post', [$id, $slug]);
     }
 
     public function getNew($page)

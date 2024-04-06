@@ -7,7 +7,6 @@ use App\Models\Film;
 use App\Models\Post;
 use App\Models\Report;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ReportTest extends TestCase

@@ -1,5 +1,5 @@
 <template>
-    <InfiniteScrollContainer @load="handleLoadEvent()">
+    <infinite-scroll-container @load="handleLoadEvent()">
         <div class="rounded-xl">
             <div>
                 <div v-for="post in posts" :key="post.id">
@@ -8,10 +8,10 @@
                 </div>
             </div>
         </div>
-    </InfiniteScrollContainer>
+    </infinite-scroll-container>
 
     <div class="mt-20" v-if="!posts.length">
-        <EmptyFeed></EmptyFeed>
+        <EmptyFeed />
     </div>
 </template>
 <script setup>

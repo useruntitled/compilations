@@ -4,12 +4,6 @@
             class="grid grid-rows-1 grid-flow-col items-start place-content-start"
         >
             <div class="flex items-end justify-end">
-                <!--                <img-->
-                <!--                    class="rounded-full inline-block border-bck border-2"-->
-                <!--                    :src="route('im', [user.avatar, '100'])"-->
-                <!--                    style="width: 40px; height: 40px"-->
-                <!--                    alt=""-->
-                <!--                />-->
                 <lazy-media
                     width="40"
                     height="40"
@@ -18,15 +12,15 @@
                     :media="user.avatar"
                 />
                 <div class="absolute">
-                    <slot name="icon"></slot>
+                    <slot name="icon" />
                 </div>
             </div>
             <div class="flex flex-col ms-2">
                 <div>
-                    <slot name="header"></slot>
+                    <slot name="header" />
                 </div>
                 <main>
-                    <slot name="content"></slot>
+                    <slot name="content" />
                 </main>
             </div>
         </header>
@@ -42,6 +36,6 @@ export default {
         user: null,
         mode: null,
     },
-    components: {LazyMedia, Link},
+    components: { LazyMedia, Link },
 };
 </script>

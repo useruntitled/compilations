@@ -2,14 +2,14 @@
     <div class="mx-8">
         <div>
             <p class="font-medium pb-4 ms-1">Имя</p>
-            <SecondaryInput v-model="form.username"></SecondaryInput>
+            <SecondaryInput v-model="form.username" />
         </div>
         <div class="mt-4">
             <p class="font-medium pb-4 ms-1">Описание</p>
             <SecondaryContent
                 v-model="form.description"
                 placeholder="Пара_слов_о_себе"
-            ></SecondaryContent>
+            />
         </div>
         <div class="ms-1 flex justify-between items-center mt-5">
             <button
@@ -20,7 +20,7 @@
             </button>
             <div class="flex items-center" v-show="isUpdated">
                 <p>Сохранено</p>
-                <IconCheck class="ms-1 w-4 h-4"></IconCheck>
+                <IconCheck class="ms-1 w-4 h-4" />
             </div>
         </div>
     </div>
