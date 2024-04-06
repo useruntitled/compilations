@@ -9,10 +9,14 @@ class SidebarController extends Controller
     public function getLastComments()
     {
 
-        $comments = Comment::with(['user' => ['roles'], 'post', 'image'])->latest()->limit(20)->get();
-
-        $comments = $comments->filter(fn ($c) => ! $c->trashed());
-
-        return $comments;
+        return Comment::published()
+            ->with([
+                'user' => ['roles'],
+                'post',
+                'image'
+            ])
+            ->latest()
+            ->limit(20)
+            ->get();
     }
 }
