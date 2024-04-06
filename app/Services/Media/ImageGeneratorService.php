@@ -28,9 +28,9 @@ class ImageGeneratorService
 
         $encodedImage = $notEncodedImage->toJpeg();
 
-        Storage::disk('media')->put($hashName . '.jpeg', $encodedImage);
+        Storage::disk('media')->put($hashName.'.jpeg', $encodedImage);
 
-        $path = media_path($hashName . '.jpeg');
+        $path = media_path($hashName.'.jpeg');
 
         $data = new MediaData([
             'id' => $hashName,

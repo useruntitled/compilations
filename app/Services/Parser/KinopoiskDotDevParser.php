@@ -26,7 +26,7 @@ class KinopoiskDotDevParser implements ParserInterface
         }
 
         $json = json_decode($response);
-        if (!isset($json->statusCode) || $json->statusCode != 404) {
+        if (! isset($json->statusCode) || $json->statusCode != 404) {
             return new FilmData($json);
         }
 

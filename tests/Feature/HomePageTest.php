@@ -14,7 +14,7 @@ class HomePageTest extends TestCase
     {
         $response = $this->get(route('home'));
 
-        $response->assertInertia(fn(Assert $inertia) => $inertia
+        $response->assertInertia(fn (Assert $inertia) => $inertia
             ->component('Home/Index')
         );
     }
