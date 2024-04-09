@@ -11,13 +11,13 @@ class CommentPolicy
 
     const DELETE = 'delete';
 
-    public function update(User $user, Comment $post): bool
+    public function update(User $user, Comment $comment): bool
     {
-        return $post->isAuthoredBy($user);
+        return $comment->isAuthoredBy($user);
     }
 
-    public function delete(User $user, Comment $post): bool
+    public function delete(User $user, Comment $comment): bool
     {
-        return $post->isAuthoredBy($user);
+        return $comment->isAuthoredBy($user);
     }
 }

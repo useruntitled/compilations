@@ -29,9 +29,9 @@ class MediaController extends Controller
             abort(422);
         }
         $handledData = $handler->handle($request->file('image'));
-        $format = $handledData->format == 'mp4' ? 'gif' : $handledData->format;
 
-        MediaUploader::save($handledData->file->getPathName(), $handledData->id, $format, file_get_contents($handledData->file));
+        MediaUploader::save($handledData);
+
         $model = Media::create([
             ...(array) $handledData->except('file'),
             'user_id' => Auth::id(),

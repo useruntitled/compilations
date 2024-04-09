@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Policies\AdminPolicy;
 use App\Traits\UsesFilters;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,9 @@ class UsersController extends Controller
     public function toggleBan(Request $request)
     {
         $user = User::findOrFail($request->id);
+
+        $this->authorize(AdminPolicy::BAN, $user);
+
         if ($user->isBanned) {
             $user->unBan();
         } else {

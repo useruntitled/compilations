@@ -42,7 +42,7 @@ class CommentController extends Controller
 
         $this->authorize(CommentPolicy::DELETE, $comment);
 
-        $data = DeleteComment::fromRequest($comment, $request);
+        $data = DeleteComment::handle($comment);
 
         return response()->json($data);
 

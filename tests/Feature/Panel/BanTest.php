@@ -14,7 +14,7 @@ class BanTest extends TestCase
 
     public function test_admin_can_ban_user(): void
     {
-        $user = User::notBanned()->inRandomOrder()->first();
+        $user = User::notBanned()->user()->inRandomOrder()->firstOrFail();
 
         $this
             ->loginAsAdmin()
@@ -27,7 +27,7 @@ class BanTest extends TestCase
 
     public function test_admin_can_unban_user(): void
     {
-        $bannedUser = User::banned()->firstOrFail();
+        $bannedUser = User::banned()->user()->firstOrFail();
 
         $this
             ->loginAsAdmin()
@@ -40,7 +40,7 @@ class BanTest extends TestCase
 
     public function test_moder_can_ban_user(): void
     {
-        $user = User::notBanned()->inRandomOrder()->first();
+        $user = User::notBanned()->user()->inRandomOrder()->firstOrFail();
 
         $this
             ->loginAsModer()
@@ -53,7 +53,7 @@ class BanTest extends TestCase
 
     public function test_moder_can_unban_user(): void
     {
-        $bannedUser = User::banned()->firstOrFail();
+        $bannedUser = User::banned()->user()->firstOrFail();
 
         $this
             ->loginAsModer()
@@ -94,7 +94,7 @@ class BanTest extends TestCase
 
     public function test_user_cannot_ban_user(): void
     {
-        $user = User::notBanned()->inRandomOrder()->first();
+        $user = User::notBanned()->inRandomOrder()->firstOrFail();
 
         $this
             ->login()
@@ -106,7 +106,7 @@ class BanTest extends TestCase
 
     public function test_user_cannot_unban_user(): void
     {
-        $bannedUser = User::banned()->inRandomOrder()->first();
+        $bannedUser = User::banned()->inRandomOrder()->firstOrFail();
 
         $this
             ->login()

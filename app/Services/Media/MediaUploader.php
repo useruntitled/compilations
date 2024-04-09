@@ -39,7 +39,7 @@ class MediaUploader
         if ($format == 'gif') {
             ConverterService::gifToMp4($media);
         } else {
-            Storage::disk('media')->put($media->id . '.' . $format, file_get_contents($media->file));
+            Storage::disk('media')->put($media->id.'.'.$format, file_get_contents($media->file));
         }
     }
 }

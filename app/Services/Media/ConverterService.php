@@ -2,13 +2,16 @@
 
 namespace App\Services\Media;
 
+use App\DTO\MediaData;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Video\X264;
 
 class ConverterService
 {
-    public static function gifToMp4($path, $name): void
+    public static function gifToMp4(MediaData $media): void
     {
+        $path = $media->file->getPathName();
+        $name = $media->id;
 
         $ffmpeg = FFMpeg::create([
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',

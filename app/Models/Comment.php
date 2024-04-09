@@ -14,7 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use Declineable, HasAuthor, HasFactory, HasReputation, SoftDeletes;
+    use Declineable;
+    use HasAuthor;
+    use HasFactory;
+    use HasReputation;
+    use SoftDeletes;
 
     const DELETED_TEXT = 'Комментарий удалён';
 

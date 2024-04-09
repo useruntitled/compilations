@@ -13,3 +13,10 @@ if (! function_exists('rtrimbr')) {
         return preg_replace('/(<div><br><\/div>\s*)+$/', '', $text);
     }
 }
+
+if (! function_exists('getModel')) {
+    function getModel($name)
+    {
+        return \Illuminate\Database\Eloquent\Relations\Relation::getMorphedModel(strtolower($name));
+    }
+}

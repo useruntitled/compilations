@@ -43,8 +43,6 @@ class MediaHandler
         $data->file = $uploadedFile;
 
         if (! $this->isGif($name)) {
-            //            Storage::disk('media')->put($name, file_get_contents($uploadedFile));
-
             return $data;
         }
 

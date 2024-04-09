@@ -36,11 +36,7 @@ class MediaService
     {
         $handledData = $this->handler->handle($file);
 
-        if ($handledData->format != 'mp4') {
-            MediaUploader::save($handledData->file->getPathName(), $handledData->id, $handledData->format, file_get_contents($handledData->file));
-        } else {
-            MediaUploader::save($handledData->file->getPathName(), $handledData->id, 'gif', file_get_contents($handledData->file));
-        }
+        MediaUploader::save($handledData);
 
         MediaUploader::upload($handledData, $eloquent);
 
