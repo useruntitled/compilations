@@ -16,12 +16,12 @@
         <code>git clone https://github.com/useruntitled/compilations/</code>
     </p>
 - <a href="https://laravel.com/docs/10.x/sail#main-content">Разверните проект с помощью sail</a>
-- <p><a href="#settings">Настройте .env конфиг</a></p>
+- <p><a href="#настройка">Настройте .env конфиг</a></p>
 - <p><code>sail artisan migrate --seed</code></p>
 - <p><code>sail npm run dev</code></p>
 - <p><code>sail artisan test --parallel</code></p>
 
-## <p id="settings">Настройка</p>
+## Настройка
 - <a href="https://pusher.com">Получите токен Pusher</a>
 - <a href="https://kinopoisk.dev/">Получите токен для работы с фильмами</a>
 - Для того, чтобы пользователи могли пройти аутентификацию, получите oauth токены у <a href="https://vk.com">vkontakte</a>, <a href="https://ya.ru">yandex</a>, <a href="https://google.com">google</a>.
