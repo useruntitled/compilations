@@ -20,7 +20,7 @@
 ## Установка
 - <p>
         <code>git clone https://github.com/useruntitled/compilations/</code>
-    </p>
+  </p>
 - <a href="https://laravel.com/docs/10.x/sail#main-content">Разверните проект с помощью sail</a>
 - <p><a href="#настройка">Настройте .env конфиг</a></p>
 - <p><code>sail artisan migrate --seed</code></p>
@@ -31,3 +31,10 @@
 - <a href="https://pusher.com">Получите токен Pusher</a>
 - <a href="https://kinopoisk.dev/">Получите токен для работы с фильмами</a>
 - Для того, чтобы пользователи могли пройти аутентификацию, получите oauth токены у <a href="https://vk.com">vkontakte</a>, <a href="https://ya.ru">yandex</a>, <a href="https://google.com">google</a>.
+
+## Команды
+| Команда      | Описание |
+| ------------- | ------------- |
+| app:make-user  | Создаёт пользователя. Можно войти перейдя на /login |
+| app:make-admin | Создаёт администраторский аккаунт. Можно войти перейдя на /login  |
+| sitemap:generate | Создаёт карту сайта |
