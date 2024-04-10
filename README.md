@@ -3,10 +3,10 @@
 Сайт, на котором пользователи могут оставлять свои подборки фильмов.
 
 ## Технологический стек
-- laravel 10
-- vue 3
-- inertia
-- tailwindcss
+- <a href="https://laravel.com">laravel 10</a>
+- <a href="https://vuejs.org">vue 3</a>
+- <a href="https://inertiajs.com">inertia </a>
+- <a href="https://tailwindcss.com">tailwindcss</a>
 
 ## О проекте
 - Пользователь может пройти аутентификацию через vkontakte, yandex, google
