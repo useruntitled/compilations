@@ -74,10 +74,12 @@
                         href="https://github.com/useruntitled/compilations/tree/master"
                         class="space-x-1"
                     >
-                        <span>GitHub</span>
                         <span>
-                            <IconGithub class="opacity-90 stroke-[1.5px]" />
+                            <IconGithub
+                                class="opacity-90 stroke-[1.5px] w-5 h-5"
+                            />
                         </span>
+                        <span>GitHub</span>
                     </a>
                 </p>
                 <p class="opacity-70 hover:opacity-100">
