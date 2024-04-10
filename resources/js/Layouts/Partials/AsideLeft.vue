@@ -65,8 +65,24 @@
                 <PrimaryButton
                     @click="callModal('Editor')"
                     class="bg-orange-500 px-0 rounded-lg py-3 w-full font-regular text-17px"
-                    >Новая подборка</PrimaryButton
-                >
+                    >Новая подборка
+                </PrimaryButton>
+            </div>
+            <div class="bottom-0 absolute py-5 ms-2 text-[15px] space-y-2">
+                <p class="opacity-70 hover:opacity-100">
+                    <a
+                        href="https://github.com/useruntitled/compilations/tree/master"
+                        class="space-x-1"
+                    >
+                        <span>GitHub</span>
+                        <span>
+                            <IconGithub class="opacity-90 stroke-[1.5px]" />
+                        </span>
+                    </a>
+                </p>
+                <p class="opacity-70 hover:opacity-100">
+                    <a href="https://t.me/accintouch">Связаться с автором</a>
+                </p>
             </div>
         </div>
     </div>
@@ -79,6 +95,7 @@ import IconClock from "@/Components/Icons/IconClock.vue";
 import IconFlame from "@/Components/Icons/IconFlame.vue";
 import { usePage } from "@inertiajs/vue3";
 import AuthLink from "@/Components/AuthLink.vue";
+import IconGithub from "@/Components/Icons/IconGithub.vue";
 
 const callModal = inject("callModal");
 
@@ -96,12 +113,3 @@ const isBookmarks = computed(() => {
     return page.component === "Auth/Bookmarks";
 });
 </script>
-
-<!-- <script>
-
-
-export default {
-    inject: ["callModal"],
-    components: { PrimaryButton, IconBookmark, IconClock, IconFlame },
-};
-</script> -->
