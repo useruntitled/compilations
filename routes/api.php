@@ -30,22 +30,22 @@ Route::controller(FilmController::class)->group(function () {
 Route::controller(CommentController::class)->group(function () {
     Route::get('comment/{id}')->name('comment.get');
     Route::get('comments/{post_id}', 'getByPostId')->name('comments.get');
-    Route::post('comment', 'store')->name('comment.store')->middleware('auth');
-    Route::delete('comment', 'delete')->name('comment.delete')->middleware('auth');
-    Route::put('comment', 'update')->name('comment.update')->middleware('auth');
+    Route::post('comments', 'store')->name('comment.store')->middleware('auth');
+    Route::delete('comments', 'delete')->name('comment.delete')->middleware('auth');
+    Route::put('comments', 'update')->name('comment.update')->middleware('auth');
 });
 
 Route::controller(PostController::class)->group(function () {
-    Route::post('post', 'store')->name('post.store')->middleware(['auth', 'creator']);
-    Route::delete('post', 'delete')->name('post.delete')->middleware(['auth', 'creator']);
-    Route::put('post', 'update')->name('post.update')->middleware(['auth']);
-    Route::get('post/{id}', 'get')->name('post.get')->middleware(['auth']);
+    Route::post('posts', 'store')->name('post.store')->middleware(['auth', 'creator']);
+    Route::delete('posts', 'delete')->name('post.delete')->middleware(['auth', 'creator']);
+    Route::put('posts', 'update')->name('post.update')->middleware(['auth']);
+    Route::get('posts/{id}', 'get')->name('post.get')->middleware(['auth']);
     Route::get('posts/popular/page/{page?}', 'getPopular')->name('posts.popular');
     Route::get('posts/new/page/{page?}', 'getNew')->name('posts.new');
     Route::get('posts/random/page/{page?}/except/{post_id}', 'getRandom')->name('posts.random');
     Route::get('posts/most-commented/page/{page?}', 'getMostCommented')->name('posts.most-commented');
-    Route::post('post/image', 'uploadImage')->name('post.upload.image')->middleware(['auth']);
-    Route::post('post/publish', 'publish')->name('post.publish')->middleware(['auth', 'creator']);
+    Route::post('posts/image', 'uploadImage')->name('post.upload.image')->middleware(['auth']);
+    Route::post('posts/publish', 'publish')->name('post.publish')->middleware(['auth', 'creator']);
 });
 
 Route::controller(PersonalPageController::class)->group(function () {

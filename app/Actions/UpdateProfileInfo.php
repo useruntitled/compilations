@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class UpdateProfileInfo
+final class UpdateProfileInfo
 {
     public static function handle(array $data): User
     {

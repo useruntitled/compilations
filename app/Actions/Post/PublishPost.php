@@ -4,7 +4,7 @@ namespace App\Actions\Post;
 
 use App\Models\Post;
 
-class PublishPost
+final class PublishPost
 {
     public static function handle(Post $post): void
     {

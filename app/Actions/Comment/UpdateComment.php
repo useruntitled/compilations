@@ -5,7 +5,7 @@ namespace App\Actions\Comment;
 use App\Services\Media\MediaService;
 use App\Services\Media\MediaUploader;
 
-class UpdateComment
+final class UpdateComment
 {
     public static function handle($comment, array $data)
     {

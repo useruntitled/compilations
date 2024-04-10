@@ -5,7 +5,7 @@ namespace App\Actions;
 use App\Models\Subsite;
 use App\Models\User;
 
-class CreateSubsite
+final class CreateSubsite
 {
     public static function handle(User $user): void
     {

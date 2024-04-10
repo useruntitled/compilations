@@ -4,7 +4,7 @@ namespace App\Actions\Comment;
 
 use App\Models\Comment;
 
-class DeleteComment
+final class DeleteComment
 {
     public static function handle(Comment $comment): array
     {

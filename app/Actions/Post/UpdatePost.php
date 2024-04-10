@@ -5,7 +5,7 @@ namespace App\Actions\Post;
 use App\Models\Post;
 use Illuminate\Support\Str;
 
-class UpdatePost
+final class UpdatePost
 {
     public static function handle(Post $post, array $data): Post
     {
