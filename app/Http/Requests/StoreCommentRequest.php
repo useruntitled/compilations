@@ -32,6 +32,8 @@ class StoreCommentRequest extends FormRequest
                 },
                 'max:20480',
             ],
+            'comment_id' => '',
+            'post_id' => '',
         ];
     }
 

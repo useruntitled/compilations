@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Actions\AddSubsiteAction;
+use App\Actions\CreateSubsite;
 use App\Jobs\AddUserRoleToNewUserJob;
 use App\Models\User;
 
@@ -13,7 +13,7 @@ class UserObserver
      */
     public function created(User $user): void
     {
-        AddSubsiteAction::handle($user);
+        CreateSubsite::handle($user);
 
         dispatch(new AddUserRoleToNewUserJob($user));
     }

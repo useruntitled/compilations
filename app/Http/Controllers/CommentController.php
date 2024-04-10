@@ -29,7 +29,7 @@ class CommentController extends Controller
 
     public function store(StoreCommentRequest $request)
     {
-        $comment = StoreComment::fromRequest($request);
+        $comment = StoreComment::handle($request->validated());
 
         event(new CommentCreatedEvent($comment));
 
@@ -54,7 +54,7 @@ class CommentController extends Controller
 
         $this->authorize(CommentPolicy::UPDATE, $comment);
 
-        $comment = UpdateComment::fromRequest($comment, $request);
+        $comment = UpdateComment::handle($comment, $request->validated());
 
         return $comment->only(['image', 'text']);
     }

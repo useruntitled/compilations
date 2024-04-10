@@ -6,7 +6,7 @@ use App\Models\Comment;
 
 class DeleteComment
 {
-    public static function handle($comment)
+    public static function handle(Comment $comment): array
     {
         $comment->image()->delete();
 

@@ -2,13 +2,14 @@
 
 namespace App\Actions\Post;
 
+use App\Models\Post;
 use Illuminate\Support\Str;
 
 class UpdatePost
 {
-    public static function fromRequest($post, $request)
+    public static function handle(Post $post, array $data): Post
     {
-        $films = $request->films;
+        $films = $data['films'] ?? null;
 
         if ($films != null && count($films) > 0) {
             if (count($post->films) > 0) {
@@ -24,10 +25,11 @@ class UpdatePost
         }
 
         $post->update([
-            'title' => $request->title,
-            'description' => nl2br($request->description),
-            'slug' => Str::slug($request->title),
+            'title' => $data['title'],
+            'description' => nl2br($data['description']),
+            'slug' => Str::slug($data['title']),
         ]);
+
         $post->save();
 
         return $post;

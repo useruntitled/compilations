@@ -6,12 +6,12 @@ use App\Models\Comment;
 use App\Services\Media\MediaUploader;
 use Illuminate\Support\Facades\Auth;
 
-class StoreComment
+final class StoreComment
 {
-    public static function fromRequest($request)
+    public static function handle(array $data): Comment
     {
-        if ($request->comment_id) {
-            $comment = Comment::find($request->comment_id);
+        if (isset($data['comment_id'])) {
+            $comment = Comment::find($data['comment_id']);
 
             $level = $comment->level + 1;
         } else {
@@ -19,15 +19,15 @@ class StoreComment
         }
 
         $comment = Comment::create([
-            'post_id' => $request->post_id,
-            'comment_id' => $request->comment_id,
-            'text' => preg_replace('/(<div><br><\/div>\s*)+$/', '', $request->text),
+            'post_id' => $data['post_id'],
+            'comment_id' => $data['comment_id'] ?? null,
+            'text' => preg_replace('/(<div><br><\/div>\s*)+$/', '', $data['text']),
             'level' => $level,
             'user_id' => Auth::user()->id,
         ]);
 
-        if ($request->image != null) {
-            MediaUploader::toEloquent($request->input('image')['href'], $comment);
+        if (isset($data['image'])) {
+            MediaUploader::toEloquent($data['image']['href'], $comment);
         }
 
         return $comment;

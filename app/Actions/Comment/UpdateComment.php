@@ -7,15 +7,15 @@ use App\Services\Media\MediaUploader;
 
 class UpdateComment
 {
-    public static function fromRequest($comment, $request)
+    public static function handle($comment, array $data)
     {
-        if ($request->image != null) {
-            MediaUploader::toEloquent($request->input('image')['href'], $comment);
+        if (isset($data['image'])) {
+            MediaUploader::toEloquent($data['image']['href'], $comment);
         } elseif ($comment->image) {
             MediaService::delete($comment->image);
         }
 
-        $comment->text = rtrimbr($request->text);
+        $comment->text = rtrimbr($data['text']);
         $comment->update();
 
         return $comment;

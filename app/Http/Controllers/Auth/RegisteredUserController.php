@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Actions\UpdateProfileInfoAction;
+use App\Actions\UpdateProfileInfo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileInfoRequest;
 use App\Http\Requests\UploadFileRequest;
@@ -30,7 +30,7 @@ class RegisteredUserController extends Controller
 
     public function updateProfileInfo(UpdateProfileInfoRequest $request)
     {
-        return UserResource::make(UpdateProfileInfoAction::handle([
+        return UserResource::make(UpdateProfileInfo::handle([
             'name' => $request->name,
             'description' => $request->description,
         ]));

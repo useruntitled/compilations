@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Post\PublishPost;
 use App\Actions\Post\UpdatePost;
+use App\Http\Requests\UpdatePostRequest;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Post;
 use App\Policies\PostPolicy;
@@ -85,7 +86,7 @@ class PostController extends Controller
         return response()->json('');
     }
 
-    public function update(Request $request)
+    public function update(UpdatePostRequest $request)
     {
         $post = Post::mayBeUnpublished()
             ->with('films')
@@ -93,7 +94,7 @@ class PostController extends Controller
 
         $this->authorize(PostPolicy::UPDATE, $post);
 
-        $post = UpdatePost::fromRequest($post, $request);
+        $post = UpdatePost::handle($post, $request->validated());
 
         return response()->json($post);
     }
@@ -104,16 +105,16 @@ class PostController extends Controller
 
         $this->authorize(PostPolicy::PUBLISH, $post);
 
-        PublishPost::fromRequest($post, $request);
+        PublishPost::handle($post);
 
         return route('post', [$post->id, $post->slug]);
     }
 
-    public function uploadImage(UploadFileRequest $request, MediaService $service)
+    public function uploadImage(UploadFileRequest $request, MediaService $media)
     {
         $post = Post::mayBeUnpublished()->findOrFail($request->id);
 
-        return $service->upload($request->file('image'), $post)->toJson();
+        return $media->upload($request->file('image'), $post)->toJson();
     }
 
     public function redirect($id)

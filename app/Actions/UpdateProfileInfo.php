@@ -2,20 +2,21 @@
 
 namespace App\Actions;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class UpdateProfileInfoAction
+class UpdateProfileInfo
 {
-    public static function handle($attributes)
+    public static function handle(array $data): User
     {
         $user = Auth::user();
 
         $user->subsite()->update([
-            'description' => $attributes['description'],
+            'description' => $data['description'],
         ]);
 
         $user->update([
-            'name' => $attributes['name'],
+            'name' => $data['name'],
         ]);
 
         return $user;
