@@ -39,18 +39,17 @@
     </div>
 </template>
 <script setup>
-import axios from "axios";
 import { onMounted, ref } from "vue";
 import Post from "@/Components/Post/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
-import Dropdown from "@/Components/Dropdown.vue";
 import IconChewronDown from "@/Components/Icons/IconChewronDown.vue";
 import ShortPost from "@/Components/Post/ShortPost.vue";
 import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
 import AnimationLoader from "@/Components/Animations/AnimationLoader.vue";
+import { postApi } from "@/api/postApi.js";
 
 defineOptions({ layout: MainLayout });
 
@@ -68,13 +67,11 @@ const mostCommentedPage = ref(2);
 const loadMostCommented = async () => {
     if (!mostCommentedIsLoading.value) {
         mostCommentedIsLoading.value = true;
-        await axios
-            .get(route("posts.most-commented", [mostCommentedPage.value]))
-            .then((res) => {
-                res.data.forEach((post) => {
-                    props.most_commented_posts.push(post);
-                });
+        await postApi.getMostCommented(mostCommentedPage.value, (res) => {
+            res.data.forEach((post) => {
+                props.most_commented_posts.push(post);
             });
+        });
         mostCommentedPage.value++;
         mostCommentedIsLoading.value = false;
     }
@@ -116,23 +113,18 @@ const handleLoadEvent = async () => {
 };
 
 const loadPosts = async () => {
-    await axios
-        .get(route("posts.popular", [current_page.value]))
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            console.log(res);
-            if (res.status == 200) {
-                if (res.data.length == 0) {
-                    isEndOfFeed.value = true;
-                }
-
-                res.data.forEach((post) => {
-                    posts.value.push(post);
-                });
-                console.log(posts.value);
+    await postApi.getPopular(current_page.value, (res) => {
+        console.log(res);
+        if (res.status == 200) {
+            if (res.data.length == 0) {
+                isEndOfFeed.value = true;
             }
-        });
+
+            res.data.forEach((post) => {
+                posts.value.push(post);
+            });
+            console.log(posts.value);
+        }
+    });
 };
 </script>

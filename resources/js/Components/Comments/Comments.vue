@@ -84,12 +84,11 @@
 import { inject, ref, provide, onMounted, watch, nextTick } from "vue";
 import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
-import axios from "axios";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import Dropdown from "../Dropdown.vue";
 import IconChewronDown from "../Icons/IconChewronDown.vue";
 import { usePage } from "@inertiajs/vue3";
-import { store } from "@/Components/Comments/api.js";
+import { commentApi } from "@/api/commentApi.js";
 
 const isLoaded = ref(false);
 
@@ -116,17 +115,13 @@ watch(isLoaded, (newValue, oldValue) => {
 });
 
 const loadComments = async () => {
-    await axios
-        .get(route("comments.get", [props.post.id]))
-        .catch((res) => {
-            console.log(res);
-        })
-        .then(async (res) => {
-            console.log(res);
-            isLoaded.value = true;
-            comments.value = res.data;
-            await processComments();
-        });
+    await commentApi.getByPostId(props.post.id, async (res) => {
+        console.log(res);
+        isLoaded.value = true;
+        comments.value = res.data;
+        await processComments();
+    });
+
 };
 
 const hasParam = (param) => {
@@ -271,8 +266,6 @@ onMounted(async () => {
         nextTick(() => {
             comments_block.value?.scrollIntoView();
         });
-    // prepareToFocusComment();
-    // if (hasParam("comments")) comments_block.value.scrollIntoView();
     comments.value.forEach((comment) => {
         if (comment.level == 0) showRepliesArray.value.unshift(comment.id);
         countReplies(comment);
@@ -337,34 +330,28 @@ const addCommentInObjectTree = (comment, parrent_id) => {
 provide("addCommentInObjectTree", addCommentInObjectTree);
 
 
-const onStore = (res) => {
-    if (res.status == 200 || res.status == 201) {
-        comments.value.unshift(res.data);
-        commentIsCreated.value = true;
-        scrollIntoComment.value = res.data.id;
-
-        setTimeout(() => {
-            commentIsCreated.value = false;
-        }, 20);
-    }
-};
 const createComment = (form) => {
     if (!page.props.auth.check) {
         callModal("auth");
         return;
     }
-    store(form, onStore);
+    commentApi.store(form, (res) => {
+        if (res.status == 200 || res.status == 201) {
+            comments.value.unshift(res.data);
+            commentIsCreated.value = true;
+            scrollIntoComment.value = res.data.id;
+
+            setTimeout(() => {
+                commentIsCreated.value = false;
+            }, 20);
+        }
+    });
 };
 
 const removeComment = (id) => {
     comments.value[comments.value.findIndex((c) => c.id == id)].text = "Комментарий удалён";
-    axios.post(route("comment.delete"), {
-        "_method": "DELETE",
-        id: id
-    })
-        .then((res) => {
-            console.log(res.data);
-        });
+    commentApi.destroy(id, (res) => {
+    });
 };
 
 const setInputValuesToNull = () => {

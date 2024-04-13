@@ -37,7 +37,7 @@ class PostController extends Controller
         ])->withCount(['comments', 'bookmarks'])
             ->findOrFail($id);
 
-        $this->service->countVisit($post);
+        $this->service->incrementVisit($post);
 
         return inertia('post', [
             'post' => $post,
@@ -47,7 +47,7 @@ class PostController extends Controller
     public function new()
     {
         $posts = $this->getNew(1);
-        $this->service->countView($posts);
+        $this->service->incrementView($posts);
 
         return inertia('Home/New', [
             'posts' => $posts,

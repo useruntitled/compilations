@@ -8,7 +8,10 @@
                 : '  '
         "
         @focusin="isFocused = true"
-        @click="content?.focus(); checkAuth()"
+        @click="
+            content?.focus();
+            checkAuth();
+        "
         @focusout="isFocused = false"
     >
         <div
@@ -25,9 +28,12 @@
         <div class="flex justify-between mt-2 ms-[-6px] items-end">
             <div class="p-2 ps-0">
                 <div v-if="!hasImage">
-                    <BtnIcon @click="filepond.click()" primaryColor="orange-100"
-                        ><IconPhoto class="stroke-2 w-5 h-5"></IconPhoto
-                    ></BtnIcon>
+                    <BtnIcon
+                        @click="filepond.click()"
+                        primaryColor="orange-100"
+                    >
+                        <IconPhoto class="stroke-2 w-5 h-5"></IconPhoto>
+                    </BtnIcon>
                     <input
                         ref="filepond"
                         type="file"
@@ -48,8 +54,9 @@
                             @click="form.image = null"
                         />
                     </div>
-                    <animation-loader v-show="imageIsLoading"
-                                      class="w-8 h-8 absolute"
+                    <animation-loader
+                        v-show="imageIsLoading"
+                        class="w-8 h-8 absolute"
                     />
                 </div>
             </div>
@@ -76,22 +83,19 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, inject, watch, reactive, onMounted } from "vue";
+import { ref, computed, inject, watch, reactive } from "vue";
 import BtnIcon from "../BtnIcon.vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
-import {handleFile} from "@/Components/File/FileHandler.js";
+import { handleFile } from "@/helpers/FileHandler.js";
 import LazyMedia from "@/Components/Media/LazyMedia.vue";
-import {usePage} from "@inertiajs/vue3";
-
-
+import { usePage } from "@inertiajs/vue3";
 
 const isLoading = ref(false);
 const imageIsLoading = ref(false);
 
-const callModal = inject('callModal');
-
+const callModal = inject("callModal");
 
 const page = usePage();
 
@@ -99,11 +103,11 @@ const emit = defineEmits(["sendComment"]);
 
 const checkAuth = () => {
     if (!page.props.auth.check) {
-        callModal('auth');
+        callModal("auth");
         return false;
     }
     return true;
-}
+};
 
 const handleSend = () => {
     if (!isLoading.value && checkAuth) {
@@ -116,7 +120,7 @@ const hasImage = computed(() => {
     return form.image != null;
 });
 
-const post = inject('post');
+const post = inject("post");
 
 const props = defineProps({
     commentIsCreated: false,
@@ -131,7 +135,7 @@ const form = reactive({
     post_id: props.post_id ?? post.id,
     image: props.comment?.image ?? null,
     comment_id: props.comment_id,
-})
+});
 
 const filepond = ref(null);
 
@@ -170,7 +174,7 @@ watch(
             form.image = null;
             isLoading.value = false;
         }
-    }
+    },
 );
 
 const handlePaste = (e) => {
@@ -185,25 +189,26 @@ const handlePaste = (e) => {
 const handleFilepond = (e) => {
     if (!checkAuth()) return false;
     const file = e.target.files[0];
-    handleFile(file, onFileRead)
+    handleFile(file, onFileRead);
     const formData = new FormData();
-    formData.append("image", file)
+    formData.append("image", file);
     imageIsLoading.value = true;
-    axios.post(route('media.upload.without-save'), formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
+    axios
+        .post(route("media.upload.without-save"), formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
         .then((res) => {
             console.log(res.data);
             form.image = res.data;
             imageIsLoading.value = false;
-        })
+        });
 };
 
 const onFileRead = (result) => {
     if (form.image === null) form.image = {};
     form.image.base64_preview = result;
     imageIsLoading.value = true;
-}
+};
 </script>

@@ -72,8 +72,10 @@
                     </button>
                 </header>
                 <main>
-                    <p v-html="comment.text"
-                       class="text-17 w-auto sm:w-auto sm:max-w-screen-sm overflow-hidden break-words"></p>
+                    <p
+                        v-html="comment.text"
+                        class="text-17 w-auto sm:w-auto sm:max-w-screen-sm overflow-hidden break-words"
+                    ></p>
                     <div style="max-width: 50%">
                         <fluid-lazy-media
                             v-if="comment.image"
@@ -94,9 +96,9 @@
                     >
                         Ответить
                     </button>
-                    <span class="ms-5"
-                        >
-                        <CommentDropdown class="w-5 h-5 text-secondary opacity-80"
+                    <span class="ms-5">
+                        <CommentDropdown
+                            class="w-5 h-5 text-secondary opacity-80"
                             @remove="emit('remove', comment.id)"
                             @enableEditing="
                                 changeShowEditingInterfaceValue(comment.id)
@@ -175,9 +177,8 @@ import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";
-import LazyMedia from "@/Components/Media/LazyMedia.vue";
 import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
-import {store} from "@/Components/Comments/api.js";
+import { commentApi } from "@/api/commentApi.js";
 
 const limitComments = inject("limitComments");
 
@@ -186,7 +187,7 @@ const isIgnoreLimitEnabled = inject("isIgnoreLimitEnabled");
 const showRepliesArray = inject("showRepliesArray");
 const changeShowReplyInterfaceValue = inject("changeShowReplyInterfaceValue");
 const changeShowEditingInterfaceValue = inject(
-    "changeShowEditingInterfaceValue"
+    "changeShowEditingInterfaceValue",
 );
 const showReplyInterface = inject("showReplyInterface");
 const showEditingInterface = inject("showEditingInterface");
@@ -214,7 +215,6 @@ const props = defineProps({
         required: true,
     },
 });
-
 
 const commentRef = ref(false);
 const replies = ref(props.comment.replies ?? []);
@@ -278,15 +278,12 @@ const emit = defineEmits([
     "enableColorize",
     "disableColorize",
     "closeReplies",
-    'remove',
+    "remove",
 ]);
 
 const closeReplies = () => {
-    // showRepliesArray.value.splice(
-    //     showRepliesArray.value.findIndex((i) => i == props.comment.id)
-    // );
     const index = showRepliesArray.value.findIndex(
-        (i) => i == props.comment.comment_id
+        (i) => i == props.comment.comment_id,
     );
     showRepliesArray.value.splice(index, 1);
     commentRef.value.scrollIntoViewIfNeeded({ block: "center" });
@@ -296,22 +293,19 @@ const commentIsCreated = ref(false);
 
 const addCommentInObjectTree = inject("addCommentInObjectTree");
 
-const onStoreReply = (res) => {
-    console.log(res);
-    commentIsCreated.value = true;
-    showRepliesArray.value.unshift(props.comment.id);
-    scrollIntoComment.value = res.data.id;
-    setTimeout(() => {
-        commentIsCreated.value = false;
-    }, 20);
-    if (res.status == 200 || res.status == 201) {
-        // replies.value.unshift(res.data);
-        addCommentInObjectTree(res.data, props.branchParrentId);
-    }
-}
-
 const sendReply = (form) => {
-    store(form, onStoreReply);
+    commentApi.store(form, (res) => {
+        console.log(res);
+        commentIsCreated.value = true;
+        showRepliesArray.value.unshift(props.comment.id);
+        scrollIntoComment.value = res.data.id;
+        setTimeout(() => {
+            commentIsCreated.value = false;
+        }, 20);
+        if (res.status == 200 || res.status == 201) {
+            addCommentInObjectTree(res.data, props.branchParrentId);
+        }
+    });
 };
 
 const updateComment = (value) => {
@@ -320,11 +314,14 @@ const updateComment = (value) => {
 };
 
 const remove = (id) => {
-    props.comment.replies[props.comment.replies.findIndex((c) => c.id == id)].text = "Комментарий удалён";
-    axios.post(route('comment.delete'),{
-        '_method': 'DELETE',
-        id: id,
-    }).then((res) => {
-    })
-}
+    props.comment.replies[
+        props.comment.replies.findIndex((c) => c.id == id)
+    ].text = "Комментарий удалён";
+    axios
+        .post(route("comment.delete"), {
+            _method: "DELETE",
+            id: id,
+        })
+        .then((res) => {});
+};
 </script>

@@ -59,7 +59,6 @@ import IconPanel from "@/Components/Icons/IconPanel.vue";
 import IconPencil from "@/Components/Icons/IconPencil.vue";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import { usePage } from "@inertiajs/vue3";
-import LazyImage from "@/Components/LazyImage.vue";
 import LazyMedia from "@/Components/Media/LazyMedia.vue";
 
 const page = usePage();

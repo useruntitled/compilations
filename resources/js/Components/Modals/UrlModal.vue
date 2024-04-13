@@ -11,10 +11,11 @@
     </div>
 </template>
 <script setup>
-import { router, usePage } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import Auth from "./Auth.vue";
 import Editor from "./Editor.vue";
-import { ref, computed, watch, onMounted, inject, nextTick } from "vue";
+import { ref, computed, watch, onMounted, inject } from "vue";
+
 const props = defineProps({
     modalIsClosed: Boolean,
     callModal: {
@@ -45,7 +46,7 @@ watch(
     () => props.callModal,
     (newValue, oldValue) => {
         if (newValue != null) callModalFunc(newValue);
-    }
+    },
 );
 watch(
     () => props.modalIsClosed,
@@ -54,7 +55,7 @@ watch(
             console.log("Modal is closed");
             injectedCloseModal();
         }
-    }
+    },
 );
 
 const calledModalByQuery = computed(() => {

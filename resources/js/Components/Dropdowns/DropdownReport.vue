@@ -37,9 +37,3 @@ const props = defineProps({
     align: 'right',
 })
 </script>
-<!--<script>-->
-
-<!--export default {-->
-<!--    components: { Dropdown, IconFlag, IconDots },-->
-<!--};-->
-<!--</script>-->

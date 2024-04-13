@@ -12,8 +12,8 @@
                     textColor="black"
                     class="font-semibold"
                     @click="emit('closeEditingInterface')"
-                    >Отмена</FlatPrimaryButton
-                >
+                    >Отмена
+                </FlatPrimaryButton>
             </template>
         </CommentInput>
     </div>
@@ -22,9 +22,8 @@
 import { ref, inject } from "vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import CommentInput from "./CommentInput.vue";
-import axios from "@/AxiosWrapper.js";
 import axiosInstance from "@/AxiosWrapper.js";
-import {update} from "@/Components/Comments/api.js";
+import { commentApi } from "@/api/commentApi.js";
 
 const vFocus = {
     mounted: (el) => el.click(),
@@ -42,17 +41,15 @@ const setInputValuesToNull = inject("setInputValuesToNull");
 
 const commentIsUpdated = ref(false);
 
-const onSuccess = (res) => {
-    console.log(res);
-    if (res?.status === 200) {
-        props.commentIsUpdated = true;
-        setInputValuesToNull();
-        emit("updateCommentValue", res.data);
-    }
-}
-
 const saveComment = (form) => {
-    update(form, onSuccess);
+    commentApi.update(form, (res) => {
+        console.log(res);
+        if (res?.status === 200) {
+            props.commentIsUpdated = true;
+            setInputValuesToNull();
+            emit("updateCommentValue", res.data);
+        }
+    });
 };
 
 const emit = defineEmits(["updateCommentValue", "closeEditingInterface"]);

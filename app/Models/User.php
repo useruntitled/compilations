@@ -9,7 +9,6 @@ use App\Traits\Banable;
 use App\Traits\HasAvatar;
 use App\Traits\HasSubsite;
 use App\Traits\Roleable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use Banable;
     use HasApiTokens;
@@ -29,7 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use Roleable;
 
-    const TABLE = 'users';
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.

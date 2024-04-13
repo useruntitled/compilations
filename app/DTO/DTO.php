@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class DTO
+abstract class DTO
 {
     public function except($attribute)
     {

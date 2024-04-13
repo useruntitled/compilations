@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Http\Resources\PostFeedResource;
 use App\Http\Resources\ShortPostFeedResource;
-use App\Jobs\PostCountViewJob;
-use App\Jobs\PostCountVisitJob;
+use App\Jobs\PostIncrementViewJob;
+use App\Jobs\PostIncrementVisitJob;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +28,7 @@ class PostService
             ->skip(($page - 1) * config('post.per_page'))
             ->take(config('post.per_page'))
             ->get();
-        $this->countView($posts);
+        $this->incrementView($posts);
 
         return PostFeedResource::collection($posts);
     }
@@ -67,7 +67,7 @@ class PostService
             ->take($this->per_page)
             ->get();
 
-        $this->countView($posts);
+        $this->incrementView($posts);
 
         return PostFeedResource::collection($posts);
     }
@@ -81,18 +81,18 @@ class PostService
             ->skip(($page - 1) * $this->per_page)
             ->take($this->per_page)
             ->get();
-        $this->countView($posts);
+        $this->incrementView($posts);
 
         return PostFeedResource::collection($posts);
     }
 
-    public function countView($posts)
+    public function incrementView($posts): void
     {
-        dispatch(new PostCountViewJob($posts));
+        dispatch(new PostIncrementViewJob($posts));
     }
 
-    public function countVisit(Post $post)
+    public function incrementVisit(Post $post): void
     {
-        dispatch(new PostCountVisitJob($post));
+        dispatch(new PostIncrementVisitJob($post));
     }
 }

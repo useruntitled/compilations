@@ -2,9 +2,9 @@
     <Dropdown width="350" v-if="$page.props.auth.user">
         <template #trigger v-if="!unreadNotificationsCount">
             <div class="px-3" @click="open()">
-                <BtnIcon class="flex items-center text-black"
-                    ><IconBell class="w-[28px] h-[28px] stroke-[2px]"></IconBell
-                ></BtnIcon>
+                <BtnIcon class="flex items-center text-black">
+                    <IconBell class="w-[28px] h-[28px] stroke-[2px]"></IconBell>
+                </BtnIcon>
             </div>
         </template>
         <template #trigger v-else>
@@ -36,8 +36,8 @@
                     <Link :href="route('notifications')">
                         <button class="p-[5px] text-dtfpr">
                             Все уведомления
-                        </button></Link
-                    >
+                        </button>
+                    </Link>
                 </div>
             </div>
             <div
@@ -60,11 +60,6 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import {
-    listenNotifications,
-    LoadNotifications,
-    markNotificationsAsRead,
-} from "../Notifications/NotificationsApi.js";
 import BtnIcon from "../BtnIcon.vue";
 import Dropdown from "../Dropdown.vue";
 import IconBell from "../Icons/IconBell.vue";
@@ -76,6 +71,7 @@ import CommentUpNotification from "../Notifications/CommentUpNotification.vue";
 import { usePage } from "@inertiajs/vue3";
 import PostWasDeclinedNotification from "@/Components/Notifications/PostWasDeclinedNotification.vue";
 import CommentWasDeclinedNotification from "@/Components/Notifications/CommentWasDeclinedNotification.vue";
+import { notificationApi } from "@/api/notificationApi.js";
 
 const page = usePage();
 
@@ -85,12 +81,14 @@ const notificationsList = {
     "App\\Notifications\\ReplyNotification": ReplyNotification,
     "App\\Notifications\\PostUpNotification": PostUpNotification,
     "App\\Notifications\\CommentUpNotification": CommentUpNotification,
-    "App\\Notifications\\PostWasDeclinedNotification": PostWasDeclinedNotification,
-    "App\\Notifications\\CommentWasDeclinedNotification": CommentWasDeclinedNotification,
+    "App\\Notifications\\PostWasDeclinedNotification":
+        PostWasDeclinedNotification,
+    "App\\Notifications\\CommentWasDeclinedNotification":
+        CommentWasDeclinedNotification,
 };
 
 const unreadNotificationsCount = ref(
-    page.props.auth.user.unreadNotifications_count ?? 0
+    page.props.auth.user.unreadNotifications_count ?? 0,
 );
 
 const notifications = ref([]);
@@ -101,10 +99,10 @@ const notificationsHaveBeenRead = ref(false);
 
 const open = async () => {
     if (!notificationsHaveBeenRead.value) {
-        await LoadNotifications((res) => (notifications.value = res.data));
+        await notificationApi.get((res) => (notifications.value = res.data));
         notificationsIsLoaded.value = true;
-        await markNotificationsAsRead(
-            (res) => (notificationsHaveBeenRead.value = true)
+        await notificationApi.markAsRead(
+            (res) => (notificationsHaveBeenRead.value = true),
         );
         unreadNotificationsCount.value = 0;
     }
@@ -117,6 +115,6 @@ const updateNotifications = (data) => {
 };
 
 onMounted(() => {
-    listenNotifications(page.props.auth.user.id, updateNotifications);
+    notificationApi.listen(page.props.auth.user.id, updateNotifications);
 });
 </script>

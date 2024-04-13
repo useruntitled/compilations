@@ -26,7 +26,6 @@
     </div>
 </template>
 <script setup>
-import IconHeart from "../Icons/IconHeart.vue";
 import IconHeartFilled from "../Icons/IconHeartFilled.vue";
 import NotificationTemplate from "./NotificationTemplate.vue";
 

@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Film;
 use App\Models\Genre;
-use App\Services\Parser\ParserInterface;
+use App\Services\Parser\Parser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
 class FilmController extends Controller
 {
-    public function __construct(protected ParserInterface $parser)
+    public function __construct(protected Parser $parser)
     {
     }
 

@@ -5,7 +5,7 @@ namespace App\Services\Parser;
 use App\DTO\FilmData;
 use Illuminate\Support\Facades\Http;
 
-class KinopoiskDotDevParser implements ParserInterface
+class KinopoiskDotDevParser implements Parser
 {
     protected $token;
 

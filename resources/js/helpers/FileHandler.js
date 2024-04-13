@@ -4,4 +4,10 @@ export const handleFile = (file, callback) => {
     reader.onload = () => {
         return callback(reader.result);
     };
-}
+};
+
+export const toFormData = (key, file) => {
+    const formData = new FormData();
+    formData.append(key, file);
+    return formData;
+};

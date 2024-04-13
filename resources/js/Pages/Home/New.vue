@@ -14,13 +14,13 @@
     </div>
 </template>
 <script setup>
-import axios from "axios";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import Post from "@/Components/Post/Post.vue";
 import EmptyFeed from "@/Components/EmptyFeed.vue";
 import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import MobileHeaderNav from "@/Components/Mobile/MobileHeaderNav.vue";
+import { postApi } from "@/api/postApi.js";
 
 defineOptions({ layout: MainLayout });
 
@@ -44,26 +44,21 @@ const handleLoadEvent = async () => {
 };
 
 const loadPosts = async () => {
-    await axios
-        .get(route("posts.new", [current_page.value]))
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            console.log(res);
-            if (res.status == 200) {
-                if (res.data.length == 0) {
-                    isEndOfFeed.value = true;
-                } else {
-                    current_page.value++;
-                }
-
-                res.data.forEach((post) => {
-                    posts.value.push(post);
-                });
-                console.log(posts.value);
-                isLoading.value = false;
+    await postApi.getNew(current_page.value, (res) => {
+        console.log(res);
+        if (res.status == 200) {
+            if (res.data.length == 0) {
+                isEndOfFeed.value = true;
+            } else {
+                current_page.value++;
             }
-        });
+
+            res.data.forEach((post) => {
+                posts.value.push(post);
+            });
+            console.log(posts.value);
+            isLoading.value = false;
+        }
+    });
 };
 </script>

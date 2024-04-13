@@ -16,8 +16,8 @@
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
 import IconSearch from "../Icons/IconSearch.vue";
+
 const model = defineModel();
 
 const emit = defineEmits(["focus", "focusout"]);

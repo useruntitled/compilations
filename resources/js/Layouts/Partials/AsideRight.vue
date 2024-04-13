@@ -39,9 +39,7 @@
                             </div>
                             <Link
                                 :href="
-                                    route('post.redirect', [
-                                        comment.post.id,
-                                    ])
+                                    route('post.redirect', [comment.post.id])
                                 "
                                 class="max-w-[200px]"
                             >
@@ -56,17 +54,14 @@
                     </div>
                     <Link :href="prepareHref(comment)">
                         <p
-                            class="text-base overflow-hidden text-ellipsis  cursor-pointer hover:opacity-70"
+                            class="text-base overflow-hidden text-ellipsis cursor-pointer hover:opacity-70"
                             style="max-height: 100px"
                             v-html="comment.text"
                         ></p>
-                        <div v-if="comment.image" class="text-center mt-2 hover:opacity-70">
-                            <!--                            <lazy-media-->
-                            <!--                                :media="comment.image"-->
-                            <!--                                class="rounded-lg mx-auto object-scale-down w-full h-full hover:opacity-80"-->
-                            <!--                                rounded="lg"-->
-                            <!--                                style="max-height: 200px"-->
-                            <!--                            />-->
+                        <div
+                            v-if="comment.image"
+                            class="text-center mt-2 hover:opacity-70"
+                        >
                             <fluid-lazy-media
                                 :media="comment.image"
                                 max-height="200"
@@ -80,11 +75,10 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import LazyImage from "@/Components/LazyImage.vue";
-import { getFeed, listenFeedUpdates } from "./AsideRightApi.js";
+import { ref, onMounted } from "vue";
 import LazyMedia from "@/Components/Media/LazyMedia.vue";
 import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
+import { asideRightApi } from "@/api/asideRightApi.js";
 
 const comments = ref([]);
 
@@ -104,17 +98,14 @@ const addComment = (data) => {
     console.log("data", data);
     comments.value.unshift(data.data);
     if (comments.value?.length > 20) {
-        comments.value.splice(20,1);
+        comments.value.splice(20, 1);
     }
 };
 
 onMounted(() => {
-    getFeed(setComments);
-
-    listenFeedUpdates(addComment);
+    asideRightApi.getFeed(setComments);
+    asideRightApi.listenFeedUpdates(addComment);
 });
-
-
 </script>
 
 <style>

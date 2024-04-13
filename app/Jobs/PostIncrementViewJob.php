@@ -8,18 +8,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class PostCountVisitJob implements ShouldQueue
+class PostIncrementViewJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $post;
+    protected $posts;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($post)
+    public function __construct($posts)
     {
-        $this->post = $post;
+        $this->posts = $posts;
     }
 
     /**
@@ -27,7 +27,9 @@ class PostCountVisitJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->post->visits = $this->post->visits + 1;
-        $this->post->update();
+        foreach ($this->posts as $post) {
+            $post->views = $post->views + 1;
+            $post->update();
+        }
     }
 }

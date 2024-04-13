@@ -83,9 +83,7 @@
                             ></SearchInput>
                             <section
                                 @mouseleave="searchInputFocused = false"
-                                v-show="
-                                    searchResult.length > 0
-                                "
+                                v-show="searchResult.length > 0"
                                 class="mt-2 p-2 px-5 bg-white shadow-lg rounded-lg"
                             >
                                 <button
@@ -94,7 +92,9 @@
                                     @click="addFilm(film)"
                                 >
                                     {{ film.name_ru ?? film.name_en }}
-                                    <span class="text-secondary text-sm">{{ film.start_year ?? film.year }}</span>
+                                    <span class="text-secondary text-sm">{{
+                                        film.start_year ?? film.year
+                                    }}</span>
                                 </button>
                             </section>
                         </div>
@@ -111,8 +111,10 @@
                                     class="font-medium"
                                     @click="removeFilm(film.id)"
                                 >
-                                    {{ film.name_ru ?? film.name_en }} <span
-                                    class="text-secondary text-sm">{{ film.start_year ?? film.year }}</span>
+                                    {{ film.name_ru ?? film.name_en }}
+                                    <span class="text-secondary text-sm">{{
+                                        film.start_year ?? film.year
+                                    }}</span>
                                 </button>
                                 <div class="flex flex-col items-center">
                                     <button
@@ -148,8 +150,8 @@
                             class="px-4 ms-1 mb-4"
                             :class="canPublishClass"
                             @click="publish()"
-                            >Опубликовать</PrimaryButton
-                        >
+                            >Опубликовать
+                        </PrimaryButton>
                         <p v-show="isUpdating" class="font-medium">
                             Сохранение...
                         </p>
@@ -179,8 +181,7 @@ import SecondaryInput from "@/Components/Forms/SecondaryInput.vue";
 import { ref, reactive, computed, watch, onMounted, inject } from "vue";
 import Modal from "./Modal.vue";
 import { router, usePage } from "@inertiajs/vue3";
-import axiosInstance from '@/AxiosWrapper.js';
-import axios from "@/AxiosWrapper.js";
+import axiosInstance from "@/AxiosWrapper.js";
 import PrimaryButton from "../Buttons/PrimaryButton.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import SecondaryContent from "../Forms/SecondaryContent.vue";
@@ -189,11 +190,12 @@ import IconUp from "../Icons/IconUp.vue";
 import IconDown from "../Icons/IconDown.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import IconCheck from "../Icons/IconCheck.vue";
-import pkg from 'lodash/function.js';
-import LazyMedia from "@/Components/Media/LazyMedia.vue";
+import pkg from "lodash/function.js";
 import UploadableLazyMedia from "@/Components/Media/UploadableLazyMedia.vue";
+import { postApi } from "@/api/postApi.js";
+import { filmApi } from "@/api/filmApi.js";
 
-const {throttle} = pkg;
+const { throttle } = pkg;
 
 const emit = defineEmits(["close"]);
 
@@ -248,7 +250,6 @@ const isUpdating = ref(false);
 watch(post, () => {
     console.log(url.value);
     postIsCreated.value = true;
-    // postIsLoading.value = false;
     if (page.props.auth.user.id != post.value.user.id) access.value = false;
     pushState();
     form.title = post.value.title;
@@ -293,23 +294,15 @@ const uploadImage = async (image, base64) => {
     if (!post.value) {
         await createPost();
     }
-    const formData = new FormData();
-    formData.append("id", post.value.id);
-    formData.append("image", image);
 
-    axios
-        .post(route("post.upload.image"), formData)
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            if (res.status == 200) {
-                imageIsLoading.value = false;
-                isUpdating.value = false;
-                post.value.image = res.data;
-            }
-            console.log(res);
-        });
+    postApi.uploadImage(post.value.id, image, (res) => {
+        if (res.status == 200) {
+            imageIsLoading.value = false;
+            isUpdating.value = false;
+            post.value.image = res.data;
+        }
+        console.log(res);
+    });
 };
 
 const canPublishClass = computed(() => {
@@ -332,15 +325,10 @@ const form = reactive({
 
 const loadPost = () => {
     postIsLoading.value = true;
-    axios
-        .get(route("post.get", [url.value.searchParams.get("id")]))
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            if (res.status == 200) post.value = res.data;
-            console.log(res);
-        });
+    postApi.get(url.value.searchParams.get("id"), (res) => {
+        if (res.status == 200) post.value = res.data;
+        console.log(res);
+    });
 };
 
 /**
@@ -356,7 +344,7 @@ const url = reactive(
         set() {
             return new URL(window.location.href);
         },
-    })
+    }),
 );
 
 watch(
@@ -364,19 +352,13 @@ watch(
     (newValue, oldValue) => {
         console.log("CHANGED!");
         url.value = newValue;
-    }
+    },
 );
 
-// watch(form, () => {
-//     if (!postIsLoading.value) {
-//         throttle(() => {
-//             savePost();
-//         }, 100)
-//     }
-//     postIsLoading.value = false;
-// });
-watch(form, throttle(async() => {
-    if (!postIsLoading.value && !isUpdating.value) {
+watch(
+    form,
+    throttle(async () => {
+        if (!postIsLoading.value && !isUpdating.value) {
             isUpdating.value = true;
             isUpdated.value = false;
 
@@ -386,10 +368,11 @@ watch(form, throttle(async() => {
             isUpdated.value = true;
             setTimeout(() => {
                 isUpdated.value = false;
-            }, 1000)
-    }
-            postIsLoading.value = false;
-}, 1000))
+            }, 1000);
+        }
+        postIsLoading.value = false;
+    }, 1000),
+);
 
 const access = computed({
     get() {
@@ -402,62 +385,54 @@ const access = computed({
 
 const pushState = () => {
     const url = new URL(window.location.href);
+
     function append(param, value) {
         if (!url.searchParams.has(param)) url.searchParams.append(param, value);
     }
+
     append("modal", "Editor");
     append("id", post.value.id);
 
     window.history.pushState(null, null, url);
     // router.reload({preserveState: true});
     router.visit(url, {
-        method: 'get',
+        method: "get",
         replace: true,
         preserveState: true,
         preserveScroll: true,
-    })
+    });
 };
 
 const createPost = async () => {
     console.log("creating post");
     isUpdating.value = true;
-    await axios
-        .post(route("post.store"), {
-            title: form.title,
-            description: form.description,
-        })
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            POSTWASLOADED.value = true;
-            if (res.status == 200) {
-                post.value = res.data;
-                isUpdating.value = false;
-            }
-            console.log(res);
-        });
+    const data = {
+        title: form.title,
+        description: form.description,
+    };
+    await postApi.store(data, (res) => {
+        POSTWASLOADED.value = true;
+        if (res.status == 200) {
+            post.value = res.data;
+            isUpdating.value = false;
+        }
+        console.log(res);
+    });
 };
 
 const savePost = async () => {
     if (!postIsCreated.value && !POSTWASLOADED.value) {
         await createPost();
     }
-        await axios
-                .post(route("post.update"), {
-                    _method: "PUT",
-                    title: form.title,
-                    description: form.description,
-                    id: post.value.id,
-                    films: form.films,
-                })
-                .catch((res) => {
-                    console.log(res);
-                })
-                .then((res) => {
-                    if (res.status == 200) {
-                    }
-                });
+    const data = {
+        _method: "PUT",
+        title: form.title,
+        description: form.description,
+        id: post.value.id,
+        films: form.films,
+    };
+
+    await postApi.update(data, (res) => {});
 };
 
 const formQuery = () => {
@@ -469,15 +444,9 @@ const searchFilm = () => {
     formQuery();
     if (searchInput.value == "") return;
     setTimeout(() => {
-        axios
-            .get(route("film.search", [`${searchInput.value}`]))
-            .catch((res) => {
-                console.log(res);
-            })
-            .then((res) => {
-                console.log(res);
-                if (res.status == 200) searchResult.value = res.data;
-            });
+        filmApi.search(`${searchInput.value}`, (res) => {
+            if (res.status == 200) searchResult.value = res.data;
+        });
     }, 200);
 };
 
@@ -518,20 +487,13 @@ const changeFilmIndex = (film_id, action) => {
 };
 
 const publish = () => {
-    axios
-        .post(route("post.publish"), {
-            id: post.value.id,
-        })
-        .catch((res) => {
-            console.log(res);
-        })
-        .then((res) => {
-            if (res.status == 200) {
-                post.value.is_active = true;
-                close();
-                router.visit(res.data);
-            }
-        });
+    postApi.publish(post.value.id, (res) => {
+        if (res.status == 200) {
+            post.value.is_active = true;
+            close();
+            router.visit(res.data);
+        }
+    });
 };
 </script>
 <style>
