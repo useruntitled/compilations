@@ -36,7 +36,7 @@ class CommentFactory extends Factory
 
         })->afterCreating(function (Comment $comment) {
             $has = (bool) mt_rand(0, 1);
-            if ($has) {
+            if ($has && $comment->deleted_at == null && $comment->declined_at == null) {
                 $image = ImageGeneratorService::make(mt_rand(10, 2000), mt_rand(10, 2000));
                 MediaUploader::upload($image, $comment);
             }

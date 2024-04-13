@@ -40,4 +40,13 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function configure(): static
+    {
+        return $this->afterMaking(function (User $user) {
+
+        })->afterCreating(function (User $user) {
+            $user->makeAvatar();
+        });
+    }
 }

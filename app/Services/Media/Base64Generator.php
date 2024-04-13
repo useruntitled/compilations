@@ -3,12 +3,11 @@
 namespace App\Services\Media;
 
 use Intervention\Image\Encoders\JpegEncoder;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\ImageInterface;
 
 class Base64Generator
 {
-    public static function make(ImageInterface $file, $format)
+    public static function make(ImageInterface $file, string $format): string
     {
         if ($format != 'gif') {
             try {
@@ -19,13 +18,6 @@ class Base64Generator
 
             return 'data:image/'.$format.';base64,'.base64_encode($file);
         }
-        //        $color = $file->pickColor(0, 0, 0)->toHex();
-
-        //        $file = ImageManager::imagick()
-        //            ->create(5, 5)
-        //            ->fill($color)
-        //            ->blur(3)
-        //            ->encode(new JpegEncoder());
 
         $file = $file
             ->removeAnimation('50%')

@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Enums\UserRole;
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,61 +18,61 @@ trait Roleable
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == Role::ADMIN));
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == UserRole::ADMIN));
     }
 
     protected function isCreator(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == Role::CREATOR));
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == UserRole::CREATOR));
     }
 
     protected function isModer(): Attribute
     {
         $this->roles ?? $this->roles();
 
-        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == Role::MODER));
+        return Attribute::get(fn () => $this->roles->contains(fn ($r) => $r->name == UserRole::MODER));
     }
 
     public function toAdmin(): void
     {
-        $this->roles()->attach(Role::where('name', Role::ADMIN)->firstOrFail()->id);
+        $this->roles()->attach(Role::whereName(UserRole::ADMIN)->firstOrFail()->id);
     }
 
     public function unAdmin(): void
     {
-        $this->roles()->detach(Role::where('name', Role::ADMIN)->firstOrFail()->id);
+        $this->roles()->detach(Role::whereName(UserRole::ADMIN)->firstOrFail()->id);
     }
 
     public function toModer(): void
     {
-        $this->roles()->attach(Role::where('name', Role::MODER)->firstOrFail()->id);
+        $this->roles()->attach(Role::whereName(UserRole::MODER)->firstOrFail()->id);
     }
 
     public function unModer(): void
     {
-        $this->roles()->detach(Role::where('name', Role::MODER)->firstOrFail()->id);
+        $this->roles()->detach(Role::whereName(UserRole::MODER)->firstOrFail()->id);
     }
 
     public function scopeAdmin(Builder $query): Builder
     {
         return $query->whereHas('roles', function (Builder $query) {
-            $query->where('name', Role::ADMIN);
+            $query->where('name', UserRole::ADMIN);
         });
     }
 
     public function scopeUser(Builder $builder): void
     {
         $builder->whereHas('roles', function (Builder $builder) {
-            $builder->whereNot('name', Role::ADMIN)->whereNot('name', Role::MODER);
+            $builder->whereNot('name', UserRole::ADMIN)->whereNot('name', UserRole::MODER);
         });
     }
 
     public function scopeModer(Builder $query): Builder
     {
         return $query->whereHas('roles', function (Builder $query) {
-            $query->where('name', Role::MODER);
+            $query->where('name', UserRole::MODER);
         });
     }
 }

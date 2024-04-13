@@ -2,14 +2,13 @@
 
 namespace App\Actions\Comment;
 
+use App\Enums\CommentText;
 use App\Models\Comment;
 
 final class DeleteComment
 {
     public static function handle(Comment $comment): array
     {
-        $comment->image()->delete();
-
         $isForceDeleted = 0;
 
         if ($comment->replies->count() == 0) {
@@ -23,7 +22,7 @@ final class DeleteComment
         }
 
         $comment->delete();
-        $comment->text = Comment::DELETED_TEXT;
+        $comment->text = CommentText::DELETED_TEXT;
         $comment->update();
 
         return [

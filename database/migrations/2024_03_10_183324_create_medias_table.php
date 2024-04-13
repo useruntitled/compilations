@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('medias', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('uuid');
+            $table->primary('uuid');
 
             $table->string('href')->nullable()->default(null);
 

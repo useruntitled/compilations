@@ -9,7 +9,7 @@ use Intervention\Image\ImageManager;
 
 class ImageGeneratorService
 {
-    public static function make($width = null, $height = null)
+    public static function make(?int $width = null, ?int $height = null): MediaData
     {
         $hashName = Str::uuid();
 
@@ -30,10 +30,8 @@ class ImageGeneratorService
 
         Storage::disk('media')->put($hashName.'.jpeg', $encodedImage);
 
-        $path = media_path($hashName.'.jpeg');
-
         $data = new MediaData([
-            'id' => $hashName,
+            'uuid' => $hashName,
             'width' => config('image.default_dimensions'),
             'height' => config('image.default_dimensions'),
             'format' => 'jpeg',

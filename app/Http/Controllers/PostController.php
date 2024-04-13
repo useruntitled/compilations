@@ -15,11 +15,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    protected PostService $service;
-
-    public function __construct(PostService $service)
+    public function __construct(protected PostService $service)
     {
-        $this->service = $service;
     }
 
     public function drafts()

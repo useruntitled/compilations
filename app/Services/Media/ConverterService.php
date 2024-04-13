@@ -11,7 +11,7 @@ class ConverterService
     public static function gifToMp4(MediaData $media): void
     {
         $path = $media->file->getPathName();
-        $name = $media->id;
+        $name = $media->uuid;
 
         $ffmpeg = FFMpeg::create([
             'ffmpeg.binaries' => '/usr/bin/ffmpeg',

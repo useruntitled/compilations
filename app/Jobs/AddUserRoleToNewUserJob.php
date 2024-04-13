@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\UserRole;
 use App\Models\Role;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,7 +29,7 @@ class AddUserRoleToNewUserJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $user_role = Role::where('name', Role::USER)->first();
+        $user_role = Role::whereName(UserRole::USER)->first();
         if ($user_role != null) {
             $this->user->roles()->attach($user_role->id);
             $this->user->save();

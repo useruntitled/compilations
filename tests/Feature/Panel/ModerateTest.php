@@ -28,7 +28,7 @@ class ModerateTest extends TestCase
 
     public function test_moder_can_decline_comment(): void
     {
-        $comment = Comment::published()->firstOrFail();
+        $comment = Comment::firstOrFail();
 
         $this->loginAsModer()
             ->putJson(route('panel.decline.comment'), [
@@ -40,7 +40,7 @@ class ModerateTest extends TestCase
 
     public function test_user_cannot_decline_post(): void
     {
-        $post = Comment::published()->firstOrFail();
+        $post = Comment::firstOrFail();
 
         $this->login()
             ->putJson(route('panel.decline.post'), [
@@ -51,7 +51,7 @@ class ModerateTest extends TestCase
 
     public function test_user_cannot_decline_comment(): void
     {
-        $comment = Comment::published()->firstOrFail();
+        $comment = Comment::firstOrFail();
 
         $this->login()
             ->putJson(route('panel.decline.comment'), [

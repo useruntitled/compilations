@@ -19,7 +19,7 @@ class MediaHandler
         $this->base64Generator = $base64Generator;
     }
 
-    public function handle(UploadedFile $uploadedFile)
+    public function handle(UploadedFile $uploadedFile): MediaData
     {
         $uuid = Str::uuid();
 
@@ -32,7 +32,7 @@ class MediaHandler
         $name = $uuid.'.'.$this->getFormat($uploadedFile->hashName());
 
         $data = new MediaData([
-            'id' => $uuid,
+            'uuid' => $uuid,
             'width' => $this->getWidth($file),
             'height' => $this->getHeight($file),
             'format' => $this->getFormat($name) == 'gif' ? 'mp4' : $this->getFormat($name),
@@ -51,33 +51,28 @@ class MediaHandler
         return $data;
     }
 
-    public function getFormat($path)
+    public function getFormat(string $path): string
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 
-    public function isGif($path)
+    public function isGif(string $path): string
     {
         return $this->getFormat($path) == 'gif';
     }
 
-    public function getDuration(ImageInterface $gif)
+    public function getDuration(ImageInterface $gif): int
     {
         return $gif->loops();
     }
 
-    public function getWidth($file)
+    public function getWidth(ImageInterface $file): int
     {
         return $file->width();
     }
 
-    public function getHeight($file)
+    public function getHeight(ImageInterface $file): int
     {
         return $file->height();
-    }
-
-    public function getColor($file)
-    {
-        return '#ffffff';
     }
 }

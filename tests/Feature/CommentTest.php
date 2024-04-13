@@ -56,27 +56,26 @@ class CommentTest extends TestCase
 
     public function test_user_can_update_comment(): void
     {
-        $comment = Comment::published()->first();
+        $comment = Comment::published()->firstOrFail();
         $this
             ->loginAs($comment->user)
             ->putJson(route('comment.update'), [
                 'id' => $comment->id,
                 'text' => 'Some new text',
             ]);
-        $comment->refresh();
-        $this->assertSame($comment->text, 'Some new text');
+        $this->assertSame('Some new text', $comment->refresh()->text);
     }
 
     public function test_user_can_attach_media_to_comment(): void
     {
-        $comment = Comment::whereNull('media')->firstOrFail();
+        $comment = Comment::published()->doesntHave('image')->firstOrFail();
 
         $response = $this->loginAs($comment->user);
 
         $media = $response
             ->postJson(route('media.upload.without-save'), [
                 'image' => UploadedFile::fake()->image('some-image.jpeg'),
-            ])->assertOk();
+            ])->assertOk()->json();
 
         $response->putJson(route('comment.update'), [
             'id' => $comment->id,
@@ -96,8 +95,7 @@ class CommentTest extends TestCase
                 'id' => $comment->id,
             ])->assertStatus(200);
 
-        $comment->refresh();
-        $this->assertTrue($comment->trashed());
+        $this->assertTrue($comment->refresh()->trashed());
     }
 
     public function test_user_cannot_update_other_comment(): void

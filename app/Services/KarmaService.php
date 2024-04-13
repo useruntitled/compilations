@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\UserRole;
 use App\Models\Reputation;
 use App\Models\Role;
 use App\Models\User;
@@ -16,7 +17,7 @@ class KarmaService
     public function __construct()
     {
         $this->KARMA_CONDITION_VALUE = config('karma.posts_creating_condition');
-        $this->creatorRole = Role::where('name', Role::CREATOR)->first();
+        $this->creatorRole = Role::whereName(UserRole::CREATOR)->first();
     }
 
     protected function attachCreatorRole(User $user)

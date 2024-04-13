@@ -22,9 +22,6 @@ class UserSeeder extends Seeder
                 ->count(2))
             ->has(Post::factory()->state(new Sequence(['published_at' => null])))
             ->create();
-        foreach ($users as $user) {
-            $user->makeAvatar();
-        }
 
         $bannedUser = User::factory()
             ->state([
@@ -32,6 +29,5 @@ class UserSeeder extends Seeder
                 'banned_by' => array_rand(array_flip($users->pluck('id')->toArray())),
             ])
             ->create();
-        $bannedUser->makeAvatar();
     }
 }

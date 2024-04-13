@@ -24,7 +24,6 @@ class MediaObserver
 
     public function deleted(Media $media)
     {
-        Storage::disk('media')->delete($media->id);
-        $media->delete();
+        Storage::disk('media')->delete($media->filename);
     }
 }

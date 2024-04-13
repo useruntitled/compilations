@@ -11,11 +11,8 @@ use Illuminate\Support\Str;
 
 class FilmController extends Controller
 {
-    protected ParserInterface $parser;
-
-    public function __construct(ParserInterface $parser)
+    public function __construct(protected ParserInterface $parser)
     {
-        $this->parser = $parser;
     }
 
     protected function getFilm(int $id)

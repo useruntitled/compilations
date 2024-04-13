@@ -14,7 +14,7 @@ class KinopoiskDotDevParser implements ParserInterface
         $this->token = env('KP2_TOKEN');
     }
 
-    public function getFilm(int $id)
+    public function getFilm(int $id): ?FilmData
     {
         $response = Http::withHeaders([
             'X-API-KEY' => $this->token,

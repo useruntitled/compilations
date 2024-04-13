@@ -2,6 +2,7 @@
 
 namespace App\Services\Media;
 
+use App\DTO\MediaData;
 use App\Models\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
@@ -9,11 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaService
 {
-    protected MediaHandler $handler;
-
-    public function __construct(MediaHandler $handler)
+    public function __construct(protected MediaHandler $handler)
     {
-        $this->handler = $handler;
     }
 
     public function get(string $filename, ?int $scale)
@@ -32,7 +30,7 @@ class MediaService
         return $result;
     }
 
-    public function upload(UploadedFile $file, $eloquent)
+    public function upload(UploadedFile $file, $eloquent): MediaData
     {
         $handledData = $this->handler->handle($file);
 
@@ -43,9 +41,9 @@ class MediaService
         return $handledData;
     }
 
-    public static function delete($media)
+    public static function delete($media): void
     {
-        Storage::disk('media')->delete($media->id);
+        Storage::disk('media')->delete($media->uuid);
         $media->delete();
     }
 }

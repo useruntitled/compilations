@@ -27,7 +27,7 @@ final class StoreComment
         ]);
 
         if (isset($data['image'])) {
-            MediaUploader::toEloquent($data['image']['href'], $comment);
+            MediaUploader::toEloquent($data['image']['uuid'], $comment);
         }
 
         return $comment;

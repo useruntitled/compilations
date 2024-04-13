@@ -31,6 +31,7 @@ class CommentObserver
      */
     public function deleted(Comment $comment): void
     {
+        $comment->image()->delete();
         event(new CommentDeletedEvent($comment));
     }
 

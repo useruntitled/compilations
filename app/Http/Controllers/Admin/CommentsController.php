@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CommentText;
 use App\Events\CommentDeclinedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeclineRequest;
@@ -52,7 +53,7 @@ class CommentsController extends Controller
     public function decline(DeclineRequest $request)
     {
         $comment = Comment::findOrFail($request->id);
-        $comment->text = Comment::DECLINED_TEXT;
+        $comment->text = CommentText::DECLINED_TEXT;
 
         $comment->image()->delete();
 

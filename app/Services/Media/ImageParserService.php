@@ -10,7 +10,7 @@ use Intervention\Image\ImageManager;
 
 class ImageParserService
 {
-    public function make(string $uri)
+    public function make(string $uri): MediaData
     {
         $im = file_get_contents($uri);
         $hashName = Str::uuid();
@@ -23,7 +23,7 @@ class ImageParserService
         Storage::disk('media')->put($hashName.'.jpeg', $encodedImage);
 
         $data = new MediaData([
-            'id' => $hashName,
+            'uuid' => $hashName,
             'width' => config('image.default_dimensions'),
             'height' => config('image.default_dimensions'),
             'format' => 'jpeg',

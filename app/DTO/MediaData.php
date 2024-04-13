@@ -4,7 +4,7 @@ namespace App\DTO;
 
 class MediaData extends DTO
 {
-    public $id;
+    public $uuid;
 
     public $href;
 
@@ -22,8 +22,8 @@ class MediaData extends DTO
 
     public function __construct($data)
     {
-        $this->id = $data['id'];
-        $this->href = route('media.view', $data['id']);
+        $this->uuid = $data['uuid'];
+        $this->href = route('media.view', $data['uuid']);
         $this->format = $data['format'];
         $this->width = $data['width'];
         $this->height = $data['height'];

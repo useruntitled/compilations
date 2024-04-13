@@ -10,17 +10,18 @@ function makeFormData(instance, method) {
     return data;
 }
 
-
 export const store = (instance, callback) => {
-    axios.post(route('comment.store'), makeFormData(instance, 'POST'))
+    axios
+        .post(route("comment.store"), makeFormData(instance, "POST"))
         .then((res) => {
             return callback(res);
-        })
-}
+        });
+};
 
 export const update = (instance, callback) => {
-    axios.post(route('comment.update'), makeFormData(instance, 'PUT'))
+    axios
+        .post(route("comment.update"), makeFormData(instance, "PUT"))
         .then((res) => {
             return callback(res);
-        })
-}
+        });
+};

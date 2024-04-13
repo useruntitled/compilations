@@ -11,11 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class MediaController extends Controller
 {
-    protected MediaService $service;
-
-    public function __construct(MediaService $service)
+    public function __construct(protected MediaService $service)
     {
-        $this->service = $service;
     }
 
     public function index($filename, $scale = null)
@@ -28,15 +25,16 @@ class MediaController extends Controller
         if (! $request->hasFile('image')) {
             abort(422);
         }
+
         $handledData = $handler->handle($request->file('image'));
 
         MediaUploader::save($handledData);
 
-        $model = Media::create([
+        Media::create([
             ...(array) $handledData->except('file'),
             'user_id' => Auth::id(),
         ]);
 
-        return response()->json($model);
+        return response()->json($handledData->except('file'));
     }
 }

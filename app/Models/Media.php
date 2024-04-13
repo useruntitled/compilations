@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Media extends Model
 {
-    use HasFactory;
+    protected $table = 'medias';
 
     protected $fillable = [
-        'id',
+        'uuid',
         'format',
         'width', 'height',
         'duration',
@@ -22,10 +22,19 @@ class Media extends Model
         'media_to_id',
     ];
 
-    protected $table = 'medias';
+    protected $primaryKey = 'uuid';
+
+    protected $casts = [
+        'uuid' => 'string',
+    ];
 
     public function media_to(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    protected function filename(): Attribute
+    {
+        return Attribute::get(fn () => "$this->uuid.$this->format");
     }
 }

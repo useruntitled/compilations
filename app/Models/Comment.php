@@ -20,10 +20,6 @@ class Comment extends Model
     use HasReputation;
     use SoftDeletes;
 
-    const DELETED_TEXT = 'Комментарий удалён';
-
-    const DECLINED_TEXT = 'Комментарий удалён модератором';
-
     protected $fillable = [
         'text', 'user_id',
         'post_id', 'comment_id',
