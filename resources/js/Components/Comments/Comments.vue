@@ -11,15 +11,20 @@
                     <template #trigger>
                         <div class="flex items-center">
                             <span>{{ currentSort }}</span>
-                        <div class="ms-2">
-                            <icon-chewron-down class="w-5 h-5"/>
-                                        </div>
+                            <div class="ms-2">
+                                <icon-chewron-down class="w-5 h-5" />
+                            </div>
                         </div>
                     </template>
                     <template #content>
                         <div class="items-start px-5 opacity-100 text-black space-y-1">
-                            <button class="block hover:opacity-80" @click="resortComments(sortByReputationOverall, 'sortByReputationOverall')">По количеству оценок</button>
-                            <button class="block hover:opacity-80" @click="resortComments(sortByNewest, 'sortByNewest')">Сначала новые</button>
+                            <button class="block hover:opacity-80"
+                                    @click="resortComments(sortByReputationOverall, 'sortByReputationOverall')">По
+                                количеству оценок
+                            </button>
+                            <button class="block hover:opacity-80"
+                                    @click="resortComments(sortByNewest, 'sortByNewest')">Сначала новые
+                            </button>
                         </div>
                     </template>
                 </Dropdown>
@@ -52,15 +57,17 @@
                 ></Comment>
             </div>
         </main>
-        <div v-if="!showReplyInterface && !showEditingInterface && isLoaded && comments?.length > 10 && isIgnoreLimitEnabled" class="mt-4">
-                <CommentInput
-                    @sendComment="createComment"
-                    :commentIsCreated="commentIsCreated"
-                ></CommentInput>
-            </div>
+        <div
+            v-if="!showReplyInterface && !showEditingInterface && isLoaded && comments?.length > 10 && isIgnoreLimitEnabled"
+            class="mt-4">
+            <CommentInput
+                @sendComment="createComment"
+                :commentIsCreated="commentIsCreated"
+            ></CommentInput>
+        </div>
     </div>
 
-     <div
+    <div
         v-if="comments?.length > limitComments && !isIgnoreLimitEnabled"
         class="bg-white border-t-2 w-full p-3 px-5 mt-[-15px] flex items-center justify-between rounded-b-xl"
     >
@@ -81,8 +88,8 @@ import axios from "axios";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import Dropdown from "../Dropdown.vue";
 import IconChewronDown from "../Icons/IconChewronDown.vue";
-import {usePage} from "@inertiajs/vue3";
-import {store} from "@/Components/Comments/api.js";
+import { usePage } from "@inertiajs/vue3";
+import { store } from "@/Components/Comments/api.js";
 
 const isLoaded = ref(false);
 
@@ -147,14 +154,14 @@ const resortComments = async (func, value) => {
     await processComments(func);
     nextTick(() => {
         comments_block.value.scrollIntoViewIfNeeded();
-    })
+    });
 
     currentSort.value = sortingValues[value];
-}
+};
 
 const sortingValues = {
-    sortByReputationOverall: 'По количеству оценок',
-    sortByNewest: 'Сначала новые',
+    sortByReputationOverall: "По количеству оценок",
+    sortByNewest: "Сначала новые"
 };
 
 const currentSort = ref(sortingValues.sortByReputationOverall);
@@ -218,6 +225,7 @@ const processComments = async (sortFunction = sortByReputationOverall) => {
 
 const countReplies = (comment) => {
     let count = 0;
+
     function updateCount(comm) {
         if (comm?.replies?.length > 0) {
             comm.replies.forEach((reply) => {
@@ -228,6 +236,7 @@ const countReplies = (comment) => {
 
         return 1;
     }
+
     updateCount(comment);
 
     comment.replies_count = count;
@@ -235,7 +244,7 @@ const countReplies = (comment) => {
 
 const commentToScrollInto = ref({
     has: false,
-    id: null,
+    id: null
 });
 
 const postCommentsCount = ref(0);
@@ -273,7 +282,7 @@ onMounted(async () => {
 const callModal = inject("callModal");
 
 const props = defineProps({
-    post: null,
+    post: null
 });
 
 const showRepliesArray = ref([]);
@@ -300,6 +309,7 @@ const findComment = (id) => {
         }
         return null;
     }
+
     for (const comment of comments.value) {
         const found = find(comment);
         if (found) {
@@ -337,25 +347,25 @@ const onStore = (res) => {
             commentIsCreated.value = false;
         }, 20);
     }
-}
+};
 const createComment = (form) => {
     if (!page.props.auth.check) {
-        callModal('auth');
+        callModal("auth");
         return;
     }
     store(form, onStore);
 };
 
 const removeComment = (id) => {
-    comments.value[comments.value.findIndex((c) => c.id == id)].text = 'Комментарий удалён';
-    axios.post(route('comment.delete'), {
-        '_method': 'DELETE',
-        id: id,
+    comments.value[comments.value.findIndex((c) => c.id == id)].text = "Комментарий удалён";
+    axios.post(route("comment.delete"), {
+        "_method": "DELETE",
+        id: id
     })
         .then((res) => {
             console.log(res.data);
-        })
-}
+        });
+};
 
 const setInputValuesToNull = () => {
     showReplyInterface.value = null;
