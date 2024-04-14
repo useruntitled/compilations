@@ -29,7 +29,7 @@ class SocialiteProviderController extends Controller
         ])->first();
 
         if (! $user) {
-            $hasImage = true;
+            $hasImage = $socialiteUser->getAvatar() != null;
 
             $user = User::create([
                 'name' => $socialiteUser->getName(),

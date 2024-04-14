@@ -14,11 +14,17 @@ class MediaUploader
 
         $data = (array) $data->except('file');
 
-        $user_id = $eloquent->user?->id != null ? $eloquent->user->id : (Auth::id() != null ? Auth::id() : $eloquent->id);
+        if ($eloquent?->user?->id != null) {
+            $userId = $eloquent->user->id;
+        } elseif (Auth::id() != null) {
+            $userId = Auth::id();
+        } elseif ($eloquent?->id != null) {
+            $userId = $eloquent->id;
+        }
 
         Media::create([
             ...$data,
-            'user_id' => $user_id,
+            'user_id' => $userId,
             'media_to_type' => get_class($eloquent),
             'media_to_id' => $eloquent->id,
         ]);
