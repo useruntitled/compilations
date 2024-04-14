@@ -14,7 +14,9 @@ import { computed } from "vue";
 const props = defineProps({
     primaryColor: null,
     secondaryColor: null,
-    textColor: "white",
+    textColor: {
+        default: "white",
+    },
 });
 
 const colorClass = computed(() => {
