@@ -6,7 +6,7 @@
             </div>
             <div
                 class="bg-white h-full sticky"
-                v-if="access && !postIsLoading"
+                v-if="!postIsLoading"
                 style="height: calc(100vh - 100px)"
             >
                 <p v-if="postIsPublished" class="font-medium">
@@ -167,10 +167,6 @@
                     </div>
                 </footer>
             </div>
-            <div v-if="!access" class="py-20">
-                Вы не можете публиковать подборки, так как пока не являетесь
-                частью сообщества.
-            </div>
         </div>
     </modal>
 </template>
@@ -200,7 +196,7 @@ const emit = defineEmits(["close"]);
 const close = () => {
     emit("close");
     showModal.value = false;
-    if (POSTWASLOADED.value && !postIsPublished.value) {
+    if (editorIsReady.value && !postIsPublished.value && postIsCreated.value) {
         injectedCallMessage("success", "Подборка сохранена в черновиках.");
     }
 };
@@ -219,11 +215,11 @@ const injectedCallMessage = inject("callMessage");
 
 axiosInstance.setCallbackFunction(injectedCallMessage);
 
-onMounted(() => {
-    if (!access.value)
-        console.log("Editor Modal: The user cannot create the post.");
-
-    if (postIsCreated.value) loadPost();
+onMounted(async () => {
+    if (postIsCreated.value) {
+        await loadPost();
+    }
+    editorIsReady.value = true;
 
     console.log(postIsCreated.value);
 });
@@ -237,29 +233,14 @@ const postIsPublished = computed(() => {
 const postIsLoading = ref(false);
 const postIsCreated = computed({
     get() {
-        return url.value.searchParams.has("id");
+        const url = new URL(window.location.href);
+        return url.searchParams.has("id");
     },
     set(newValue) {
         return newValue;
     },
 });
 const isUpdating = ref(false);
-
-watch(post, () => {
-    console.log(url.value);
-    postIsCreated.value = true;
-    if (page.props.auth.user.id != post.value.user.id) access.value = false;
-    pushState();
-    form.title = post.value.title;
-    form.description = post.value.description;
-
-    if (post.value.films != undefined) {
-        pinnedFilms.value = [...post.value.films];
-        form.films = post.value.films;
-    } else {
-        form.films = [];
-    }
-});
 
 const searchInput = ref(null);
 const searchResult = ref([]);
@@ -321,65 +302,34 @@ const form = reactive({
     films: "",
 });
 
+const getUrl = () => {
+    return new URL(window.location.href);
+};
+
 const loadPost = () => {
     postIsLoading.value = true;
-    postApi.get(url.value.searchParams.get("id"), (res) => {
-        if (res.status == 200) post.value = res.data;
+    postApi.get(getUrl().searchParams.get("id"), (res) => {
+        if (res.status == 200) {
+            post.value = res.data;
+            form.title = res.data.title;
+            form.description = res.data.description;
+            form.films = res.data.films;
+            postIsLoading.value = false;
+        }
         console.log(res);
     });
 };
 
-/**
- * Crunch
- */
-const POSTWASLOADED = ref(false);
-
-const url = reactive(
-    computed({
-        get() {
-            return new URL(window.location.href);
-        },
-        set() {
-            return new URL(window.location.href);
-        },
-    }),
-);
-
-watch(
-    () => window.location.href,
-    (newValue, oldValue) => {
-        console.log("CHANGED!");
-        url.value = newValue;
-    },
-);
+const editorIsReady = ref(false);
 
 watch(
     form,
     throttle(async () => {
         if (!postIsLoading.value && !isUpdating.value) {
-            isUpdating.value = true;
-            isUpdated.value = false;
-
             await savePost();
-
-            isUpdating.value = false;
-            isUpdated.value = true;
-            setTimeout(() => {
-                isUpdated.value = false;
-            }, 1000);
         }
-        postIsLoading.value = false;
-    }, 1000),
+    }, 500),
 );
-
-const access = computed({
-    get() {
-        return page.props.auth.can.create_posts;
-    },
-    set(newValue) {
-        return newValue;
-    },
-});
 
 const pushState = () => {
     const url = new URL(window.location.href);
@@ -409,19 +359,35 @@ const createPost = async () => {
         description: form.description,
     };
     await postApi.store(data, (res) => {
-        POSTWASLOADED.value = true;
+        editorIsReady.value = true;
         if (res.status == 200) {
             post.value = res.data;
             isUpdating.value = false;
+            pushState();
         }
         console.log(res);
     });
 };
 
+const showUpdated = () => {
+    isUpdating.value = false;
+    isUpdated.value = true;
+    setTimeout(() => {
+        isUpdated.value = false;
+    }, 500);
+};
+
+const showUpdating = () => {
+    isUpdating.value = true;
+};
+
 const savePost = async () => {
-    if (!postIsCreated.value && !POSTWASLOADED.value) {
+    if (!postIsCreated.value && editorIsReady.value) {
         await createPost();
     }
+
+    showUpdating();
+
     const data = {
         _method: "PUT",
         title: form.title,
@@ -430,7 +396,9 @@ const savePost = async () => {
         films: form.films,
     };
 
-    await postApi.update(data, (res) => {});
+    await postApi.update(data, (res) => {
+        showUpdated();
+    });
 };
 
 const formQuery = () => {
@@ -453,13 +421,14 @@ const addFilm = async (film) => {
         await createPost();
     }
 
-    if (!form.films.find((obj) => obj.id == film.id)) form.films.push(film);
+    if (!form.films.find((obj) => obj.id == film.id)) {
+        form.films.push(film);
+    }
 };
 
 const removeFilm = (film_id) => {
     const index = form.films.findIndex((obj) => obj.id == film_id);
     form.films.splice(index, 1);
-    savePost();
 };
 
 const changeFilmIndex = (film_id, action) => {
@@ -480,8 +449,6 @@ const changeFilmIndex = (film_id, action) => {
         form.films[index + 1] = film;
         form.films[index] = filmBelow;
     }
-
-    savePost();
 };
 
 const publish = () => {
