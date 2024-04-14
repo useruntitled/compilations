@@ -30,8 +30,6 @@ final class UpdatePost
             'slug' => Str::slug($data['title']),
         ]);
 
-        $post->save();
-
         return $post;
     }
 }
