@@ -14,9 +14,15 @@ class FilmResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $array = parent::toArray($request);
-        $array['genres'] = $this->genres;
-
-        return $array;
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'name_en' => $this->name_en,
+            'name_ru' => $this->name_ru,
+            'poster_url' => $this->poster_url,
+            'poster_url_preview' => $this->poster_url_preview,
+            'description' => $this->description,
+            'genres' => GenreResource::collection($this->genres),
+        ];
     }
 }

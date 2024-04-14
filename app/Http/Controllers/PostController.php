@@ -6,6 +6,7 @@ use App\Actions\Post\PublishPost;
 use App\Actions\Post\UpdatePost;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Requests\UploadFileRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Policies\PostPolicy;
 use App\Services\Media\MediaService;
@@ -40,7 +41,7 @@ class PostController extends Controller
         $this->service->incrementVisit($post);
 
         return inertia('post', [
-            'post' => $post,
+            'post' => PostResource::make($post),
         ]);
     }
 
