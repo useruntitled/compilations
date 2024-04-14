@@ -2,26 +2,23 @@
     <div class="my-2 px-0 bg-white rounded-xl p-2">
         <header class="flex items-center justify-between">
             <!-- <UserTablet :user="comment.user"></UserTablet> -->
-            <UserTabletWithElementInside :user="comment.user">
+            <user-tablet-with-element-inside :user="comment.user">
                 <template #content>
                     <p class="text-xs opacity-80">{{ comment.timestamp }}</p>
                 </template>
-            </UserTabletWithElementInside>
+            </user-tablet-with-element-inside>
         </header>
         <main>
             <p v-html="comment.text" class="text-base"></p>
         </main>
         <footer class="flex items-center">
-            <Reputation
-                :type="type"
-                :reputation="comment.reputation"
-            ></Reputation>
+            <Reputation :type="type" :reputation="comment.reputation" />
             <button
                 class="ms-2 text-sm text-secondary"
                 @click="
                     this.changeShowReplyInterfaceValue(
                         this.type,
-                        this.comment.id
+                        this.comment.id,
                     )
                 "
             >
@@ -34,8 +31,7 @@
                         changeShowEditingInterfaceValue(type, comment.id)
                     "
                     :comment="this.comment"
-                ></CommentDropdown
-            ></span>
+            /></span>
         </footer>
         <button
             v-if="comment.replies_count > 0 && !showReplies"
@@ -47,9 +43,9 @@
     </div>
 </template>
 <script>
-import Dropdown from "../Dropdown.vue";
-import Reputation from "../Reputation.vue";
-import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
+import Dropdown from "../Dropdowns/Dropdown.vue";
+import Reputation from "../Forms/Reputation.vue";
+import UserTabletWithElementInside from "../User/UserTabletWithElementInside.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 
 export default {

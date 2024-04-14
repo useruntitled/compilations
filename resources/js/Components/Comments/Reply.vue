@@ -5,8 +5,7 @@
             type="Reply"
             @showReplyInterface="$emit('showReplyInterface')"
             @showEditingInterface="$emit('showReplyEditingInterface')"
-        >
-        </CommentTemplate>
+        />
     </div>
 </template>
 <script>

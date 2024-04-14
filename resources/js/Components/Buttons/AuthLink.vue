@@ -1,9 +1,9 @@
 <template>
     <Link v-if="page.props.auth.check" :href="href" preserve-state>
-        <slot></slot>
+        <slot />
     </Link>
     <div v-else @click="callModal('Auth')">
-        <slot></slot>
+        <slot />
     </div>
 </template>
 <script setup>

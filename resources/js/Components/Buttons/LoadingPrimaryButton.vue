@@ -1,32 +1,23 @@
 <template>
-    <PrimaryButton v-if="!isLoaded" @click="startLoading()"
-        ><slot></slot
-    ></PrimaryButton>
+    <primary-button v-if="!isLoaded" @click="startLoading()">
+        <slot />
+    </primary-button>
     <div v-else class="flex justify-end px-8 my-4 mb-5">
-        <!-- <AnimationLoading></AnimationLoading> -->
-        <AnimationLoader></AnimationLoader>
+        <AnimationLoader />
     </div>
 </template>
-<script>
+<script setup>
 import AnimationLoader from "../Animations/AnimationLoader.vue";
-import AnimationLoading from "../Animations/AnimationLoading.vue";
 import PrimaryButton from "./PrimaryButton.vue";
+import { ref } from "vue";
 
-export default {
-    emits: [],
-    props: {
-        isLoaded: false,
-    },
-    data() {
-        return {
-            loading: false,
-        };
-    },
-    methods: {
-        startLoading() {
-            this.loading = true;
-        },
-    },
-    components: { PrimaryButton, AnimationLoading, AnimationLoader },
+const props = defineProps({
+    isLoaded: false,
+});
+
+const loading = ref(false);
+
+const startLoading = () => {
+    loading.value = true;
 };
 </script>

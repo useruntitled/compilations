@@ -1,21 +1,21 @@
 <template>
     <div class="ms-2 mt-2">
-        <CommentInput
+        <comment-input
             v-focus
             @sendComment="saveComment"
             :commentIsCreated="commentIsUpdated"
             :comment="comment"
         >
             <template #button>
-                <FlatPrimaryButton
+                <flat-primary-button
                     primaryColor="neutral-200"
                     textColor="black"
                     class="font-semibold"
                     @click="emit('closeEditingInterface')"
                     >Отмена
-                </FlatPrimaryButton>
+                </flat-primary-button>
             </template>
-        </CommentInput>
+        </comment-input>
     </div>
 </template>
 <script setup>

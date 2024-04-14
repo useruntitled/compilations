@@ -25,9 +25,9 @@ import CommentUpNotification from "@/Components/Notifications/CommentUpNotificat
 import PostWasCommentedNotification from "@/Components/Notifications/PostWasCommentedNotification.vue";
 import ReplyNotification from "@/Components/Notifications/ReplyNotification.vue";
 import PostUpNotification from "@/Components/Notifications/PostUpNotification.vue";
-import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import InfiniteScrollContainer from "@/Components/Feed/InfiniteScrollContainer.vue";
 import axios from "axios";
-import EmptyFeed from "@/Components/EmptyFeed.vue";
+import EmptyFeed from "@/Components/Feed/EmptyFeed.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 
 defineOptions({ layout: MainLayout });

@@ -17,7 +17,7 @@
                             }"
                         >
                             <div :class="props.class">
-                                <slot :class="props.class"></slot>
+                                <slot :class="props.class" />
                             </div>
                         </div>
                         <span class="ms-1">{{ text }}</span>
@@ -29,6 +29,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
+
 const props = defineProps({
     class: null,
     text: null,

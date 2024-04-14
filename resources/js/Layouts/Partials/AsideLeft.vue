@@ -17,7 +17,7 @@
                             :class="{
                                 'stroke-amber-500 fill-amber-500 ': isPopular,
                             }"
-                        ></IconFlame>
+                        />
                     </span>
                     <span class="text-lgg font-regular">Популярное</span>
                 </div>
@@ -36,12 +36,11 @@
                                 'text-amber-500 ': isNew,
                                 'text-secondary': !isNew,
                             }"
-                        ></IconClock
-                    ></span>
+                    /></span>
                     <span class="text-lgg font-regular">Свежее</span>
                 </div>
             </Link>
-            <AuthLink
+            <auth-link
                 :href="route('me.bookmarks')"
                 class="block w-full hover:bg-white p-2 rounded-xl text-lg mb-2 hover:cursor-pointer hover:shadow-sm"
                 :class="{
@@ -56,17 +55,17 @@
                                 'text-secondary': !isBookmarks,
                             }"
                             class="w-[24px]"
-                        ></IconBookmark
-                    ></span>
+                    /></span>
                     <span class="text-lgg font-regular">Закладки</span>
                 </div>
-            </AuthLink>
+            </auth-link>
             <div class="w-full mt-10">
-                <PrimaryButton
+                <primary-button
                     @click="callModal('Editor')"
+                    text-color="white"
                     class="bg-orange-500 px-0 rounded-lg py-3 w-full font-regular text-17px"
                     >Новая подборка
-                </PrimaryButton>
+                </primary-button>
             </div>
             <div class="bottom-0 absolute py-5 ms-2 text-[15px] space-y-2">
                 <p class="opacity-70 hover:opacity-100">
@@ -96,7 +95,7 @@ import IconBookmark from "@/Components/Icons/IconBookmark.vue";
 import IconClock from "@/Components/Icons/IconClock.vue";
 import IconFlame from "@/Components/Icons/IconFlame.vue";
 import { usePage } from "@inertiajs/vue3";
-import AuthLink from "@/Components/AuthLink.vue";
+import AuthLink from "@/Components/Buttons/AuthLink.vue";
 import IconGithub from "@/Components/Icons/IconGithub.vue";
 
 const callModal = inject("callModal");

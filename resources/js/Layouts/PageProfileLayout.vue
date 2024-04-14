@@ -47,7 +47,7 @@
                 </div>
                 <p class="text-xl font-medium">{{ user.name }}</p>
                 <p class="text-sm" v-html="user.subsite?.description"></p>
-                <karma-count-with-emoji :karma="karma"></karma-count-with-emoji>
+                <KarmaCountWithEmoji :karma="karma" />
 
                 <div class="flex items-center mt-4">
                     <Link
@@ -93,7 +93,7 @@
 </template>
 <script setup>
 import { ref, watch, computed, onMounted, inject } from "vue";
-import KarmaCountWithEmoji from "@/Components/KarmaCountWithEmoji.vue";
+import KarmaCountWithEmoji from "@/Components/User/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
 import axiosInstance from "@/AxiosWrapper.js";

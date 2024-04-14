@@ -9,8 +9,8 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import { inject, ref } from "vue";
-import IconBookmark from "./Icons/IconBookmark.vue";
-import BtnIcon from "./BtnIcon.vue";
+import IconBookmark from "@/Components/Icons/IconBookmark.vue";
+import BtnIcon from "@/Components/Buttons/BtnIcon.vue";
 import axios from "axios";
 
 const callModal = inject("callModal");
@@ -56,7 +56,7 @@ const setBookmark = () => {
         .post(
             route("bookmark.toggle", {
                 post_id: props.post_id,
-            })
+            }),
         )
         .then((res) => {
             console.log(res);

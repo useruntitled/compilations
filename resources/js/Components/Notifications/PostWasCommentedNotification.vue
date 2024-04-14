@@ -1,15 +1,15 @@
 <template>
     <div class="p-2 px-3">
         <main class="text-start">
-            <NotificationTemplate :notification="notification">
+            <notification-template :notification="notification">
                 <template #content>
                     Прокомментировал вашу подборку
                     {{ notification.data.post.title }}
                 </template>
                 <template #icon>
-                    <IconCommentsFilled></IconCommentsFilled>
+                    <IconCommentsFilled />
                 </template>
-            </NotificationTemplate>
+            </notification-template>
         </main>
     </div>
 </template>

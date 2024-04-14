@@ -6,7 +6,7 @@
             >
                 <div class="flex items-end justify-start">
                     <div class="flex items-end justify-end">
-                        <lazy-media
+                        <LazyMedia
                             :media="user.avatar"
                             rounded="full"
                             class="inline-block hover:brightness-110 object-cover border-2"
@@ -19,7 +19,7 @@
                             v-if="icon != null"
                         >
                             <div class="text-white">
-                                <component
+                                <Component
                                     :is="icon"
                                     class="mx-auto duration-200 relative stroke-[2] fill-white p-1"
                                     :class="
@@ -30,14 +30,16 @@
                                             : 'w-5 h-5'
                                     "
                                     :style="translateStyle"
-                                ></component>
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col align-center ms-2 text-15 font-500">
                     <p class="font-medium opacity-80">{{ user.name }}</p>
-                    <p><slot name="content" /></p>
+                    <p>
+                        <slot name="content" />
+                    </p>
                 </div>
             </div>
             <div class="d-none text-primary bg-primary bg-dtfpr"></div>
@@ -45,10 +47,10 @@
     </div>
 </template>
 <script>
-import IconArrowForwardUp from "./Icons/IconArrowForwardUp.vue";
-import IconComments from "./Icons/IconComments.vue";
-import IconHeart from "./Icons/IconHeart.vue";
-import LazyImage from "./LazyImage.vue";
+import IconArrowForwardUp from "../Icons/IconArrowForwardUp.vue";
+import IconComments from "../Icons/IconComments.vue";
+import IconHeart from "../Icons/IconHeart.vue";
+import LazyImage from "../Media/LazyImage.vue";
 import LazyMedia from "@/Components/Media/LazyMedia.vue";
 
 export default {
@@ -74,6 +76,12 @@ export default {
             this.isVisible = true;
         }, 20);
     },
-    components: {LazyMedia, IconArrowForwardUp, IconHeart, IconComments, LazyImage},
+    components: {
+        LazyMedia,
+        IconArrowForwardUp,
+        IconHeart,
+        IconComments,
+        LazyImage,
+    },
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="p-2 px-3">
         <main class="text-start">
-            <NotificationTemplate
+            <notification-template
                 :notification="notification"
                 iconFirstColor="red-500"
             >
@@ -18,10 +18,9 @@
                     </Link>
                 </template>
                 <template #icon>
-                    <!-- <IconHeart></IconHeart> -->
-                    <IconHeartFilled></IconHeartFilled>
+                    <IconHeartFilled />
                 </template>
-            </NotificationTemplate>
+            </notification-template>
         </main>
     </div>
 </template>

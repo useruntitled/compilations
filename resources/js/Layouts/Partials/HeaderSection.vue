@@ -53,7 +53,7 @@
     </div>
 </template>
 <script setup>
-import DropdownLink from "@/Components/DropdownLink.vue";
+import DropdownLink from "@/Components/Dropdowns/DropdownLink.vue";
 import IconExit from "@/Components/Icons/IconExit.vue";
 import IconPanel from "@/Components/Icons/IconPanel.vue";
 import IconPencil from "@/Components/Icons/IconPencil.vue";

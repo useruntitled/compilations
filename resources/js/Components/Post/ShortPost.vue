@@ -5,9 +5,8 @@
                 <span>{{ post.title }}</span>
                 <span class="opacity-60 text-[13px] inline-block items-end">
                     <span class="items-end space-x-0">
-                        <icon-comments class="w-4 h-4 inline-block ms-1"/> <span class="ms-0">{{
-                            post.comments_count
-                        }}</span>
+                        <IconComments class="w-4 h-4 inline-block ms-1" />
+                        <span class="ms-0">{{ post.comments_count }}</span>
                     </span>
                 </span>
             </div>
@@ -19,5 +18,5 @@ import IconComments from "@/Components/Icons/IconComments.vue";
 
 const props = defineProps({
     post: null,
-})
+});
 </script>

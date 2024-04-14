@@ -1,8 +1,8 @@
 <template>
-    <Modal :show="show" @close="close()" v-if="showModal">
+    <modal :show="show" @close="close()" v-if="showModal">
         <div class="sm:p-5 xs:px-2 sm:px-20 pb-0">
             <div v-if="postIsLoading" class="flex justify-center my-10">
-                <AnimationLoader></AnimationLoader>
+                <AnimationLoader />
             </div>
             <div
                 class="bg-white h-full sticky"
@@ -34,7 +34,7 @@
                                 >
                                     <IconPhoto
                                         class="w-[80px] h-[80px] stroke-[1.2] cursor-pointer opacity-60"
-                                    ></IconPhoto>
+                                    />
                                 </div>
                             </div>
                             <div
@@ -44,7 +44,7 @@
                                 <div
                                     class="flex text-center justify-center items-center"
                                 >
-                                    <uploadable-lazy-media
+                                    <UploadableLazyMedia
                                         v-if="post.image || form.image"
                                         rounded="xl"
                                         class="cursor-pointer object-cover w-[100px] h-[100px]"
@@ -63,13 +63,13 @@
                                 v-focus
                                 v-model="form.title"
                                 placeholder="Название подборки"
-                            ></SecondaryInput>
+                            />
                         </div>
                         <div>
                             <SecondaryContent
                                 v-model="form.description"
                                 placeholder="Описание подборки"
-                            ></SecondaryContent>
+                            />
                         </div>
 
                         <div class="my-5">
@@ -80,7 +80,7 @@
                                 @input="searchFilm()"
                                 @focus="searchInputFocused = true"
                                 @mouseenter="searchInputFocused = true"
-                            ></SearchInput>
+                            />
                             <section
                                 @mouseleave="searchInputFocused = false"
                                 v-show="searchResult.length > 0"
@@ -126,7 +126,7 @@
                                         class="p-0 m-0 hover:opacity-60"
                                         @click="changeFilmIndex(film.id, 0)"
                                     >
-                                        <IconUp class="w-4 h-4"></IconUp>
+                                        <IconUp class="w-4 h-4" />
                                     </button>
                                     <button
                                         :class="
@@ -137,7 +137,7 @@
                                         class="p-0 m-0 hover:opacity-60"
                                         @click="changeFilmIndex(film.id, 1)"
                                     >
-                                        <IconDown class="w-4 h-4"></IconDown>
+                                        <IconDown class="w-4 h-4" />
                                     </button>
                                 </div>
                             </div>
@@ -146,12 +146,12 @@
                 </div>
                 <footer class="bg-white absolute bottom-0 w-full">
                     <div class="flex justify-between items-center bg-white">
-                        <PrimaryButton
+                        <primary-button
                             class="px-4 ms-1 mb-4"
                             :class="canPublishClass"
                             @click="publish()"
                             >Опубликовать
-                        </PrimaryButton>
+                        </primary-button>
                         <p v-show="isUpdating" class="font-medium">
                             Сохранение...
                         </p>
@@ -161,9 +161,7 @@
                         >
                             <span> Сохранено </span>
                             <span>
-                                <IconCheck
-                                    class="w-5 h-5 inline-block"
-                                ></IconCheck>
+                                <IconCheck class="w-5 h-5 inline-block" />
                             </span>
                         </div>
                     </div>
@@ -174,10 +172,10 @@
                 частью сообщества.
             </div>
         </div>
-    </Modal>
+    </modal>
 </template>
 <script setup>
-import SecondaryInput from "@/Components/Forms/SecondaryInput.vue";
+import SecondaryInput from "@/Components/Forms/Inputs/SecondaryInput.vue";
 import { ref, reactive, computed, watch, onMounted, inject } from "vue";
 import Modal from "./Modal.vue";
 import { router, usePage } from "@inertiajs/vue3";
@@ -185,7 +183,7 @@ import axiosInstance from "@/AxiosWrapper.js";
 import PrimaryButton from "../Buttons/PrimaryButton.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import SecondaryContent from "../Forms/SecondaryContent.vue";
-import SearchInput from "../Forms/SearchInput.vue";
+import SearchInput from "../Forms/Inputs/SearchInput.vue";
 import IconUp from "../Icons/IconUp.vue";
 import IconDown from "../Icons/IconDown.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";

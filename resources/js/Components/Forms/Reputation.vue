@@ -30,8 +30,8 @@
 <script setup>
 import { ref, inject, computed } from "vue";
 import axios from "axios";
-import IconUp from "./Icons/IconUp.vue";
-import IconDown from "./Icons/IconDown.vue";
+import IconUp from "../Icons/IconUp.vue";
+import IconDown from "../Icons/IconDown.vue";
 import { usePage } from "@inertiajs/vue3";
 
 const callModal = inject("callModal");

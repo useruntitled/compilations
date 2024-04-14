@@ -18,7 +18,7 @@
                             }"
                         >
                             <div :class="props.class">
-                                <slot :class="props.class"></slot>
+                                <slot :class="props.class" />
                             </div>
                         </div>
                         <span class="ms-1">{{ text }}</span>
@@ -43,17 +43,3 @@ const props = defineProps({
 
 const isHovered = ref(false);
 </script>
-<!-- <script>
-import { Link } from "@inertiajs/vue3";
-
-export default {
-    props: {
-        href: {
-            required: false,
-            type: String,
-        },
-        text: null,
-    },
-    components: { Link },
-};
-</script> -->

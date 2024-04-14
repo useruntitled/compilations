@@ -1,5 +1,5 @@
 <template>
-    <IconLoader class="animate-spin" :class="color"></IconLoader>
+    <IconLoader class="animate-spin" :class="color" />
 </template>
 <script setup>
 import IconLoader from "../Icons/IconLoader.vue";

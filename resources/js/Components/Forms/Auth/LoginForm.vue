@@ -22,14 +22,14 @@
         </main>
         <footer>
             <PrimaryButton class="px-4 py-3 w-full" :class="buttonClass"
-                >Войти</PrimaryButton
-            >
+                >Войти
+            </PrimaryButton>
         </footer>
     </form>
 </template>
 <script setup>
 import { reactive, computed } from "vue";
-import SecondaryInput from "../SecondaryInput.vue";
+import SecondaryInput from "../Inputs/SecondaryInput.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 
 const emit = defineEmits(["login"]);

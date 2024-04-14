@@ -70,7 +70,7 @@
     ></UrlModal>
 </template>
 <script setup>
-import AuthLink from "@/Components/AuthLink.vue";
+import AuthLink from "@/Components/Buttons/AuthLink.vue";
 import Message from "@/Components/Messages/Message.vue";
 import IconHome from "@/Components/Icons/IconHome.vue";
 import AsideLeft from "@/Layouts/Partials/AsideLeft.vue";

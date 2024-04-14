@@ -1,7 +1,7 @@
 <template>
     <div class="p-2 px-3">
         <main class="text-start">
-            <NotificationTemplate :notification="notification">
+            <notification-template :notification="notification">
                 <template #content>
                     <Link
                         :href="
@@ -9,13 +9,15 @@
                         "
                     >
                         Ответил на ваш комментарий
-                        <span v-html="notification.data.parrentComment.text"></span>
+                        <span
+                            v-html="notification.data.parrentComment.text"
+                        ></span>
                     </Link>
                 </template>
                 <template #icon>
-                    <IconCommentsFilled></IconCommentsFilled>
+                    <IconCommentsFilled />
                 </template>
-            </NotificationTemplate>
+            </notification-template>
         </main>
     </div>
 </template>

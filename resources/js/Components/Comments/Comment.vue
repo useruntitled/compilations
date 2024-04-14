@@ -43,21 +43,13 @@
             >
                 <header class="flex items-start p-0 m-0">
                     <!-- <UserTablet :user="comment.user"></UserTablet> -->
-                    <UserTabletWithElementInside :user="comment.user">
+                    <user-tablet-with-element-inside :user="comment.user">
                         <template #content>
                             <p class="text-xs opacity-80">
                                 {{ comment.timestamp }}
-                                <!-- <span
-                                    class="text-orange-500 opacity-100 ms-1"
-                                    v-if="
-                                        comment.user.id == comment.post.user.id
-                                    "
-                                >
-                                    Автор
-                                </span> -->
                             </p>
                         </template>
-                    </UserTabletWithElementInside>
+                    </user-tablet-with-element-inside>
 
                     <button
                         @click="emit('focusEmit')"
@@ -172,8 +164,8 @@
 <script setup>
 import { ref, inject, watch, onMounted, onUnmounted, nextTick } from "vue";
 import IconArrowUp from "../Icons/IconArrowUp.vue";
-import Reputation from "../Reputation.vue";
-import UserTabletWithElementInside from "../UserTabletWithElementInside.vue";
+import Reputation from "../Forms/Reputation.vue";
+import UserTabletWithElementInside from "../User/UserTabletWithElementInside.vue";
 import CommentDropdown from "./CommentDropdown.vue";
 import EditingInput from "./EditingInput.vue";
 import ReplyInput from "./ReplyInput.vue";

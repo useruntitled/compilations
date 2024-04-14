@@ -1,8 +1,8 @@
 <template>
-    <Dropdown>
+    <dropdown>
         <template #trigger>
             <button class="p-1 hover:bg-gray-100 text-secondary rounded-full">
-                <IconDots></IconDots>
+                <IconDots />
             </button>
         </template>
         <template #content v-if="!user || user.id != post.user.id">
@@ -10,9 +10,7 @@
                 <button
                     class="text-base text-black hover:bg-neutral-100 rounded-lg px-5"
                 >
-                    <IconFlag
-                        class="stroke-2 inline-block me-2 w-5 h-5"
-                    ></IconFlag>
+                    <IconFlag class="stroke-2 inline-block me-2 w-5 h-5" />
                     <button @click="showReportModal = true">
                         Пожаловаться
                     </button>
@@ -25,22 +23,19 @@
                     @click="editPost()"
                     class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
-                    <IconPencil
-                        class="w-5 h-5  me-2 inline-block"
-                    ></IconPencil>
+                    <IconPencil class="w-5 h-5 me-2 inline-block" />
                     <span>Редактировать</span>
                 </button>
-                <button @click="deletePost"
+                <button
+                    @click="deletePost"
                     class="text-black hover:bg-neutral-100 rounded-lg px-5 w-full text-start"
                 >
-                    <IconTrash
-                        class="w-5 h-5  me-2 inline-block"
-                    ></IconTrash>
+                    <IconTrash class="w-5 h-5 me-2 inline-block" />
                     <span>Удалить</span>
                 </button>
             </div>
         </template>
-    </Dropdown>
+    </dropdown>
     <Report
         report_to_type="post"
         :report_to_id="post.id"
@@ -51,7 +46,7 @@
 <script setup>
 import { router } from "@inertiajs/vue3";
 import { inject, ref } from "vue";
-import Dropdown from "../Dropdown.vue";
+import Dropdown from "./Dropdown.vue";
 import IconDots from "../Icons/IconDots.vue";
 import IconFlag from "../Icons/IconFlag.vue";
 import IconPencil from "../Icons/IconPencil.vue";
@@ -62,7 +57,6 @@ const props = defineProps({
     user: null,
     post: null,
 });
-
 
 const showReportModal = ref(false);
 
@@ -82,9 +76,9 @@ const editPost = async () => {
 };
 
 const deletePost = async () => {
-    axios.post(route('post.delete'), {
-        _method: 'DELETE',
-        id: props.post.id
-    })
-}
+    axios.post(route("post.delete"), {
+        _method: "DELETE",
+        id: props.post.id,
+    });
+};
 </script>

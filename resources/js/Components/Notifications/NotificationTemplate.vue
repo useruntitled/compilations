@@ -1,9 +1,11 @@
 <template>
     <div>
-        <UserTablet :user="notification.data.byUser">
+        <user-tablet :user="notification.data.byUser">
             <template #header>
                 <span class="font-medium">
-                    <Link :href="route('profile', [notification.data.byUser.id])">
+                    <Link
+                        :href="route('profile', [notification.data.byUser.id])"
+                    >
                         {{ notification.data.byUser.name }}
                     </Link>
                 </span>
@@ -20,20 +22,20 @@
                 </p>
             </template>
             <template #icon v-if="hasIcon">
-                <CircledIcon
+                <circled-icon
                     :firstColor="iconFirstColor"
                     :secondColor="iconSecondColor"
                     size="5"
                 >
-                    <slot name="icon"></slot>
-                </CircledIcon>
+                    <slot name="icon" />
+                </circled-icon>
             </template>
-        </UserTablet>
+        </user-tablet>
     </div>
 </template>
 <script>
-import CircledIcon from "../Icons/CircledIcon.vue";
-import UserTablet from "../UserTablet.vue";
+import CircledIcon from "@/Components/Icons/CircledIcon.vue";
+import UserTablet from "@/Components/User/UserTablet.vue";
 
 export default {
     props: {

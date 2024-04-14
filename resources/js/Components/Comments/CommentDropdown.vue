@@ -57,7 +57,7 @@ import IconFlag from "@/Components/Icons/IconFlag.vue";
 import IconPencil from "@/Components/Icons/IconPencil.vue";
 import {usePage} from "@inertiajs/vue3";
 import Report from '@/Components/Modals/Report/Report.vue';
-import Dropdown from '@/Components/Dropdown.vue';
+import Dropdown from '@/Components/Dropdowns/Dropdown.vue';
 
 const emit = defineEmits(['enableEditing', 'remove']);
 

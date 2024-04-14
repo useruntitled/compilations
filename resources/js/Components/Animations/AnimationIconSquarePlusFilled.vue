@@ -1,8 +1,5 @@
 <template>
-    <IconSquarePlusFilled
-        ref="icon"
-        class="animate-wobble animate"
-    ></IconSquarePlusFilled>
+    <IconSquarePlusFilled ref="icon" class="animate-wobble animate" />
 </template>
 <script>
 import IconSquarePlusFilled from "../Icons/IconSquarePlusFilled.vue";
@@ -49,6 +46,7 @@ export default {
         transform: rotate(0deg);
     }
 }
+
 @keyframes wobble {
     0% {
         transform: none;
@@ -76,6 +74,7 @@ export default {
 .animate-shake {
     animation: shake 2s ease-out infinite alternate;
 }
+
 .animate-wobble {
     animation: wobble 3s ease infinite;
 }

@@ -41,14 +41,14 @@
         </main>
         <footer>
             <PrimaryButton class="px-4 w-full py-3" :class="buttonClass"
-                >Зарегистрироваться</PrimaryButton
-            >
+                >Зарегистрироваться
+            </PrimaryButton>
         </footer>
     </form>
 </template>
 <script setup>
 import { reactive, computed } from "vue";
-import SecondaryInput from "../SecondaryInput.vue";
+import SecondaryInput from "../Inputs/SecondaryInput.vue";
 import PrimaryButton from "@/Components/Buttons/PrimaryButton.vue";
 
 const emit = defineEmits(["register"]);

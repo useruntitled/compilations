@@ -1,10 +1,10 @@
 <template>
-    <Dropdown width="350" v-if="$page.props.auth.user">
+    <dropdown width="350" v-if="$page.props.auth.user">
         <template #trigger v-if="!unreadNotificationsCount">
             <div class="px-3" @click="open()">
-                <BtnIcon class="flex items-center text-black">
-                    <IconBell class="w-[28px] h-[28px] stroke-[2px]"></IconBell>
-                </BtnIcon>
+                <btn-icon class="flex items-center text-black">
+                    <IconBell class="w-[28px] h-[28px] stroke-[2px]" />
+                </btn-icon>
             </div>
         </template>
         <template #trigger v-else>
@@ -52,16 +52,16 @@
             </div>
             <div v-if="!notificationsIsLoaded" class="p-5">
                 <div class="flex justify-center">
-                    <AnimationLoader></AnimationLoader>
+                    <AnimationLoader />
                 </div>
             </div>
         </template>
-    </Dropdown>
+    </dropdown>
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import BtnIcon from "../BtnIcon.vue";
-import Dropdown from "../Dropdown.vue";
+import BtnIcon from "../Buttons/BtnIcon.vue";
+import Dropdown from "./Dropdown.vue";
 import IconBell from "../Icons/IconBell.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import PostWasCommentedNotification from "@/Components/Notifications/PostWasCommentedNotification.vue";

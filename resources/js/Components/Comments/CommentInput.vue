@@ -28,12 +28,12 @@
         <div class="flex justify-between mt-2 ms-[-6px] items-end">
             <div class="p-2 ps-0">
                 <div v-if="!hasImage">
-                    <BtnIcon
+                    <btn-icon
                         @click="filepond.click()"
                         primaryColor="orange-100"
                     >
-                        <IconPhoto class="stroke-2 w-5 h-5"></IconPhoto>
-                    </BtnIcon>
+                        <IconPhoto class="stroke-2 w-5 h-5" />
+                    </btn-icon>
                     <input
                         ref="filepond"
                         type="file"
@@ -44,7 +44,7 @@
                 </div>
                 <div v-else class="flex justify-center items-center">
                     <div>
-                        <lazy-media
+                        <LazyMedia
                             v-if="hasImage"
                             :media="form.image"
                             rounded="lg"
@@ -54,15 +54,15 @@
                             @click="form.image = null"
                         />
                     </div>
-                    <animation-loader
+                    <AnimationLoader
                         v-show="imageIsLoading"
                         class="w-8 h-8 absolute"
                     />
                 </div>
             </div>
             <div class="flex mb-2">
-                <slot name="button"></slot>
-                <FlatPrimaryButton
+                <slot name="button" />
+                <flat-primary-button
                     v-if="content?.innerHTML.length > 0 || form?.image"
                     class="ms-2"
                     primaryColor="orange-500"
@@ -72,19 +72,17 @@
                     <div v-else class="flex items-center justify-center">
                         <div class="opacity-0">Отправить</div>
                         <div class="absolute">
-                            <AnimationLoader
-                                color="text-white"
-                            ></AnimationLoader>
+                            <AnimationLoader color="text-white" />
                         </div>
                     </div>
-                </FlatPrimaryButton>
+                </flat-primary-button>
             </div>
         </div>
     </div>
 </template>
 <script setup>
 import { ref, computed, inject, watch, reactive } from "vue";
-import BtnIcon from "../BtnIcon.vue";
+import BtnIcon from "../Buttons/BtnIcon.vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import IconPhoto from "../Icons/IconPhoto.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";

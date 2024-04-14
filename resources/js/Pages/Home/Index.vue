@@ -41,8 +41,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Post from "@/Components/Post/Post.vue";
-import EmptyFeed from "@/Components/EmptyFeed.vue";
-import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import EmptyFeed from "@/Components/Feed/EmptyFeed.vue";
+import InfiniteScrollContainer from "@/Components/Feed/InfiniteScrollContainer.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import IconChewronDown from "@/Components/Icons/IconChewronDown.vue";

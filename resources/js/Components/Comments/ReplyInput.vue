@@ -1,6 +1,6 @@
 <template>
     <div class="ms-2 mt-2">
-        <CommentInput
+        <comment-input
             @sendComment="sendReply"
             :commentIsCreated="commentIsCreated"
             :comment_id="comment_id"
@@ -8,15 +8,15 @@
             v-focus
         >
             <template #button>
-                <FlatPrimaryButton
+                <flat-primary-button
                     primaryColor="neutral-200"
                     textColor="black"
                     class="font-medium"
                     @click="changeShowReplyInterfaceValue(null)"
-                    >Отмена</FlatPrimaryButton
-                >
+                    >Отмена
+                </flat-primary-button>
             </template>
-        </CommentInput>
+        </comment-input>
     </div>
 </template>
 <script setup>

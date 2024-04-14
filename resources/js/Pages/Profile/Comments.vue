@@ -33,10 +33,10 @@
 <script setup>
 import { ref } from "vue";
 import PageProfileLayout from "@/Layouts/PageProfileLayout.vue";
-import EmptyFeed from "@/Components/EmptyFeed.vue";
-import UserTabletWithElementInside from "@/Components/UserTabletWithElementInside.vue";
-import LazyImage from "@/Components/LazyImage.vue";
-import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import EmptyFeed from "@/Components/Feed/EmptyFeed.vue";
+import UserTabletWithElementInside from "@/Components/User/UserTabletWithElementInside.vue";
+import LazyImage from "@/Components/Media/LazyImage.vue";
+import InfiniteScrollContainer from "@/Components/Feed/InfiniteScrollContainer.vue";
 import axios from "axios";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import LazyMedia from "@/Components/Media/LazyMedia.vue";

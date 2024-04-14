@@ -1,19 +1,23 @@
 <template>
     <button
         class="p-2 font-semibold rounded-lg duration-200 hover:bg-opacity-90"
-        :class="'bg-' + primaryColor + ' ' + 'text-' + textColor"
+        :class="colorClass"
     >
-        <slot></slot>
+        <slot />
     </button>
 </template>
-<script>
-export default {
-    props: {
-        primaryColor: null,
-        secondaryColor: null,
-        textColor: {
-            default: "white",
-        },
+<script setup>
+import { computed } from "vue";
+
+const props = defineProps({
+    primaryColor: null,
+    secondaryColor: null,
+    textColor: {
+        default: "white",
     },
-};
+});
+
+const colorClass = computed(() => {
+    return `bg-${props.primaryColor} text-${props.textColor}`;
+});
 </script>

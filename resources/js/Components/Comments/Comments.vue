@@ -7,12 +7,12 @@
         <p class="text-xl mb-8 font-medium flex justify-between items-center">
             <p>Комментарии</p>
             <div class="text-sm  hover:opacity-80  hover:cursor-pointer">
-                <Dropdown>
+                <dropdown>
                     <template #trigger>
                         <div class="flex items-center">
                             <span>{{ currentSort }}</span>
                             <div class="ms-2">
-                                <icon-chewron-down class="w-5 h-5" />
+                                <IconChewronDown class="w-5 h-5" />
                             </div>
                         </div>
                     </template>
@@ -27,7 +27,7 @@
                             </button>
                         </div>
                     </template>
-                </Dropdown>
+                </dropdown>
             </div>
         </p>
         <div class="md:px-2 mb-5">
@@ -36,7 +36,7 @@
                     @sendComment="createComment"
                     :commentIsCreated="commentIsCreated"
                     :post_id="post.id"
-                ></CommentInput>
+                />
             </div>
         </div>
         <div></div>
@@ -44,7 +44,7 @@
             <AnimationLoader
                 v-if="!isLoaded"
                 class="mx-auto stroke-gray-500"
-            ></AnimationLoader>
+            />
 
             <div v-for="(comment, index) in comments">
                 <Comment
@@ -54,16 +54,16 @@
                     :isBranchParrent="true"
                     :branchParrentId="comment.id"
                     :key="comment.id"
-                ></Comment>
+                />
             </div>
         </main>
         <div
             v-if="!showReplyInterface && !showEditingInterface && isLoaded && comments?.length > 10 && isIgnoreLimitEnabled"
             class="mt-4">
-            <CommentInput
+            <comment-input
                 @sendComment="createComment"
                 :commentIsCreated="commentIsCreated"
-            ></CommentInput>
+            ></comment-input>
         </div>
     </div>
 
@@ -85,7 +85,7 @@ import { inject, ref, provide, onMounted, watch, nextTick } from "vue";
 import Comment from "./Comment.vue";
 import CommentInput from "./CommentInput.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
-import Dropdown from "../Dropdown.vue";
+import Dropdown from "../Dropdowns/Dropdown.vue";
 import IconChewronDown from "../Icons/IconChewronDown.vue";
 import { usePage } from "@inertiajs/vue3";
 import { commentApi } from "@/api/commentApi.js";

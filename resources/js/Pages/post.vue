@@ -1,12 +1,15 @@
 <template>
     <Head>
         <title>{{ post.title }}</title>
-        <meta name="description" :content="post.description + (post.meta_description ?? '')">
-        <link rel="canonical" :href="route('post', [post.id, post.slug])"/>
+        <meta
+            name="description"
+            :content="post.description + (post.meta_description ?? '')"
+        />
+        <link rel="canonical" :href="route('post', [post.id, post.slug])" />
     </Head>
     <post-template :post="post">
         <div ref="films_block">
-            <div v-for="(film, index) in post.films" class="sm:px-3 xs:px-1" >
+            <div v-for="(film, index) in post.films" class="sm:px-3 xs:px-1">
                 <Film :film="film"></Film>
             </div>
         </div>
@@ -34,11 +37,11 @@
 </template>
 <script setup>
 import { onMounted, ref, watch, nextTick } from "vue";
-import Film from "@/Components/Film.vue";
+import Film from "@/Components/Film/Film.vue";
 import Comments from "@/Components/Comments/Comments.vue";
 import axios from "axios";
 import Post from "@/Components/Post/Post.vue";
-import InfiniteScrollContainer from "@/Components/InfiniteScrollContainer.vue";
+import InfiniteScrollContainer from "@/Components/Feed/InfiniteScrollContainer.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import PostTemplate from "@/Components/Post/PostTemplate.vue";
 

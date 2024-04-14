@@ -29,7 +29,7 @@
 import { reactive, ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import SettingsLayout from "./SettingsLayout.vue";
-import SecondaryInput from "@/Components/Forms/SecondaryInput.vue";
+import SecondaryInput from "@/Components/Forms/Inputs/SecondaryInput.vue";
 import SecondaryContent from "@/Components/Forms/SecondaryContent.vue";
 import axios from "axios";
 import IconCheck from "@/Components/Icons/IconCheck.vue";

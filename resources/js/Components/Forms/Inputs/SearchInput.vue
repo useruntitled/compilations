@@ -16,7 +16,7 @@
     </div>
 </template>
 <script setup>
-import IconSearch from "../Icons/IconSearch.vue";
+import IconSearch from "../../Icons/IconSearch.vue";
 
 const model = defineModel();
 

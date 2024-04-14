@@ -1,8 +1,8 @@
 <template>
-    <Dropdown :align="align">
+    <dropdown :align="align">
         <template #trigger>
             <button class="p-1 hover:bg-gray-100 text-gray-600 rounded-full" >
-                <IconDots :class="class"></IconDots>
+                <IconDots :class="class"/>
             </button>
         </template>
         <template #content>
@@ -13,16 +13,16 @@
                 >
                     <IconFlag
                         class="stroke-2 inline-block me-2 w-5 h-5"
-                    ></IconFlag>
+                    />
                     <span>Пожаловаться</span>
                 </button>
             </div>
         </template>
-    </Dropdown>
-    <report @close="showModal = false" :show="showModal" :report_to_type="report_to_type" :report_to_id="report_to_id"></report>
+    </dropdown>
+    <Report @close="showModal = false" :show="showModal" :report_to_type="report_to_type" :report_to_id="report_to_id"/>
 </template>
 <script setup>
-import Dropdown from "@/Components/Dropdown.vue";
+import Dropdown from "@/Components/Dropdowns/Dropdown.vue";
 import IconFlag from "@/Components/Icons/IconFlag.vue";
 import IconDots from "@/Components/Icons/IconDots.vue";
 import Report from '@/Components/Modals/Report/Report.vue';
