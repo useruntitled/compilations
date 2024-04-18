@@ -12,6 +12,7 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
+        - DOMAIN=fcbc.site
     ports:
       - "80:80"
     volumes:
