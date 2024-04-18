@@ -7,7 +7,7 @@ networks:
 services:
     app:
         build:
-            context: ./docker
+            context: ./docker/local
             dockerfile: nginx/Dockerfile
             args:
                 - UID=${UID:-1000}
@@ -37,7 +37,7 @@ services:
 
     php:
         build:
-            context: ./docker
+            context: ./docker/local
             dockerfile: php-fpm/Dockerfile
             args:
                 - UID=${UID:-1000}
@@ -59,7 +59,7 @@ services:
     node:
         image: node:21-alpine
         build:
-            context: ./docker
+            context: ./docker/local
             dockerfile: node/Dockerfile
         volumes:
             - .:/var/www/html

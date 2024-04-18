@@ -8,7 +8,7 @@ services:
   app:
     build:
       context: ./docker
-      dockerfile: nginx/Dockerfile
+      dockerfile: docker/production/caddy/Dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
@@ -38,7 +38,7 @@ services:
   php:
     build:
       context: ./docker
-      dockerfile: php-fpm/Dockerfile
+      dockerfile: docker/production/php-fpm/Dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
@@ -60,7 +60,7 @@ services:
     image: node:21-alpine
     build:
       context: ./docker
-      dockerfile: node/Dockerfile
+      dockerfile: docker/production/node/Dockerfile
     volumes:
       - .:/var/www/html
     ports:
