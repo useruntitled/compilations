@@ -15,11 +15,14 @@ RUN delgroup dialout
 
 RUN addgroup -g ${GID} --system laravel
 RUN adduser -G laravel --system -D -s /bin/sh -u ${UID} laravel
-RUN #sed -i "s/user  nginx/user laravel/g" /etc/nginx/nginx.conf
+#RUN sed -i "s/user  nginx/user laravel/g" /etc/nginx/nginx.conf
+
+RUN mkdir -p /etc/caddy
+
+RUN rm /etc/caddy/Caddyfile
 
 
-
-ADD ./caddy/Caddyfile /etc/caddy/CaddyFile
+ADD ./caddy/Caddyfile /etc/caddy/Caddyfile
 
 RUN sed -i "s/:8876/${DOMAIN}/g" /etc/caddy/Caddyfile
 
