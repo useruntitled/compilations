@@ -4,9 +4,3 @@
         php_fastcgi php:9000
         file_server
 }
-
-:80 {
-    root * /usr/share/caddy
-    encode zstd gzip
-    file_server
-}
