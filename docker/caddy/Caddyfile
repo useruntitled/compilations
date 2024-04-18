@@ -1,0 +1,8 @@
+:8876 {
+        local_certs
+        tls internal
+        root * /var/www/html/public
+        encode zstd gzip
+        php_fastcgi localhost:9000
+        file_server
+}
