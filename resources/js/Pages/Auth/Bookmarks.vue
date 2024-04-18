@@ -2,7 +2,7 @@
     <Head>
         <title>Закладки</title>
     </Head>
-    <mobile-header-nav />
+    <MobileHeaderNav />
 
     <infinite-scroll-container @load="handleLoadEvent">
         <Post v-for="post in posts" :post="post" />
