@@ -7,8 +7,8 @@ networks:
 services:
   app:
     build:
-      context: ./docker
-      dockerfile: docker/production/caddy/Dockerfile
+      context: ./docker/production
+      dockerfile: caddy/Dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
@@ -37,8 +37,8 @@ services:
 
   php:
     build:
-      context: ./docker
-      dockerfile: docker/production/php-fpm/Dockerfile
+      context: ./docker/production
+      dockerfile: php-fpm/Dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
@@ -59,8 +59,8 @@ services:
   node:
     image: node:21-alpine
     build:
-      context: ./docker
-      dockerfile: docker/production/node/Dockerfile
+      context: ./docker/production
+      dockerfile: node/Dockerfile
     volumes:
       - .:/var/www/html
     ports:
