@@ -25,7 +25,14 @@ services:
       - node
     networks:
       - laravel
-
+  certbot:
+    image: certbot/certbot
+    depends_on:
+      - nginx
+    volumes:
+      - etc-letsencrypt:/etc/letsencrypt
+      - www-html:/var/www/www-html
+    command: certonly --webroot --webroot-path=/var/www/html --email --agree-tos --no-eff-email -d fcbc.site
   mysql:
     image: mysql:8.0
     restart: unless-stopped
