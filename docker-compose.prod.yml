@@ -25,14 +25,21 @@ services:
       - node
     networks:
       - laravel
+
   certbot:
-    image: certbot/certbot
-    depends_on:
-      - nginx
+    ports:
+      - "6000:80"
+    env_file:
+      - .env
     volumes:
-      - etc-letsencrypt:/etc/letsencrypt
-      - www-html:/var/www/www-html
-    command: certonly --webroot --webroot-path=/var/www/html --email --agree-tos --no-eff-email -d fcbc.site
+      - .:/etc/nginx/
+    build:
+      context: ./docker/production/certbot
+      dockerfile: Dockerfile
+      args:
+        DOMAIN_EMAIL: ${DOMAIN_EMAIL}
+        DOMAIN_URL: ${DOMAIN_URL}
+
   mysql:
     image: mysql:8.0
     restart: unless-stopped
