@@ -8,11 +8,10 @@ services:
   app:
     build:
       context: ./docker/production
-      dockerfile: caddy/Dockerfile
+      dockerfile: nginx/Dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
-        - DOMAIN=fcbc.site
     ports:
       - "80:80"
       - "443:443"
