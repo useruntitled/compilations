@@ -12,12 +12,15 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
+    restart: on-failure
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     volumes:
       - .:/var/www/html:delegated
+      - ./docker/production/nginx/cert.pem:/etc/cert.pem
+      - ./docker/production/nginx/key.pem:/etc/key.pem
     depends_on:
       - php
       - mysql
