@@ -15,6 +15,9 @@ RUN adduser --disabled-password --gecos '' --uid ${UID} --gid ${GID} laravel
 
 ADD ./nginx/conf.d/default.conf /etc/nginx/conf.d/
 
+RUN apt update &&  \
+    apt install snapd
+
 RUN snap install --classic certbot && \
      ln -s /snap/bin/certbot /usr/bin/certbot && \
     certbot --nginx && \
