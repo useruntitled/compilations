@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Post;
 
+use App\Http\Resources\FilmResource;
+use App\Http\Resources\MediaResource;
+use App\Http\Resources\User\CompressedUserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +25,7 @@ class PostResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'reputation' => $this->reputation,
-            'comments_count' => $this->comments_count,
+            'comments_count' => $this->comments_relation_count,
             'tags' => $this->tags,
             'user' => CompressedUserResource::make($this->user),
             'films' => FilmResource::collection($this->films),

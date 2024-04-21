@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Post;
 
+use App\Http\Resources\FilmResource;
+use App\Http\Resources\MediaResource;
+use App\Http\Resources\User\CompressedUserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -27,10 +30,10 @@ class PostFeedResource extends JsonResource
             'user' => CompressedUserResource::make($this->user),
             'reputation' => $this->reputation,
             'films' => FilmResource::collection($this->films),
-            'comments_count' => $this->comments_count,
-            'bookmarks_count' => $this->bookmarks_count,
+            'comments_count' => $this->comments_relation_count,
+            'bookmarks_count' => $this->bookmarks_relation_count,
             'has_bookmark' => $this->hasBookmark,
-            'films_count' => $this->films_count,
+            'films_count' => $this->films_relation_count,
             'views' => $this->views,
             'visits' => $this->visits,
         ];

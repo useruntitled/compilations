@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Comment;
 
+use App\Http\Resources\MediaResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,7 +25,7 @@ class CommentResource extends JsonResource
             ],
             'level' => $this->level,
             'text' => $this->text,
-            'image' => $this->image,
+            'image' => MediaResource::make($this->image),
             'image_preview' => $this->image_preview,
             'reputation' => $this->reputation,
 
