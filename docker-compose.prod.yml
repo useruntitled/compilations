@@ -12,6 +12,8 @@ services:
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
+        - DOMAIN_EMAIL=${DOMAIN_EMAIL}
+        - DOMAIN_URL=${DOMAIN_URL}
     restart: on-failure
     ports:
       - "80:80"
@@ -19,8 +21,7 @@ services:
       - "443:443/udp"
     volumes:
       - .:/var/www/html:delegated
-      - ./docker/production/nginx/cert.pem:/etc/cert.pem
-      - ./docker/production/nginx/key.pem:/etc/key.pem
+      - "/etc/letsencrypt/live/${DOMAIN_URL}:/etc/nginx/certs"
     depends_on:
       - php
       - mysql
@@ -28,10 +29,11 @@ services:
       - node
     networks:
       - laravel
+    command: "bash ./docker/production/nginx/nginx-start.sh"
+    environment:
+      DOMAIN_URL: ${DOMAIN_URL}
 
   certbot:
-    ports:
-      - "6000:80"
     env_file:
       - .env
     volumes:
@@ -42,6 +44,10 @@ services:
       args:
         DOMAIN_EMAIL: ${DOMAIN_EMAIL}
         DOMAIN_URL: ${DOMAIN_URL}
+    command: "bash ./docker/production/certbot/certbot-start.sh"
+    environment:
+      DOMAIN_URL: ${DOMAIN_NAME}
+      DOMAIN_EMAIL: ${DOMAIN_EMAIL}
 
   mysql:
     image: mysql:8.0
