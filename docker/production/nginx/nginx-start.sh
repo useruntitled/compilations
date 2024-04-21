@@ -1,16 +1,18 @@
-#!/bin/bash
-set -e  # If a command fails, stop the script
+#!/bin/sh
 
-until [ -f /etc/letsencrypt/live/$DOMAIN_URL/fullchain.pem ]
-do
-  echo "Waiting for Certbot to create the certificate..."
-  sleep 10  # Wait for 10 seconds before checking again
-done
+# Запускаем Nginx со стартовой конфигурацией, что слушает только порт 80
+nginx
 
-echo "Certificate found, updating Nginx configuration."
+# Проверяем, существуют ли SSL сертификаты
+if [ -f /etc/letsencrypt/live/$DOMAIN_URL/fullchain.pem ]; then
+    echo "Сертификаты уже существуют, обновление конфигурации nginx..."
+    cp /etc/nginx/conf.d/ssl.conf /etc/nginx/conf.d/default.conf
+else
+    echo "Сертификатов не обнаружено, запускаем Certbot..."
+    certbot --nginx --non-interactive --redirect --agree-tos --email $DOMAIN_EMAIL --domains $DOMAIN_URL
+    echo "Certbot завершил работу, обновление конфигурации nginx..."
+    cp /etc/nginx/conf.d/default.conf.ssl /etc/nginx/conf.d/default.conf
+fi
 
-# Replace placeholders in Nginx's configuration with values
-envsubst '${DOMAIN_NAME}' < /etc/nginx/conf.d/$DOMAIN_URL.template > /etc/nginx/conf.d/default.conf
-
-echo "Starting Nginx."
-exec nginx -g 'daemon off;'
+# Перезапускаем Nginx со новой конфигурацией
+nginx -s reload
