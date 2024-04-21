@@ -22,8 +22,8 @@ services:
       - "443:443/udp"
     volumes:
       - .:/var/www/html:delegated
-      - ./docker/production/nginx/key.pem:/etc/key.pem
-      - ./docker/production/nginx/cert.pem:/etc/cert.pem
+      - ./docker/production/nginx/key.pem:/etc/nginx/certs/key.pem
+      - ./docker/production/nginx/cert.pem:/etc/nginx/certs/cert.pem
     depends_on:
       - php
       - mysql
@@ -34,7 +34,7 @@ services:
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}
-    command: "sh /nginx-start.sh"
+  #    command: "sh /nginx-start.sh"
 
   mysql:
     image: mysql:8.0

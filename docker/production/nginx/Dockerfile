@@ -31,7 +31,7 @@ RUN apk add certbot
 RUN apk add certbot-nginx
 
 ADD ./conf.d/default.conf /etc/nginx/conf.d/
-ADD ./conf.d/ssl.conf /etc/nginx/conf.d
+ADD ./conf.d/default.conf.ssl /etc/nginx/conf.d
 
 COPY ./nginx-start.sh /nginx-start.sh
 RUN chmod +x /nginx-start.sh
