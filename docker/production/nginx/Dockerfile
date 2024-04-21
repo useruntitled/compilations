@@ -27,11 +27,15 @@ ENV DOMAIN_URL=$DOMAIN_URL
 # И даём права на его выполнение
 #RUN chmod +x /nginx-start.sh
 
+COPY ./conf.d/default.conf.template /etc/nginx/conf.d/
+RUN apk add gettext \
+  && envsubst '\$DOMAIN_URL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+
 RUN apk add certbot
 RUN apk add certbot-nginx
 
-ADD ./conf.d/default.conf /etc/nginx/conf.d/
-ADD ./conf.d/default.conf.ssl /etc/nginx/conf.d
+#ADD ./conf.d/default.conf /etc/nginx/conf.d/
+#ADD ./conf.d/default.conf.ssl /etc/nginx/conf.d
 
 COPY ./nginx-start.sh /nginx-start.sh
 RUN chmod +x /nginx-start.sh
