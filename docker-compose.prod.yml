@@ -44,7 +44,7 @@ services:
       args:
         DOMAIN_EMAIL: ${DOMAIN_EMAIL}
         DOMAIN_URL: ${DOMAIN_URL}
-    command: "bash ./docker/production/certbot/certbot-start.sh"
+    command: "bash ./certbot-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_NAME}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}
