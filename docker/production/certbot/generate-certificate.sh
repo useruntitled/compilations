@@ -5,8 +5,8 @@
 rm -rf /etc/letsencrypt/live/certfolder*
 
 # выдаем себе сертификат (обратите внимание на переменные среды)
-certbot certonly --standalone --email $DOMAIN_EMAIL -d $DOMAIN_URL --cert-name=certfolder --key-type rsa --agree-tos
-
+#certbot certonly --standalone --email $DOMAIN_EMAIL -d $DOMAIN_URL --cert-name=certfolder --key-type rsa --agree-tos
+certbot certonly --standalone -d $DOMAIN_URL --debug-challenges -v --dry-run
 # удаляем старые сертификаты из примонтированной
 # через Docker Compose папки Nginx
 rm -rf /etc/nginx/cert.pem
