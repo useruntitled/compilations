@@ -22,7 +22,8 @@ services:
       - "443:443/udp"
     volumes:
       - .:/var/www/html:delegated
-    #      - "/etc/letsencrypt/live/${DOMAIN_URL}:/etc/nginx/certs"
+      - ./docker/production/nginx/key.pem:/etc/key.pem
+      - ./docker/production/nginx/cert.pem:/etc/cert.pem
     depends_on:
       - php
       - mysql
@@ -30,25 +31,10 @@ services:
       - node
     networks:
       - laravel
-    #    command: "sh /nginx-start.sh"
-    environment:
-      DOMAIN_URL: ${DOMAIN_URL}
-
-  certbot:
-    env_file:
-      - .env
-    volumes:
-      - .:/etc/nginx/
-    build:
-      context: ./docker/production/certbot
-      dockerfile: Dockerfile
-      args:
-        DOMAIN_EMAIL: ${DOMAIN_EMAIL}
-        DOMAIN_URL: ${DOMAIN_URL}
-        command: "sh ./certbot-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}
+    command: "sh /nginx-start.sh"
 
   mysql:
     image: mysql:8.0
