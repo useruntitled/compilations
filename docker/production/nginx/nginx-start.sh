@@ -10,7 +10,7 @@ done
 echo "Certificate found, updating Nginx configuration."
 
 # Replace placeholders in Nginx's configuration with values
-envsubst '${DOMAIN_NAME}' < /etc/nginx/conf.d/yourdomain.template > /etc/nginx/conf.d/default.conf
+envsubst '${DOMAIN_NAME}' < /etc/nginx/conf.d/$DOMAIN_URL.template > /etc/nginx/conf.d/default.conf
 
 echo "Starting Nginx."
 exec nginx -g 'daemon off;'

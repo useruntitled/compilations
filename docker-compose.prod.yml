@@ -7,14 +7,14 @@ networks:
 services:
   app:
     build:
-      context: ./docker/production
-      dockerfile: nginx/Dockerfile
+      context: ./docker/production/nginx
+      dockerfile: Dockerfile
       args:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
         - DOMAIN_EMAIL=${DOMAIN_EMAIL}
         - DOMAIN_URL=${DOMAIN_URL}
-    restart: on-failure
+    #restart: on-failure
     ports:
       - "80:80"
       - "443:443"
@@ -29,7 +29,7 @@ services:
       - node
     networks:
       - laravel
-    command: "bash ./nginx/nginx-start.sh"
+    command: "sh /nginx-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
 
@@ -44,7 +44,7 @@ services:
       args:
         DOMAIN_EMAIL: ${DOMAIN_EMAIL}
         DOMAIN_URL: ${DOMAIN_URL}
-    command: "bash ./certbot-start.sh"
+    command: "sh ./certbot-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}

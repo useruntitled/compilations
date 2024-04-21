@@ -11,6 +11,13 @@ ARG DOMAIN_URL
 ENV DOMAIN_EMAIL=$DOMAIN_EMAIL
 ENV DOMAIN_URL=$DOMAIN_URL
 
+
+# Копируем наш скрипт внутрь образа Docker
+COPY ./certbot-start.sh /nginx-start.sh
+
+# И даём права на его выполнение
+RUN chmod +x /nginx-start.sh
+
 WORKDIR /certbot
 COPY . /certbot
 WORKDIR /certbot

@@ -9,3 +9,4 @@ while true; do  # Infinite loop
   sleep 12h  # Wait for half a day
   certbot renew
 done
+

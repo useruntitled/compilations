@@ -12,6 +12,9 @@ RUN addgroup -g ${GID} --system laravel
 RUN adduser -G laravel --system -D -s /bin/sh -u ${UID} laravel
 RUN sed -i "s/user  nginx/user laravel/g" /etc/nginx/nginx.conf
 
-ADD ./nginx/conf.d/default.conf /etc/nginx/conf.d/
+ADD ./conf.d/default.conf /etc/nginx/conf.d/
+
+COPY ./nginx-start.sh /nginx-start.sh
+RUN chmod +x /nginx-start.sh
 
 RUN mkdir -p /var/www/html
