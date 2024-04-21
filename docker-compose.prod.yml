@@ -29,7 +29,7 @@ services:
       - node
     networks:
       - laravel
-    command: "bash ./docker/production/nginx/nginx-start.sh"
+    command: "bash ./nginx/nginx-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
 
