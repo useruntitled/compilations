@@ -15,13 +15,14 @@ services:
         - DOMAIN_EMAIL=${DOMAIN_EMAIL}
         - DOMAIN_URL=${DOMAIN_URL}
     #restart: on-failure
+    tty: true
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     volumes:
       - .:/var/www/html:delegated
-      - "/etc/letsencrypt/live/${DOMAIN_URL}:/etc/nginx/certs"
+    #      - "/etc/letsencrypt/live/${DOMAIN_URL}:/etc/nginx/certs"
     depends_on:
       - php
       - mysql
@@ -29,7 +30,7 @@ services:
       - node
     networks:
       - laravel
-    command: "sh /nginx-start.sh"
+    #    command: "sh /nginx-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
 
@@ -44,7 +45,7 @@ services:
       args:
         DOMAIN_EMAIL: ${DOMAIN_EMAIL}
         DOMAIN_URL: ${DOMAIN_URL}
-    command: "sh ./certbot-start.sh"
+        command: "sh ./certbot-start.sh"
     environment:
       DOMAIN_URL: ${DOMAIN_URL}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}
