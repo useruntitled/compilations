@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Reputation;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdatePostRequest extends FormRequest
+class DestroyReputationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +23,8 @@ class UpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'max:150',
-            'description' => 'max:1000',
-            'films' => '',
+            'id' => 'required',
+            'type' => 'required', Rule::in(['post', 'comment']),
         ];
     }
 }

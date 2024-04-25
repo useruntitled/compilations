@@ -37,11 +37,11 @@ class ServiceUserSeeder extends Seeder
             'height' => 1000,
             'format' => 'webp',
             'href' => route('media.view', $uuid),
-            'base64_preview' => 'data:image/' . 'jpeg' . ';base64,' . base64_encode(Storage::disk('public')->get('trashed.webp')),
+            'base64_preview' => 'data:image/'.'jpeg'.';base64,'.base64_encode(Storage::disk('public')->get('trashed.webp')),
             'duration' => null,
             'file' => Storage::disk('public')->get('trashed.webp'),
         ]);
-        Storage::disk('media')->put($uuid . '.webp', Storage::disk('public')->get('trashed.webp'));
+        Storage::disk('media')->put($uuid.'.webp', Storage::disk('public')->get('trashed.webp'));
         MediaUploader::upload($trashedImage, $user);
     }
 }

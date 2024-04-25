@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Bookmark;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewReputationRequest extends FormRequest
+class DestroyBookmarkRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,7 @@ class NewReputationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reputation_to_type' => 'required',
-            'reputation_to_id' => 'required',
-            'action' => 'required',
+            'post_id' => 'required|exists:posts,id',
         ];
     }
 }
