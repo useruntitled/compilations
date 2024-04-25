@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    private function bootEloquentMorphs()
+    private function bootEloquentMorphs(): void
     {
         Relation::morphMap([
             'App\Models\User' => User::class,
