@@ -1,29 +1,44 @@
 <template>
     <!--    <div class="w-[40px] h-[40px] border-gray-100"></div>-->
     <!--    <div class="w-[90px] h-[90px] border-gray-100 border-[3.5px]"></div>-->
-    <div v-if="! isVideo">
-        <img class="object-cover" @load="isLoaded = true" :src="src" :class="[roundedClass, props.class, borderClass]"
-             alt=""
-             :style="[widthStyle, heightStyle]"
-        >
-    </div>
-    <div v-else class="flex relative">
-        <video class="object-cover" loop autoplay muted @loadeddata="isLoaded = true"
-               :class="[roundedClass, props.class, borderClass]"
-               :style="[widthStyle, heightStyle]"
-        >
-            <source :src="media.href" type="video/mp4">
-        </video>
-        <div v-show="! isLoaded">
-            <img class="object-cover absolute ms-[-100%] w-full h-full" :src="media.base64_preview"
-                 :class="[roundedClass, props.class, borderClass]"
-                 :style="[widthStyle, heightStyle]"
-                 alt="">
+    <div class="relative" :style="[heightStyle]">
+        <div class="relative flex justify-center w-full">
+            <img
+                class="absolute w-full h-full z-[2] top-0"
+                :src="media.base64_preview"
+                :class="[roundedClass, props.class, borderClass]"
+                :style="[heightStyle, widthStyle]"
+                alt=""
+            />
+
+            <img
+                v-if="!isVideo && media.href"
+                class="object-cover mx-auto hover:brightness-[1.2] z-[4]"
+                @load="isLoaded = true"
+                :src="media.href"
+                :class="[roundedClass, props.class, borderClass]"
+                :style="[heightStyle, widthStyle]"
+                alt=""
+                loading="lazy"
+            />
+
+            <video
+                v-else
+                class="backdrop-blur-3xl object-cover mx-auto z-[4]"
+                loop
+                autoplay
+                muted
+                @loadeddata="isLoaded = true"
+                :class="[roundedClass, props.class, borderClass]"
+                :style="[heightStyle, widthStyle]"
+            >
+                <source :src="media.href" type="video/mp4" />
+            </video>
         </div>
     </div>
 </template>
 <script setup>
-import {computed, ref} from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
     media: null,
@@ -65,6 +80,6 @@ const src = computed(() => {
 const isLoaded = ref(false);
 
 const isVideo = computed(() => {
-    return props.media?.format === 'mp4';
+    return props.media?.format === "mp4";
 });
 </script>

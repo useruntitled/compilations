@@ -61,11 +61,7 @@
                             ><IconComments class="w-5 h-5" /></link-icon
                     ></span>
                     <span class="me-2 text-slate-700">
-                        <Bookmark
-                            :has="post.has_bookmark"
-                            :count="post.bookmarks_count"
-                            :post_id="post.id"
-                        />
+                        <Bookmark :post="post" />
                     </span>
                     <span class="me-2 text-slate-700">
                         <copy-link-button

@@ -6,7 +6,7 @@
     <mobile-header-nav />
     <infinite-scroll-container @load="handleLoadEvent()">
         <div v-for="post in posts">
-            <Post :post="post"></Post>
+            <Post :post="post" />
         </div>
     </infinite-scroll-container>
     <div v-if="posts.length == 0 && !isLoading" class="mt-20 mb-20">

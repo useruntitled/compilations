@@ -50,13 +50,13 @@
                             rounded="lg"
                             width="75"
                             height="75"
-                            class="object-cover cursor-pointer"
+                            class="object-cover cursor-pointer bg-gray-100"
                             @click="form.image = null"
                         />
                     </div>
                     <AnimationLoader
                         v-show="imageIsLoading"
-                        class="w-8 h-8 absolute"
+                        class="w-8 h-8 absolute z-[8]"
                     />
                 </div>
             </div>

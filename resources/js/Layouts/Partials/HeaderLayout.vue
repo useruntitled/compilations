@@ -4,8 +4,8 @@
             class="bg-kppale"
             :class="
                 i == 1
-                    ? 'fixed w-full z-[48] border-b-4 border-kpnpale'
-                    : 'block'
+                    ? 'fixed w-full z-[48] border-b-4 border-kpnpale bg-opacity-90'
+                    : 'block opacity-0'
             "
             id="header"
         >
