@@ -37,7 +37,7 @@ const loadPosts = async () => {
         .get(route("me.bookmarks.get", [currentPage.value]))
         .then((res) => {
             console.log(res);
-            if (res.data.length == 0) {
+            if (res.data.length === 0) {
                 isEnd.value = true;
             } else {
                 res.data.forEach((post) => {
