@@ -15,6 +15,6 @@ trait HasSubsite
 
     protected function subsite(): Attribute
     {
-        return Attribute::get(fn() => $this->subsiteRelation);
+        return Attribute::get(fn () => $this->subsiteRelation);
     }
 }

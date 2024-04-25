@@ -101,7 +101,7 @@ class User extends Authenticatable
 
     protected function canCreatePosts(): Attribute
     {
-            $this->rolesRelation ?? $this->rolesRelation();
+        $this->rolesRelation ?? $this->rolesRelation();
         $isCan = $this->rolesRelation->where('role', 'creator')->count();
 
         return Attribute::get(fn () => $isCan);
@@ -109,7 +109,7 @@ class User extends Authenticatable
 
     protected function karma(): Attribute
     {
-        return Attribute::get(fn() => KarmaService::calculateUserKarma($this));
+        return Attribute::get(fn () => KarmaService::calculateUserKarma($this));
     }
 
     public function postsRelation(): HasMany
@@ -119,7 +119,7 @@ class User extends Authenticatable
 
     protected function posts(): Attribute
     {
-        return Attribute::get(fn() => $this->postsRelation);
+        return Attribute::get(fn () => $this->postsRelation);
     }
 
     public function commentsRelation(): HasMany
@@ -129,7 +129,7 @@ class User extends Authenticatable
 
     protected function comments(): Attribute
     {
-        return Attribute::get(fn() => $this->commentsRelation);
+        return Attribute::get(fn () => $this->commentsRelation);
     }
 
     public function receivesBroadcastNotificationsOn(): string

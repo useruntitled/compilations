@@ -15,7 +15,7 @@ trait HasAuthor
 
     protected function user(): Attribute
     {
-        return Attribute::get(fn() => $this->userRelation);
+        return Attribute::get(fn () => $this->userRelation);
     }
 
     public function isAuthoredBy(User $user): bool

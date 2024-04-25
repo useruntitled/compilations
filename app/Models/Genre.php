@@ -26,6 +26,6 @@ class Genre extends Model
 
     protected function films(): Attribute
     {
-        return Attribute::get(fn() => $this->filmsRelation);
+        return Attribute::get(fn () => $this->filmsRelation);
     }
 }

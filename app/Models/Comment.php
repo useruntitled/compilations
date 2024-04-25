@@ -55,7 +55,7 @@ class Comment extends Model
 
     protected function post(): Attribute
     {
-        return Attribute::get(fn() => $this->postRelation);
+        return Attribute::get(fn () => $this->postRelation);
     }
 
     public function repliesRelation()
@@ -66,7 +66,7 @@ class Comment extends Model
 
     protected function replies(): Attribute
     {
-        return Attribute::get(fn() => $this->repliesRelation);
+        return Attribute::get(fn () => $this->repliesRelation);
     }
 
     public function commentRelation()
@@ -76,7 +76,7 @@ class Comment extends Model
 
     protected function comment(): Attribute
     {
-        return Attribute::get(fn() => $this->commentRelation);
+        return Attribute::get(fn () => $this->commentRelation);
     }
 
     protected function timestamp(): Attribute

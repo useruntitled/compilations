@@ -17,7 +17,7 @@ trait Roleable
 
     protected function roles(): Attribute
     {
-        return Attribute::get(fn() => $this->rolesRelation);
+        return Attribute::get(fn () => $this->rolesRelation);
     }
 
     protected function isUser(): Attribute
@@ -27,23 +27,23 @@ trait Roleable
 
     protected function isAdmin(): Attribute
     {
-            $this->roles ?? $this->rolesRelation();
+        $this->roles ?? $this->rolesRelation();
 
-        return Attribute::get(fn() => $this->rolesRelation->contains(fn($r) => $r->name == UserRole::ADMIN));
+        return Attribute::get(fn () => $this->rolesRelation->contains(fn ($r) => $r->name == UserRole::ADMIN));
     }
 
     protected function isCreator(): Attribute
     {
-            $this->roles ?? $this->rolesRelation();
+        $this->roles ?? $this->rolesRelation();
 
-        return Attribute::get(fn() => $this->rolesRelation->contains(fn($r) => $r->name == UserRole::CREATOR));
+        return Attribute::get(fn () => $this->rolesRelation->contains(fn ($r) => $r->name == UserRole::CREATOR));
     }
 
     protected function isModer(): Attribute
     {
-            $this->roles ?? $this->rolesRelation();
+        $this->roles ?? $this->rolesRelation();
 
-        return Attribute::get(fn() => $this->rolesRelation->contains(fn($r) => $r->name == UserRole::MODER));
+        return Attribute::get(fn () => $this->rolesRelation->contains(fn ($r) => $r->name == UserRole::MODER));
     }
 
     public function toAdmin(): void

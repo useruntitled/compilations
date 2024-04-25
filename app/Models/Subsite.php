@@ -23,6 +23,6 @@ class Subsite extends Model
 
     protected function cover(): Attribute
     {
-        return Attribute::get(fn() => $this->mediaRelation);
+        return Attribute::get(fn () => $this->mediaRelation);
     }
 }

@@ -24,6 +24,6 @@ class Bookmark extends Model
 
     protected function post(): Attribute
     {
-        return Attribute::get(fn() => $this->postRelation);
+        return Attribute::get(fn () => $this->postRelation);
     }
 }

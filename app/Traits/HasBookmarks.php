@@ -20,6 +20,6 @@ trait HasBookmarks
 
     protected function hasBookmark(): Attribute
     {
-        return Attribute::get(fn() => $this->bookmarks->contains('user_id', auth()->id()));
+        return Attribute::get(fn () => $this->bookmarks->contains('user_id', auth()->id()));
     }
 }

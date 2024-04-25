@@ -12,7 +12,7 @@ trait HasAvatar
 
     protected function avatar(): Attribute
     {
-        return Attribute::get(fn() => $this->mediaRelation);
+        return Attribute::get(fn () => $this->mediaRelation);
     }
 
     public function makeAvatar(): void

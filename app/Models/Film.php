@@ -23,6 +23,6 @@ class Film extends Model
 
     protected function genres(): Attribute
     {
-        return Attribute::get(fn() => $this->genresRelation);
+        return Attribute::get(fn () => $this->genresRelation);
     }
 }
