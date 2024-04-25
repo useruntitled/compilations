@@ -11,4 +11,6 @@ enum UserRole: string
     const CREATOR = 'creator';
 
     const USER = 'user';
+
+    const SERVICE_DELETED_ACCOUNT = 'deleted';
 }
