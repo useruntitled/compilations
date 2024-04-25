@@ -11,6 +11,7 @@ use App\Events\ReputationPutEvent;
 use App\Listeners\CommentCreatedListener;
 use App\Listeners\CommentDeclinedListener;
 use App\Listeners\CommentDeletedListener;
+use App\Listeners\DepersonalizeCommentAuthor;
 use App\Listeners\PostDeclinedListener;
 use App\Listeners\ReputationDeletedListener;
 use App\Listeners\ReputationPutListener;
@@ -51,9 +52,11 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommentDeletedEvent::class => [
             CommentDeletedListener::class,
+            DepersonalizeCommentAuthor::class,
         ],
         CommentDeclinedEvent::class => [
             CommentDeclinedListener::class,
+            DepersonalizeCommentAuthor::class,
         ],
         PostDeclinedEvent::class => [
             PostDeclinedListener::class,

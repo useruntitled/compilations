@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
