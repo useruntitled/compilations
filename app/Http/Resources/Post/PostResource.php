@@ -26,6 +26,8 @@ class PostResource extends JsonResource
             'description' => $this->description,
             'reputation' => $this->reputation,
             'comments_count' => $this->comments_relation_count,
+            'bookmarks_count' => $this->bookmarks_relation_count,
+            'has_bookmark' => $this->hasBookmark,
             'tags' => $this->tags,
             'user' => CompressedUserResource::make($this->user),
             'films' => FilmResource::collection($this->films),
