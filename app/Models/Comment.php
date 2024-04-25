@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Traits\Declineable;
 use App\Traits\HasAuthor;
+use App\Traits\HasImage;
 use App\Traits\HasReputation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
@@ -17,6 +17,7 @@ class Comment extends Model
     use Declineable;
     use HasAuthor;
     use HasFactory;
+    use HasImage;
     use HasReputation;
     use SoftDeletes;
 
@@ -34,7 +35,7 @@ class Comment extends Model
     ];
 
     protected $with = [
-        'user',
+        'userRelation',
     ];
 
     public function scopePublished($query)
@@ -47,25 +48,35 @@ class Comment extends Model
         $builder->whereNotNull('declined_at');
     }
 
-    public function image(): MorphOne
+    public function postRelation()
     {
-        return $this->morphOne(Media::class, 'media_to')->latest();
+        return $this->belongsTo(Post::class, 'post_id');
     }
 
-    public function post()
+    protected function post(): Attribute
     {
-        return $this->belongsTo(Post::class);
+        return Attribute::get(fn() => $this->postRelation);
     }
 
-    public function replies()
+    public function repliesRelation()
     {
         // return $this->hasMany(Comment::class)->with('replies');
-        return $this->hasMany(Comment::class)->withTrashed();
+        return $this->hasMany(Comment::class, 'comment_id')->withTrashed();
     }
 
-    public function comment()
+    protected function replies(): Attribute
     {
-        return $this->belongsTo(Comment::class)->withTrashed();
+        return Attribute::get(fn() => $this->repliesRelation);
+    }
+
+    public function commentRelation()
+    {
+        return $this->belongsTo(Comment::class, 'comment_id')->withTrashed();
+    }
+
+    protected function comment(): Attribute
+    {
+        return Attribute::get(fn() => $this->commentRelation);
     }
 
     protected function timestamp(): Attribute

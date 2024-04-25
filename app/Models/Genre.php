@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,8 +19,13 @@ class Genre extends Model
         'created_at', 'updated_at',
     ];
 
-    public function films()
+    public function filmsRelation()
     {
         return $this->belongsToMany(Film::class);
+    }
+
+    protected function films(): Attribute
+    {
+        return Attribute::get(fn() => $this->filmsRelation);
     }
 }

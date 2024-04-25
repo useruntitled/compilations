@@ -17,4 +17,9 @@ trait HasBookmarks
     {
         return Attribute::get(fn () => $this->bookmarksRelation);
     }
+
+    protected function hasBookmark(): Attribute
+    {
+        return Attribute::get(fn() => $this->bookmarks->contains('user_id', auth()->id()));
+    }
 }

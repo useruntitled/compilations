@@ -22,14 +22,14 @@ class KarmaService
 
     protected function attachCreatorRole(User $user)
     {
-        $user->roles()->attach($this->creatorRole->id);
+        $user->rolesRelation()->attach($this->creatorRole->id);
 
         return true;
     }
 
     protected function dettachCreatorRole(User $user)
     {
-        $user->roles()->detach($this->creatorRole->id);
+        $user->rolesRelation()->detach($this->creatorRole->id);
 
         return true;
     }
@@ -64,13 +64,15 @@ class KarmaService
         }
     }
 
-    public function calculateUserKarma(User $user)
+    public static function calculateUserKarma(User $user)
     {
         // $reps = Reputation::with(['reputation_to.user','user'])->where('user_id','!=',$user->id)->get()
         // ->reject(fn($rep) => $rep->reputation_to->user->id != $user->id);
 
         $reputation = Cache::remember("karma-$user->id", now()->addMinutes(5), function () use ($user) {
-            $reps = Reputation::with(['reputation_to' => ['user'], 'user'])->where('user_id', '!=', $user->id)->get()
+            $reps = Reputation::with(['reputation_to' => ['userRelation'], 'userRelation'])
+                ->where('user_id', '!=', $user->id)
+                ->get()
                 ->filter(fn ($r) => $r->reputation_to?->user->id == $user->id);
             $reputation = $reps->sum(fn ($rep) => $rep->action == 'up');
             $reputation -= $reps->sum(fn ($rep) => $rep->action == 'down');

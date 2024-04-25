@@ -5,15 +5,16 @@ namespace App\Models;
 use App\Models\Scopes\PublishedScope;
 use App\Traits\Declineable;
 use App\Traits\HasAuthor;
+use App\Traits\HasBookmarks;
+use App\Traits\HasComments;
+use App\Traits\HasFilms;
+use App\Traits\HasImage;
 use App\Traits\HasReputation;
 use App\Traits\Reportable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\Sitemap\Contracts\Sitemapable;
@@ -23,7 +24,11 @@ class Post extends Model implements Sitemapable
 {
     use Declineable;
     use HasAuthor;
+    use HasBookmarks;
+    use HasComments;
     use HasFactory;
+    use HasFilms;
+    use HasImage;
     use HasReputation;
     use Reportable;
     use SoftDeletes;
@@ -55,7 +60,7 @@ class Post extends Model implements Sitemapable
     ];
 
     protected $with = [
-        'user',
+        'userRelation',
     ];
 
     protected $casts = [
@@ -82,38 +87,6 @@ class Post extends Model implements Sitemapable
     public function scopeDeclined(Builder $builder): void
     {
         $builder->whereNotNull('declined_at');
-    }
-
-    public function image(): MorphOne
-    {
-        return $this->morphOne(Media::class, 'media_to')->latest();
-    }
-
-    public function films(): BelongsToMany
-    {
-        return $this->belongsToMany(Film::class)->orderByPivot('id');
-    }
-
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class);
-    }
-
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class);
-    }
-
-    public function bookmarks(): HasMany
-    {
-        return $this->hasMany(Bookmark::class);
-    }
-
-    protected function hasBookmark(): Attribute
-    {
-        $this->bookmarks ?? $this->bookmarks();
-
-        return Attribute::get(fn () => $this->bookmarks->contains('user_id', auth()->id()));
     }
 
     protected function timestamp(): Attribute

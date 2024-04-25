@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Services\KarmaService;
 use App\Traits\Banable;
 use App\Traits\HasAvatar;
@@ -12,7 +10,6 @@ use App\Traits\Roleable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,8 +25,6 @@ class User extends Authenticatable
     use Notifiable;
     use Roleable;
 
-    protected $table = 'users';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -41,7 +36,7 @@ class User extends Authenticatable
     ];
 
     protected $with = [
-        'avatar',
+        'mediaRelation',
     ];
 
     protected $fillable = [
@@ -106,30 +101,35 @@ class User extends Authenticatable
 
     protected function canCreatePosts(): Attribute
     {
-        $this->roles ?? $this->roles();
-        $isCan = $this->roles->where('role', 'creator')->count();
+            $this->rolesRelation ?? $this->rolesRelation();
+        $isCan = $this->rolesRelation->where('role', 'creator')->count();
 
         return Attribute::get(fn () => $isCan);
     }
 
-    public function karma(KarmaService $service)
+    protected function karma(): Attribute
     {
-        return $service->calculateUserKarma($this);
+        return Attribute::get(fn() => KarmaService::calculateUserKarma($this));
     }
 
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    public function posts(): HasMany
+    public function postsRelation(): HasMany
     {
         return $this->hasMany(Post::class, 'user_id');
     }
 
-    public function comments(): HasMany
+    protected function posts(): Attribute
+    {
+        return Attribute::get(fn() => $this->postsRelation);
+    }
+
+    public function commentsRelation(): HasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    protected function comments(): Attribute
+    {
+        return Attribute::get(fn() => $this->commentsRelation);
     }
 
     public function receivesBroadcastNotificationsOn(): string

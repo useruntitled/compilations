@@ -2,16 +2,17 @@
 
 namespace App\Traits;
 
-use App\Models\Media;
 use App\Services\Media\ImageGeneratorService;
 use App\Services\Media\MediaUploader;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasAvatar
 {
-    public function avatar(): MorphOne
+    use HasMedia;
+
+    protected function avatar(): Attribute
     {
-        return $this->morphOne(Media::class, 'media_to')->latest();
+        return Attribute::get(fn() => $this->mediaRelation);
     }
 
     public function makeAvatar(): void

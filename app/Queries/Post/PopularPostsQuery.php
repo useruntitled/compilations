@@ -5,11 +5,11 @@ namespace App\Queries\Post;
 use App\Models\Post;
 use Illuminate\Support\Collection;
 
-class PopularPostsQuery
+final class PopularPostsQuery
 {
     public static function get(int $page): Collection
     {
-        return Post::with(['userRelation', 'filmsRelation' => ['genresRelation'], 'reputationRelation'])
+        return Post::with(['userRelation' => ['mediaRelation'], 'filmsRelation' => ['genresRelation'], 'reputationRelation', 'mediaRelation'])
             ->withCount(['commentsRelation', 'bookmarksRelation', 'reputationRelation', 'filmsRelation'])
             ->orderByDesc('reputation_relation_count')
             ->orderByDesc('comments_relation_count')

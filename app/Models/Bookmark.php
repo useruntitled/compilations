@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Traits\HasAuthor;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Bookmark extends Model
 {
@@ -15,8 +17,13 @@ class Bookmark extends Model
         'post_id', 'user_id',
     ];
 
-    public function post()
+    public function postRelation(): BelongsTo
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class, 'post_id');
+    }
+
+    protected function post(): Attribute
+    {
+        return Attribute::get(fn() => $this->postRelation);
     }
 }

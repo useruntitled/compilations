@@ -4,14 +4,14 @@ namespace App\Queries\Post;
 
 use App\Models\Post;
 
-class ViewPostQuery
+final class ViewPostQuery
 {
     public static function get(int $id): Post
     {
         return Post::with([
             'userRelation',
             'filmsRelation' => ['genresRelation'],
-            'imageRelation',
+            'mediaRelation',
         ])
             ->withCount(['commentsRelation', 'bookmarksRelation'])
             ->findOrFail($id);

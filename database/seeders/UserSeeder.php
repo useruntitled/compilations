@@ -18,9 +18,9 @@ class UserSeeder extends Seeder
         $users = User::factory()
             ->count(2)
             ->has(Post::factory()
-                ->has(Film::factory()->count(mt_rand(2, 20)))
-                ->count(2))
-            ->has(Post::factory()->state(new Sequence(['published_at' => null])))
+                ->has(Film::factory()->count(mt_rand(2, 20)), 'filmsRelation')
+                ->count(2), 'postsRelation')
+            ->has(Post::factory()->state(new Sequence(['published_at' => null])), 'postsRelation')
             ->create();
 
         $bannedUser = User::factory()

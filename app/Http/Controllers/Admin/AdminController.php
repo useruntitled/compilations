@@ -18,7 +18,7 @@ class AdminController extends Controller
 
     public function admins(Request $request)
     {
-        $admins = User::Admin()
+        $admins = User::hasAdminRole()
             ->latest()
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%$search%")
@@ -35,7 +35,7 @@ class AdminController extends Controller
 
     public function moders(Request $request)
     {
-        $admins = User::Moder()
+        $admins = User::hasModerRole()
             ->latest()
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%$search%");

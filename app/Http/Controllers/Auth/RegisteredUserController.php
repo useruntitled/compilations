@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileInfoRequest;
 use App\Http\Requests\UploadFileRequest;
 use App\Http\Resources\NotificationResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\User\UserResource;
 use App\Services\Media\MediaService;
 use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;

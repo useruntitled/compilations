@@ -5,7 +5,7 @@ namespace App\Queries\Post;
 use App\Models\Post;
 use Illuminate\Support\Collection;
 
-class MostCommentedPostsQuery
+final class MostCommentedPostsQuery
 {
     public static function get(int $page): Collection
     {

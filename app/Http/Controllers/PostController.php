@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Actions\Post\PublishPost;
 use App\Actions\Post\UpdatePost;
-use App\Http\Requests\UpdatePostRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Requests\UploadFileRequest;
-use App\Http\Resources\PostResource;
+use App\Http\Resources\Post\PostResource;
 use App\Models\Post;
 use App\Policies\PostPolicy;
+use App\Queries\Post\ViewPostQuery;
 use App\Services\Media\MediaService;
 use App\Services\PostService;
 use Illuminate\Http\Request;
@@ -31,12 +32,7 @@ class PostController extends Controller
 
     public function index(int $id, ?string $slug)
     {
-        $post = Post::with([
-            'user' => ['roles'],
-            'films' => ['genres'],
-            'image',
-        ])->withCount(['comments', 'bookmarks'])
-            ->findOrFail($id);
+        $post = ViewPostQuery::get($id);
 
         $this->service->incrementVisit($post);
 
@@ -48,6 +44,7 @@ class PostController extends Controller
     public function new()
     {
         $posts = $this->getNew(1);
+
         $this->service->incrementView($posts);
 
         return inertia('Home/New', [
@@ -70,7 +67,7 @@ class PostController extends Controller
             'description' => $request->description,
         ]);
 
-        return response()->json($post->load('user'));
+        return response()->json($post->load('userRelation'));
     }
 
     public function delete(Request $request)
@@ -87,7 +84,7 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request)
     {
         $post = Post::mayBeUnpublished()
-            ->with('films')
+            ->with('filmsRelation')
             ->findOrFail($request->id);
 
         $this->authorize(PostPolicy::UPDATE, $post);

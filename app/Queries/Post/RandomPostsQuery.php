@@ -5,7 +5,7 @@ namespace App\Queries\Post;
 use App\Models\Post;
 use Illuminate\Support\Collection;
 
-class RandomPostsQuery
+final class RandomPostsQuery
 {
     public static function get(int $page, int $postId): Collection
     {

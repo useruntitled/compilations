@@ -5,7 +5,7 @@ namespace App\Queries\Post;
 use App\Models\Post;
 use Illuminate\Support\Collection;
 
-class NewPostsQuery
+final class NewPostsQuery
 {
     public static function get(int $page): Collection
     {
@@ -13,7 +13,7 @@ class NewPostsQuery
             'userRelation',
             'reputationRelation',
             'filmsRelation' => ['genresRelation'],
-            'imageRelation',
+            'mediaRelation',
         ])
             ->withCount(['commentsRelation', 'bookmarksRelation', 'filmsRelation'])
             ->latest('published_at')

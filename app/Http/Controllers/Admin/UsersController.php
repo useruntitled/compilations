@@ -17,7 +17,7 @@ class UsersController extends Controller
 
         $page = $request->page;
 
-        $users = User::with('roles')
+        $users = User::with('rolesRelation')
             ->latest()
             ->when($request->input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%$search%")

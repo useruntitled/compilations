@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Comment\SidebarCommentResource;
 use App\Models\Comment;
 
 class SidebarController extends Controller
 {
     public function getLastComments()
     {
-
-        return Comment::published()
+        $comments = Comment::published()
             ->with([
-                'user' => ['roles'],
-                'post',
-                'image',
+                'userRelation',
+                'postRelation',
+                'mediaRelation',
             ])
             ->latest()
             ->limit(20)
             ->get();
+
+        return SidebarCommentResource::collection($comments);
     }
 }

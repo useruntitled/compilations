@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Traits\HasAuthor;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasMedia;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Subsite extends Model
 {
-    use HasAuthor, HasFactory;
+    use HasAuthor;
+    use HasMedia;
 
     protected $fillable = [
         'description',
@@ -17,11 +18,11 @@ class Subsite extends Model
     ];
 
     protected $with = [
-        'cover',
+        'mediaRelation',
     ];
 
-    public function cover(): MorphOne
+    protected function cover(): Attribute
     {
-        return $this->morphOne(Media::class, 'media_to')->latest();
+        return Attribute::get(fn() => $this->mediaRelation);
     }
 }

@@ -7,8 +7,8 @@ use App\Actions\Comment\StoreComment;
 use App\Actions\Comment\UpdateComment;
 use App\Events\CommentCreatedEvent;
 use App\Http\Requests\StoreCommentRequest;
-use App\Http\Resources\CommentResource;
-use App\Http\Resources\StoreCommentResource;
+use App\Http\Resources\Comment\CommentResource;
+use App\Http\Resources\Comment\StoreCommentResource;
 use App\Models\Comment;
 use App\Policies\CommentPolicy;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class CommentController extends Controller
 {
     public function index($id)
     {
-        $comment = Comment::with('post')->find($id);
+        $comment = Comment::with('postRelation')->find($id);
 
         return redirect()
             ->route('post', [
@@ -63,7 +63,13 @@ class CommentController extends Controller
     {
         $comments = Comment::where('post_id', $post_id)
             ->withTrashed()
-            ->with(['replies', 'user' => ['roles'], 'reputationRelation', 'comment', 'image'])
+            ->with([
+                'repliesRelation',
+                'userRelation',
+                'reputationRelation',
+                'commentRelation',
+                'mediaRelation',
+            ])
             ->latest()
             ->get();
 

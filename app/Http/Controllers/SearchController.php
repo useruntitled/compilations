@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CompressedUserResource;
-use App\Http\Resources\ShortPostFeedResource;
+use App\Http\Resources\Post\ShortPostFeedResource;
+use App\Http\Resources\User\CompressedUserResource;
 use App\Models\Post;
 use App\Models\User;
 

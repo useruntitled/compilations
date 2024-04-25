@@ -6,6 +6,7 @@ use App\Enums\CommentText;
 use App\Events\CommentDeclinedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeclineRequest;
+use App\Http\Resources\Comment\CommentResource;
 use App\Models\Comment;
 use App\Models\Report;
 use App\Traits\UsesFilters;
@@ -17,7 +18,7 @@ class CommentsController extends Controller
 
     public function index(Request $request)
     {
-        $comments = Comment::with(['image'])
+        $comments = Comment::with(['mediaRelation'])
             ->latest()
             ->withTrashed()
             ->when($request->input('search'), function ($query, $search) {
@@ -37,15 +38,15 @@ class CommentsController extends Controller
     public function view($id)
     {
         $comment = Comment::withTrashed()
-            ->with(['declinedBy', 'image'])
+            ->with(['declinedBy', 'mediaRelation'])
             ->findOrFail($id);
         $reports_count = Report::where('report_to_id', $id)
-            ->where('report_to_type', 'App\\Models\\Comment')
+            ->where('report_to_type', getModel('comment'))
             ->get()
             ->count();
 
         return inertia('Admin/Comments/View', [
-            'comment' => $comment,
+            'comment' => CommentResource::make($comment),
             'reports_count' => $reports_count,
         ]);
     }
@@ -55,7 +56,7 @@ class CommentsController extends Controller
         $comment = Comment::findOrFail($request->id);
         $comment->text = CommentText::DECLINED_TEXT;
 
-        $comment->image()->delete();
+        $comment->mediaRelation()->delete();
 
         $comment->decline($request->reason);
 
