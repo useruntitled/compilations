@@ -58,8 +58,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(BookmarkController::class)->group(function () {
-    Route::post('bookmark', 'toggle')->name('bookmark.toggle')->middleware('auth');
-    Route::get('me/bookmarks/page/{page}', 'getMyBookmarkedPosts')->name('me.bookmarks.get')->middleware('auth');
+    Route::put('bookmark', 'store')->name('bookmark.store')->middleware('auth');
+    Route::delete('bookmark', 'destroy')->name('bookmark.destroy')->middleware('auth');
+    Route::get('me/bookmarks/page/{page}', 'get')->name('me.bookmarks.get')->middleware('auth');
 });
 
 Route::controller(SidebarController::class)->group(function () {
@@ -67,7 +68,9 @@ Route::controller(SidebarController::class)->group(function () {
 });
 
 Route::controller(ReputationController::class)->group(function () {
-    Route::post('reputation', 'index')->name('new.reputation')->middleware('auth');
+    Route::post('reputation', 'store')->name('reputation.store')->middleware('auth');
+    Route::put('reputation', 'update')->name('reputation.update')->middleware('auth');
+    Route::delete('reputation', 'destroy')->name('reputation.destroy')->middleware('auth');
 });
 
 Route::controller(NotificationController::class)->group(function () {

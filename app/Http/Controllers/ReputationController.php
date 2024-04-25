@@ -2,52 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\NewReputationRequest;
+use App\Http\Requests\Reputation\DestroyReputationRequest;
+use App\Http\Requests\Reputation\StoreReputationRequest;
+use App\Http\Requests\Reputation\UpdateReputationRequest;
 use App\Models\Reputation;
-use Illuminate\Support\Facades\Auth;
 
 class ReputationController extends Controller
 {
-    public function index(NewReputationRequest $request)
+    public function store(StoreReputationRequest $request)
     {
-        $reputation = Reputation::where(
-            'reputation_to_type', getModel($request->reputation_to_type),
-        )->where('reputation_to_id', $request->reputation_to_id)
-            ->where('user_id', Auth::user()->id)->first();
-
-        if ($reputation != null) {
-            $reputation = $this->patch($reputation, $request);
-        } else {
-            $reputation = $this->store($request);
-        }
-
-        return $reputation->reputation_to->reputation;
-    }
-
-    public function patch($reputation, $request)
-    {
-        if ($request->action == $reputation->action) {
-            Reputation::destroy($reputation->id);
-            $reputation['action'] = null;
-
-            return $reputation;
-        } else {
-            $reputation['action'] = $request->action;
-            $reputation->save();
-
-            return $reputation;
-        }
-    }
-
-    public function store($request)
-    {
-        $reputation = Reputation::create([
-            'reputation_to_type' => getModel($request->reputation_to_type),
-            'reputation_to_id' => $request->reputation_to_id,
+        Reputation::create([
+            'user_id' => auth()->user()->id,
             'action' => $request->action,
-            'user_id' => Auth::user()->id,
+            'reputation_to_type' => getModel($request->type),
+            'reputation_to_id' => $request->id,
         ]);
 
-        return $reputation;
+        return response()->json('', 201);
+    }
+
+    public function update(UpdateReputationRequest $request)
+    {
+        $reputation = Reputation::where('reputation_to_type', getModel($request->type))
+            ->where('reputation_to_id', $request->id)
+            ->where('user_id', auth()->user()->id)->firstOrFail();
+        $reputation->update([
+            'action' => $request->action,
+        ]);
+
+        return response()->json('', 200);
+    }
+
+    public function destroy(DestroyReputationRequest $request)
+    {
+        $reputation = Reputation::where('reputation_to_type', getModel($request->type))
+            ->where('reputation_to_id', $request->id)
+            ->where('user_id', auth()->user()->id)
+            ->firstOrFail();
+        $reputation->delete();
+
+        return response()->json('', 204);
     }
 }

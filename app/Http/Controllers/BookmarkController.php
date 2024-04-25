@@ -2,53 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Bookmark\DestroyBookmarkRequest;
+use App\Http\Requests\Bookmark\StoreBookmarkRequest;
+use App\Http\Resources\Post\PostResource;
 use App\Models\Bookmark;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BookmarkController extends Controller
 {
     public function index()
     {
+        return inertia('Auth/Bookmarks', [
+            'posts' => $this->get(),
+        ]);
+    }
+
+    public function get(?int $page = 1)
+    {
         $bookmarks = Bookmark::with([
-            'post.user',
-            'post.films.genres',
+            'postRelation' => ['userRelation', 'filmsRelation' => ['genresRelation']],
         ])
-            ->where('user_id', Auth::id())
+            ->where('user_id', auth()->user()->id)
+            ->skip(($page - 1) * config('post.per_page'))
+            ->take(config('post.per_page'))
             ->get();
 
         $posts = [];
 
         foreach ($bookmarks as $bookmark) {
-            $bookmark->post->loadCount(['comments', 'bookmarks']);
-            $posts[] = $bookmark->post;
+            $bookmark->postRelation->loadCount(['commentsRelation', 'bookmarksRelation']);
+            $posts[] = $bookmark->postRelation;
         }
 
-        return inertia('Auth/Bookmarks', [
-            'posts' => $posts,
-        ]);
+        return PostResource::collection($posts);
     }
 
-    public function toggle(Request $request)
+    public function store(StoreBookmarkRequest $request)
     {
-        $request->validate([
-            'post_id' => 'required|exists:posts,id',
+        Bookmark::create([
+            'user_id' => auth()->user()->id,
+            'post_id' => $request->post_id,
         ]);
 
-        $bookmark = Bookmark::where('post_id', $request->post_id)
-            ->where('user_id', Auth::id())
-            ->first();
+        return response()->json('', 201);
+    }
 
-        if ($bookmark) {
-            $bookmark->delete();
-            $bookmark = null;
-        } else {
-            $bookmark = Bookmark::create([
-                'post_id' => $request->post_id,
-                'user_id' => Auth::id(),
-            ]);
-        }
+    public function destroy(DestroyBookmarkRequest $request)
+    {
+        $bookmark = Bookmark::where('post_id', $request->post_id);
+        $bookmark->delete();
 
-        return response()->json($bookmark);
+        return response()->json('', 204);
     }
 }
