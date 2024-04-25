@@ -59,7 +59,7 @@ services:
       - .:/var/www/html:delegated
     networks:
       - laravel
-    command: "sh /php-fpm/supervisor/start.sh"
+  #    command: "sh /php-fpm/supervisor/start.sh"
 
   redis:
     image: redis:alpine
@@ -77,7 +77,6 @@ services:
       - .:/var/www/html
     ports:
       - "5173:5173"
-    restart: on-failure
     tty: true
     networks:
       - laravel
