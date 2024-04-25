@@ -28,5 +28,9 @@ class RoleSeeder extends Seeder
         Role::factory()->create([
             'name' => UserRole::USER,
         ]);
+
+        Role::factory()->create([
+            'name' => UserRole::SERVICE_DELETED_ACCOUNT,
+        ]);
     }
 }
