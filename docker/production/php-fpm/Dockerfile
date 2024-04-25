@@ -72,7 +72,7 @@ RUN apt-get install -y supervisor
 RUN mkdir -p /etc/supervisor/conf.d
 
 ADD ./php-fpm/supervisor/conf.d/compilations-worker.conf /etc/supervisor/conf.d
-
+COPY ./php-fpm/supervisor/start.sh /php-fpm/supervisor/start.sh
 
 
 
