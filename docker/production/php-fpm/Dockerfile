@@ -17,7 +17,7 @@ RUN adduser --disabled-password --gecos '' --uid ${UID} --gid ${GID} laravel
 
 
 
-RUN mkdir -p /var/www/html
+
 
 WORKDIR /var/www/html
 
@@ -31,6 +31,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 
 #RUN docker-php-ext-install pdo pdo_mysql
+
 
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
@@ -63,6 +64,15 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && curl -L https://github.com/phpredis/phpredis/archive/5.3.4.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
     && echo 'redis' >> /usr/src/php-available-exts \
     && docker-php-ext-install redis
+
+RUN mkdir -p /var/www/html
+
+RUN apt-get install -y supervisor
+
+RUN mkdir -p /etc/supervisor/conf.d
+
+ADD ./php-fpm/supervisor/conf.d/compilations-worker.conf /etc/supervisor/conf.d
+
 
 
 

@@ -13,8 +13,7 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
         - DOMAIN_EMAIL=${DOMAIN_EMAIL}
-        - DOMAIN_URL=${DOMAIN_URL}
-    #restart: on-failure
+        - APP_URL=${APP_URL}
     tty: true
     ports:
       - "80:80"
@@ -22,8 +21,7 @@ services:
       - "443:443/udp"
     volumes:
       - .:/var/www/html:delegated
-      - ./docker/production/nginx/key.pem:/etc/nginx/certs/key.pem
-      - ./docker/production/nginx/cert.pem:/etc/nginx/certs/cert.pem
+      - certs:/etc/letsencrypt/live/${APP_URL}
     depends_on:
       - php
       - mysql
@@ -32,18 +30,18 @@ services:
     networks:
       - laravel
     environment:
-      DOMAIN_URL: ${DOMAIN_URL}
+      APP_URL: ${APP_URL}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}
-  #    command: "sh /nginx-start.sh"
+    command: "sh /nginx-start.sh"
 
   mysql:
     image: mysql:8.0
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - ${DB_PORT}:${DB_PORT}
     environment:
-      MYSQL_DATABASE: compilations
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     networks:
       - laravel
 
@@ -60,6 +58,7 @@ services:
       - .:/var/www/html:delegated
     networks:
       - laravel
+    command: "sh ./php-fpm/supervisor/script.sh"
 
   redis:
     image: redis:alpine
@@ -78,7 +77,9 @@ services:
     ports:
       - "5173:5173"
     restart: on-failure
-    tty: true # keep running
+    tty: true
     networks:
       - laravel
+volumes:
+  certs:
 

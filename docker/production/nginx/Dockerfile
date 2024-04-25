@@ -14,11 +14,11 @@ RUN sed -i "s/user  nginx/user laravel/g" /etc/nginx/nginx.conf
 
 # читаем переменные среды из .env
 ARG DOMAIN_EMAIL
-ARG DOMAIN_URL
+ARG APP_URL
 
 # устанавливаем переменные среды в переменные
 ENV DOMAIN_EMAIL=$DOMAIN_EMAIL
-ENV DOMAIN_URL=$DOMAIN_URL
+ENV APP_URL=$APP_URL
 
 
 ## Копируем наш скрипт внутрь образа Docker
@@ -29,10 +29,13 @@ ENV DOMAIN_URL=$DOMAIN_URL
 
 COPY ./conf.d/default.conf.template /etc/nginx/conf.d/
 RUN apk add gettext \
-  && envsubst '\$DOMAIN_URL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+  && envsubst '\$APP_URL' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
 RUN apk add certbot
 RUN apk add certbot-nginx
+
+COPY crontab /etc/cron.d/certbot-cron
+RUN /usr/bin/crontab /etc/cron.d/certbot-cron
 
 #ADD ./conf.d/default.conf /etc/nginx/conf.d/
 #ADD ./conf.d/default.conf.ssl /etc/nginx/conf.d
