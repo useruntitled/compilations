@@ -29,5 +29,6 @@ class UserSeeder extends Seeder
                 'banned_by' => array_rand(array_flip($users->pluck('id')->toArray())),
             ])
             ->create();
+
     }
 }
