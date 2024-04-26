@@ -50,7 +50,7 @@ class ReputationTest extends TestCase
     public function test_user_can_update_vote(): void
     {
         foreach ($this->models as $model) {
-            $eloquent = $model::whereHas('reputationRelation')->first();
+            $eloquent = $model::whereHas('reputationRelation')->firstOrFail();
             $reputation = $eloquent->reputationRelation->first();
 
             $this->loginAs($reputation->userRelation)
