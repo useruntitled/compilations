@@ -20,7 +20,7 @@ trait HasReputation
 
     protected function getSessionVotedReputation(): ?Reputation
     {
-        if (!$this->reputationRelation) {
+        if (! $this->reputationRelation) {
             return null;
         }
 
@@ -44,7 +44,7 @@ trait HasReputation
 
     protected function getUpVotesCount(): int
     {
-        if (!$this->reputationRelation) {
+        if (! $this->reputationRelation) {
             return 0;
         }
 
@@ -53,7 +53,7 @@ trait HasReputation
 
     protected function getDownVotesCount(): int
     {
-        if (!$this->reputationRelation) {
+        if (! $this->reputationRelation) {
             return 0;
         }
 
