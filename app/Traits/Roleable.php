@@ -73,7 +73,7 @@ trait Roleable
         });
     }
 
-    public function scopeOnlyUserRole(Builder $builder): void
+    public function scopeBanAble(Builder $builder): void
     {
         $builder->whereHas('rolesRelation', function (Builder $builder) {
             $builder->whereNot('name', UserRole::ADMIN)->whereNot('name', UserRole::MODER);
