@@ -26,7 +26,7 @@ class AdminPolicy
 
     public function addModerRole(User $user, User $roleAble)
     {
-        return $user->isAdmin && !$roleAble->isModer;
+        return $user->isAdmin && ! $roleAble->isModer;
     }
 
     public function removeModerRole(User $user, User $roleAble)
