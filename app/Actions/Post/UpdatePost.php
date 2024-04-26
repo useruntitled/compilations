@@ -13,7 +13,7 @@ final class UpdatePost
 
         if ($films != null && count($films) > 0) {
             if (count($post->films) > 0) {
-                $post->films()->detach();
+                $post->filmsRelation()->detach();
             }
 
             $arrayOfIds = [];
@@ -21,7 +21,7 @@ final class UpdatePost
                 $arrayOfIds[] = $film['id'];
             }
 
-            $post->films()->attach(array_unique($arrayOfIds));
+            $post->filmsRelation()->attach(array_unique($arrayOfIds));
         }
 
         $post->update([

@@ -9,7 +9,7 @@ final class PublishPost
     public static function handle(Post $post): void
     {
         if (! $post->isActive) {
-            if ($post->title != null && $post->films()->count() > 0) {
+            if ($post->title != null && $post->filmsRelation()->count() > 0) {
                 if (! $post->published_at) {
                     $post->published_at = now();
                 }
