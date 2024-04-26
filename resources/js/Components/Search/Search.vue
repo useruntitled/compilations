@@ -84,7 +84,7 @@ const props = defineProps({
 });
 
 const inputOpacityClass = computed(() => {
-    return `bg-opacity-${props.inputOpacity}`;
+    return `bg-opacity-${props.inputOpacity} brightness-[0.9]`;
 });
 
 const search = ref(null);
