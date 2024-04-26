@@ -80,7 +80,7 @@ const store = (action) => {
 };
 
 const update = (action) => {
-    reputationApi.update(props.reputation.reputation_to_id, props.type, action);
+    reputationApi.update(props.reputation.id, action);
     if (action === "up") {
         up.value++;
         down.value--;
@@ -92,7 +92,7 @@ const update = (action) => {
 };
 
 const destroy = () => {
-    reputationApi.destroy(props.reputation.reputation_to_id, props.type);
+    reputationApi.destroy(props.reputation.id, props.type);
     if (current_action.value === "up") {
         up.value--;
     } else {
