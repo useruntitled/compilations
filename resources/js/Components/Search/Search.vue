@@ -12,7 +12,7 @@
             type="text"
             placeholder="Поиск"
             class="appearance-none w-full border-[0.2px] border-opacity-0 font-regular ps-10 border-orange-300 hover:border-opacity-100 rounded-xl outline-orange-500 outline-0 hover:ring-[2px] ring-opacity-[10] hover:ring-orange-300 hover:ring-opacity-50 text-md duration-300 text-slate-900 hover:bg-white focus:ring-kpnpale focus:ring-opacity-[10] focus:bg-white focus:border-orange-500"
-            :class="bgInputColor"
+            :class="[bgInputColor, inputOpacityClass]"
         />
     </div>
     <div
@@ -67,7 +67,7 @@
 </template>
 <script setup>
 import IconSearch from "@/Components/Icons/IconSearch.vue";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 // import {throttle} from "lodash/function.js";
 import pkg from "lodash/function.js";
 
@@ -80,6 +80,11 @@ const props = defineProps({
     bgInputColor: {
         default: "bg-kpnpale",
     },
+    inputOpacity: null,
+});
+
+const inputOpacityClass = computed(() => {
+    return `bg-opacity-${props.inputOpacity}`;
 });
 
 const search = ref(null);
