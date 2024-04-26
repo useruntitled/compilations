@@ -25,7 +25,7 @@ class StoreReputationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required', Rule::in(['post', 'comment', 'Post', ' Comment'])],
+            'type' => ['required', Rule::in(['post', 'comment', 'Post', 'Comment'])],
             'action' => ['required', Rule::in(['up', 'down'])],
             'id' => 'required',
         ];
