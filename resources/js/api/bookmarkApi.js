@@ -4,7 +4,7 @@ export const bookmarkApi = {
     store: async (id, callback = () => {}) => {
         await axios
             .post(route("bookmark.store"), {
-                _method: "PUT",
+                _method: "POST",
                 post_id: id,
             })
             .then((res) => {
