@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeclineRequest;
 use App\Models\User;
 use App\Policies\AdminPolicy;
 use App\Traits\UsesFilters;
@@ -14,9 +15,6 @@ class UsersController extends Controller
 
     public function index(Request $request)
     {
-
-        $page = $request->page;
-
         $users = User::with('rolesRelation')
             ->latest()
             ->when($request->input('search'), function ($query, $search) {
@@ -42,27 +40,51 @@ class UsersController extends Controller
         ]);
     }
 
-    public function toggleModer(Request $request)
+    public function addModerRole(Request $request)
     {
+        $request->validate(['id' => ['required', 'exists:users']]);
+
         $user = User::findOrFail($request->id);
 
-        if (! $user->isModer) {
-            $user->toModer();
-        } else {
-            $user->unModer();
-        }
+        $this->authorize(AdminPolicy::ADD_MODER_ROLE, $user);
+
+        $user->toModer();
+
+        return response()->json('', 201);
     }
 
-    public function toggleBan(Request $request)
+    public function removeModerRole(Request $request)
+    {
+        $request->validate(['id' => ['required', 'exists:users']]);
+
+        $user = User::hasModerRole()->findOrFail($request->id);
+
+        $this->authorize(AdminPolicy::REMOVE_MODER_ROLE, $user);
+
+        $user->unModer();
+
+        return response()->json('', 204);
+    }
+
+    public function ban(DeclineRequest $request)
     {
         $user = User::findOrFail($request->id);
 
         $this->authorize(AdminPolicy::BAN, $user);
 
-        if ($user->isBanned) {
-            $user->unBan();
-        } else {
-            $user->ban($request->reason);
-        }
+        $user->ban($request->reason);
+    }
+
+    public function unBan(Request $request)
+    {
+        $request->validate(['id' => ['required', 'exists:users']]);
+
+        $user = User::findOrFail($request->id);
+
+        $this->authorize(AdminPolicy::UNBAN, $user);
+
+        $user->unBan();
+
+        return response()->json($user, 200);
     }
 }

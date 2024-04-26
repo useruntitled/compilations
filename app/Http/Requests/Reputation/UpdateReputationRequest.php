@@ -23,7 +23,7 @@ class UpdateReputationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required', Rule::in(['post', 'comment']),
+            'action' => ['required', Rule::in(['up', 'down', 'Up', 'Down'])],
             'id' => 'required',
         ];
     }

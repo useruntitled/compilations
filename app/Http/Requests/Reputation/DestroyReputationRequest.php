@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Reputation;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class DestroyReputationRequest extends FormRequest
 {
@@ -24,7 +23,6 @@ class DestroyReputationRequest extends FormRequest
     {
         return [
             'id' => 'required',
-            'type' => 'required', Rule::in(['post', 'comment']),
         ];
     }
 }
