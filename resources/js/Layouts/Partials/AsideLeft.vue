@@ -78,11 +78,8 @@
                                 class="opacity-90 stroke-[1.5px] w-5 h-5"
                             />
                         </span>
-                        <span>GitHub</span>
+                        <span>О проекте</span>
                     </a>
-                </p>
-                <p class="opacity-70 hover:opacity-100">
-                    <a href="https://t.me/accintouch">Связаться с автором</a>
                 </p>
             </div>
         </div>
