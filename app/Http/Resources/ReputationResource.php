@@ -25,8 +25,6 @@ class ReputationResource extends JsonResource
             'reputation_to_id' => $request->reputation_to_id,
             'reputation_to' => $request->reputation_to,
             'user_id' => $request->user_id,
-            'created_at' => $request->created_at,
-            'updated_at' => $request->updated_at,
         ];
     }
 }
