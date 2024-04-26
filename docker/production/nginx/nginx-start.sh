@@ -22,4 +22,4 @@ else
 fi
 
 # Перезапускаем Nginx со новой конфигурацией
-nginx -s reload
+exec nginx -g "daemon off;"
