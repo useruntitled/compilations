@@ -22,12 +22,16 @@ trait HasReputation
             $this->reputationRelation->where('action', 'down')
                 ->where('reputation_to_type', __CLASS__)->count() : 0;
 
-        $user_action = Auth::user() ? $this->getUserActionReputation() : null;
+        $action = Auth::user() ? $this->getUserActionReputation() : null;
+
+        $id = $this->reputationRelation ? $this->reputationRelation->where('user_id', Auth::user()->id)
+            ->where('reputation_to_type', __CLASS__)->first()?->id : null;
 
         return [
+            'id' => $id,
             'up' => $pluses,
             'down' => $minuses,
-            'action' => $user_action ?? null,
+            'action' => $action,
             'reputation_to_id' => $this->id,
             'overall' => $pluses + $minuses,
         ];
