@@ -63,10 +63,10 @@ class PostTest extends TestCase
             'id' => $post['id'],
         ]);
 
-        $post = Post::withCount('films')->findOrFail($post['id']);
+        $post = Post::withCount('filmsRelation')->findOrFail($post['id']);
         $this->assertSame($post->title, $title);
         $this->assertSame($post->description, $description);
-        $this->assertSame($post->films_count, 1);
+        $this->assertSame($post->films_relation_count, 1);
     }
 
     public function test_user_can_attach_image_to_post(): void

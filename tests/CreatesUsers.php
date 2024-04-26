@@ -13,7 +13,7 @@ trait CreatesUsers
         return $this;
     }
 
-    protected function loginAsAdmin()
+    protected function loginAsAdmin(): self
     {
         $user = $this->createUser();
         $user->toAdmin();
@@ -22,7 +22,7 @@ trait CreatesUsers
         return $this;
     }
 
-    protected function loginAsModer()
+    protected function loginAsModer(): self
     {
         $user = $this->createUser();
         $user->toModer();
@@ -31,7 +31,7 @@ trait CreatesUsers
         return $this;
     }
 
-    protected function loginAsBanned()
+    protected function loginAsBanned(): self
     {
         $user = $this->createUser();
         $user->ban('Some ban reason');
@@ -40,7 +40,7 @@ trait CreatesUsers
         return $this;
     }
 
-    protected function login()
+    protected function login(): self
     {
         $user = $this->createUser();
         $this->loginAs($user);
@@ -48,8 +48,24 @@ trait CreatesUsers
         return $this;
     }
 
-    protected function createUser()
+    protected function createUser(): User
     {
         return User::factory()->create();
+    }
+
+    protected function createModer(): User
+    {
+        $user = $this->createUser();
+        $user->toModer();
+
+        return $user;
+    }
+
+    protected function createAdmin(): User
+    {
+        $user = $this->createUser();
+        $user->toAdmin();
+
+        return $user;
     }
 }

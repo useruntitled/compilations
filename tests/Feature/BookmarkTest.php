@@ -17,20 +17,20 @@ class BookmarkTest extends TestCase
         $post = Post::inRandomOrder()->firstOrFail();
 
         $this->login()
-            ->postJson(route('bookmark.toggle'), [
+            ->postJson(route('bookmark.store'), [
                 'post_id' => $post->id,
-            ])->assertOk();
+            ])->assertCreated();
     }
 
     public function test_user_can_unbookmark_post(): void
     {
-        $bookmarkedPost = Post::withCount('bookmarks')
+        $bookmarkedPost = Post::withCount('bookmarksRelation')
             ->where('bookmarks_count', '>', 0)
             ->firstOrFail();
 
         $this->loginAs($bookmarkedPost->user)
-            ->postJson(route('bookmark.toggle'), [
+            ->deleteJson(route('bookmark.destroy'), [
                 'post_id' => $bookmarkedPost->id,
-            ])->assertOk();
+            ])->assertNoContent();
     }
 }

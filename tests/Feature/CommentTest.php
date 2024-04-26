@@ -68,7 +68,7 @@ class CommentTest extends TestCase
 
     public function test_user_can_attach_media_to_comment(): void
     {
-        $comment = Comment::published()->doesntHave('image')->firstOrFail();
+        $comment = Comment::published()->doesntHave('mediaRelation')->firstOrFail();
 
         $response = $this->loginAs($comment->user);
 

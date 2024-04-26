@@ -20,7 +20,7 @@ class MediaTest extends TestCase
         $models = [Comment::class, Post::class];
 
         foreach ($models as $model) {
-            $model = $model::whereHas('image')->firstOrFail();
+            $model = $model::whereHas('mediaRelation')->firstOrFail();
 
             $media = $model->image;
 

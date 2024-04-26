@@ -55,7 +55,7 @@ class SettingsTest extends TestCase
             'name' => 'John Doe',
         ]);
 
-        $user->subsite()->update([
+        $user->subsiteRelation()->update([
             'description' => 'John Doe Description',
         ]);
 

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Reputation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,62 +14,110 @@ class ReputationTest extends TestCase
 
     protected $seed = true;
 
-    public function test_user_can_up_vote_post(): void
+    protected $models = [
+        Post::class,
+        Comment::class,
+    ];
+
+    public function test_user_can_store_up_vote(): void
     {
-        $post = Post::inRandomOrder()->first();
+        foreach ($this->models as $model) {
+            $eloquent = $model::inRandomOrder()->first();
+
+            $this->login()
+                ->postJson(route('reputation.store'), [
+                    'type' => $model == Comment::class ? 'comment' : 'post',
+                    'id' => $eloquent->id,
+                    'action' => 'up',
+                ])->assertCreated();
+        }
+    }
+
+    public function test_user_can_store_down_vote(): void
+    {
+        foreach ($this->models as $model) {
+            $eloquent = $model::inRandomOrder()->first();
+
+            $this->login()
+                ->postJson(route('reputation.store'), [
+                    'type' => $model == Comment::class ? 'comment' : 'post',
+                    'id' => $eloquent->id,
+                    'action' => 'down',
+                ])->assertCreated();
+        }
+    }
+
+    public function test_user_can_update_vote(): void
+    {
+        foreach ($this->models as $model) {
+            $eloquent = $model::whereHas('reputationRelation')->first();
+            $reputation = $eloquent->reputationRelation->first();
+
+            $this->loginAs($reputation->userRelation)
+                ->putJson(route('reputation.update'), [
+                    'id' => $reputation->id,
+                    'action' => $reputation->action == 'down' ? 'up' : 'down',
+                ])->assertOk();
+        }
+    }
+
+    public function test_user_can_delete_vote(): void
+    {
+        foreach ($this->models as $model) {
+            $eloquent = $model::whereHas('reputationRelation')->first();
+            $reputation = $eloquent->reputationRelation->first();
+
+            $this->loginAs($reputation->userRelation)
+                ->deleteJson(route('reputation.destroy'), [
+                    'id' => $reputation->id,
+                ])->assertNoContent();
+        }
+    }
+
+    public function test_user_cannot_delete_other_user_vote(): void
+    {
+        $reputation = Reputation::inRandomOrder()->first();
 
         $this->login()
-            ->postJson(route('new.reputation'), [
-                'reputation_to_type' => 'Post',
-                'reputation_to_id' => $post->id,
+            ->deleteJson(route('reputation.destroy'), [
+                'id' => $reputation->id,
+            ])->assertRedirect();
+
+        $this->assertNotNull($reputation->refresh());
+    }
+
+    public function test_user_cannot_update_other_user_vote(): void
+    {
+        $reputation = Reputation::inRandomOrder()->first();
+
+        $this->login()
+            ->putJson(route('reputation.update'), [
+                'id' => $reputation->id,
                 'action' => 'up',
-            ])->assertOk();
+            ])->assertRedirect();
+
+        $this->assertSame($reputation, $reputation->refresh());
     }
 
-    public function test_user_can_down_vote_post(): void
+    public function test_user_cannot_store_vote_twice(): void
     {
-        $post = Post::inRandomOrder()->first();
+        $reputation = Reputation::inRandomOrder()->first();
 
-        $this->login()
-            ->postJson(route('new.reputation'), [
-                'reputation_to_type' => 'Post',
-                'reputation_to_id' => $post->id,
-                'action' => 'down',
-            ])->assertOk();
-    }
-
-    public function test_user_can_up_vote_comment(): void
-    {
-        $comment = Comment::published()->first();
-
-        $this->login()
-            ->postJson(route('new.reputation'), [
-                'reputation_to_type' => 'Comment',
-                'reputation_to_id' => $comment->id,
-                'action' => 'up',
-            ])->assertOk();
-    }
-
-    public function test_user_can_down_vote_comment(): void
-    {
-        $comment = Comment::published()->first();
-
-        $this->login()
-            ->postJson(route('new.reputation'), [
-                'reputation_to_type' => 'Comment',
-                'reputation_to_id' => $comment->id,
-                'action' => 'down',
-            ])->assertOk();
+        $this->loginAs($reputation->userRelation)
+            ->postJson(route('reputation.store'), [
+                'type' => get_class($reputation) == 'App\\Models\\Post' ? 'post' : 'comment',
+                'id' => $reputation->reputation_to->id,
+                'action' => array_rand(array_flip(['up', 'down'])),
+            ])->assertRedirect();
     }
 
     public function test_guest_cannot_vote(): void
     {
-        $types = ['Post', 'Comment'];
-        foreach ($types as $t) {
+        foreach ($this->models as $model) {
             $this
-                ->postJson(route('new.reputation'), [
-                    'reputation_to_type' => $t,
-                    'reputation_to_id' => 1,
+                ->postJson(route('reputation.store'), [
+                    'type' => $model,
+                    'id' => 1,
                     'action' => array_rand(array_flip(['up', 'down'])),
                 ])->assertRedirect();
         }

@@ -14,12 +14,13 @@ class BanTest extends TestCase
 
     public function test_admin_can_ban_user(): void
     {
-        $user = User::notBanned()->user()->inRandomOrder()->firstOrFail();
+        $user = User::notBanned()->banAble()->inRandomOrder()->firstOrFail();
 
         $this
             ->loginAsAdmin()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.ban'), [
                 'id' => $user->id,
+                'reason' => 'Some reason',
             ])->assertOk();
 
         $this->assertTrue($user->refresh()->isBanned);
@@ -27,51 +28,55 @@ class BanTest extends TestCase
 
     public function test_admin_can_unban_user(): void
     {
-        $bannedUser = User::banned()->user()->firstOrFail();
+        $bannedUser = User::banned()->banAble()->firstOrFail();
 
         $this
             ->loginAsAdmin()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.unban'), [
                 'id' => $bannedUser->id,
             ])
             ->assertOk();
+
         $this->assertFalse($bannedUser->refresh()->isBanned);
     }
 
     public function test_moder_can_ban_user(): void
     {
-        $user = User::notBanned()->user()->inRandomOrder()->firstOrFail();
+        $user = User::notBanned()->banAble()->inRandomOrder()->firstOrFail();
 
         $this
             ->loginAsModer()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.ban'), [
                 'id' => $user->id,
-            ])
-            ->assertOk();
+                'reason' => 'Some reason',
+            ])->assertOk();
+
         $this->assertTrue($user->refresh()->isBanned);
     }
 
     public function test_moder_can_unban_user(): void
     {
-        $bannedUser = User::banned()->user()->firstOrFail();
+        $bannedUser = User::banned()->banAble()->firstOrFail();
 
         $this
             ->loginAsModer()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.unban'), [
                 'id' => $bannedUser->id,
             ])
             ->assertOk();
+
         $this->assertFalse($bannedUser->refresh()->isBanned);
     }
 
     public function test_moder_cannot_ban_admin(): void
     {
         $this->loginAsAdmin();
-        $admin = User::admin()->firstOrfail();
+        $admin = User::hasAdminRole()->firstOrfail();
 
         $this->loginAsModer()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.ban'), [
                 'id' => $admin->id,
+                'reason' => 'Some reason',
             ])->assertRedirect();
 
         $this->assertFalse($admin->refresh()->isBanned);
@@ -98,8 +103,9 @@ class BanTest extends TestCase
 
         $this
             ->login()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.ban'), [
                 'id' => $user->id,
+                'reason' => 'Some reason',
             ])
             ->assertRedirect();
     }
@@ -110,7 +116,7 @@ class BanTest extends TestCase
 
         $this
             ->login()
-            ->putJson(route('panel.toggle.ban'), [
+            ->putJson(route('panel.user.ban'), [
                 'id' => $bannedUser->id,
             ])
             ->assertRedirect();
