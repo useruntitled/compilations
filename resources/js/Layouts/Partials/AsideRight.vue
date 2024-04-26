@@ -52,7 +52,7 @@
                             >
                         </div>
                     </div>
-                    <Link :href="prepareHref(comment)">
+                    <Link :href="route('comment.redirect', [comment.id])">
                         <p
                             class="text-base overflow-hidden text-ellipsis cursor-pointer hover:opacity-70"
                             style="max-height: 100px"
@@ -81,14 +81,6 @@ import FluidLazyMedia from "@/Components/Media/FluidLazyMedia.vue";
 import { asideRightApi } from "@/api/asideRightApi.js";
 
 const comments = ref([]);
-
-const prepareHref = (comment) => {
-    return route("post", [
-        comment.post.id,
-        comment.post.slug,
-        { comment: comment.id },
-    ]);
-};
 
 const setComments = (data) => {
     comments.value = data;
