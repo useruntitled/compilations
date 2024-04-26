@@ -40,14 +40,6 @@
 
         <footer class="sm:px-3 xs:px-1 py-2">
             <div class="flex flex-col">
-                <div class="flex items-center space-x-5 text-secondary">
-                    <div>
-                        {{ $tc("view", post.views) }}
-                    </div>
-                    <div>
-                        {{ $tc("visit", post.visits) }}
-                    </div>
-                </div>
                 <div class="m-0 flex items-center">
                     <span class="me-0">
                         <Reputation type="Post" :reputation="post.reputation" />
