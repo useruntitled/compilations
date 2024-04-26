@@ -1,5 +1,5 @@
 <template>
-    <dropdown width="200" align="left">
+    <dropdown width="200" align="right">
         <template #trigger>
             <button
                 class="p-[1px] rounded-full hover:bg-orange-100 hover:text-orange-700"
