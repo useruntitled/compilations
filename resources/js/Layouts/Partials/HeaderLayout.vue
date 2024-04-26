@@ -4,7 +4,7 @@
             class="bg-kppale"
             :class="
                 i == 1
-                    ? 'fixed w-full z-[48] border-b-4 border-kpnpale bg-opacity-90'
+                    ? 'fixed w-full z-[48] border-b-4 border-kpnpale bg-opacity-90 backdrop-blur-sm'
                     : 'block opacity-0'
             "
             id="header"
@@ -28,7 +28,7 @@
                     </section>
                     <section class="ms-3 hidden lg:block">
                         <div class="w-[640px] mx-auto">
-                            <search class="relative"></search>
+                            <Search class="relative" input-opacity="20" />
                         </div>
                     </section>
                     <section class="flex items-center hidden lg:block">
