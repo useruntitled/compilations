@@ -4,9 +4,6 @@ namespace App\Services;
 
 use App\Http\Resources\Post\PostFeedResource;
 use App\Http\Resources\Post\ShortPostFeedResource;
-use App\Jobs\PostIncrementViewJob;
-use App\Jobs\PostIncrementVisitJob;
-use App\Models\Post;
 use App\Queries\Post\DraftedPostsQuery;
 use App\Queries\Post\MostCommentedPostsQuery;
 use App\Queries\Post\NewPostsQuery;
@@ -18,8 +15,6 @@ class PostService
     public function getPopular(?int $page = 1)
     {
         $posts = PopularPostsQuery::get($page);
-
-        $this->incrementView($posts);
 
         return PostFeedResource::collection($posts);
     }
@@ -35,8 +30,6 @@ class PostService
     {
         $posts = NewPostsQuery::get($page);
 
-        $this->incrementView($posts);
-
         return PostFeedResource::collection($posts);
     }
 
@@ -49,18 +42,6 @@ class PostService
     {
         $posts = RandomPostsQuery::get($page, $postId);
 
-        $this->incrementView($posts);
-
         return PostFeedResource::collection($posts);
-    }
-
-    public function incrementView($posts): void
-    {
-        dispatch(new PostIncrementViewJob($posts));
-    }
-
-    public function incrementVisit(Post $post): void
-    {
-        dispatch(new PostIncrementVisitJob($post));
     }
 }

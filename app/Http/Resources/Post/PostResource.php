@@ -36,8 +36,6 @@ class PostResource extends JsonResource
             'timestamp' => $this->created_at->diffForHumans(),
             'image' => MediaResource::make($this->image),
             'image_preview' => $this->image_preview,
-            'views' => $this->views,
-            'visits' => $this->visits,
         ];
     }
 }

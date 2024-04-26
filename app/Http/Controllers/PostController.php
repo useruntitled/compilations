@@ -34,8 +34,6 @@ class PostController extends Controller
     {
         $post = ViewPostQuery::get($id);
 
-        $this->service->incrementVisit($post);
-
         return inertia('post', [
             'post' => PostResource::make($post),
         ]);
@@ -44,8 +42,6 @@ class PostController extends Controller
     public function new()
     {
         $posts = $this->getNew(1);
-
-        $this->service->incrementView($posts);
 
         return inertia('Home/New', [
             'posts' => $posts,

@@ -34,8 +34,6 @@ class PostFeedResource extends JsonResource
             'bookmarks_count' => $this->bookmarks_relation_count,
             'has_bookmark' => $this->hasBookmark,
             'films_count' => $this->films_relation_count,
-            'views' => $this->views,
-            'visits' => $this->visits,
         ];
     }
 }
