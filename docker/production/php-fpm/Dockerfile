@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
+        libjpeg-dev \
         libpng-dev \
         zlib1g-dev \
         libxml2-dev \
@@ -44,7 +45,7 @@ RUN apt-get update && apt-get install -y \
         libonig-dev \
     libmagickwand-dev\
         graphviz \
-    && docker-php-ext-configure gd \
+    && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mysqli \
@@ -55,10 +56,10 @@ RUN apt-get update && apt-get install -y \
      --install-dir=/usr/local/bin --filename=composer \
     && apt-get install -y npm
 
-RUN apt-get update; \
-    apt-get install -y libmagickwand-dev; \
+RUN apt-get install -y libmagickwand-dev; \
     pecl install imagick; \
-    docker-php-ext-enable imagick;
+    docker-php-ext-enable imagick
+
 
 RUN mkdir -p /usr/src/php/ext/redis \
     && curl -L https://github.com/phpredis/phpredis/archive/5.3.4.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
