@@ -1,46 +1,50 @@
 <?php
 
-Route::middleware('moderOrAdmin')->group(function () {
-    Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
-        Route::get('panel', 'index')->name('panel.index');
+Route::name('panel.')->prefix('panel')->group(function () {
+    Route::middleware('moderOrAdmin')->group(function () {
+        Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+        });
+
+        Route::controller(\App\Http\Controllers\Admin\FilmsController::class)->group(function () {
+            Route::get('films', 'index')->name('films');
+            Route::get('view/films/{id}', 'view')->name('view.film');
+            Route::patch('update/film/{id}', 'update')->name('update.film');
+        });
+
+        Route::controller(\App\Http\Controllers\Admin\PostsController::class)->group(function () {
+            Route::get('posts', 'index')->name('posts');
+            Route::get('view/post/{id}', 'view')->name('view.post');
+            Route::put('decline/post', 'decline')->name('decline.post');
+        });
+
+        Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
+            Route::get('users', 'index')->name('users');
+            Route::get('view/user/{id}', 'view')->name('view.user');
+            Route::put('user/ban', 'ban')->name('user.ban');
+            Route::put('user/unban', 'unBan')->name('user.unban');
+        });
+
+        Route::controller(\App\Http\Controllers\Admin\ReportController::class)->group(function () {
+            Route::get('report/view/{report_id}', 'index')->name('report.view');
+        });
+
+        Route::controller(\App\Http\Controllers\Admin\CommentsController::class)->group(function () {
+            Route::get('comments', 'index')->name('comments');
+            Route::get('view/comment/{id}', 'view')->name('view.comment');
+            Route::put('decline/comment', 'decline')->name('decline.comment');
+        });
     });
 
-    Route::controller(\App\Http\Controllers\Admin\FilmsController::class)->group(function () {
-        Route::get('panel/films', 'index')->name('panel.films');
-        Route::get('panel/view/films/{id}', 'view')->name('panel.view.film');
-        Route::patch('panel/update/film/{id}', 'update')->name('panel.update.film');
-    });
+    Route::middleware('admin')->group(function () {
+        Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
+            Route::get('admins', 'admins')->name('admins');
+            Route::get('moders', 'moders')->name('moders');
+        });
 
-    Route::controller(\App\Http\Controllers\Admin\PostsController::class)->group(function () {
-        Route::get('panel/posts', 'index')->name('panel.posts');
-        Route::get('panel/view/post/{id}', 'view')->name('panel.view.post');
-        Route::put('panel/decline/post', 'decline')->name('panel.decline.post');
-    });
-
-    Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
-        Route::get('panel/users', 'index')->name('panel.users');
-        Route::get('panel/view/user/{id}', 'view')->name('panel.view.user');
-        Route::put('panel/toggle/ban', 'toggleBan')->name('panel.toggle.ban');
-    });
-
-    Route::controller(\App\Http\Controllers\Admin\ReportController::class)->group(function () {
-        Route::get('panel/report/view/{report_id}', 'index')->name('panel.report.view');
-    });
-
-    Route::controller(\App\Http\Controllers\Admin\CommentsController::class)->group(function () {
-        Route::get('panel/comments', 'index')->name('panel.comments');
-        Route::get('panel/view/comment/{id}', 'view')->name('panel.view.comment');
-        Route::put('panel/decline/comment', 'decline')->name('panel.decline.comment');
-    });
-});
-
-Route::middleware('admin')->group(function () {
-    Route::controller(\App\Http\Controllers\Admin\AdminController::class)->group(function () {
-        Route::get('panel/admins', 'admins')->name('panel.admins');
-        Route::get('panel/moders', 'moders')->name('panel.moders');
-    });
-
-    Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
-        Route::put('panel/toggle/moder', 'toggleModer')->name('panel.user.toggle.moder');
+        Route::controller(\App\Http\Controllers\Admin\UsersController::class)->group(function () {
+            Route::post('user/add/role/moder', 'addModerRole')->name('user.add.role.moder');
+            Route::delete('user/remove/role/moder', 'removeModerRole')->name('user.remove.role.moder');
+        });
     });
 });

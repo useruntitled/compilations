@@ -6,6 +6,7 @@ use App\Http\Requests\Reputation\DestroyReputationRequest;
 use App\Http\Requests\Reputation\StoreReputationRequest;
 use App\Http\Requests\Reputation\UpdateReputationRequest;
 use App\Models\Reputation;
+use App\Policies\ReputationPolicy;
 
 class ReputationController extends Controller
 {
@@ -23,9 +24,10 @@ class ReputationController extends Controller
 
     public function update(UpdateReputationRequest $request)
     {
-        $reputation = Reputation::where('reputation_to_type', getModel($request->type))
-            ->where('reputation_to_id', $request->id)
-            ->where('user_id', auth()->user()->id)->firstOrFail();
+        $reputation = Reputation::findOrFail($request->id);
+
+        $this->authorize(ReputationPolicy::UPDATE, $reputation);
+
         $reputation->update([
             'action' => $request->action,
         ]);
@@ -35,10 +37,10 @@ class ReputationController extends Controller
 
     public function destroy(DestroyReputationRequest $request)
     {
-        $reputation = Reputation::where('reputation_to_type', getModel($request->type))
-            ->where('reputation_to_id', $request->id)
-            ->where('user_id', auth()->user()->id)
-            ->firstOrFail();
+        $reputation = Reputation::findOrFail($request->id);
+
+        $this->authorize(ReputationPolicy::DELETE, $reputation);
+
         $reputation->delete();
 
         return response()->json('', 204);

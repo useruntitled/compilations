@@ -58,7 +58,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(BookmarkController::class)->group(function () {
-    Route::put('bookmark', 'store')->name('bookmark.store')->middleware('auth');
+    Route::post('bookmark', 'store')->name('bookmark.store')->middleware('auth');
     Route::delete('bookmark', 'destroy')->name('bookmark.destroy')->middleware('auth');
     Route::get('me/bookmarks/page/{page}', 'get')->name('me.bookmarks.get')->middleware('auth');
 });
