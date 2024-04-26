@@ -40,28 +40,41 @@
 
         <footer class="sm:px-3 xs:px-1 py-2">
             <div class="flex flex-col">
-                <div class="m-0 flex items-center">
-                    <span class="me-0">
-                        <Reputation type="Post" :reputation="post.reputation" />
-                    </span>
-                    <span class="me-2 text-slate-700 font-[15px]"
-                        ><link-icon
-                            :text="post.comments_count"
-                            :href="
-                                route('post', [post.id, post.slug, 'comments'])
-                            "
-                            ><IconComments class="w-5 h-5" /></link-icon
-                    ></span>
-                    <span class="me-2 text-slate-700">
-                        <Bookmark :post="post" />
-                    </span>
-                    <span class="me-2 text-slate-700">
-                        <copy-link-button
-                            :href="route('post', [post.id, post.slug])"
-                        >
-                            <IconArrowForwardUp class="w-6 h-6 stroke-3/2" />
-                        </copy-link-button>
-                    </span>
+                <div class="m-0 flex items-center justify-between">
+                    <section class="flex items-center">
+                        <span>
+                            <Reputation
+                                type="Post"
+                                :reputation="post.reputation"
+                            />
+                        </span>
+                        <span class="me-2 text-slate-700 font-[15px]"
+                            ><link-icon
+                                :text="post.comments_count"
+                                :href="
+                                    route('post', [
+                                        post.id,
+                                        post.slug,
+                                        'comments',
+                                    ])
+                                "
+                                ><IconComments class="w-5 h-5" /></link-icon
+                        ></span>
+                    </section>
+                    <section class="flex items-center">
+                        <span class="me-2 text-slate-700">
+                            <Bookmark :post="post" />
+                        </span>
+                        <span class="me-2 text-slate-700">
+                            <copy-link-button
+                                :href="route('post', [post.id, post.slug])"
+                            >
+                                <IconArrowForwardUp
+                                    class="w-6 h-6 stroke-3/2"
+                                />
+                            </copy-link-button>
+                        </span>
+                    </section>
                 </div>
             </div>
         </footer>
