@@ -16,8 +16,8 @@ const props = defineProps({
     },
     color: {
         type: String,
-        default: 'white',
-    }
+        default: "white",
+    },
 });
 
 const emit = defineEmits(["close"]);
@@ -30,7 +30,7 @@ watch(
         } else {
             document.body.style.overflow = null;
         }
-    }
+    },
 );
 
 // const closeModal = inject("closeModal");
@@ -67,7 +67,7 @@ const maxWidthClass = computed(() => {
 
 const bgColorClass = computed(() => {
     return `bg-${props.color}`;
-})
+});
 </script>
 
 <template>
@@ -75,7 +75,7 @@ const bgColorClass = computed(() => {
         <Transition leave-active-class="duration-200">
             <div
                 v-show="show"
-                class="fixed inset-0 overflow-y-auto xs:px-0 px-4 py-6  z-[49]"
+                class="fixed inset-0 overflow-y-auto xs:px-0 px-4 py-6 z-[49]"
                 scroll-region
             >
                 <Transition
@@ -91,7 +91,7 @@ const bgColorClass = computed(() => {
                         class="fixed inset-0 transform transition-all backdrop-blur-md"
                         @click="close"
                     >
-                        <div class="absolute inset-0 bg-gray-500 opacity-75" />
+                        <div class="absolute inset-0 bg-gray-400 opacity-75" />
                     </div>
                 </Transition>
 
