@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DeclineRequest;
+use App\Http\Resources\User\PanelUserResource;
 use App\Models\User;
 use App\Policies\AdminPolicy;
 use App\Traits\UsesFilters;
@@ -36,7 +37,7 @@ class UsersController extends Controller
         $user = User::with('bannedByUser')->findOrFail($id);
 
         return inertia('Admin/Users/View', [
-            'user' => $user,
+            'user' => PanelUserResource::make($user),
         ]);
     }
 
