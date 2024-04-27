@@ -15,6 +15,7 @@ class ModerOrAdmin
             return $next($request);
         }
 
+        
         return redirect(route('home'))->with(403);
     }
 }
