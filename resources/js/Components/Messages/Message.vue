@@ -10,16 +10,15 @@
                             v-if="msg.message != null"
                         >
                             <div class="flex items-center">
-                                <div
-                                    class="p-[1px] me-2"
-                                >
-                                    <icon-check v-show="msg.type === 'success'"
+                                <div class="p-[1px] me-2">
+                                    <icon-check
+                                        v-show="msg.type === 'success'"
                                         class="w-5 h-5 stroke-2 text-white bg-green-400 rounded-full"
                                     ></icon-check>
                                     <icon-circle-cross
                                         v-show="msg.type === 'error'"
-                                        class="w-5 h-5 text-white"></icon-circle-cross>
-
+                                        class="w-5 h-5 text-white"
+                                    ></icon-circle-cross>
                                 </div>
                                 <p class="text-center font-medium">
                                     {{ msg.message }}

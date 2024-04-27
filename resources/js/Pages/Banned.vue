@@ -1,3 +1,1 @@
-<template>
-    Ваш аккаунт заблокирован.
-</template>
+<template>Ваш аккаунт заблокирован.</template>
