@@ -1,4 +1,4 @@
-import axios from "@/AxiosWrapper.js";
+import axios from "@/axios/AxiosWrapper.js";
 import { toFormData } from "@/helpers/FileHandler.js";
 
 export const profileApi = {

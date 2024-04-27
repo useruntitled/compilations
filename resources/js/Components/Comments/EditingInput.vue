@@ -22,7 +22,7 @@
 import { ref, inject } from "vue";
 import FlatPrimaryButton from "../Buttons/FlatPrimaryButton.vue";
 import CommentInput from "./CommentInput.vue";
-import axiosInstance from "@/AxiosWrapper.js";
+import axiosInstance from "@/axios/AxiosWrapper.js";
 import { commentApi } from "@/api/commentApi.js";
 
 const vFocus = {

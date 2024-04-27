@@ -96,7 +96,7 @@ import { ref, watch, computed, onMounted, inject } from "vue";
 import KarmaCountWithEmoji from "@/Components/User/KarmaCountWithEmoji.vue";
 import { usePage } from "@inertiajs/vue3";
 import IconTooth from "@/Components/Icons/IconTooth.vue";
-import axiosInstance from "@/AxiosWrapper.js";
+import axiosInstance from "@/axios/AxiosWrapper.js";
 import SubsiteCover from "@/Components/Media/SubsiteCover.vue";
 import UploadableLazyMedia from "@/Components/Media/UploadableLazyMedia.vue";
 import { profileApi } from "@/api/profileApi.js";

@@ -1,4 +1,4 @@
-import axios from "@/AxiosWrapper.js";
+import axios from "@/axios/AxiosWrapper.js";
 
 export const postApi = {
     get: async (id, callback) => {
