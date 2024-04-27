@@ -1,9 +1,11 @@
 <template>
     <admin-view-card title="Фильм" :object="film">
         <template #description>
-            <br>
-            <a :href="'https://kinopoisk.ru/film/' + film.id"
-               class="bg-orange-500 text-white rounded-xl px-4 py-3 font-medium">
+            <br />
+            <a
+                :href="'https://kinopoisk.ru/film/' + film.id"
+                class="bg-orange-500 text-white rounded-xl px-4 py-3 font-medium"
+            >
                 Ссылка на кинопоиск
             </a>
             <form @submit.prevent="" class="shadow rounded-lg p-5 mt-5">
@@ -75,34 +77,37 @@
 <script setup>
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminViewCard from "@/Components/Admin/AdminViewCard.vue";
-import {router, usePage} from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
+import { filmApi } from "@/api/panel/filmApi.js";
 
 defineOptions({
     layout: PanelLayout,
-})
+});
 
 const page = usePage();
 
-
 const props = defineProps({
     film: null,
-})
+});
 
 const update = async () => {
-    await axios.post(route('panel.update.film', [props.film.id]), {
-        '_method': 'PATCH',
-        name_ru: props.film.name_ru,
-        name_en: props.film.name_en,
-        description: props.film.description,
-        short_description: props.film.short_description,
-        poster_url: props.film.poster_url,
-        poster_url_preview: props.film.poster_url_preview,
-        logo_url: props.film.logo_url,
-        slogan: props.film.slogan,
-    })
-    router.reload({
-        preserveState: false,
-        replace: false
-    });
-}
+    await filmApi.update(
+        {
+            name_ru: props.film.name_ru,
+            name_en: props.film.name_en,
+            description: props.film.description,
+            short_description: props.film.short_description,
+            poster_url: props.film.poster_url,
+            poster_url_preview: props.film.poster_url_preview,
+            logo_url: props.film.logo_url,
+            slogan: props.film.slogan,
+        },
+        (res) => {
+            router.reload({
+                preserveState: false,
+                replace: false,
+            });
+        },
+    );
+};
 </script>
