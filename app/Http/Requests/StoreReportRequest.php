@@ -23,6 +23,7 @@ class StoreReportRequest extends FormRequest
     {
         return [
             'report_to_type' => 'required',
+
             'report_to_id' => 'required',
             'message' => 'required',
         ];
