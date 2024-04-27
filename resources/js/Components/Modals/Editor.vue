@@ -99,8 +99,12 @@
                             </section>
                         </div>
 
-                        <div class="my-5" v-show="form.films.length > 0">
-                            <p>{{ $tc("film", form.films.length) }}</p>
+                        <div
+                            class="my-5"
+                            v-show="form.films?.length > 0"
+                            v-if="form.films"
+                        >
+                            <p>{{ $tc("film", form.films?.length) }}</p>
                             <div
                                 @mouseenter="hoverButtons = film.id"
                                 @mouseleave="hoverButtons = null"
@@ -175,7 +179,7 @@ import SecondaryInput from "@/Components/Forms/Inputs/SecondaryInput.vue";
 import { ref, reactive, computed, watch, onMounted, inject } from "vue";
 import Modal from "./Modal.vue";
 import { router, usePage } from "@inertiajs/vue3";
-import axiosInstance from "@/AxiosWrapper.js";
+import axiosInstance from "@/axios/AxiosWrapper.js";
 import PrimaryButton from "../Buttons/PrimaryButton.vue";
 import AnimationLoader from "../Animations/AnimationLoader.vue";
 import SecondaryContent from "../Forms/SecondaryContent.vue";
@@ -244,7 +248,6 @@ const isUpdating = ref(false);
 
 const searchInput = ref(null);
 const searchResult = ref([]);
-const pinnedFilms = ref([]);
 const hoverButtons = ref(null);
 const filepond = ref(null);
 const imageIsLoading = ref(false);
@@ -270,7 +273,7 @@ const uploadImage = async (image, base64) => {
 
     imageIsLoading.value = true;
 
-    if (!post.value) {
+    if (!postIsCreated.value) {
         await createPost();
     }
 
@@ -285,7 +288,7 @@ const uploadImage = async (image, base64) => {
 };
 
 const canPublishClass = computed(() => {
-    if (form.films.length > 0 && form.title) {
+    if (form.films && form.title) {
         return "bg-orange-500";
     }
     return "bg-orange-200";
@@ -299,7 +302,7 @@ const form = reactive({
     title: "",
     description: "",
     image: "",
-    films: "",
+    films: [],
 });
 
 const getUrl = () => {
@@ -313,7 +316,7 @@ const loadPost = () => {
             post.value = res.data;
             form.title = res.data.title;
             form.description = res.data.description;
-            form.films = res.data.films;
+            form.films = res.data.films ?? [];
             postIsLoading.value = false;
         }
         console.log(res);
@@ -353,16 +356,17 @@ const pushState = () => {
 
 const createPost = async () => {
     console.log("creating post");
-    isUpdating.value = true;
+    showUpdating();
     const data = {
         title: form.title,
         description: form.description,
     };
     await postApi.store(data, (res) => {
         editorIsReady.value = true;
-        if (res.status == 200) {
+        if (res.status === 200) {
             post.value = res.data;
-            isUpdating.value = false;
+            showUpdated();
+            postIsCreated.value = true;
             pushState();
         }
         console.log(res);
@@ -417,12 +421,13 @@ const searchFilm = () => {
 };
 
 const addFilm = async (film) => {
-    if (!post.value && !isUpdating.value) {
+    if (!postIsCreated.value) {
         await createPost();
     }
 
-    if (!form.films.find((obj) => obj.id == film.id)) {
+    if (!form.films.length || !form.films.find((obj) => obj.id === film.id)) {
         form.films.push(film);
+        console.log(form.films);
     }
 };
 
