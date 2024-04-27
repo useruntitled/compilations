@@ -9,6 +9,7 @@ trait Reportable
 {
     public function report_to(): MorphMany
     {
+
         return $this->morphMany(Report::class, 'report_to');
     }
 }
