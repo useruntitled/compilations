@@ -10,6 +10,8 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","name":"{{ env('APP_NAME')  }}
         "}
     </script>
+
+    <link rel="preload" href="{{ Vite::asset('resources/css/fonts/Roboto-Regular.ttf') }}" as="font" />
     {{--        <title inertia>{{ config('app.name', 'Laravel') }}</title>--}}
 
     <!-- Fonts -->
