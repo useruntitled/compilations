@@ -17,7 +17,7 @@ class CommentController extends Controller
 {
     public function index($id)
     {
-        $comment = Comment::with('postRelation')->find($id);
+        $comment = Comment::with('postRelation')->withTrashed()->find($id);
 
         return redirect()
             ->route('post', [
