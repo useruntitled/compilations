@@ -3,17 +3,19 @@
 namespace App\Listeners;
 
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CommentDeclinedListener implements ShouldQueue
+class SendCommentWasDeclinedNotification
 {
-    protected $notifier;
-
-    public function __construct(NotificationService $notifier)
+    /**
+     * Create the event listener.
+     */
+    public function __construct(protected NotificationService $notifier)
     {
-        $this->notifier = $notifier;
     }
 
+    /**
+     * Handle the event.
+     */
     public function handle(object $event): void
     {
         $comment = $event->comment;

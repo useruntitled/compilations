@@ -42,11 +42,11 @@ class Reputation extends Model
 
     protected function isUp(): Attribute
     {
-        return Attribute::get(fn() => $this->action == 'up');
+        return Attribute::get(fn () => $this->action == 'up');
     }
 
     protected function isDown(): Attribute
     {
-        return Attribute::get(fn() => $this->action == 'down');
+        return Attribute::get(fn () => $this->action == 'down');
     }
 }
