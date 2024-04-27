@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'subsite' => $this->subsite,
             'roles' => $this->roles,
             'canCreatePosts' => $this->canCreatePosts,
+            'is_banned' => $this->isBanned,
         ];
         if (Auth::check() && $this->id == Auth::user()->id) {
             $prepare['unreadNotifications_count'] = $this->unreadNotifications->count();
