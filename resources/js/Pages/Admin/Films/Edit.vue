@@ -4,7 +4,7 @@
             <br />
             <a
                 :href="'https://kinopoisk.ru/film/' + film.id"
-                class="bg-orange-500 text-white rounded-xl px-4 py-3 font-medium"
+                class="bg-panelbck text-white rounded-xl px-4 py-3 font-medium"
             >
                 Ссылка на кинопоиск
             </a>
@@ -21,49 +21,49 @@
                         <input
                             type="text"
                             v-model="film.name_ru"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">name_en</p>
                         <input
                             type="text"
                             v-model="film.name_en"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">description</p>
                         <input
                             type="text"
                             v-model="film.description"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">short_description</p>
                         <input
                             type="text"
                             v-model="film.short_description"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">poster_url</p>
                         <input
                             type="text"
                             v-model="film.poster_url"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">poster_url_preview</p>
                         <input
                             type="text"
                             v-model="film.poster_url_preview"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">logo_url</p>
                         <input
                             type="text"
                             v-model="film.logo_url"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                         <p class="text-sm uppercase">slogan</p>
                         <input
                             type="text"
                             v-model="film.slogan"
-                            class="w-full bg-panelbck rounded-xl border-1 border-slate-200 text-sm text-slate-900"
+                            class="w-full bg-panelbck rounded-xl border-1 border-panelbck text-sm text-white"
                         />
                     </div>
                 </div>
