@@ -1,5 +1,10 @@
 <template>
-    <modal @close="emit('close')" :show="show" color="panelsemiprimary">
+    <modal
+        @close="emit('close')"
+        :show="show"
+        color="panelsemiprimary"
+        bg-theme="dark"
+    >
         <div class="px-10 py-10">
             <p class="font-semibold">Введите причину</p>
             <SecondaryInput
@@ -8,6 +13,7 @@
                 class="mt-5"
                 bg-color="panelbck"
                 primary-color="panelsemiprimary"
+                bg-active-color="panelbck"
                 secondary-color="gray-500"
             />
             <flat-primary-button
@@ -24,6 +30,7 @@ import Modal from "@/Components/Modals/Modal.vue";
 import SecondaryInput from "@/Components/Forms/Inputs/SecondaryInput.vue";
 import FlatPrimaryButton from "@/Components/Buttons/FlatPrimaryButton.vue";
 import { ref, watch } from "vue";
+import { declineApi } from "@/api/panel/declineApi.js";
 
 const props = defineProps({
     show: false,
@@ -45,15 +52,9 @@ watch(
 const reason = ref(null);
 
 const execute = () => {
-    axios
-        .post(route(props.route), {
-            _method: "PUT",
-            id: props.id,
-            reason: reason.value,
-        })
-        .then((res) => {
-            if (res.status === 200) emit("close");
-        });
+    declineApi.withRoute(route(props.route), props.id, reason.value, (res) => {
+        if (res.status === 200) emit("close");
+    });
 };
 
 const emit = defineEmits(["close"]);
