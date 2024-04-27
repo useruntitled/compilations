@@ -15,7 +15,9 @@
                 {{ user.created_at }}
             </template>
             <template #action>
-                <Link :href="route('panel.view.user', [user.id])">Рассмотреть</Link>
+                <Link :href="route('panel.view.user', [user.id])"
+                    >Рассмотреть
+                </Link>
             </template>
         </admin-row>
     </admin-table>
@@ -23,9 +25,7 @@
 <script setup>
 import PanelLayout from "@/Layouts/PanelLayout.vue";
 import AdminRow from "@/Components/Admin/AdminRow.vue";
-import AdminPagination from "@/Components/Admin/AdminPagination.vue";
-import AdminSearchInertiaInput from "@/Components/Admin/AdminSearchInertiaInput.vue";
-import {usePage} from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import PanelListLayout from "@/Layouts/PanelListLayout.vue";
 import AdminTable from "@/Components/Admin/AdminTable.vue";
 
@@ -34,13 +34,9 @@ const props = defineProps({
     search: null,
 });
 
-
 const page = usePage();
 
-
 defineOptions({
-    layout: [PanelLayout, PanelListLayout]
-})
-
-
+    layout: [PanelLayout, PanelListLayout],
+});
 </script>
