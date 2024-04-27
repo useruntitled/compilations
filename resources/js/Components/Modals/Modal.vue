@@ -18,6 +18,10 @@ const props = defineProps({
         type: String,
         default: "white",
     },
+    bgTheme: {
+        type: String,
+        default: "white",
+    },
 });
 
 const emit = defineEmits(["close"]);
@@ -65,6 +69,13 @@ const maxWidthClass = computed(() => {
     }[props.maxWidth];
 });
 
+const bgThemeClass = computed(() => {
+    if (props.bgTheme === "white") {
+        return `bg-gray-400`;
+    }
+    return `bg-panelsemiprimary`;
+});
+
 const bgColorClass = computed(() => {
     return `bg-${props.color}`;
 });
@@ -91,7 +102,10 @@ const bgColorClass = computed(() => {
                         class="fixed inset-0 transform transition-all backdrop-blur-md"
                         @click="close"
                     >
-                        <div class="absolute inset-0 bg-gray-400 opacity-75" />
+                        <div
+                            class="absolute inset-0 opacity-75"
+                            :class="bgThemeClass"
+                        />
                     </div>
                 </Transition>
 
