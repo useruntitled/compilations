@@ -12,14 +12,14 @@ class ReputationController extends Controller
 {
     public function store(StoreReputationRequest $request)
     {
-        Reputation::create([
+        $reputation = Reputation::create([
             'user_id' => auth()->user()->id,
             'action' => $request->action,
             'reputation_to_type' => getModel($request->type),
             'reputation_to_id' => $request->id,
         ]);
 
-        return response()->json('', 201);
+        return response()->json($reputation, 201);
     }
 
     public function update(UpdateReputationRequest $request)

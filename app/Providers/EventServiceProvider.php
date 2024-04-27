@@ -6,15 +6,20 @@ use App\Events\CommentCreatedEvent;
 use App\Events\CommentDeclinedEvent;
 use App\Events\CommentDeletedEvent;
 use App\Events\PostDeclinedEvent;
+use App\Events\ReputationCreatedEvent;
 use App\Events\ReputationDeletedEvent;
-use App\Events\ReputationPutEvent;
-use App\Listeners\CommentCreatedListener;
-use App\Listeners\CommentDeclinedListener;
-use App\Listeners\CommentDeletedListener;
+use App\Events\ReputationUpdatedEvent;
+use App\Listeners\DeleteReplyNotifications;
+use App\Listeners\DeleteReputationNotifications;
 use App\Listeners\DepersonalizeCommentAuthor;
-use App\Listeners\PostDeclinedListener;
-use App\Listeners\ReputationDeletedListener;
-use App\Listeners\ReputationPutListener;
+use App\Listeners\ForceDeleteDeletedParent;
+use App\Listeners\SendCommentUpNotification;
+use App\Listeners\SendCommentWasDeclinedNotification;
+use App\Listeners\SendPostUpNotification;
+use App\Listeners\SendPostWasCommentedNotification;
+use App\Listeners\SendPostWasDeclinedNotification;
+use App\Listeners\SendReplyNotification;
+use App\Listeners\UpdateReputationNotifications;
 use App\Models\Comment;
 use App\Models\Media;
 use App\Models\Post;
@@ -28,7 +33,6 @@ use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -41,25 +45,31 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        ReputationPutEvent::class => [
-            ReputationPutListener::class,
+        ReputationCreatedEvent::class => [
+            SendPostUpNotification::class,
+            SendCommentUpNotification::class,
+        ],
+        ReputationUpdatedEvent::class => [
+            UpdateReputationNotifications::class,
         ],
         ReputationDeletedEvent::class => [
-            ReputationDeletedListener::class,
+            DeleteReputationNotifications::class,
         ],
         CommentCreatedEvent::class => [
-            CommentCreatedListener::class,
+            SendReplyNotification::class,
+            SendPostWasCommentedNotification::class,
         ],
         CommentDeletedEvent::class => [
-            CommentDeletedListener::class,
+            DeleteReplyNotifications::class,
+            ForceDeleteDeletedParent::class,
             DepersonalizeCommentAuthor::class,
         ],
         CommentDeclinedEvent::class => [
-            CommentDeclinedListener::class,
+            SendCommentWasDeclinedNotification::class,
             DepersonalizeCommentAuthor::class,
         ],
         PostDeclinedEvent::class => [
-            PostDeclinedListener::class,
+            SendPostWasDeclinedNotification::class,
         ],
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             // ... other providers

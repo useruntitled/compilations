@@ -11,7 +11,7 @@
                     border="gray"
                     :media="user.avatar"
                 />
-                <div class="absolute">
+                <div class="absolute z-10">
                     <slot name="icon" />
                 </div>
             </div>

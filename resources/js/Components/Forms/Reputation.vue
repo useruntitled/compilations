@@ -70,7 +70,14 @@ const onClick = (action) => {
 };
 
 const store = (action) => {
-    reputationApi.store(props.reputation.reputation_to_id, props.type, action);
+    reputationApi.store(
+        props.reputation.reputation_to_id,
+        props.type,
+        action,
+        (res) => {
+            props.reputation.id = res.data.id;
+        },
+    );
     if (action === "up") {
         up.value++;
     } else {
