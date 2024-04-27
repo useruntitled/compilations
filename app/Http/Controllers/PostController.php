@@ -51,7 +51,7 @@ class PostController extends Controller
     public function get(int $id)
     {
         return Post::mayBeUnpublished()
-            ->with(['user' => ['roles'], 'films', 'image'])
+            ->with(['userRelation' => ['rolesRelation'], 'filmsRelation', 'mediaRelation'])
             ->findOrFail($id);
     }
 
