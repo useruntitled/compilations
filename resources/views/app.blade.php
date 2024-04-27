@@ -11,7 +11,8 @@
         "}
     </script>
 
-    <link rel="preload" href="{{ Vite::asset('resources/css/fonts/Roboto-Regular.ttf') }}" as="font" />
+    <link rel="preload" as="font" crossorigin href="{{ Vite::asset('resources/css/fonts/Roboto-Regular.ttf') }}" />
+    <link rel="preload" as="font" crossorigin href="{{ Vite::asset('resources/css/fonts/Roboto-Medium.ttf') }}" />
     {{--        <title inertia>{{ config('app.name', 'Laravel') }}</title>--}}
 
     <!-- Fonts -->
