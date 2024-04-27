@@ -74,7 +74,7 @@ const banOrUnbanRoute = computed(() => {
 });
 
 const accessToAttachRoles = computed(() => {
-    return page.props.auth.access_level == 2 && !props.user.is_admin;
+    return page.props.auth.access_level === 2 && !props.user.is_admin;
 });
 
 const addModerRole = async () => {
