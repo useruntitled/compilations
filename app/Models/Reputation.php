@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasAuthor;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -37,5 +38,15 @@ class Reputation extends Model
     public function getIsUpAttribute()
     {
         return strtolower($this->action) == 'up';
+    }
+
+    protected function isUp(): Attribute
+    {
+        return Attribute::get(fn() => $this->action == 'up');
+    }
+
+    protected function isDown(): Attribute
+    {
+        return Attribute::get(fn() => $this->action == 'down');
     }
 }
