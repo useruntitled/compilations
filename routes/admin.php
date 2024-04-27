@@ -9,7 +9,7 @@ Route::name('panel.')->prefix('panel')->group(function () {
         Route::controller(\App\Http\Controllers\Admin\FilmsController::class)->group(function () {
             Route::get('films', 'index')->name('films');
             Route::get('view/films/{id}', 'view')->name('view.film');
-            Route::patch('update/film/{id}', 'update')->name('update.film');
+            Route::put('update/film/{id}', 'update')->name('update.film');
         });
 
         Route::controller(\App\Http\Controllers\Admin\PostsController::class)->group(function () {
