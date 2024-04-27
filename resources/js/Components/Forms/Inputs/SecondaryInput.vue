@@ -42,7 +42,7 @@ const props = defineProps({
     },
     secondaryColor: {
         type: String,
-        default: "orange-200,
+        default: "orange-200",
     },
 });
 
