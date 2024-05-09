@@ -7,7 +7,7 @@ networks:
 services:
   app:
     build:
-      context: ./docker/production/nginx
+      context: ./docker/production/caddy
       dockerfile: Dockerfile
       args:
         - UID=${UID:-1000}
@@ -15,13 +15,18 @@ services:
         - DOMAIN_EMAIL=${DOMAIN_EMAIL}
         - APP_URL=${APP_URL}
     tty: true
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
     volumes:
-      - .:/var/www/html:delegated
-      - certs:/etc/letsencrypt/live/${APP_URL}
+      - ./docker/production/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - .:/srv
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - php
       - mysql
@@ -32,7 +37,7 @@ services:
     environment:
       APP_URL: ${APP_URL}
       DOMAIN_EMAIL: ${DOMAIN_EMAIL}
-    command: "sh /nginx-start.sh"
+  #    command: "sh /nginx-start.sh"
 
   mysql:
     image: mysql:8.0
@@ -85,4 +90,7 @@ services:
       - laravel
 volumes:
   certs:
+  caddy_data:
+    external: true
+  caddy_config:
 

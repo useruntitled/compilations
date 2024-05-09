@@ -22,7 +22,7 @@ RUN mkdir -p /etc/caddy
 RUN rm /etc/caddy/Caddyfile
 
 
-ADD ./caddy/Caddyfile /etc/caddy/Caddyfile
+ADD Caddyfile /etc/caddy/Caddyfile
 
 #RUN sed -i "s/:8876/${DOMAIN}/g" /etc/caddy/Caddyfile
 
