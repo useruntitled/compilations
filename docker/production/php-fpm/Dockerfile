@@ -45,6 +45,7 @@ RUN apt-get update && apt-get install -y \
         libonig-dev \
     libmagickwand-dev\
         graphviz \
+        ffmpeg \
     && docker-php-ext-configure gd --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql \
@@ -56,9 +57,10 @@ RUN apt-get update && apt-get install -y \
      --install-dir=/usr/local/bin --filename=composer \
     && apt-get install -y npm
 
-RUN apt-get install -y libmagickwand-dev; \
+RUN apt-get update; \
+    apt-get install -y libmagickwand-dev; \
     pecl install imagick; \
-    docker-php-ext-enable imagick
+    docker-php-ext-enable imagick;
 
 
 RUN mkdir -p /usr/src/php/ext/redis \
