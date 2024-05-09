@@ -43,6 +43,6 @@ class RegisteredUserController extends Controller
 
     public function uploadCover(UploadFileRequest $request, MediaService $media)
     {
-        return $media->upload($request->file('image'), Auth::user()->subsite)->toJson();
+        return $media->upload($request->file('image'), Auth::user()->subsiteRelation)->toJson();
     }
 }
