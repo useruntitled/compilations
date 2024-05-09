@@ -22,7 +22,10 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'isAdmin' => $this->isAdmin,
             'avatar' => MediaResource::make($this->avatar),
-            'subsite' => $this->subsite,
+            'subsite' => [
+                'description' => $this->subsite->description,
+                'cover' => $this->subsite->cover,
+            ],
             'roles' => $this->roles,
             'canCreatePosts' => $this->canCreatePosts,
             'is_banned' => $this->isBanned,
