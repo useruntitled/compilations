@@ -24,6 +24,9 @@ RUN rm /etc/caddy/Caddyfile
 
 ADD Caddyfile /etc/caddy/Caddyfile
 
+RUN apk add gettext \
+  && envsubst '\$APP_URL' < /etc/caddy/Caddyfile > /etc/caddy/Caddyfile
+
 #RUN sed -i "s/:8876/${DOMAIN}/g" /etc/caddy/Caddyfile
 
 RUN mkdir -p /var/www/html

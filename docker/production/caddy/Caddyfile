@@ -1,4 +1,4 @@
-:443 {
+$APP_URL {
         root * /var/www/html/public
         encode zstd gzip
         php_fastcgi php:9000
