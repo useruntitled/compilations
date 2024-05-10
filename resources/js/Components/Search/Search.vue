@@ -1,10 +1,9 @@
 <template>
     <div class="flex items-center w-full mx-auto">
-        <span class="text-sm absolute pl-2"
+        <span class="text-sm absolute z-10 pl-2"
             ><IconSearch
                 class="text-slate-600 text-secondary opacity-70 w-5 h-5"
-            ></IconSearch
-        ></span>
+        /></span>
         <input
             @focus="showResultsBlock = true"
             v-model="search"
@@ -80,11 +79,13 @@ const props = defineProps({
     bgInputColor: {
         default: "bg-kpnpale",
     },
-    inputOpacity: null,
+    inputOpacity: {
+        default: 20,
+    },
 });
 
 const inputOpacityClass = computed(() => {
-    return `bg-opacity-${props.inputOpacity} brightness-[0.9]`;
+    return `bg-opacity-${props.inputOpacity} brightness-90 hover:brightness-100 focus:brightness-100 focus:bg-opacity-100`;
 });
 
 const search = ref(null);
