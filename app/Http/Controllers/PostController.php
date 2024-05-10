@@ -63,12 +63,12 @@ class PostController extends Controller
             'description' => $request->description,
         ]);
 
-        return response()->json($post->load('userRelation'));
+        return response()->json($post->load('userRelation'), 201);
     }
 
     public function delete(Request $request)
     {
-        $post = Post::findOrFail($request->id);
+        $post = Post::mayBeUnpublished()->findOrFail($request->id);
 
         $this->authorize(PostPolicy::DELETE, $post);
 

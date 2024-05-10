@@ -35,7 +35,9 @@ class PostService
 
     public function getDrafts(?int $page = 1)
     {
-        return DraftedPostsQuery::get($page);
+        $posts = DraftedPostsQuery::get($page);
+
+        return PostFeedResource::collection($posts);
     }
 
     public function getRandom(?int $page, ?int $postId)
