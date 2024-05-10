@@ -83,6 +83,6 @@ COPY ./php-fpm/supervisor/conf.d/compilations-worker.conf /etc/supervisor/conf.d
 COPY ./php-fpm/supervisor/start.sh /php-fpm/supervisor/start.sh
 
 
-CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
-
+#CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
+CMD ["sh", "/php-fpm/supervisor/start.sh"]
 #USER laravel

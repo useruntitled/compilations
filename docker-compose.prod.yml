@@ -64,7 +64,7 @@ services:
       - .:/var/www/html:delegated
     networks:
       - laravel
-    command: "sh /php-fpm/supervisor/start.sh"
+  #    command: "sh /php-fpm/supervisor/start.sh"
 
   redis:
     image: redis:alpine
