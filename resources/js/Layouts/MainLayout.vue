@@ -44,7 +44,7 @@
                 :href="route('search')"
                 :class="{ 'text-orange-600': page.component === 'Search' }"
             >
-                <IconHome class="w-7 h-7" />
+                <IconSearch class="w-7 h-7" />
             </Link>
             <auth-link
                 :href="route('notifications')"
