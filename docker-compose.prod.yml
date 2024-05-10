@@ -64,10 +64,7 @@ services:
       - .:/var/www/html:delegated
     networks:
       - laravel
-
-  supervisor:
-    build:
-      context: ./docker/production/supervisor
+    command: "sh /php-fpm/supervisor/start.sh"
 
   redis:
     image: redis:alpine

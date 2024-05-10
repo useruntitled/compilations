@@ -70,8 +70,19 @@ RUN mkdir -p /usr/src/php/ext/redis \
 
 RUN mkdir -p /var/www/html
 
+RUN apt-get install -y supervisor
+
+RUN mkdir -p /var/log/supervisor/
+
+RUN mkdir -p /var/log/supervisor /var/run/supervisor
+RUN chmod -R 0700 /var/run/supervisor /var/log/supervisor
+RUN chown -R laravel:laravel /var/run/supervisor /var/log/supervisor
+COPY ./php-fpm/supervisor/supervisord.conf /etc/supervisor/conf.d
+COPY ./php-fpm/supervisor/supervisord.conf /etc/
+COPY ./php-fpm/supervisor/conf.d/compilations-worker.conf /etc/supervisor/conf.d/
+COPY ./php-fpm/supervisor/start.sh /php-fpm/supervisor/start.sh
 
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
 
-USER laravel
+#USER laravel
