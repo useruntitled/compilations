@@ -1,7 +1,7 @@
 import { router } from "@inertiajs/vue3";
 
 export const ModalStateManager = {
-    pushEditor: (id) => {
+    pushEditor: async (id) => {
         const url = new URL(window.location.href);
 
         function append(param, value) {
@@ -14,7 +14,7 @@ export const ModalStateManager = {
 
         window.history.pushState(null, null, url);
         // router.reload({preserveState: true});
-        router.visit(url, {
+        await router.visit(url, {
             method: "get",
             replace: true,
             preserveState: true,
