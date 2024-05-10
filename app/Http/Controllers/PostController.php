@@ -50,9 +50,11 @@ class PostController extends Controller
 
     public function get(int $id)
     {
-        return Post::mayBeUnpublished()
+        $post = Post::mayBeUnpublished()
             ->with(['userRelation' => ['rolesRelation'], 'filmsRelation', 'mediaRelation'])
             ->findOrFail($id);
+
+        return PostResource::make($post);
     }
 
     public function store(Request $request)
