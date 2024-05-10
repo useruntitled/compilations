@@ -47,7 +47,7 @@ class FilmController extends Controller
             ])->id;
         });
 
-        $film->genres()->attach($genres);
+        $film->genresRelation()->attach($genres);
 
         return $film;
     }
