@@ -29,7 +29,7 @@
     </div>
 
     <div
-        class="lg:hidden bg-white bottom-0 w-full mx-auto text-center px-8 md:px-20 py-2 fixed"
+        class="lg:hidden bg-white bottom-0 w-full z-40 mx-auto text-center px-8 md:px-20 py-2 fixed"
     >
         <div class="flex justify-between items-center py-1 sticky bottom-0">
             <Link :href="route('home')">
