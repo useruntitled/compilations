@@ -84,5 +84,6 @@ COPY ./php-fpm/supervisor/start.sh /php-fpm/supervisor/start.sh
 
 
 #CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
-CMD ["sh", "/php-fpm/supervisor/start.sh"]
+#CMD sh -c "php-fpm && /usr/bin/supervisord"
+CMD sh -c "/usr/bin/supervisord"
 #USER laravel
