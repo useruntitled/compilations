@@ -192,6 +192,7 @@ import pkg from "lodash/function.js";
 import UploadableLazyMedia from "@/Components/Media/UploadableLazyMedia.vue";
 import { postApi } from "@/api/postApi.js";
 import { filmApi } from "@/api/filmApi.js";
+import { ModalStateManager } from "@/helpers/ModalStateManager.js";
 
 const { throttle } = pkg;
 
@@ -200,7 +201,7 @@ const emit = defineEmits(["close"]);
 const close = () => {
     emit("close");
     showModal.value = false;
-    if (editorIsReady.value && !postIsPublished.value && postIsCreated.value) {
+    if (editorIsReady.value && !postIsPublished.value && isCreated.value) {
         injectedCallMessage("success", "Подборка сохранена в черновиках.");
     }
 };
@@ -220,12 +221,17 @@ const injectedCallMessage = inject("callMessage");
 axiosInstance.setCallbackFunction(injectedCallMessage);
 
 onMounted(async () => {
-    if (postIsCreated.value) {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("id")) {
+        isCreated.value = true;
+    }
+
+    if (isCreated.value) {
         await loadPost();
     }
     editorIsReady.value = true;
 
-    console.log(postIsCreated.value);
+    console.log(isCreated.value);
 });
 
 const searchInputFocused = ref(false);
@@ -235,15 +241,9 @@ const postIsPublished = computed(() => {
     return post.value && post.value.is_active;
 });
 const postIsLoading = ref(false);
-const postIsCreated = computed({
-    get() {
-        const url = new URL(window.location.href);
-        return url.searchParams.has("id");
-    },
-    set(newValue) {
-        return newValue;
-    },
-});
+
+const isCreated = ref(false);
+
 const isUpdating = ref(false);
 
 const searchInput = ref(null);
@@ -273,7 +273,7 @@ const uploadImage = async (image, base64) => {
 
     imageIsLoading.value = true;
 
-    if (!postIsCreated.value) {
+    if (!isCreated.value) {
         await createPost();
     }
 
@@ -334,48 +334,34 @@ watch(
     }, 500),
 );
 
-const pushState = () => {
-    const url = new URL(window.location.href);
-
-    function append(param, value) {
-        if (!url.searchParams.has(param)) url.searchParams.append(param, value);
-    }
-
-    append("modal", "Editor");
-    append("id", post.value.id);
-
-    window.history.pushState(null, null, url);
-    // router.reload({preserveState: true});
-    router.visit(url, {
-        method: "get",
-        replace: true,
-        preserveState: true,
-        preserveScroll: true,
-    });
-};
-
 const createPost = async () => {
     console.log("creating post");
-    showUpdating();
+
     const data = {
         title: form.title,
         description: form.description,
     };
-    await postApi.store(data, (res) => {
-        editorIsReady.value = true;
-        if (res.status === 200) {
-            post.value = res.data;
-            showUpdated();
-            postIsCreated.value = true;
-            pushState();
-        }
-        console.log(res);
-    });
+
+    if (!isUpdating.value && !isCreated.value) {
+        showUpdating();
+
+        await postApi.store(data, (res) => {
+            if (res.status === 200 || res.status === 201) {
+                post.value = res.data;
+                showUpdated();
+                console.log("post is created");
+                isCreated.value = true;
+                ModalStateManager.pushEditor(post.value.id);
+            }
+            console.log(res);
+        });
+    }
 };
 
 const showUpdated = () => {
     isUpdating.value = false;
     isUpdated.value = true;
+    editorIsReady.value = true;
     setTimeout(() => {
         isUpdated.value = false;
     }, 500);
@@ -386,23 +372,24 @@ const showUpdating = () => {
 };
 
 const savePost = async () => {
-    if (!postIsCreated.value && editorIsReady.value) {
+    if (!isCreated.value) {
+        console.log("post is created value", isCreated.value);
         await createPost();
+    } else {
+        showUpdating();
+
+        const data = {
+            _method: "PUT",
+            title: form.title,
+            description: form.description,
+            id: post.value.id,
+            films: form.films,
+        };
+
+        await postApi.update(data, (res) => {
+            showUpdated();
+        });
     }
-
-    showUpdating();
-
-    const data = {
-        _method: "PUT",
-        title: form.title,
-        description: form.description,
-        id: post.value.id,
-        films: form.films,
-    };
-
-    await postApi.update(data, (res) => {
-        showUpdated();
-    });
 };
 
 const formQuery = () => {
@@ -421,7 +408,7 @@ const searchFilm = () => {
 };
 
 const addFilm = async (film) => {
-    if (!postIsCreated.value) {
+    if (!isCreated.value) {
         await createPost();
     }
 
