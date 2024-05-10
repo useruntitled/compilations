@@ -70,14 +70,6 @@ RUN mkdir -p /usr/src/php/ext/redis \
 
 RUN mkdir -p /var/www/html
 
-RUN apt-get install -y supervisor
-
-RUN mkdir -p /etc/supervisor/conf.d
-
-ADD ./php-fpm/supervisor/conf.d/compilations-worker.conf /etc/supervisor/conf.d
-COPY ./php-fpm/supervisor/conf.d/compilations-worker.conf /etc/supervisord.conf
-COPY ./php-fpm/supervisor/start.sh /php-fpm/supervisor/start.sh
-
 
 
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]
