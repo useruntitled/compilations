@@ -269,13 +269,13 @@ const handleFile = (e) => {
 
 const uploadImage = async (image, base64) => {
     form.image = base64;
-    isUpdating.value = true;
-
-    imageIsLoading.value = true;
 
     if (!isCreated.value) {
         await createPost();
     }
+
+    imageIsLoading.value = true;
+    showUpdating();
 
     postApi.uploadImage(post.value.id, image, (res) => {
         if (res.status == 200) {
@@ -345,13 +345,13 @@ const createPost = async () => {
     if (!isUpdating.value && !isCreated.value) {
         showUpdating();
 
-        await postApi.store(data, (res) => {
+        await postApi.store(data, async (res) => {
             if (res.status === 200 || res.status === 201) {
                 post.value = res.data;
                 showUpdated();
                 console.log("post is created");
                 isCreated.value = true;
-                ModalStateManager.pushEditor(post.value.id);
+                await ModalStateManager.pushEditor(post.value.id);
             }
             console.log(res);
         });
