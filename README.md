@@ -46,7 +46,7 @@ A site where users can post their movie selections.
         <code>git clone https://github.com/useruntitled/compilations/</code>
   </p>
 - <p><a href="#настройка">Configure .env</a></p>
-- <a href="https://laravel.com/docs/10.x/sail#main-content">Install docker and docker-composel</a>
+- <a href="https://laravel.com/docs/10.x/sail#main-content">Install docker and docker-compose</a>
 - <p><code>docker-compose up -d --build</code></p>
 - <p><code>docker-compose run --rm artisan migrate --seed</code></p>
 - <p><code>docker-compose run --rm artisan test --parallel</code></p>
